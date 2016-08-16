@@ -1,0 +1,77 @@
+<head>
+            <meta charset="UTF-8">
+            <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Vaquero Documentation</title>
+            <link rel="stylesheet" type="text/css" href="../doc.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+            <style>
+                .markdown-body {
+                    box-sizing: border-box;
+                    min-width: 200px;
+                    max-width: 980px;
+                    margin: 0 auto;
+                    padding: 45px;
+                }
+            </style>
+        </head><article class="markdown-body"><h1>Gemini / Vaquero</h1>
+
+<p><a href="https://drone.projectshipped.io/CiscoCloud/gemini"><img src="https://drone.projectshipped.io/api/badges/CiscoCloud/gemini/status.svg" alt="Build Status"></a></p>
+
+<p>A bare metal configuration tool that leverages github templates, and CoreOS bare-metal to net boot machines. </p>
+
+<h1>High Level Overview</h1>
+
+<h2>Architecture</h2>
+
+<p><img src="https://github.com/CiscoCloud/gemini/blob/master/docs/design/architecture.png" alt="Architecture"></p>
+
+<h2><a href="https://github.com/CiscoCloud/gemini/blob/master/docs/env-data-structure.md">Data Model Templates</a></h2>
+
+<h2><a href="https://github.com/CiscoCloud/gemini/blob/master/docs/design/requirements.md">Requirements</a></h2>
+
+<h2>Running Vaquero</h2>
+
+<ol>
+<li>Fetch the image: <code>docker login -u gem-test -p f42556869fc7c81ec066e150f769b9c03cf4385b shippedrepos-docker-gemini.bintray.io &amp;&amp; docker pull shippedrepos-docker-gemini.bintray.io/gemini/gemini:0.1</code></li>
+<li>Run: <code>docker run shippedrepos-docker-gemini.bintray.io/gemini/gemini:0.1</code></li>
+</ol>
+
+<h2>Dev Environment: Pre-Reqs</h2>
+
+<ol>
+<li><a href="https://golang.org/">Golang</a> environment</li>
+<li>pkg-config</li>
+<li>libssl-dev</li>
+<li><a href="https://libgit2.github.com/">libgit2</a>. Mac OSX: <code>brew install libgit2</code>. Linux: Clone our repo and run <code>./libgit2.sh</code>. Windows: Bootcamp to Linux / OSX.</li>
+</ol>
+
+<h2>Dev Environment: Fetching / Compiling / Running code</h2>
+
+<ol>
+<li><code>git clone https://github.com/CiscoCloud/gemini.git</code> the Gemini repo under <code>$GOPATH/src/github.com/ciscocloud/</code>.</li>
+<li>Build gemini binary <code>make</code>.</li>
+<li>Run the gemini binary <code>.bin/gemini -config config.json</code>.</li>
+</ol>
+
+<h2>Sending Webhooks to Vaquero Master</h2>
+
+<ol>
+<li>Install <a href="https://ngrok.com/">ngrok</a> to your local machine, unzip the package, and move the executable to <code>/usr/local/bin</code>.</li>
+<li>Run ngrok on your physical machine <code>ngrok http 4816</code>.</li>
+<li>Create a testing repo to launch webhooks from.</li>
+<li>Give github.com the http endpoint provided by ngrok. </li>
+<li>Launch a webhook to hit the ngrok address.</li>
+</ol>
+
+<h2>CI System</h2>
+
+<p><a href="https://github.com/CiscoCloud/gemini/blob/master/docs/continuous-integration.md">Drone/CI Documentation</a></p>
+
+<h2>Contributing</h2>
+
+<p>See our <a href="https://github.com/CiscoCloud/gemini/blob/master/CONTRIBUTING.md">Contributing Guide</a></p>
+
+<h2>Docs</h2>
+
+<p>Build the documentation by running <code>godoc -http &lt;port&gt;</code> and open localhost:<port> on your web browser</p>
