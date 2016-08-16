@@ -1,0 +1,98 @@
+<head>
+            <meta charset="UTF-8">
+            <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Vaquero Documentation</title>
+            <link rel="stylesheet" type="text/css" href="../doc.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+            <style>
+                .markdown-body {
+                    box-sizing: border-box;
+                    min-width: 200px;
+                    max-width: 980px;
+                    margin: 0 auto;
+                    padding: 45px;
+                }
+            </style>
+        </head><article class="markdown-body"><h1>Continuous Integration for Vaquero</h1>
+
+<p><a href="https://github.com/drone/drone">Drone</a> is used to build the Vaquero project. One of the advantages of the Drone system is that it executes all builds within containers, and all build instructions are stored within the repo along with this code. These two characteristics help ensure that the output of the build system (the artifact) is highly consistent even in the face of rebuilds tied to a specific revision.</p>
+
+<p>To help manage the build process and versioning, a Makefile has been introduced. This should remain relatively static for the life of the project, but it currently has two targets defined:</p>
+
+<ul>
+<li><code>make test</code> -- this target executes the unit tests built into the Vaquero software, filtering tests provided by external systems.</li>
+<li><code>make</code> or <code>make all</code> -- this target executes the build, and creates the output binary at <code>bin/vaquero</code></li>
+</ul>
+
+<p>Upon successful completetion of the build, Drone will package the output binary into a lightweight Docker container (built on top of the <a href="https://hub.docker.com/_/alpine/">official Alpine Linux</a> image), and push the container to a Docker repository. A downstream deployment could (potentially) watch the repository for updates, and deploy updated containers automatically.</p>
+
+<p>With Drone, it is possible to execute builds locally within the same container-based environment using a CLI. To install the CLI on Windows or Linux, please refer to the upstream <a href="http://readme.drone.io/0.5/reference/cli/overview/">documentation</a>.</p>
+
+<p>To install the CLI on OS X using <a href="http://brew.sh/">Homebrew</a>, please follow these steps:</p>
+
+<ol>
+<li>Tap the repository to ensure availability of the appropriate formula for Homebrew:</li>
+</ol>
+
+<p><code>brew tap drone/drone</code></p>
+
+<p><em>Example:</em></p>
+
+<p><code>shell
+  $ brew tap drone/drone
+  ==&gt; Tapping drone/drone
+  Cloning into &#39;/usr/local/Library/Taps/drone/homebrew-drone&#39;...
+  remote: Counting objects: 5, done.
+  remote: Compressing objects: 100% (5/5), done.
+  remote: Total 5 (delta 0), reused 3 (delta 0), pack-reused 0
+  Unpacking objects: 100% (5/5), done.
+  Checking connectivity... done.
+  Tapped 1 formula (29 files, 37.2K)
+</code></p>
+
+<ol>
+<li>Install the <code>devel</code> version of the CLI to get the version to be used with Drone v0.5:</li>
+</ol>
+
+<p><code>brew install drone/drone/drone --devel</code></p>
+
+<p><em>Example:</em></p>
+
+<p><code>shell
+  $ brew install drone/drone/drone --devel
+  ==&gt; Installing drone from drone/drone
+  ==&gt; Downloading http://downloads.drone.io/release/darwin/amd64/drone.tar.gz
+  ######################################################################## 100.0%
+  🍺  /usr/local/Cellar/drone/0.5: 2 files, 19.5M, built in 19 seconds
+</code></p>
+
+<p>You should now have the correct version of the Drone CLI installed.</p>
+
+<h2>Running Local Tests</h2>
+
+<p>At the top project directory</p>
+
+<p><code>drone exec .drone.yml</code></p>
+
+<h2>Re-running tests on shipped.io</h2>
+
+<ol>
+<li><p>Add the Shipped Token and URL to your environment.</p>
+
+<ul>
+<li>Go to <a href="https://drone.projectshipped.io/CiscoCloud/gemini">shipped</a> and click to your own account page. Click <strong>Show Token</strong>. Copy it and paste it in your <code>.bash_profile</code> or equivalent under <code>DRONE_TOKEN</code></li>
+<li>In your <code>.bash_profile</code> or equivalent add <code>DRONE_SERVER=https://drone.projectshipped.io</code></li>
+</ul></li>
+<li><p>Test a build</p>
+
+<ul>
+<li>Go to the project build <a href="https://drone.projectshipped.io/CiscoCloud/gemini">summary page</a> and pick a build number you want to use. Then run `drone build start CiscoCloud/gemini <build_number></li>
+</ul></li>
+</ol>
+
+<h2>Signing drone.yml on edits</h2>
+
+<ol>
+<li>If edits are made to <code>.drone.yml</code> you must sign it by running <code>drone sign CiscoCloud/gemini</code></li>
+</ol>
