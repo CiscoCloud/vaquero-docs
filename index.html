@@ -63,6 +63,7 @@
         var releasesTemplate = Handlebars.compile($("#releases-collection").html());
 
         function fetchGitHubTags() {
+          
             return $.ajax({
                     url: "https://api.github.com/repos/CiscoCloud/vaquero-docs/tags?access_token=f0ae4de5c1dfe9f2af2b1a770d72e97962671cc6",
                     dataType: "json"
