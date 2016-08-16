@@ -46,7 +46,8 @@
               <tr>
                 <td class="tableblock halign-left valign-top">
                     <p class="tableblock"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/README.html">latest</a></p>
-                </td>    </tr>
+                </td>
+              </tr>
                 {{#if tags}} {{#each tags}}
                 <tr>
                     <td class="tableblock halign-left valign-top">
@@ -65,7 +66,7 @@
         function fetchGitHubTags() {
 
             return $.ajax({
-                    url: "https://api.github.com/repos/CiscoCloud/vaquero-docs/tags?access_token=411f981d105c46149ea7bb0da08664992ca498aa",
+                    url: "https://api.github.com/repos/CiscoCloud/vaquero-docs/tags",
                     dataType: "json"
                 })
                 .done(function(data) {
