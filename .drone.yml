@@ -1,0 +1,25 @@
+---
+build:
+  commands:
+    - "curl https://api.github.com/repos/CiscoCloud/vaquero-docs/tags > tags.json"
+    - "[sudo] gem install redcarpet"
+    - "rm -rf docs/current/*.html"
+    - "RECENT=$(git describe --abbrev=0 --tags)"
+    - |
+        if [ ! -d $RECENT ]; then
+            for z in docs/current/*
+            do
+                echo $z
+                ruby -r "./render_html.rb" -e "Renderer.convert("\"$z\"", "\"current\"")"
+            done
+            mkdir docs/$RECENT #create version dir
+            cp docs/current/*html docs/$RECENT/
+            cp docs/current/*png docs/$RECENT/
+            cp docs/current/*jpg docs/$RECENT/
+        fi
+    - "git push origin --tags -f"
+    - "git add ."
+    - "git commit -a -m \"Pushed $RECENT to site\""
+    - "git push origin gh-pages"
+  image: "gemtest/vaquero-docs:latest"
+  pull: true
