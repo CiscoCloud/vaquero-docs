@@ -1,0 +1,164 @@
+<head>
+            <meta charset="UTF-8">
+            <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Vaquero Documentation</title>
+            <link rel="stylesheet" type="text/css" href="../doc.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+            <style>
+                .markdown-body {
+                    box-sizing: border-box;
+                    min-width: 200px;
+                    max-width: 980px;
+                    margin: 0 auto;
+                    padding: 45px;
+                }
+            </style>
+        </head><article class="markdown-body"><h1>Gemini Architecture</h1>
+
+<p>Gemini is bare metal configuration and management for Viper video apps. It provides centralized management for multi-site deployments, and life cycle management of CoreOS on bare metal running Kubernetes. </p>
+
+<p><a href="https://github.com/CiscoCloud/gemini/blob/master/docs/gemini-arch.png">Diagram</a></p>
+
+<h2>High Level View</h2>
+
+<ul>
+<li>  Implemented in Go</li>
+<li>  Deploying CoreOS on bare metal</li>
+<li>  Intended to be containerized</li>
+<li>  Packages Included:
+
+<ul>
+<li>CoreOS bare-metal</li>
+<li>Go-github</li>
+</ul></li>
+<li>  Requirements
+
+<ul>
+<li>Github templates as Source of Truth</li>
+<li>Routable end point to receive git webhook</li>
+</ul></li>
+</ul>
+
+<h2>Components</h2>
+
+<h3>Storage Interface</h3>
+
+<p>The storage component that will store the standardized Gemini BM templates. In general the purpose is to retain the state of the desired templates of the systems described.</p>
+
+<p>It is defined as an interface because it must be flexible to future needs, we want to use git as our storage today, but one might want a DB or other system to hold templates.</p>
+
+<h4>Responsibilities</h4>
+
+<ul>
+<li>Update local files/templates/etc</li>
+<li>  Queryable by Orchestrator for changes made. </li>
+<li>  Listen for Updates from webhook or poll storage
+
+<ul>
+<li>Pull or Push Model – we can support both by requiring a Storage module to define two interface functions, a listen and a start function. Listen is used in the push model, it defines an HTTP.listen() function for git webhooks. Start would be the closed loop that would poll the central storage every so often and update that way. One of the interfaces would be defined as a NO-OP depending on if you want a polling system or a push based system.</li>
+</ul></li>
+</ul>
+
+<h3>Provisioner Interface</h3>
+
+<p>The provisioner component must be able to take <a href="https://github.com/CiscoCloud/gemini/blob/master/docs/env-data-structure.md">Gemini templates</a>, and use that information to stand up a site. It has two components one component that would live in the centralized location acting as the master, and have a client at each site that would be taking action on its behalf.  It is responsible for knowing if actions taken on the machines require a restart and reporting that back to the orchestrator. It will report the current boot state back to the inventory. </p>
+
+<p>This is an interface to enable other provisioner types, we are implementing the CoreOS bare metal package, but it is foreseeable that other provisioners might be useful, such as foreman.</p>
+
+<h4>Responsibilities</h4>
+
+<ul>
+<li>  Translate standardized files/tmpls/etc into real bare metal configurations</li>
+<li>  Handle DHCP for subnet(possibly a relay)</li>
+<li>  Delivering boot images</li>
+<li>  Delivering kickstarts &amp; equivalents</li>
+<li>  Knowing who needs reboots.</li>
+<li>  Report state to Orchestrator</li>
+</ul>
+
+<h3>BMC Interface</h3>
+
+<p>The BMC component is required to manage firmware and staging system reboots. It does not take part in the PXE process, but will only serve to power cycle machines / firmware. It is possible for the BMC to have a client that will take action locally at each site.</p>
+
+<p>This is an interface to enable other types of BMC, we will most likely implement IPMI here, but it is likely we would want USCM in the future.</p>
+
+<h4>Responsibilities</h4>
+
+<ul>
+<li>  Life cycle management</li>
+<li>  Firmware upgrade/downgrade</li>
+<li>  Report power status to orchestrator</li>
+</ul>
+
+<h3>Inventory</h3>
+
+<p>The aggregated database of all current statuses reported from sites. Queryable so the orchestrator can know what is going on in every site. </p>
+
+<h4>Responsibilities</h4>
+
+<ul>
+<li>  Store current state of every host and site</li>
+</ul>
+
+<h3>Gemctl</h3>
+
+<p>The REST interface that enables one to configure, query site information, update templates, and kick off power cycles / new builds. Update the DHCP manager.</p>
+
+<h4>Responsibilities</h4>
+
+<ul>
+<li>  Provide a programmatic interface for configuration and all CRUD operations on Storage, Provisioner, BMC, DHCP and Orchestrator.</li>
+</ul>
+
+<h3>Orchestrator / Gemgine</h3>
+
+<p>The central component that ties all the interfaces together. This will resolve if the current state found in inventory matches the desired state found via the storage interface. If differences are found it will pass updates to the provisioner and wait for a response. If necessary it will talk to the BMC to reboot machines that require it. It will not provide any translation, it will only deal with Gemini templates and be the only way to interface with the inventory DB.</p>
+
+<h4>Responsibilities</h4>
+
+<ul>
+<li>  Note differences between the current state and desired template state</li>
+<li>  Notify provisioner to take action</li>
+<li>  Update Inventory with current status it receives from Provisioner and BMC</li>
+</ul>
+
+<h2>Current Implementation</h2>
+
+<ul>
+<li>  Implementing the ‘github’ Storage Interface</li>
+<li>  Implementing the ‘CoreOS bare metal’ Provisioner Interface</li>
+<li>  Implementing the ‘IPMI’ BMC Interface</li>
+</ul>
+
+<h2>Open Questions</h2>
+
+<ul>
+<li>  What exactly is inventory? How much do we want for current state / health? </li>
+<li>  How will we do fact collection? </li>
+<li>  How do we get current state / health?
+
+<ul>
+<li>Is site health critical here, or is that out of scope for what Gemini is built for?</li>
+<li>If we have health checking, do we have to deploy it to each machine, how will that happen?</li>
+</ul></li>
+<li>  BMC remote service vs. centralized service
+
+<ul>
+<li>Baked into Gemini or extensible out of Gemini?</li>
+</ul></li>
+<li>  Do we want to bake in DHCP management like foreman, or force the user to manage their own DHCP like CoreOS bare metal does?
+
+<ul>
+<li>Danehans - suggesting this should be a responsibility of the provisioner interface. We need to work upstream in bootcfg to include it.</li>
+</ul></li>
+<li>  Container strategy?
+
+<ul>
+<li>What will the micro-services be?</li>
+<li>How will we deploy / manage?</li>
+</ul></li>
+<li>  Deployment Strategy for master and site client.</li>
+<li>  How will we handle Scalability?</li>
+<li>  How will we handle Reliability?</li>
+</ul>
