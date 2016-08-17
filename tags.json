@@ -1,3 +1,11 @@
 [
-
+  {
+    "name": "1.0",
+    "zipball_url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/zipball/1.0",
+    "tarball_url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/tarball/1.0",
+    "commit": {
+      "sha": "78c4618fc2f70391845210ed7c052ad190cc998a",
+      "url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/commits/78c4618fc2f70391845210ed7c052ad190cc998a"
+    }
+  }
 ]
