@@ -1,9 +1,9 @@
 # Gemini / Vaquero
 
-A bare metal configuration tool that leverages github templates, and CoreOS bare-metal to net boot machines. 
+A bare metal configuration tool that leverages github templates, and CoreOS bare-metal to net boot machines.
 
 ## Architecture
-![Architecture] (architecture.png)
+![arch](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/architecturediagram.png)
 
 ## [Data Model Templates] (https://github.com/CiscoCloud/gemini/blob/master/docs/env-data-structure.md)
 
@@ -32,7 +32,7 @@ A bare metal configuration tool that leverages github templates, and CoreOS bare
 1. Install [ngrok] (https://ngrok.com/) to your local machine, unzip the package, and move the executable to `/usr/local/bin`.
 2. Run ngrok on your physical machine `ngrok http 4816`.
 3. Create a testing repo to launch webhooks from.
-4. Give github.com the http endpoint provided by ngrok. 
+4. Give github.com the http endpoint provided by ngrok.
 5. Launch a webhook to hit the ngrok address.
 
 ## CI System
