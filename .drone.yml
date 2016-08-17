@@ -1,0 +1,13 @@
+pipeline:
+  build:
+    image: gemtest/vaquero-docs:0.1
+    pull: true
+    commands:
+      - ./convert.sh
+    when:
+      branch: master
+      event: tag
+      
+  publish:
+    image: plugin/gh-pages
+    source: docs
