@@ -8,6 +8,8 @@ The goal is to provide the ability for teams to manage their infrastructure usin
 
 The diagram linked below shows a high-level view of the overall application architecture. All components should run as containers, but some will need various levels of privilege to perform their required functionality.
 
+![arch](https://ciscocloud.github.io/vaquero-docs/current/architecturediagram.png)
+
 ### The Datacenter Node
 
 Each datacenter will be able to operate without an active connection to the master nodes once the active datacenter configuration has been staged to those nodes. The system is composed of multiple services which should be operated with redundancies for availability.
@@ -61,4 +63,3 @@ No explicit runtime environment is required, aside from a recent Docker engine, 
 To achieve a highly-available system, an operator should plan to run redundant instances of the various services, and ensure they're properly connected to the coordination system. (needs docs)
 
 Finally, the control node can also act as an agent if that is desired. This can be useful to allow the control node to bootstrap agent nodes directly, or if a multi-datacenter deployment is not required.
-
