@@ -61,4 +61,3 @@ No explicit runtime environment is required, aside from a recent Docker engine, 
 To achieve a highly-available system, an operator should plan to run redundant instances of the various services, and ensure they're properly connected to the coordination system. (needs docs)
 
 Finally, the control node can also act as an agent if that is desired. This can be useful to allow the control node to bootstrap agent nodes directly, or if a multi-datacenter deployment is not required.
-
