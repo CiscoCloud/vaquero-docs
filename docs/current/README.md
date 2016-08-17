@@ -1,14 +1,11 @@
 # Gemini / Vaquero
-[![Build Status](https://drone.projectshipped.io/api/badges/CiscoCloud/gemini/status.svg)](https://drone.projectshipped.io/CiscoCloud/gemini)
 
 A bare metal configuration tool that leverages github templates, and CoreOS bare-metal to net boot machines. 
 
-# High Level Overview
-
 ## Architecture
-![Architecture] (https://github.com/CiscoCloud/gemini/blob/master/docs/design/architecture.png)
+![Architecture] (architecture.png)
 
-## [Data Model Templates] (https://github.com/CiscoCloud/gemini/blob/master/docs/env-data-structure.md) 
+## [Data Model Templates] (https://github.com/CiscoCloud/gemini/blob/master/docs/env-data-structure.md)
 
 ## [Requirements] (https://github.com/CiscoCloud/gemini/blob/master/docs/design/requirements.md)
 
