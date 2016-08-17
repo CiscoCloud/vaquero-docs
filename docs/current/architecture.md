@@ -8,7 +8,7 @@ The goal is to provide the ability for teams to manage their infrastructure usin
 
 The diagram linked below shows a high-level view of the overall application architecture. All components should run as containers, but some will need various levels of privilege to perform their required functionality.
 
-![arch](https://ciscocloud.github.io/vaquero-docs/current/architecturediagram.png)
+![arch](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/architecturediagram.png)
 
 ### The Datacenter Node
 
