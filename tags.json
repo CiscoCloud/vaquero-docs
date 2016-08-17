@@ -1,0 +1,38 @@
+[
+  {
+    "name": "beta",
+    "zipball_url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/zipball/beta",
+    "tarball_url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/tarball/beta",
+    "commit": {
+      "sha": "c7bbb8844b36eef05254351c0076e9612674a596",
+      "url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/commits/c7bbb8844b36eef05254351c0076e9612674a596"
+    }
+  },
+  {
+    "name": "alpha",
+    "zipball_url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/zipball/alpha",
+    "tarball_url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/tarball/alpha",
+    "commit": {
+      "sha": "ca93ae1a165ab7d45702e50d42250928e8c7ab19",
+      "url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/commits/ca93ae1a165ab7d45702e50d42250928e8c7ab19"
+    }
+  },
+  {
+    "name": "1.3",
+    "zipball_url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/zipball/1.3",
+    "tarball_url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/tarball/1.3",
+    "commit": {
+      "sha": "49a52f90f460c7ba72ce3aaf278a45550d50d9db",
+      "url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/commits/49a52f90f460c7ba72ce3aaf278a45550d50d9db"
+    }
+  },
+  {
+    "name": "1.0",
+    "zipball_url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/zipball/1.0",
+    "tarball_url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/tarball/1.0",
+    "commit": {
+      "sha": "8fac2a2f021b9e457bfd77692e5bb2b052f4d794",
+      "url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/commits/8fac2a2f021b9e457bfd77692e5bb2b052f4d794"
+    }
+  }
+]
