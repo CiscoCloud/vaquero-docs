@@ -8,8 +8,6 @@ The goal is to provide the ability for teams to manage their infrastructure usin
 
 The diagram linked below shows a high-level view of the overall application architecture. All components should run as containers, but some will need various levels of privilege to perform their required functionality.
 
-[architecture diagram][1]
-
 ### The Datacenter Node
 
 Each datacenter will be able to operate without an active connection to the master nodes once the active datacenter configuration has been staged to those nodes. The system is composed of multiple services which should be operated with redundancies for availability.
@@ -24,7 +22,7 @@ The `vaquero` process in `agent` mode registers itself with an upstream master a
 
 The agent will have a built-in HTTP server that will be used for API endpoints, as well as asset delivery. The assets delivered can be provided through multiple mechanisms based on configuration, including potentially being cached (uploaded) locally, or passed through from other systems (i.e. CDN).
 
-Some endpoints will be passed through directly to internal services, but others will be terminated by the agent (more details in [API documentation][2]):
+Some endpoints will be passed through directly to internal services, but others will be terminated by the agent (more details in [API documentation][1]):
 
 * **/assets** - static assets required to boot client nodes.
 * **/state** - mechanism for client nodes to report state (via API).
@@ -32,18 +30,18 @@ Some endpoints will be passed through directly to internal services, but others 
 
 CoreOS Bare Metal has the following endpoints documented:
 
-* [HTTP API][3]
-* [gRPC API][4]
+* [HTTP API][2]
+* [gRPC API][3]
 
 ### The Control Node
 
 The overall solution will be driven by a centralized control system node that manage the process of transforming updates for our Source of Truth (SoT) into configurations that can be applied by the datacenter nodes. To perform this transformation, the system will need to process updates from the SoT, compile the changes, and stage those changes for implementation.
 
-The structure of this data is defined [elsewhere][5].
+The structure of this data is defined [elsewhere][4].
 
 #### `vaquero server`
 
-The `vaquero` application in `server` implements a simple HTTP-based API that manages the overall workflow. To this end a few endpoints have been planned (these will be further details in the [API documentation][6]):
+The `vaquero` application in `server` implements a simple HTTP-based API that manages the overall workflow. To this end a few endpoints have been planned (these will be further details in the [API documentation][5]):
 
 * **/postreceive** - accepts inbound webhooks indicated an update has occurred in the SoT.
 * **/status** - used to inspect current operational state of the Vaquero system, and agent nodes.
@@ -64,9 +62,8 @@ To achieve a highly-available system, an operator should plan to run redundant i
 
 Finally, the control node can also act as an agent if that is desired. This can be useful to allow the control node to bootstrap agent nodes directly, or if a multi-datacenter deployment is not required.
 
-[1]:	architecture.png "architecture"
-[2]:	api.md
-[3]:	https://github.com/coreos/coreos-baremetal/blob/master/Documentation/api.md
-[4]:	https://godoc.org/github.com/coreos/coreos-baremetal/bootcfg/client
-[5]:	env-data-structure.md
-[6]:	api.md
+[1]:	api.md
+[2]:	https://github.com/coreos/coreos-baremetal/blob/master/Documentation/api.md
+[3]:	https://godoc.org/github.com/coreos/coreos-baremetal/bootcfg/client
+[4]:	env-data-structure.md
+[5]:	api.md
