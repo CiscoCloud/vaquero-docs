@@ -1,7 +1,7 @@
 # vaquero-docs
 Documentation for the Vaquero project: [https://github.com/CiscoCloud/vaquero](https://github.com/CiscoCloud/vaquero)
 
-Website: [ciscocloud.github.io/vaquero-docs](https://ciscocloud.github.io/vaquero-docs)
+Website: [https://ciscocloud.github.io/vaquero-docs](https://ciscocloud.github.io/vaquero-docs)
 
 
 ### How to modify the documentation
