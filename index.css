@@ -44,7 +44,7 @@ html {
 }
 
 body {
-    margin: 0
+    margin-left: 100
 }
 
 a {
@@ -224,7 +224,7 @@ table {
 
 html,
 body {
-    font-size: 100%
+    font-size: 110%
 }
 
 body {
@@ -232,7 +232,7 @@ body {
     color: rgba(0, 0, 0, .8);
     padding: 0;
     margin: 0;
-    font-family: "Noto Serif", "DejaVu Serif", serif;
+    font-family: "Open Sans", serif;
     font-weight: 400;
     font-style: normal;
     line-height: 1;
@@ -343,7 +343,7 @@ table.tableblock>.title,
 .qlist>.title,
 .hdlist>.title {
     line-height: 1.45;
-    color: #7a2518;
+    color: #bf4616;
     font-weight: 400;
     margin-top: 0;
     margin-bottom: .25em
@@ -413,7 +413,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: "Open Sans", "DejaVu Sans", sans-serif;
+    font-family: "Actor", sans-serif;
     font-weight: 300;
     font-style: normal;
     color: #ba3925;
@@ -485,7 +485,7 @@ small {
 }
 
 code {
-    font-family: "Droid Sans Mono", "DejaVu Sans Mono", monospace;
+    font-family: "Ubuntu Mono", monospace;
     font-weight: 400;
     color: rgba(0, 0, 0, .9)
 }
@@ -622,6 +622,7 @@ table {
     background: #fff;
     margin-bottom: 1.25em;
     border: solid 1px #dedede
+    font-size: 10px;
 }
 
 table thead,
@@ -715,7 +716,7 @@ pre,
 pre>code {
     line-height: 1.45;
     color: rgba(0, 0, 0, .9);
-    font-family: "Droid Sans Mono", "DejaVu Sans Mono", monospace;
+    font-family: "Ubuntu Mono", monospace;
     font-weight: 400;
     text-rendering: optimizeSpeed
 }
@@ -923,7 +924,7 @@ body.toc2 #header>h1:nth-last-child(2) {
 }
 
 #toctitle {
-    color: #7a2518;
+    color: #bf4616;
     font-size: 1.2em
 }
 
@@ -1106,7 +1107,7 @@ h3>a.link,
 h4>a.link,
 h5>a.link,
 h6>a.link {
-    color: #ba3925;
+    color: #bf4616;
     text-decoration: none
 }
 
@@ -1118,7 +1119,7 @@ h3>a.link:hover,
 h4>a.link:hover,
 h5>a.link:hover,
 h6>a.link:hover {
-    color: #a53221
+    color: #bf4616
 }
 
 .audioblock,
@@ -1242,7 +1243,7 @@ table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p {
 }
 
 .sidebarblock>.content>.title {
-    color: #7a2518;
+    color: #bf4616;
     margin-top: 0;
     text-align: center
 }
@@ -1433,7 +1434,7 @@ table.pyhltable .linenodiv {
     font-weight: bold;
     line-height: .6em;
     margin-left: -.6em;
-    color: #7a2518;
+    color: #bf4616;
     text-shadow: 0 1px 2px rgba(0, 0, 0, .1)
 }
 
@@ -1645,7 +1646,7 @@ p.tableblock>code:only-child {
 }
 
 p.tableblock {
-    font-size: 1em
+    font-size: 0.8em
 }
 
 td>div.verse {
