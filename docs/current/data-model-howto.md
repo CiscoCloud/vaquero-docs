@@ -1,4 +1,4 @@
-<a name="key-concepts">Key Concepts</a>
+[Key Concepts](#key-concepts)
 
 [Vocabulary](#vocabulary)
 
@@ -24,7 +24,7 @@ A more complex example in a heterogeneous environment, with a multistage boot ca
 
 We treat this data model as a "single source of truth" (SoT) that describes the operating state of your datacenter. The data model is [parsed and verified](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html) by a Vaquero Controller, and then deployed to an on-site Vaquero Agent for execution.
 
-## <a id="key-concepts"></a>Key Concepts
+## <a name="key-concepts">Key Concepts</a>
 
 Your datacenter is expressed as an inventory of _hosts_. Each host belongs to a _host group_. Each host group uses a combination of _unattended assets_ and _operating system_ definitions to define a target configured state for a host.
 
