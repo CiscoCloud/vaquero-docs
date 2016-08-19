@@ -1,4 +1,4 @@
-[Key Concepts](#key-concepts)
+[Key Concepts][#key-concepts]
 
 [Vocabulary](#vocabulary)
 
