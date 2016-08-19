@@ -1,0 +1,330 @@
+<head>
+            <meta charset="UTF-8">
+            <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Vaquero Documentation</title>
+            <link rel="stylesheet" type="text/css" href="../doc.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+            <style>
+                .markdown-body {
+                    box-sizing: border-box;
+                    min-width: 200px;
+                    max-width: 980px;
+                    margin: 0 auto;
+                    padding: 45px;
+                }
+            </style>
+        </head><article class="markdown-body"><h1>Overview</h1>
+
+<p>Proposal for the representation of environment/configuration for baremetal provisioning. </p>
+
+<p>The goal of this structure is to create a Source of Truth (SoT) that describes baremetal deployments across multiple/unassociated sites. </p>
+
+<h1>Key Concepts</h1>
+
+<p>Strike a balance between:</p>
+
+<ul>
+<li>Reusability: Should be able to reuse definitions as much as possible to keep large changes to many hosts manageable (think 1000s of machines per environment).</li>
+<li>Readability: Do not obfuscate information to the point of being unreadable. Where not hugely contrary to reusability, aim for structures that are easy to read and understand. When possible, consolidate metadata in one place.</li>
+</ul>
+
+<h2>Source of Truth</h2>
+
+<p>The directory structure:</p>
+
+<pre><code class="prettyprint">.
+├── assets
+│   └── ignition
+│       ├── etcd.yaml
+│       └── etcd-proxy.yaml
+├── os
+│   ├── centos-7.yaml
+│   └── coreos-1053.12.0.yaml
+├── host_groups
+│   ├── etcd-cluster.yaml
+│   └── etcd-proxy.yaml
+└── sites
+    ├── site-a
+    │   ├── env.yaml
+    │   └── inventory.yaml
+    └── site-a
+        ├── env.yaml
+        └── inventory.yaml
+</code></pre>
+
+<h2>Changelog</h2>
+
+<ul>
+<li>Writing Templates
+
+<ul>
+<li>Added section about writing templates, and how collections of information interact on the system.</li>
+</ul></li>
+<li>Inventory (NOTE: removed INI proposal from previous revision)
+
+<ul>
+<li>Each site has an inventory file that:</li>
+<li>Assigns hosts to a group (host -&gt; host_group)</li>
+<li>Provides selectors required to identify this host</li>
+<li>Provides host-specific metadata</li>
+</ul></li>
+<li>Simplify and flatten structure
+
+<ul>
+<li>Host groups now exist at the top level and are shared among sites (like operating systems have been)</li>
+<li>no more per-site assets</li>
+<li>each site now has only two files: <code class="prettyprint">env.yaml</code> and <code class="prettyprint">inventory[.ini]</code></li>
+</ul></li>
+<li>Condensed metadata
+
+<ul>
+<li>metadata will be namespaced during templating. These are each &quot;collections&quot; of metadata. As opposed to merging metadata together.</li>
+<li>metadata from <code class="prettyprint">env.yaml</code> will be under <code class="prettyprint">env</code></li>
+<li>metadata from each host group will be under <code class="prettyprint">group</code></li>
+<li>metadata from each host will be under <code class="prettyprint">host</code></li>
+<li>A dedicated <code class="prettyprint">host</code> collection will now exist when rendering any configuration templates. This will be populated with any information we have gained during the initial <a href="http://ipxe.org/cfg">iPXE chainloading</a></li>
+</ul></li>
+<li>JSON -&gt; YAML
+
+<ul>
+<li>All documents have been shifted to yaml. Semantically, this does nothing to the data. It is just easier to compose/read.</li>
+</ul></li>
+<li>Operating System definition: 
+
+<ul>
+<li>remove pw_hash/password from operating system</li>
+<li>move cmdline from host_group -&gt; operating system (for now)</li>
+</ul></li>
+</ul>
+
+<h2>Workflow</h2>
+
+<p>My envisioned workflow using this information:</p>
+
+<ol>
+<li>gemgine starts, and waits for changes to come in from any configured repository.
+a. When a webhook is received, it&#39;s repo url and branch are used to identify affected sites.
+b. Any affected sites continue through the workflow</li>
+<li>Fetch the environment for the sites identified (using key from binding file)</li>
+<li>For coreos-bm provisioner, use Hosts and Operating Systems to create profiles and groups for each host. 
+a. For each group/profile after it is created, treat it as a template and try to apply the environment&#39;s metadata to each file. </li>
+<li>Render any assets (if the environment description and/or the asset file has been modified).</li>
+<li>Push all changed files to the remote hosts. </li>
+</ol>
+
+<h3>Environments</h3>
+
+<p>An environment represents a collection of hosts that will be provisioned by our services. The environment manifest includes information on how to connect to the on-site provisioner, the subnets being managed by the provisioner, and a collection of arbitrary metadata that will be used to configure any installation files (cloud-init, ignition, kickstart, etc) as well as services (through systemd, fleet, etc).</p>
+
+<p>Agent is a nested block with connection details that will be used to establish server-&gt;agent communication. <code class="prettyprint">url</code> and <code class="prettyprint">port</code> specify a local, insecure connection for hosts on the same subnet as the agent. </p>
+
+<pre><code class="prettyprint">---
+name: Virtualenv Dev
+id: test-site
+kind: pre-prod
+agent:
+  url: 10.10.10.9 # the site-local URL
+  port: 8080
+  secure_url: some.proper.domainname.com
+  secure_port: 443
+  cert_path: /etc/vaquero/certs/test-site.crt
+  # specify a specific root CA here? Or one CA to rule them all?
+metadata: 
+  env_name: detroit-preprod
+  env_kind: pre-prod  
+
+  coreos_path: assets/coreos/1053.2.0/
+
+  etcd_initial_cluster: node1=http://10.10.10.10:2380,node2=http://10.10.10.11:2380,node3=http://10.10.10.12:2380
+  networkd_gateway: 172.15.0.1
+  networkd_dns: 172.15.0.3
+
+  ssh_authorized_keys: []
+</code></pre>
+
+<p>NOTE: Stay away from arrays where you need to access a single index. The templating gets ugly. It&#39;s okay if you have arrays where you&#39;ll cover the entire range.</p>
+
+<h3>Inventory</h3>
+
+<p>Inventory is an association between a host and a host group. A file will be considered an inventory file if <code class="prettyprint">inventory</code> is prepended to the file name.</p>
+
+<p>A host matches a booting machine if <em>all</em> selectors are present, and match. Selectors will be restricted to any information <a href="http://ipxe.org/cfg">pulled via iPXE</a>, or stored in our stateful information about this machine (assuming the machine has booted before and have collected facts about it).</p>
+
+<pre><code class="prettyprint">---
+host_group: etcd-proxy
+hosts:
+- name: proxy1
+  selectors:
+    mac: 00:00:00:00:00:04
+- name: proxy2
+  selectors:
+    mac: 00:00:00:00:00:05
+---
+host_group: etcd-cluster
+hosts:
+- name: host1
+  selectors:
+    mac: 00:00:00:00:00:01
+  metadata:
+    ipv4: 10.10.10.10
+    networkd_address: 10.10.10.10/16
+    etcd_name: node1
+- name: host2
+  selectors:
+    mac: 00:00:00:00:00:02
+  metadata:
+    ipv4: 10.10.10.11
+    networkd_address: 10.10.10.11/16
+    etcd_name: node2
+- name: host3
+  selectors:
+    mac: 00:00:00:00:00:03
+  metadata:
+    ipv4: 10.10.10.12
+    networkd_address: 10.10.10.12/16
+    etcd_name: node3
+</code></pre>
+
+<h4>BMC</h4>
+
+<p>Baseboard Management Controller configuration can be added to any host. The nested <code class="prettyprint">bmc</code> block in each host will provide the details need to manage hardware lifecycle. Each implementation of bmc should have reasonable defaults if not specified.</p>
+
+<p>This should be made pluggable so <code class="prettyprint">cimc</code>/<code class="prettyprint">ucsm</code>/etc can be added (eventually...)</p>
+
+<pre><code class="prettyprint">- name: proxy-host
+  selectors:
+    mac: 00:00:00:00:00:04
+  bmc:
+    type: ipmi
+    ip: 10.10.11.10
+    mac: 00:00:00:00:01:04
+    port: 623 # may be omitted
+</code></pre>
+
+<h3>Bindings</h3>
+
+<p>A binding ties a particular environment to a site. It represents an association between a single SoT. <code class="prettyprint">source</code> has been included to keep the possibility for other sources to be used (eventually). For now, we can just assume every binding is to a git repository.</p>
+
+<pre><code class="prettyprint">```
+{
+    &quot;site-id&quot;: {
+        &quot;source&quot;: &quot;git&quot;, //later can change to sqldb/filesystem/etc?
+        &quot;repo&quot;: &quot;github.com/myorgs/repo&quot;, //defaults to &#39;this&#39; repo
+        &quot;branch&quot;: &quot;my-branch&quot;, //defaults master
+        &quot;commit&quot;: &quot;sha-sha-sha&quot;, //defaults to head of branch
+        &quot;tags&quot;: &quot;v1.1&quot; //defaults to none
+        //credentials? Auth, tokens, etc?
+    },
+    &quot;dev-syseng&quot;: {
+        &quot;source&quot;: &quot;git&quot;, //later can change to sqldb/filesystem/etc?
+        &quot;repo&quot;: &quot;https://github.comcast.com/viper-sde/belvedere&quot;,
+        &quot;branch&quot;: &quot;feature&quot;
+        //remote repository/feature at head commit
+    },
+    &quot;detroit-preprod&quot;: {
+        &quot;source&quot;: &quot;git&quot;
+        &quot;branch&quot;: &quot;feature&quot;
+        //this repository/feature at the head
+    },
+    &quot;qa-performance&quot;: {
+        &quot;source&quot;: &quot;git&quot;
+        &quot;commit&quot;: &quot;3b2664e421e441b75b3520722c42f0e0fe7e01e2&quot;
+        //this repository/master at commit 3b2664
+    }
+}
+```
+</code></pre>
+
+<h3>Host Group</h3>
+
+<p>A <em>host group</em> is a collection of hosts with identical structure or purpose. A host a single machine that will be managed by our provisioning service. It has two purposes: provide the provisioner with the details needed to identify the new host, and provide the files that will be needed to provision the host when it first boots. We can either specify metadata here, inject them from the environment metadata, or both.</p>
+
+<p>Any cloud-config/ignition/generic templates or other assets are staged in the top level <code class="prettyprint">assets</code> directory.</p>
+
+<pre><code class="prettyprint">---
+id: etcd-cluster
+name: Etcd Cluster
+operating_system: coreos-1053.2.0-stable
+
+unattended:
+  type: ignition
+  use: ignition/etcd.yaml
+
+metadata:
+  fleet_role: etcd
+</code></pre>
+
+<h3>Operating Systems</h3>
+
+<p>Operating systems specify the assets needed to boot a particular OS, and includes basic information on how to boot the OS. Like hosts, we can add placeholders here that will later be filled by environment (and agent) level metadata.</p>
+
+<pre><code class="prettyprint">---
+id: coreos-1053.2.0-stable
+name: CoreOS Stable 1053.2.0
+major_version: &#39;1053&#39;
+minor_version: &#39;2.0&#39;
+os_family: CoreOS
+release_name: stable
+boot:
+  kernel: &quot;http://{{.agent.url}}:{{.agent.port}}/{{.env.coreos_path}}coreos_production_pxe.vmlinuz&quot;
+  initrd:
+  - &quot;http://{{.agent.url}}:{{.agent.port}}/{{.env.coreos_path}}coreos_production_pxe_image.cpio.gz&quot;
+cmdline:
+  coreos.autologin: &#39;&#39;
+  coreos.first_boot: &#39;&#39;
+</code></pre>
+
+<h3>Writing Templates</h3>
+
+<p>Metadata from various sources is <code class="prettyprint">namespaced</code> in templated files to make it as clear as possible where particular information is expected to be provided. There are three namespaces: 
+  * env: metadata gained from the environment the host lives in
+  * group: collection of metadata gained from a hosts assigned host group
+  * host: collection of metadata provided in the inventory file AND an stateful information we have about the host
+  * agent: information about the provisioning agent. Not 100% sure what will exist here. <code class="prettyprint">url</code> and <code class="prettyprint">port</code> are a good start.</p>
+
+<p>An example ignition file for etcd nodes:</p>
+
+<pre><code class="prettyprint">---
+systemd:
+  units:
+    - name: etcd2.service
+      enable: true
+      dropins:
+        - name: 40-etcd-cluster.conf
+          contents: |
+            [Service]
+            Environment=&quot;ETCD_NAME={{.host.etcd_name}}&quot;
+            Environment=&quot;ETCD_ADVERTISE_CLIENT_URLS=http://{{.host.ipv4_address}}:2379&quot;
+            Environment=&quot;ETCD_INITIAL_ADVERTISE_PEER_URLS=http://{{.host.ipv4_address}}:2380&quot;
+            Environment=&quot;ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379&quot;
+            Environment=&quot;ETCD_LISTEN_PEER_URLS=http://{{.host.ipv4_address}}:2380&quot;
+            Environment=&quot;ETCD_INITIAL_CLUSTER={{.env.etcd_initial_cluster}}&quot;
+            Environment=&quot;ETCD_STRICT_RECONFIG_CHECK=true&quot;
+    - name: fleet.service
+      enable: true
+      dropins:
+        - name: fleet-metadata.conf
+          contents: |
+            [Service]
+            Environment=&quot;FLEET_METADATA=role={{.group.role}},name={{.host.etcd_name}}&quot;
+networkd:
+  units:
+    - name: 10-static.network
+      contents: |
+        [Match]
+        MACAddress={{.host.mac}}
+        [Network]
+        Gateway={{.env.networkd_gateway}}
+        DNS={{.env.networkd_dns}}
+        Address={{.host.networkd_address}}
+{{ if index . &quot;.env.ssh_authorized_keys&quot; }}
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        {{ range $element := .env.ssh_authorized_keys }}
+        - {{$element}}
+        {{end}}
+{{end}}
+</code></pre>
