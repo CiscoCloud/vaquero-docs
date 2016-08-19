@@ -22,8 +22,8 @@ class Renderer
             </style>
         </head><article class="markdown-body">'''
     text=File.open(fn).read
-    renderer = Redcarpet::Render::HTML.new()
-    markdown = Redcarpet::Markdown.new(renderer)
+    renderer = Redcarpet::Render::HTML.new(prettify: true)
+    markdown = Redcarpet::Markdown.new(renderer, autolink: true, tables: true)
     output = markdown.render(text)
     #parse the name of filename minus the .txt
     x = fn.split("/")
