@@ -1,4 +1,4 @@
-[Key Concepts][#key-concepts]
+<a name="key-concepts">Key Concepts</a>
 
 [Vocabulary](#vocabulary)
 
