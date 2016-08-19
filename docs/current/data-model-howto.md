@@ -28,7 +28,7 @@ We treat this data model as a "single source of truth" (SoT) that describes the 
 
 Your datacenter is expressed as an inventory of _hosts_. Each host belongs to a _host group_. Each host group uses a combination of _unattended assets_ and _operating system_ definitions to define a target configured state for a host.
 
-## Vocabulary
+## <a name="vocabulary">Vocabulary</a>
 
 *Site*: A managed datacenter, or group of machines managed by a single Vaquero Agent.
 
@@ -40,7 +40,7 @@ Your datacenter is expressed as an inventory of _hosts_. Each host belongs to a 
 
 *Host Group*: A collection that ties together operating systems and unattended assets. Describes a target state for hosts to reach.
 
-## Where things go
+## <a name="where-things-go">Where Things Go</a>
 
 Configuration files are placed in a directory hierarchy. Vaquero parses site configurations by reading files placed in specially named subdirectories. The root of your configuration path has four directories:
 
@@ -134,7 +134,7 @@ Each site has _at least_ two documents, the specially named `env.yml` and at lea
             ├── inventory.yml
             └── another-inv.yml
 
-## Rough Workflow
+## <a name="rough-workflow">Rough Workflow</a>
 
 Configurations are roughly executed in the following order:
 
@@ -152,7 +152,7 @@ The default ipxe script chains back to Vaquero Agent, injecting basic informatio
     chain ipxe?uuid=${uuid}&mac=${net0/mac:hexhyp}&domain=${domain}&hostname=${hostname}&domain=${domain}
 
 
-## Serving files
+## <a name="serving-files">Serving Files</a>
 
 Vaquero Agent will expose an endpoint `/file` for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to configuration.
 
@@ -189,7 +189,7 @@ For a host requesting `/ignition?mac=00:00:00:00:00:01`, group_one will be match
 For a host requesting `/ignition?mac=00:00:00:00:00:01&os=installed`, group_two will be matched (rule #2).
 
 
-## Metadata and Templating
+## <a name="metadata-and-templating">Metadata and Templating</a>
 
 Templates are written using [Go's standard templates](https://golang.org/pkg/text/template/). Templated information occurs in the following areas:
 
@@ -252,7 +252,7 @@ Might be replaced with,
 
 Where `AgentFileServer` is a built-in function that translates to `{{.agent.url}}:{{.agent.port}}/file`.
 
-## Translation to iPXE
+## <a name="translation-to-ipxe">Translation to iPXE</a>
 
 Currently, all network boots/installations are performed using iPXE scripts. Operating system boot parameters and cmdline options are translated into iPXE scripts to perform boot/installation tasks.
 
@@ -296,7 +296,7 @@ The iPXE script will be roughly generated as (not taking unattended info from ho
 Note how `lang` appears with a trailing `=`, because it's value was non-empty `' '`
 
 
-## Schemas
+## <a name="schemas">Schemas</a>
 
 Some more proper schemas for the various objects.
 
