@@ -54,13 +54,11 @@ Configuration files are placed in a directory hierarchy. Vaquero parses site con
 4. *sites*: One or more sites (each in it's own subdirectory) that share the same host_group, os, and asset definitions. Each site includes environment-specific information, and an inventory of hosts that apply host_group definitions to machines.
 
 
-
     .
     ├── assets
     ├── os
     ├── host_groups
     └── sites
-
 
 ### Assets
 
