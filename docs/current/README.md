@@ -5,18 +5,18 @@ A bare metal configuration tool that leverages github templates, and CoreOS bare
 
 # High Level Overview
 
-## Architecture
+## [Architecture] (https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html)
 ![arch](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/architecturediagram.png)
 
-## [Data Model Templates] (https://github.com/CiscoCloud/vaquero/blob/master/docs/env-data-structure.md)
+## [Data Model Templates] (https://github.com/CiscoCloud/vaquero-docs/blob/gh-pages/docs/current/env-data-structure.md)
 
-## [Requirements] (https://github.com/CiscoCloud/vaquero/blob/master/docs/design/requirements.md)
+## [Requirements] (https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html)
 
 ## Running Vaquero
-1. Fetch the image: `docker login -u gem-test -p f42556869fc7c81ec066e150f769b9c03cf4385b shippedrepos-docker-gemini.bintray.io && docker pull shippedrepos-docker-gemini.bintray.io/gemini/gemini:0.1`
-2. Run: `docker run shippedrepos-docker-gemini.bintray.io/gemini/gemini:0.1`
+1. Fetch the image: `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:0.1`
+2. Run: `docker run shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:0.1`
 
-## [Vauqero Validate] (https://github.com/CiscoCloud/vaquero/blob/master/docs/validator.md)
+## [Vaquero Validate] (https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
 
 ## Dev Environment: Pre-Reqs
 
@@ -27,9 +27,9 @@ A bare metal configuration tool that leverages github templates, and CoreOS bare
 
 ## Dev Environment: Fetching / Compiling / Running code
 
-1. `git clone https://github.com/CiscoCloud/vaquero.git` the Vaquero repo under `$GOPATH/src/github.com/ciscocloud/`.
+1. `git clone https://github.com/CiscoCloud/vaquero.git` the Vaquero repo under `$GOPATH/src/github.com/CiscoCloud/`.
 2. Build vaquero binary `make`.
-3. Run the vaquero binary `.bin/vaquero -config config.json`.
+3. Run the vaquero binary `.bin/vaquero <command> -config config.json`.
 
 
 ## Sending Webhooks to Vaquero Master
@@ -39,12 +39,6 @@ A bare metal configuration tool that leverages github templates, and CoreOS bare
 3. Create a testing repo to launch webhooks from.
 4. Give github.com the http endpoint provided by ngrok.
 5. Launch a webhook to hit the ngrok address.
-
-## CI System
-[Drone/CI Documentation] (https://github.com/CiscoCloud/vaquero/blob/master/docs/continuous-integration.md)
-
-## Contributing
-See our [Contributing Guide] (https://github.com/CiscoCloud/vaquero/blob/master/CONTRIBUTING.md)
 
 ## Docs
 Build the documentation by running `godoc -http <port>` and open localhost:<port> on your web browser

@@ -4,7 +4,7 @@ The Vaquero validator is a built in utility for checking the consistency of your
 
 ## Using vaquero validate
 
-Running `vaquero validate --sot-dir <base_directory>` The base directory structure should be consistent with the [data model] (https://github.com/CiscoCloud/vaquero/blob/master/docs/env-data-structure.md).
+Running `vaquero validate --sot-dir <base_directory>` The base directory structure should be consistent with the [data model] (https://github.com/CiscoCloud/vaquero-docs/blob/gh-pages/docs/current/env-data-structure.md).
 
 ## Validation Process
 
