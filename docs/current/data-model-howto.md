@@ -1,3 +1,8 @@
+# Vaquero Data Model and YOU
+
+
+## Table of Contents
+
 [Key Concepts](#key-concepts)
 
 [Vocabulary](#vocabulary)
@@ -14,8 +19,7 @@
 
 [Schemas](#schemas)
 
-
-# Vaquero Data Model and YOU
+### Introduction
 
 The Vaquero data model is meant to be a declarative representation of the state of your datacenter. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.
 
