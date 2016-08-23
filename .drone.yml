@@ -1,11 +1,11 @@
 ---
 pipeline:
   build:
-    image: ruby:2.3-alpine
+    image: ruby:2.3
     commands:
       - "echo HELLOWORLD"
       - "curl https://api.github.com/repos/CiscoCloud/vaquero-docs/tags > tags.json"
-      - "[sudo] gem install redcarpet"
+      - "gem install redcarpet"
       - "rm -rf docs/current/*.html"
       - "RECENT=$(git describe --abbrev=0 --tags)"
       - |
