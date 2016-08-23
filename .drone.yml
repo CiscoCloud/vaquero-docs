@@ -22,4 +22,4 @@ build:
     - "git commit -a -m \"Pushed $RECENT to site\""
     - "git push origin master"
   image: "gemtest/vaquero-docs:latest"
-  pull: true
+  pull: false
