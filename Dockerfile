@@ -1,1 +1,0 @@
-cmd echo Hello World!

@@ -1,6 +1,7 @@
 ---
 pipeline:
   build:
+    image: debian:stable
     commands:
       - "echo HELLOWORLD"
       - "curl https://api.github.com/repos/CiscoCloud/vaquero-docs/tags > tags.json"
@@ -23,5 +24,3 @@ pipeline:
       - "git add ."
       - "git commit -a -m \"Pushed $RECENT to site\""
       - "git push origin master"
-    image: gemtest/vaquero-docs
-    pull: false
