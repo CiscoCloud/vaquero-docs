@@ -1,7 +1,7 @@
 ---
 pipeline:
   build:
-    image: debian:stable
+    image: ruby:2.3-alpine
     commands:
       - "echo HELLOWORLD"
       - "curl https://api.github.com/repos/CiscoCloud/vaquero-docs/tags > tags.json"
