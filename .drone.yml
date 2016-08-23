@@ -20,6 +20,6 @@ build:
     - "git push origin --tags -f"
     - "git add ."
     - "git commit -a -m \"Pushed $RECENT to site\""
-    - "git push origin gh-pages"
+    - "git push origin master"
   image: "gemtest/vaquero-docs:latest"
   pull: true
