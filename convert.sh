@@ -1,5 +1,5 @@
 #!/bin/bash
-git config remote.origin.url "https://6db5d6b384651628616ecc2c022c99c04b963cbe@github.com/CiscoCloud/vaquero-docs.git"
+git config remote.origin.url "https://e319a829365cb5295dbeb5ad25bbc66d6365cdd3@github.com/CiscoCloud/vaquero-docs.git"
 git config --global user.name gem-test
 git config --global user.email gemini.atlas@gmail.com
 git config --list
