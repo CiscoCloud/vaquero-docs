@@ -1,27 +1,6 @@
----
 pipeline:
   build:
-    image: ruby:2.3
+    image: gemtest/vaquero-docs:0.1
+    pull: true
     commands:
-      - "echo HELLOWORLD"
-      - "sudo apt-get install curl"
-      - "curl https://api.github.com/repos/CiscoCloud/vaquero-docs/tags > tags.json"
-      - "gem install redcarpet"
-      - "rm -rf docs/current/*.html"
-      - "RECENT=$(git describe --abbrev=0 --tags)"
-      - |
-          if [ ! -d $RECENT ]; then
-              for z in docs/current/*
-              do
-                  echo $z
-                  ruby -r "./render_html.rb" -e "Renderer.convert("\"$z\"", "\"current\"")"
-              done
-              mkdir docs/$RECENT #create version dir
-              cp docs/current/*html docs/$RECENT/
-              cp docs/current/*png docs/$RECENT/
-              cp docs/current/*jpg docs/$RECENT/
-          fi
-      - "git push origin --tags -f"
-      - "git add ."
-      - "git commit -a -m \"Pushed $RECENT to site\""
-      - "git push origin master"
+      - ./convert.sh
