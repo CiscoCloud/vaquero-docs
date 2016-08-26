@@ -1,13 +1,11 @@
 #!/bin/bash
 set -u
 
-TMP=$(mktemp -d)
-git clone -b gh-pages $(git config remote.origin.url) "${TMP}"
-TARGET="${TMP}/docs/current"
+TARGET="docs/current"
 if [[ $DRONE_BRANCH != master ]]; then
-    TARGET="${TMP}/docs/branches/${DRONE_BRANCH/\//--}"
+    TARGET="docs/branches/${DRONE_BRANCH/\//--}"
 elif [[ -n ${DRONE_TAG:-} ]]; then
-    TARGET="${TMP}/docs/${DRONE_TAG}"
+    TARGET="docs/${DRONE_TAG}"
 fi
 
 mkdir -vp "${TARGET}"
@@ -17,4 +15,9 @@ for src in docs/current/*.md; do
     echo Converting ${src} to ${dst}...
     pandoc "${src}" -o "${dst}"
 done
+git add "${TARGET}"
 
+curl https://api.github.com/repos/CiscoCloud/vaquero-docs/tags > tags.json
+git add "tags.json"
+
+git status
