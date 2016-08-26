@@ -1,4 +1,5 @@
 # vaquero-docs
+
 [![Build Status](https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero-docs/status.svg)](https://drone.projectshipped.io/CiscoCloud/vaquero-docs)
 
 Documentation for the Vaquero project: [https://github.com/CiscoCloud/vaquero](https://github.com/CiscoCloud/vaquero)
