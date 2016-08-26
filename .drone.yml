@@ -9,6 +9,7 @@ pipeline:
       
   git_push:
     image: plugins/git-push
+    remote: git@github.com:CiscoCloud/vaquero-docs
     remote_name: origin
     branch: gh-pages
     commit: true
