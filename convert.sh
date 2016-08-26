@@ -1,12 +1,15 @@
 #!/bin/bash
-git config remote.origin.url "https://e319a829365cb5295dbeb5ad25bbc66d6365cdd3@github.com/CiscoCloud/vaquero-docs.git"
-git config --global user.name gem-test
-git config --global user.email gemini.atlas@gmail.com
-git config --list
-git checkout debian
+#git config remote.origin.url "https://e319a829365cb5295dbeb5ad25bbc66d6365cdd3@github.com/CiscoCloud/vaquero-docs.git"
+git config --global user.name meganokeefe
+git config --global user.email megan037@gmail.com
+#git config --list
+
+rm -rf vaquero-docs #remove if it exists 
+git clone https://github.com/CiscoCloud/vaquero-docs.git
+cd vaquero-docs
 curl https://api.github.com/repos/CiscoCloud/vaquero-docs/tags > tags.json
+
 RECENT="$(git describe --abbrev=0 --tags)"
-rm -rf vaquero-docs
 if [ ! -d $RECENT ]; then
   FILES=docs/current/*.md
   for f in $FILES
@@ -20,10 +23,8 @@ if [ ! -d $RECENT ]; then
   cp docs/current/*jpg docs/$RECENT/
 fi
 
-git status
-git push origin --tags -f
 git add .
 git commit -m "Pushed $NEW_TAG to site"
 git push origin master
 
-rm docs/current/*.html
+rm docs/current/*.html #prep for next iteration
