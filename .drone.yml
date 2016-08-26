@@ -4,3 +4,6 @@ pipeline:
     pull: true
     commands:
       - ./convert.sh
+    when:
+      branch: master
+      event: tag
