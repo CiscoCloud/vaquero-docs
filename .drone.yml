@@ -7,3 +7,7 @@ pipeline:
     when:
       branch: master
       event: tag
+      
+  publish:
+    image: plugin/gh-pages
+    source: docs
