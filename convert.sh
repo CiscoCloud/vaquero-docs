@@ -1,6 +1,7 @@
 #!/bin/bash
 set -u
 
+
 TARGET="docs/current"
 if [[ $DRONE_BRANCH != master ]]; then
     TARGET="docs/branches/${DRONE_BRANCH/\//--}"
