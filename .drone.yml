@@ -6,7 +6,7 @@ pipeline:
     image: gemtest/vaquero-docs:0.1
     commands:
       - ./convert.sh
-      
+
   git_push:
     image: plugins/git-push
     remote: git@github.com:CiscoCloud/vaquero-docs
@@ -15,4 +15,4 @@ pipeline:
     commit: true
     force: true
     when:
-      branch: convert
+      branch: meganconvert
