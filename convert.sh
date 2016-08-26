@@ -18,6 +18,6 @@ done
 git add "${TARGET}"
 
 curl https://api.github.com/repos/CiscoCloud/vaquero-docs/tags > tags.json
+git remote set-url origin https://github.com/CiscoCloud/vaquero-docs.git
 git add "tags.json"
-
 git status

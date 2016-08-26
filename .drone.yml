@@ -1,18 +1,17 @@
+---
 branches:
   exclude: gh-pages
-
 pipeline:
   build:
-    image: gemtest/vaquero-docs:0.1
     commands:
       - ./convert.sh
-
+    image: "gemtest/vaquero-docs:0.1"
   git_push:
-    image: plugins/git-push
-    remote: git@github.com:CiscoCloud/vaquero-docs
-    remote_name: upstream
     branch: gh-pages
     commit: true
     force: true
+    image: plugins/git-push
+    remote: "git@github.com:CiscoCloud/vaquero-docs"
+    remote_name: upstream
     when:
       branch: meganconvert
