@@ -2,21 +2,22 @@ branches:
   exclude: gh-pages
 
 pipeline:
-  merge:
-    image: plugins/git
-    commands:
-      - mkdir -p $HOME/.ssh
-      - umask 0077
-      - echo "$GIT_PUSH_SSH_KEY" > $HOME/.ssh/id_rsa
-      - echo "StrictHostKeyChecking no" > $HOME/.ssh/config
-      - git merge $(git config remote.origin.url)
-    when:
-      branch: convert
-
   build:
     image: gemtest/vaquero-docs:0.1
     commands:
       - ./convert.sh
+
+  merge:
+    image: gemtest/vaquero-docs:0.1
+    commands:
+      - set -ue
+      - git fetch origin gh-pages:gh-pages
+      - DIR="/drone/$(ls /drone | grep -v src)"
+      - expr $(git status --porcelain | egrep '^(M| M|\?\?)' | wc -l) = 0 || DRY_RUN="--dry-run "
+      - git checkout -q gh-pages
+      - |
+        (   cd /drone \
+         && rsync -av ${DRY_RUN:-} --delete-delay --exclude ".git" "${DIR}/" "src")
 
   git_push:
     image: plugins/git-push
@@ -24,6 +25,5 @@ pipeline:
     remote_name: upstream
     branch: gh-pages
     commit: true
-    force: true
     when:
       branch: convert
