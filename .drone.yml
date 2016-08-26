@@ -13,5 +13,6 @@ pipeline:
     remote_name: upstream
     branch: gh-pages
     commit: true
+    force: true
     when:
       branch: convert
