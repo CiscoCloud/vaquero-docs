@@ -17,11 +17,9 @@ pipeline:
       - git checkout -q gh-pages
       - rsync -av ${DRY_RUN:-} --delete-delay --exclude ".git" "${DIR}/" .
 
-  git_push:
+  publish:
     image: plugins/git-push
     remote: git@github.com:CiscoCloud/vaquero-docs
     remote_name: upstream
     branch: gh-pages
     commit: true
-    when:
-      branch: convert
