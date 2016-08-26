@@ -4,11 +4,15 @@
 #git config --global user.email megan037@gmail.com
 #git config --list
 
+
+git config user.email "megan037@gmail.com"
+git config user.name "meganokeefe"
 rm -rf vaquero-docs #remove if it exists
 git clone https://github.com/CiscoCloud/vaquero-docs.git
 cd vaquero-docs
 curl https://api.github.com/repos/CiscoCloud/vaquero-docs/tags > tags.json
 
+rm docs/current/*.html #ensure that the conversions output new files
 RECENT="$(git describe --abbrev=0 --tags)"
 if [ ! -d $RECENT ]; then
   FILES=docs/current/*.md
@@ -26,5 +30,3 @@ fi
 git add .
 git commit -m "Pushed $NEW_TAG to site"
 git push origin master
-
-rm docs/current/*.html #prep for next iteration
