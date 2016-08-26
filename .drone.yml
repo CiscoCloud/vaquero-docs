@@ -2,11 +2,22 @@ branches:
   exclude: gh-pages
 
 pipeline:
+  merge:
+    image: plugins/git
+    commands:
+      - mkdir -p $HOME/.ssh
+      - umask 0077
+      - echo "$GIT_PUSH_SSH_KEY" > $HOME/.ssh/id_rsa
+      - echo "StrictHostKeyChecking no" > $HOME/.ssh/config
+      - git merge $(git config remote.origin.url)
+    when:
+      branch: convert
+
   build:
     image: gemtest/vaquero-docs:0.1
     commands:
       - ./convert.sh
-      
+
   git_push:
     image: plugins/git-push
     remote: git@github.com:CiscoCloud/vaquero-docs
