@@ -11,5 +11,6 @@ pipeline:
     image: plugins/git-push
     remote_name: origin
     branch: gh-pages
+    commit: true
     when:
       branch: convert
