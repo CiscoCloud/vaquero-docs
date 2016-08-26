@@ -1,13 +1,15 @@
+branches:
+  exclude: gh-pages
+
 pipeline:
   build:
     image: gemtest/vaquero-docs:0.1
-    pull: true
     commands:
       - ./convert.sh
-    when:
-      branch: master
-      event: tag
       
-  publish:
-    image: plugin/gh-pages
-    source: docs
+  git_push:
+    image: plugins/git-push
+    remote_name: origin
+    branch: gh-pages
+    when:
+      branch: convert

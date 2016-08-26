@@ -1,22 +1,20 @@
 #!/bin/bash
-rm -rf vaquero-docs #remove if it exists
-git clone https://github.com/CiscoCloud/vaquero-docs.git
-cd vaquero-docs
-curl https://api.github.com/repos/CiscoCloud/vaquero-docs/tags > tags.json
-rm docs/current/*.html #ensure that the conversions output new files
-RECENT="$(git describe --abbrev=0 --tags)"
-if [ ! -d $RECENT ]; then
-  FILES=docs/current/*.md
-  for f in $FILES
-  do
-    echo Converting $f...
-    pandoc $f -o $f.html
-  done
-  mkdir docs/$RECENT #create version dir
-  cp docs/current/*html docs/$RECENT/
-  cp docs/current/*png docs/$RECENT/
-  cp docs/current/*jpg docs/$RECENT/
+set -u
+
+TMP=$(mktemp -d)
+git clone -b gh-pages $(git config remote.origin.url) "${TMP}"
+TARGET="${TMP}/docs/current"
+if [[ $DRONE_BRANCH != master ]]; then
+    TARGET="${TMP}/docs/branches/${DRONE_BRANCH/\//--}"
+elif [[ -n ${DRONE_TAG:-} ]]; then
+    TARGET="${TMP}/docs/${DRONE_TAG}"
 fi
-git add .
-git commit -m "Pushed $RECENT to site"
-git push origin master
+
+mkdir -vp "${TARGET}"
+FILES=docs/current/*.md
+for src in docs/current/*.md; do
+    dst="${TARGET}/$(basename "${src}" .md).html"
+    echo Converting ${src} to ${dst}...
+    pandoc "${src}" -o "${dst}"
+done
+
