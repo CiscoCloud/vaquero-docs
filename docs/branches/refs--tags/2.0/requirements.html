@@ -1,44 +1,3 @@
-<<<<<<< HEAD
-<head>
-            <meta charset="UTF-8">
-            <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Vaquero Documentation</title>
-            <link rel="stylesheet" type="text/css" href="../doc.css">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
-            <style>
-                .markdown-body {
-                    box-sizing: border-box;
-                    min-width: 200px;
-                    max-width: 980px;
-                    margin: 0 auto;
-                    padding: 45px;
-                }
-            </style>
-        </head><article class="markdown-body"><h1>Vaquero Requirements</h1>
-
-<p>The Vaquero project is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure.</p>
-
-<p>Use case(s):</p>
-
-<p>Actor: DevOps Engineer</p>
-
-<ol>
-<li>As a DevOps Engineer, I want to be able to manage my bare metal compute (hardware) as code.</li>
-</ol>
-
-<h2>Requirements:</h2>
-
-<ol>
-<li>A textual and structured representation of the cluster in a VCS -- the source of truth (SoT).</li>
-<li>Validation of data within SoT -- proper structure, dump work to be performed in human-readable format. (some minimum validation of &quot;known&quot; asset formats?)</li>
-<li>Automatically provision hardware according to the SoT.
-
-<ol>
-<li>Support for netboot (PXE, TFTP, etc.) of cluster instances.</li>
-<li>Support for delivering O/S assets (kernel, ramdisk, images, cloud-config, etc.) via HTTP. (Assumes iPXE support.)</li>
-</ol></li>
-=======
 <h1 id="vaquero-requirements">Vaquero Requirements</h1>
 <p>The Vaquero project is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure.</p>
 <p>Use case(s):</p>
@@ -53,7 +12,6 @@
 <li>Automatically provision hardware according to the SoT.</li>
 <li>Support for netboot (PXE, TFTP, etc.) of cluster instances.</li>
 <li>Support for delivering O/S assets (kernel, ramdisk, images, cloud-config, etc.) via HTTP. (Assumes iPXE support.)</li>
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 <li>Management of multiple clusters of software.</li>
 <li>Integration with GitHub has provider of SoT.</li>
 <li>Management of multiple datacenters via federated architecture.</li>
@@ -65,36 +23,18 @@
 <li>The ability to gate changes from SoT before applying to hardware.</li>
 <li>Support incremental (multistep) cluster provisioning.</li>
 <li>Provide availability in the following network conditions:
-<<<<<<< HEAD
-
-<ul>
-<li>network partition between agent and controller</li>
-<li>~~outage of agent node (and upgrade of agent node)~~</li>
-</ul></li>
-</ol>
-
-<h2>Non-requirements:</h2>
-
-=======
 <ul>
 <li>network partition between agent and controller</li>
 <li><del>outage of agent node (and upgrade of agent node)</del></li>
 </ul></li>
 </ol>
 <h2 id="non-requirements">Non-requirements:</h2>
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 <ul>
 <li>Have semantic understanding of installed software.</li>
 <li>Dynamic system inventory.</li>
 <li>Pre-built user interface.</li>
 </ul>
-<<<<<<< HEAD
-
-<h2>Implementation details:</h2>
-
-=======
 <h2 id="implementation-details">Implementation details:</h2>
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 <ul>
 <li>System will implement REST-based APIs for working w/external systems (i.e. GitHub webhook).</li>
 <li>System will use REST-based APIs for coordination between different nodes.</li>
@@ -102,13 +42,7 @@
 <li>System will provide detailed logs of operations.</li>
 <li>Internal APIs will be protected via an authentication mechanism (i.e. bearer token).</li>
 </ul>
-<<<<<<< HEAD
-
-<h2>Out-of-Scope:</h2>
-
-=======
 <h2 id="out-of-scope">Out-of-Scope:</h2>
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 <ul>
 <li>Security: integration w/role base systems</li>
 <li>Security: management of user credentials</li>

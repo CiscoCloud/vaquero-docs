@@ -2,6 +2,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Vaquero
 [![Build Status](https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg)](https://drone.projectshipped.io/CiscoCloud/vaquero)
 =======
@@ -59,6 +60,8 @@ A bare metal configuration tool that leverages github templates, and CoreOS bare
 
 >>>>>>> 98509d0... Attempted integration with drone
 =======
+=======
+>>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 # Vaquero
 [![Build Status](https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg)](https://drone.projectshipped.io/CiscoCloud/vaquero)
 
@@ -71,7 +74,10 @@ A bare metal configuration tool that leverages github templates, and CoreOS bare
 
 ## [Data Model Templates] (https://github.com/CiscoCloud/vaquero-docs/blob/gh-pages/docs/current/env-data-structure.md)
 
+<<<<<<< HEAD
 >>>>>>> 04eed73... Initialized docs site to v1.0
+=======
+>>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 ## [Requirements] (https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html)
 
 ## Running Vaquero

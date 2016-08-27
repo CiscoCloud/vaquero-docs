@@ -1,5 +1,6 @@
 [
   {
+<<<<<<< HEAD
     "name": "2.0",
     "zipball_url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/zipball/2.0",
     "tarball_url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/tarball/2.0",
@@ -9,6 +10,8 @@
     }
   },
   {
+=======
+>>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
     "name": "1.2",
     "zipball_url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/zipball/1.2",
     "tarball_url": "https://api.github.com/repos/CiscoCloud/vaquero-docs/tarball/1.2",

@@ -1,88 +1,3 @@
-<<<<<<< HEAD
-<head>
-            <meta charset="UTF-8">
-            <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Vaquero Documentation</title>
-            <link rel="stylesheet" type="text/css" href="../doc.css">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
-            <style>
-                .markdown-body {
-                    box-sizing: border-box;
-                    min-width: 200px;
-                    max-width: 980px;
-                    margin: 0 auto;
-                    padding: 45px;
-                }
-            </style>
-        </head><article class="markdown-body"><h1>Vaquero Data Model and YOU</h1>
-
-<h2>Table of Contents</h2>
-
-<p><a href="#key-concepts">Key Concepts</a></p>
-
-<p><a href="#vocabulary">Vocabulary</a></p>
-
-<p><a href="#where-things-go">Where things go</a></p>
-
-<p><a href="#rough-workflow">Rough Workflow</a></p>
-
-<p><a href="#serving-files">Serving files</a></p>
-
-<p><a href="#metadata-and-templating">Metadata and Templating</a></p>
-
-<p><a href="#translation-to-ipxe">Translation to iPXE</a></p>
-
-<p><a href="#schemas">Schemas</a></p>
-
-<h3>Introduction</h3>
-
-<p>The Vaquero data model is meant to be a declarative representation of the state of your datacenter. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.</p>
-
-<p>You can find a simple example model using CoreOS <a href="https://github.com/gem-test/vaquero">here</a>.
-A more complex example in a heterogeneous environment, with a multistage boot can be found <a href="https://github.com/gem-test/vaquero/tree/multi">here</a></p>
-
-<p>We treat this data model as a &quot;single source of truth&quot; (SoT) that describes the operating state of your datacenter. The data model is <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html">parsed and verified</a> by a Vaquero Controller, and then deployed to an on-site Vaquero Agent for execution.</p>
-
-<h2><a name="key-concepts">Key Concepts</a></h2>
-
-<p>Your datacenter is expressed as an inventory of <em>hosts</em>. Each host belongs to a <em>host group</em>. Each host group uses a combination of <em>unattended assets</em> and <em>operating system</em> definitions to define a target configured state for a host.</p>
-
-<h2><a name="vocabulary">Vocabulary</a></h2>
-
-<p><em>Site</em>: A managed datacenter, or group of machines managed by a single Vaquero Agent.</p>
-
-<p><em>Host</em>: A single managed machine. Definition includes identifying attributes (selectors), host-specific metadata, information for LOM (IPMI), and an association to a single host group.</p>
-
-<p><em>Operating System</em>: An &quot;installation&quot; template containing the details to perform a network boot into a particular OS, specifying kernel, initrd, boot command-line parameters, unattended config, etc.</p>
-
-<p><em>Unattended Assets</em>: An optionally templated unattended config/script (i.e. cloud-init, ignition, kickstart, etc) used for unattended boot and installation operations.</p>
-
-<p><em>Host Group</em>: A collection that ties together operating systems and unattended assets. Describes a target state for hosts to reach.</p>
-
-<h2><a name="where-things-go">Where Things Go</a></h2>
-
-<p>Configuration files are placed in a directory hierarchy. Vaquero parses site configurations by reading files placed in specially named subdirectories. The root of your configuration path has four directories:</p>
-
-<ol>
-<li><em>assets</em>: Assets grouped by type. These are generally unattended configs/scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).</li>
-<li><em>os</em>: Individual documents describing family, version, kernel/image location, and boot/installation options for any operating systems used by host groups.</li>
-<li><em>host_groups</em>: Individual documents combining operating system and unattended asset information to describe a target host state.</li>
-<li><p><em>sites</em>: One or more sites (each in it&#39;s own subdirectory) that share the same host<em>group, os, and asset definitions. Each site includes environment-specific information, and an inventory of hosts that apply host</em>group definitions to machines.</p>
-
-<p>.
-├── assets
-├── os
-├── host_groups
-└── sites</p></li>
-</ol>
-
-<h3>Assets</h3>
-
-<p>Assets are grouped into named subdirectories based on type. There are currently four types:</p>
-
-<ol>
-=======
 <h1 id="vaquero-data-model-and-you">Vaquero Data Model and YOU</h1>
 <h2 id="table-of-contents">Table of Contents</h2>
 <p><a href="#key-concepts">Key Concepts</a></p>
@@ -117,21 +32,13 @@ A more complex example in a heterogeneous environment, with a multistage boot ca
 <h3 id="assets">Assets</h3>
 <p>Assets are grouped into named subdirectories based on type. There are currently four types:</p>
 <ol style="list-style-type: decimal">
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 <li>Cloud-Config: <a href="https://coreos.com/os/docs/latest/cloud-config.html">CoreOS Cloudinit System</a></li>
 <li>Ignition: <a href="https://coreos.com/ignition/docs/latest/">CoreOS Ignition</a></li>
 <li>Kickstart: <a href="http://fedoraproject.org/wiki/Anaconda/Kickstart">Fedora Project Kickstart</a></li>
 <li>Untyped: Misc files. Can be used for &quot;unsupported&quot; configuration types.</li>
 </ol>
-<<<<<<< HEAD
-
-<p>Each asset is placed under a subdirectory according to it&#39;s type. Assets are referenced by file name from host groups:</p>
-
-<pre><code class="prettyprint">.
-=======
 <p>Each asset is placed under a subdirectory according to it's type. Assets are referenced by file name from host groups:</p>
 <pre><code>.
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 └── assets
     ├── ignition
     │   ├── etcd.yml
@@ -142,52 +49,6 @@ A more complex example in a heterogeneous environment, with a multistage boot ca
     │   └── clevos.yml
     └── untyped
         ├── autoyast.xml
-<<<<<<< HEAD
-        └── preseed.cfg
-</code></pre>
-
-<p>Validation is performed on typed assets to verify that rendered templates produce valid configurations.</p>
-
-<p>Assets are retrieved dynamically from the Vaquero Agent through typed endpoints. Query parameters are included in the request to render the asset for a particular host:
-- <code class="prettyprint">/cloud-config</code> -- Cloud-config assets
-- <code class="prettyprint">/ignition</code> -- Ignition assets
-- <code class="prettyprint">/kickstart</code> -- Kickstart assets
-- <code class="prettyprint">/untyped</code> -- Untyped assets</p>
-
-<p>So a host with mac address <code class="prettyprint">00:00:00:00:00:01</code> could retrieve it&#39;s rendered ignition configuration by requesting
-<code class="prettyprint">
-&lt;agent_url&gt;:&lt;agent_port&gt;/ignition?mac=00:00:00:00:00:01
-</code></p>
-
-<h3>Operating Systems</h3>
-
-<p>Operating systems exist as individual documents under the <code class="prettyprint">os</code> subdirectory. They are referenced by a self-assigned ID described in the document:</p>
-
-<pre><code class="prettyprint">.
-└── os
-    ├── centos-7.yml
-    ├── clevos-3.yml
-    └── coreos-1053.12.0.yml
-</code></pre>
-
-<h3>Host Groups</h3>
-
-<p>Host groups exist as individual documents under the <code class="prettyprint">host_groups</code> subdirectory. They are referenced by a self-assigned ID described in the document:</p>
-
-<pre><code class="prettyprint">.
-└── host_groups
-    ├── etcd-cluster.yml
-    └── etcd-proxy.yml
-</code></pre>
-
-<h3>Sites</h3>
-
-<p>Sites are represented by individual subdirectories. One directory == one site == one managed group of machines. Each SoT can contain multiple sites. Each of these sites shares the same assets/host_groups/os configuration files.</p>
-
-<p>Each site has <em>at least</em> two documents, the specially named <code class="prettyprint">env.yml</code> and at least one document describing an inventory of hosts. You may use YAML&#39;s triple-dash <code class="prettyprint">---</code> separator to combine multiple inventory documents into one file.</p>
-
-<pre><code class="prettyprint">.
-=======
         └── preseed.cfg</code></pre>
 <p>Validation is performed on typed assets to verify that rendered templates produce valid configurations.</p>
 <p>Assets are retrieved dynamically from the Vaquero Agent through typed endpoints. Query parameters are included in the request to render the asset for a particular host: - <code>/cloud-config</code> -- Cloud-config assets - <code>/ignition</code> -- Ignition assets - <code>/kickstart</code> -- Kickstart assets - <code>/untyped</code> -- Untyped assets</p>
@@ -210,7 +71,6 @@ A more complex example in a heterogeneous environment, with a multistage boot ca
 <p>Sites are represented by individual subdirectories. One directory == one site == one managed group of machines. Each SoT can contain multiple sites. Each of these sites shares the same assets/host_groups/os configuration files.</p>
 <p>Each site has <em>at least</em> two documents, the specially named <code>env.yml</code> and at least one document describing an inventory of hosts. You may use YAML's triple-dash <code>---</code> separator to combine multiple inventory documents into one file.</p>
 <pre><code>.
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 └── sites
     ├── site-a
     │   ├── env.yml
@@ -218,21 +78,10 @@ A more complex example in a heterogeneous environment, with a multistage boot ca
     └── site-a
         ├── env.yml
         ├── inventory.yml
-<<<<<<< HEAD
-        └── another-inv.yml
-</code></pre>
-
-<h2><a name="rough-workflow">Rough Workflow</a></h2>
-
-<p>Configurations are roughly executed in the following order:</p>
-
-<ol>
-=======
         └── another-inv.yml</code></pre>
 <h2 id="rough-workflow"><a name="rough-workflow">Rough Workflow</a></h2>
 <p>Configurations are roughly executed in the following order:</p>
 <ol style="list-style-type: decimal">
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 <li>Host makes DHCP request.</li>
 <li>DHCP causes host to chainload iPXE (undionly.kpxe) and indicates Vaquero Agent as next-server</li>
 <li>Vaquero Agent provides default iPXE script to discover basic host information (mac, uuid, domain, hostname)</li>
@@ -240,38 +89,6 @@ A more complex example in a heterogeneous environment, with a multistage boot ca
 <li>Vaquero Agent renders iPXE script using os, host_group, and host information</li>
 <li>Host executes iPXE script, requesting resources (kernel, intitrd, unattended configs/scripts) as required</li>
 </ol>
-<<<<<<< HEAD
-
-<p>The default ipxe script chains back to Vaquero Agent, injecting basic information:</p>
-
-<pre><code class="prettyprint">#!ipxe
-chain ipxe?uuid=${uuid}&amp;mac=${net0/mac:hexhyp}&amp;domain=${domain}&amp;hostname=${hostname}&amp;domain=${domain}
-</code></pre>
-
-<h2><a name="serving-files">Serving Files</a></h2>
-
-<p>Vaquero Agent will expose an endpoint <code class="prettyprint">/file</code> for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to configuration.</p>
-
-<h2>Identifying a Host</h2>
-
-<p>A booting machine is identified as a particular host based on the selecting information used. Currently, a host will be identified by <code class="prettyprint">mac</code> and <code class="prettyprint">uuid</code>, as reported by iPXE.</p>
-
-<p>Additionally, a specific callback may be made to Vaquero Agent that includes a custom selection parameter</p>
-
-<pre><code class="prettyprint">curl &quot;{{.agent.url}}:{{.agent.port}}/ignition?mac={{.host.mac}}&amp;os=installed&quot; -o ignition.json
-</code></pre>
-
-<p>When identifying a host, Vaquero Agent will:</p>
-
-<ol>
-<li>Only select a host where all the selectors apply</li>
-<li>Select the host where the most selectors apply</li>
-</ol>
-
-<p>So for two hosts:</p>
-
-<pre><code class="prettyprint">---
-=======
 <p>The default ipxe script chains back to Vaquero Agent, injecting basic information:</p>
 <pre><code>#!ipxe
 chain ipxe?uuid=${uuid}&amp;mac=${net0/mac:hexhyp}&amp;domain=${domain}&amp;hostname=${hostname}&amp;domain=${domain}</code></pre>
@@ -288,7 +105,6 @@ chain ipxe?uuid=${uuid}&amp;mac=${net0/mac:hexhyp}&amp;domain=${domain}&amp;host
 </ol>
 <p>So for two hosts:</p>
 <pre><code>---
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 host_group: group_one
 hosts:
 - name: host1
@@ -300,45 +116,6 @@ hosts:
 - name: host1_plus_some
   selectors:
     mac: 00:00:00:00:00:01
-<<<<<<< HEAD
-    os: installed
-</code></pre>
-
-<p>For a host requesting <code class="prettyprint">/ignition?mac=00:00:00:00:00:01</code>, group<em>one will be matched (rule #1).
-For a host requesting <code class="prettyprint">/ignition?mac=00:00:00:00:00:01&amp;os=installed</code>, group</em>two will be matched (rule #2).</p>
-
-<h2><a name="metadata-and-templating">Metadata and Templating</a></h2>
-
-<p>Templates are written using <a href="https://golang.org/pkg/text/template/">Go&#39;s standard templates</a>. Templated information occurs in the following areas:</p>
-
-<ol>
-<li>In any files under <code class="prettyprint">assets</code></li>
-<li>In os objects in <code class="prettyprint">boot.kernel</code>, <code class="prettyprint">boot.initrd</code>, and values in <code class="prettyprint">cmdline</code></li>
-</ol>
-
-<p>Metadata is used primarily to render templated information. It is &quot;unstructured&quot; data, that consists of nested key-value maps, and lists.</p>
-
-<p>Metadata is included in three separate places in your configuration:</p>
-
-<ol>
-<li>In the environment <code class="prettyprint">env.yml</code> file</li>
-<li>In a host_group file</li>
-<li>In an inventory document, under each host</li>
-</ol>
-
-<p>Metadata is made available during template execution as separate fields under the template&#39;s &quot;dot&quot;. The fields are:</p>
-
-<ol>
-<li><code class="prettyprint">.env</code> for environmental metadata</li>
-<li><code class="prettyprint">.agent</code> for Vaquero Agent information (all fields from the <code class="prettyprint">agent</code> object)</li>
-<li><code class="prettyprint">.group</code> for host_group metadata</li>
-<li><code class="prettyprint">.host</code> for host metadata, selectors, and limited information discovered via iPXE (mac, uuid, domain, hostname).</li>
-</ol>
-
-<p>By way of example, this template snippet defines a networkd configuration:</p>
-
-<pre><code class="prettyprint">networkd:
-=======
     os: installed</code></pre>
 <p>For a host requesting <code>/ignition?mac=00:00:00:00:00:01</code>, group_one will be matched (rule #1). For a host requesting <code>/ignition?mac=00:00:00:00:00:01&amp;os=installed</code>, group_two will be matched (rule #2).</p>
 <h2 id="metadata-and-templating"><a name="metadata-and-templating">Metadata and Templating</a></h2>
@@ -363,7 +140,6 @@ For a host requesting <code class="prettyprint">/ignition?mac=00:00:00:00:00:01&
 </ol>
 <p>By way of example, this template snippet defines a networkd configuration:</p>
 <pre><code>networkd:
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
   units:
     - name: 10-static.network
       contents: |
@@ -372,68 +148,16 @@ For a host requesting <code class="prettyprint">/ignition?mac=00:00:00:00:00:01&
         [Network]
         Gateway={{.env.networkd_gateway}}
         DNS={{.env.networkd_dns}}
-<<<<<<< HEAD
-        Address={{.host.networkd_address}}
-</code></pre>
-
-<p><code class="prettyprint">.host.mac</code> is from the host&#39;s selectors, <code class="prettyprint">.host.networkd_address</code> and the <code class="prettyprint">.env</code> fields are specified as metadata in their respective documents.</p>
-
-<h3>Hosts with iPXE</h3>
-
-<p>Host information for templating includes the following information, discovered via <a href="http://ipxe.org/cfg">iPXE</a>:</p>
-
-<ol>
-=======
         Address={{.host.networkd_address}}</code></pre>
 <p><code>.host.mac</code> is from the host's selectors, <code>.host.networkd_address</code> and the <code>.env</code> fields are specified as metadata in their respective documents.</p>
 <h3 id="hosts-with-ipxe">Hosts with iPXE</h3>
 <p>Host information for templating includes the following information, discovered via <a href="http://ipxe.org/cfg">iPXE</a>:</p>
 <ol style="list-style-type: decimal">
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 <li>mac</li>
 <li>domain</li>
 <li>hostname</li>
 <li>uuid</li>
 </ol>
-<<<<<<< HEAD
-
-<h3>TEMPLATING TODO</h3>
-
-<p>As a future feature, we will define a series of well defined helper functions that will make for more succinct and readable templates.</p>
-
-<p>For example,</p>
-
-<pre><code class="prettyprint">boot:
-  kernel: {{.agent.url}}:{{.agent.port}}/file/coreos_production_pxe.vmlinuz
-</code></pre>
-
-<p>Might be replaced with,</p>
-
-<pre><code class="prettyprint">boot:
-  kernel: {{ AgentFileServer }}/coreos_production_pxe.vmlinuz
-</code></pre>
-
-<p>Where <code class="prettyprint">AgentFileServer</code> is a built-in function that translates to <code class="prettyprint">{{.agent.url}}:{{.agent.port}}/file</code>.</p>
-
-<h2><a name="translation-to-ipxe">Translation to iPXE</a></h2>
-
-<p>Currently, all network boots/installations are performed using iPXE scripts. Operating system boot parameters and cmdline options are translated into iPXE scripts to perform boot/installation tasks.</p>
-
-<p>Any unattended configs/scripts included in a host_group are inserted during this process. Inconsistencies (i.e. using ignition for a CentOS os) should be detected during validation.</p>
-
-<h3>Cmdline Parameters</h3>
-
-<p>Rules for translating cmdline parameters:</p>
-
-<ol>
-<li>Keys with empty values (i.e. &quot;&quot; or &#39;&#39;) are formatted as <code class="prettyprint">key</code> in the boot options</li>
-<li>Keys with non-empty values are formatted as <code class="prettyprint">key=value</code> in the boot options</li>
-</ol>
-
-<p>So for the os</p>
-
-<pre><code class="prettyprint">---
-=======
 <h3 id="templating-todo">TEMPLATING TODO</h3>
 <p>As a future feature, we will define a series of well defined helper functions that will make for more succinct and readable templates.</p>
 <p>For example,</p>
@@ -454,7 +178,6 @@ For a host requesting <code class="prettyprint">/ignition?mac=00:00:00:00:00:01&
 </ol>
 <p>So for the os</p>
 <pre><code>---
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 id: centos-example
 major_version: &#39;7&#39;
 minor_version: &#39;2&#39;
@@ -468,31 +191,6 @@ cmdline:
   console: ttyS0,115200
   lang: &#39; &#39;
   debug: &#39;&#39;
-<<<<<<< HEAD
-  enforcing: &#39;&#39;
-</code></pre>
-
-<p>The iPXE script will be roughly generated as (not taking unattended info from host_group):</p>
-
-<pre><code class="prettyprint">#!ipxe
-
-kernel centos_kernel console=ttyS0,115200 lang=  debug enforcing
-initrd centos_initrd
-boot
-</code></pre>
-
-<p>Note how <code class="prettyprint">lang</code> appears with a trailing <code class="prettyprint">=</code>, because it&#39;s value was non-empty <code class="prettyprint">&#39; &#39;</code></p>
-
-<h2><a name="schemas">Schemas</a></h2>
-
-<p>Some more proper schemas for the various objects.</p>
-
-<h3>host_group</h3>
-
-<p>Defines a configured state (combination of os w/ unattended configuration and metadata) that may be applied to a group of hosts.</p>
-
-<pre><code class="prettyprint">|       name       |                  description                  | required |         schema        | default |
-=======
   enforcing: &#39;&#39;</code></pre>
 <p>The iPXE script will be roughly generated as (not taking unattended info from host_group):</p>
 <pre><code>#!ipxe
@@ -506,42 +204,11 @@ boot</code></pre>
 <h3 id="host_group">host_group</h3>
 <p>Defines a configured state (combination of os w/ unattended configuration and metadata) that may be applied to a group of hosts.</p>
 <pre><code>|       name       |                  description                  | required |         schema        | default |
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 |------------------|-----------------------------------------------|----------|-----------------------|---------|
 | id               | A self-assigned identifier (should be unique) | yes      | string                |         |
 | name             | A human-readable name for this group          | no       | string                | id      |
 | operating_system | The ID of the os associated with this group   | yes      | string                |         |
 | unattended       | Unattended config/script details              | no       | host_group.unattended |         |
-<<<<<<< HEAD
-| metadata         | unstructured, host_group-specific information | no       | object                |         |
-</code></pre>
-
-<h4>host_group.unattended</h4>
-
-<p>Allow a network boot or installation to proceed automatically by providing canned answers.</p>
-
-<pre><code class="prettyprint">| name |                       description                       | required | schema | default |
-|------|---------------------------------------------------------|----------|--------|---------|
-| type | The type of unattended config/script to use             | yes      | string |         |
-| use  | The file name used to find the unattended config/script | yes      | string |         |
-</code></pre>
-
-<h3>inventory</h3>
-
-<p>Define a collection of hosts that will be configured according to a specific host_group.</p>
-
-<pre><code class="prettyprint">|    name    |          description          | required |   schema   | default |
-|------------|-------------------------------|----------|------------|---------|
-| host_group | host_group id                 | yes      | string     |         |
-| hosts      | A list of hosts in this group | yes      | host array |         |
-</code></pre>
-
-<h4>inv.host</h4>
-
-<p>Details for single-hosts bmc</p>
-
-<pre><code class="prettyprint">|    name   |                     description                      | required | schema | default |
-=======
 | metadata         | unstructured, host_group-specific information | no       | object                |         |</code></pre>
 <h4 id="host_group.unattended">host_group.unattended</h4>
 <p>Allow a network boot or installation to proceed automatically by providing canned answers.</p>
@@ -558,90 +225,41 @@ boot</code></pre>
 <h4 id="inv.host">inv.host</h4>
 <p>Details for single-hosts bmc</p>
 <pre><code>|    name   |                     description                      | required | schema | default |
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 |-----------|------------------------------------------------------|----------|--------|---------|
 | name      | unique name among hosts in the same group            | yes      | string |         |
 | selectors | map of string keys/values used to identify this host | yes      | object |         |
 | bmc       | Details for connecting to the host&#39;s BMC             | no       | bmc    |         |
-<<<<<<< HEAD
-| metadata  | unstructured, host-specific information              | no       | object |         |
-</code></pre>
-
-<h4>inv.bmc (ipmi)</h4>
-
-<p>Details for single-hosts bmc, used for LOM of the host machine.</p>
-
-<p>NOTE: Only IPMI is supported at this time.</p>
-
-<pre><code class="prettyprint">| name |          description          | required | schema | default |
-=======
 | metadata  | unstructured, host-specific information              | no       | object |         |</code></pre>
 <h4 id="inv.bmc-ipmi">inv.bmc (ipmi)</h4>
 <p>Details for single-hosts bmc, used for LOM of the host machine.</p>
 <p>NOTE: Only IPMI is supported at this time.</p>
 <pre><code>| name |          description          | required | schema | default |
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 |------|-------------------------------|----------|--------|---------|
 | type | The type of BMC the host uses | yes      | string | ipmi    |
 | ip   | IP Address of IPMI interface  | yes      | string |         |
 | mac  | MAC Address of IPMI inteface  | no       | string |         |
 | user | Configured user               | yes      | string |         |
-<<<<<<< HEAD
-| pass | Configured password           | yes      | string |         |
-</code></pre>
-
-<h3>env</h3>
-
-<p>Provides information for a single deployment/datacenter/etc.</p>
-
-<pre><code class="prettyprint">|   name   |                        description                        | required |   schema  | default |
-=======
 | pass | Configured password           | yes      | string |         |</code></pre>
 <h3 id="env">env</h3>
 <p>Provides information for a single deployment/datacenter/etc.</p>
 <pre><code>|   name   |                        description                        | required |   schema  | default |
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 |----------|-----------------------------------------------------------|----------|-----------|---------|
 | id       | A self-assigned identifier (should be unique)             | yes      | string    |         |
 | name     | A human-readable name for this group                      | no       | string    | id      |
 | agent    | Details for establishing a connection to the site&#39;s agent | yes      | env.agent |         |
-<<<<<<< HEAD
-| metadata | unstructured, site-specific information                   | no       | object    |         |
-</code></pre>
-
-<h4>env.agent</h4>
-
-<p>Details for establishing a connection to a site&#39;s agent</p>
-
-<pre><code class="prettyprint">|     name    |              description              | required |  schema |      default      |
-=======
 | metadata | unstructured, site-specific information                   | no       | object    |         |</code></pre>
 <h4 id="env.agent">env.agent</h4>
 <p>Details for establishing a connection to a site's agent</p>
 <pre><code>|     name    |              description              | required |  schema |      default      |
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 |-------------|---------------------------------------|----------|---------|-------------------|
 | url         | Insecure/local url for reaching agent | yes      | string  | http://127.0.0.1  |
 | port        | Port for insecure URL                 | yes      | integer | 80                |
 | secure_url  | Secure/remote url for reaching agent  | yes      | string  | https://127.0.0.1 |
-<<<<<<< HEAD
-| secure_port | Port for secure URL                   | yes      | integer | 443               |
-</code></pre>
-
-<p>The transport (http/s) should be included with the agent URL.</p>
-
-<h3>os</h3>
-
-<p>Represents a single operating system with boot/installation parameters.</p>
-
-<pre><code class="prettyprint">|      name     |           description            | required |  schema | default |
-=======
 | secure_port | Port for secure URL                   | yes      | integer | 443               |</code></pre>
 <p>The transport (http/s) should be included with the agent URL.</p>
 <h3 id="os">os</h3>
 <p>Represents a single operating system with boot/installation parameters.</p>
 <pre><code>|      name     |           description            | required |  schema | default |
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 |---------------|----------------------------------|----------|---------|---------|
 | id            | self-assigned identifier         | yes      | string  |         |
 | name          | human-readable name              | yes      | string  | id      |
@@ -650,23 +268,6 @@ boot</code></pre>
 | os_family     | family (i.e. CoreOS, CentOS)     | yes      | string  |         |
 | release_name  | release name (i.e. stable, beta) | no       | string  |         |
 | boot          | kernal &amp; initrd img info         | yes      | os.boot |         |
-<<<<<<< HEAD
-| cmdline       | boot/installation options        | no       | object  |         |
-</code></pre>
-
-<p>Cmdline values may be templated. They will be rendered on-demand for inidividual hosts.</p>
-
-<h4>os.boot</h4>
-
-<p>Contains information about the kernal/initrds for an operating system.</p>
-
-<pre><code class="prettyprint">|  name  |               description               | required |    schema    | default |
-|--------|-----------------------------------------|----------|--------------|---------|
-| kernel | URL for retrieving kernel on boot       | yes      | string       |         |
-| initrd | URL for retrieving initrds/imgs on boot | yes      | string array |         |
-</code></pre>
-
-=======
 | cmdline       | boot/installation options        | no       | object  |         |</code></pre>
 <p>Cmdline values may be templated. They will be rendered on-demand for inidividual hosts.</p>
 <h4 id="os.boot">os.boot</h4>
@@ -675,5 +276,4 @@ boot</code></pre>
 |--------|-----------------------------------------|----------|--------------|---------|
 | kernel | URL for retrieving kernel on boot       | yes      | string       |         |
 | initrd | URL for retrieving initrds/imgs on boot | yes      | string array |         |</code></pre>
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 <p>Kernel and initrd values may be templated. They will be rendered on-demand for inidividual hosts.</p>
