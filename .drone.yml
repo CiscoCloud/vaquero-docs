@@ -1,13 +1,25 @@
+branches:
+  exclude: gh-pages
+
 pipeline:
   build:
     image: gemtest/vaquero-docs:0.1
-    pull: true
     commands:
       - ./convert.sh
-    when:
-      branch: master
-      event: tag
-      
+
+  merge:
+    image: gemtest/vaquero-docs:0.1
+    commands:
+      - set -ue
+      - git fetch origin gh-pages:gh-pages
+      - DIR="/drone/$(ls /drone | grep -v src)"
+      - expr $(git status --porcelain | egrep '^(M| M|\?\?)' | wc -l) = 0 || DRY_RUN="--dry-run "
+      - git checkout -q gh-pages
+      - rsync -av ${DRY_RUN:-} --delete-delay --exclude ".git" "${DIR}/" .
+
   publish:
-    image: plugin/gh-pages
-    source: docs
+    image: plugins/git-push
+    remote: git@github.com:CiscoCloud/vaquero-docs
+    remote_name: upstream
+    branch: gh-pages
+    commit: true
