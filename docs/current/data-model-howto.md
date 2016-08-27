@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="../doc.css"">
+
 # Vaquero Data Model and YOU
 
 
@@ -73,16 +75,16 @@ Each asset is placed under a subdirectory according to it's type. Assets are ref
 
     .
     └── assets
-        ├── ignition
-        │   ├── etcd.yml
-        │   └── raid-fmt.yml
-        ├── cloud-config
-        │   └── base.yml
-        ├── kickstart
-        │   └── clevos.yml
-        └── untyped
-            ├── autoyast.xml
-            └── preseed.cfg
+        ├── ignition
+        │   ├── etcd.yml
+        │   └── raid-fmt.yml
+        ├── cloud-config
+        │   └── base.yml
+        ├── kickstart
+        │   └── clevos.yml
+        └── untyped
+            ├── autoyast.xml
+            └── preseed.cfg
 
 Validation is performed on typed assets to verify that rendered templates produce valid configurations.
 
@@ -104,9 +106,9 @@ Operating systems exist as individual documents under the `os` subdirectory. The
 
     .
     └── os
-        ├── centos-7.yml
-        ├── clevos-3.yml
-        └── coreos-1053.12.0.yml
+        ├── centos-7.yml
+        ├── clevos-3.yml
+        └── coreos-1053.12.0.yml
 
 
 ### Host Groups
@@ -129,12 +131,12 @@ Each site has _at least_ two documents, the specially named `env.yml` and at lea
     .
     └── sites
         ├── site-a
-        │   ├── env.yml
-        │   └── inventory.yml
+        │   ├── env.yml
+        │   └── inventory.yml
         └── site-a
-            ├── env.yml
-            ├── inventory.yml
-            └── another-inv.yml
+            ├── env.yml
+            ├── inventory.yml
+            └── another-inv.yml
 
 ## <a name="rough-workflow">Rough Workflow</a>
 

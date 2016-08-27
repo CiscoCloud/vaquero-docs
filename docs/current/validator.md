@@ -1,3 +1,6 @@
+<link rel="stylesheet" type="text/css" href="../doc.css"">
+
+
 #Vaquero Validator
 
 The Vaquero validator is a built in utility for checking the consistency of your configurations. Its purpose is to preemptively report any inconsistencies (mistyped IDs, missing metadata, etc) in your configuration, before you attempt to deploy it.
@@ -12,7 +15,7 @@ The first thing validate does is load the directory tree passed to it.
 
 - It checks if all links between objects exist
 
-  - For example, an error would be generated if a `host_group` is looking for `operating_system: coreos-1053.2.0-stable` and the data model only has `coreos-1053.2.0-alpha`. 
+  - For example, an error would be generated if a `host_group` is looking for `operating_system: coreos-1053.2.0-stable` and the data model only has `coreos-1053.2.0-alpha`.
 
 - It checks if all metadata needed to render templates is available.
 

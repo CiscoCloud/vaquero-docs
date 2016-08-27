@@ -1,8 +1,11 @@
+<link rel="stylesheet" type="text/css" href="../doc.css"">
+
+
 # Overview
 
-Proposal for the representation of environment/configuration for baremetal provisioning. 
+Proposal for the representation of environment/configuration for baremetal provisioning.
 
-The goal of this structure is to create a Source of Truth (SoT) that describes baremetal deployments across multiple/unassociated sites. 
+The goal of this structure is to create a Source of Truth (SoT) that describes baremetal deployments across multiple/unassociated sites.
 
 # Key Concepts
 
@@ -33,7 +36,7 @@ The directory structure:
 	    └── site-a
 	        ├── env.yaml
 	        └── inventory.yaml
-	
+
 ## Changelog
 
 * Writing Templates
@@ -55,7 +58,7 @@ The directory structure:
   * A dedicated `host` collection will now exist when rendering any configuration templates. This will be populated with any information we have gained during the initial [iPXE chainloading][1]
 * JSON -\> YAML
   * All documents have been shifted to yaml. Semantically, this does nothing to the data. It is just easier to compose/read.
-* Operating System definition: 
+* Operating System definition:
   * remove pw\_hash/password from operating system
   * move cmdline from host\_group -\> operating system (for now)
 
@@ -68,17 +71,17 @@ My envisioned workflow using this information:
 	a. When a webhook is received, it's repo url and branch are used to identify affected sites.
 	b. Any affected sites continue through the workflow
   2. Fetch the environment for the sites identified (using key from binding file)
-  3. For coreos-bm provisioner, use Hosts and Operating Systems to create profiles and groups for each host. 
-	a. For each group/profile after it is created, treat it as a template and try to apply the environment's metadata to each file. 
+  3. For coreos-bm provisioner, use Hosts and Operating Systems to create profiles and groups for each host.
+	a. For each group/profile after it is created, treat it as a template and try to apply the environment's metadata to each file.
   4. Render any assets (if the environment description and/or the asset file has been modified).
-  5. Push all changed files to the remote hosts. 
+  5. Push all changed files to the remote hosts.
 
 
 ### Environments
 
 An environment represents a collection of hosts that will be provisioned by our services. The environment manifest includes information on how to connect to the on-site provisioner, the subnets being managed by the provisioner, and a collection of arbitrary metadata that will be used to configure any installation files (cloud-init, ignition, kickstart, etc) as well as services (through systemd, fleet, etc).
 
-Agent is a nested block with connection details that will be used to establish server-\>agent communication. `url` and `port` specify a local, insecure connection for hosts on the same subnet as the agent. 
+Agent is a nested block with connection details that will be used to establish server-\>agent communication. `url` and `port` specify a local, insecure connection for hosts on the same subnet as the agent.
 
 
 	---
@@ -92,16 +95,16 @@ Agent is a nested block with connection details that will be used to establish s
 	  secure_port: 443
 	  cert_path: /etc/vaquero/certs/test-site.crt
 	  # specify a specific root CA here? Or one CA to rule them all?
-	metadata: 
+	metadata:
 	  env_name: detroit-preprod
 	  env_kind: pre-prod  
-	
+
 	  coreos_path: assets/coreos/1053.2.0/
-	
+
 	  etcd_initial_cluster: node1=http://10.10.10.10:2380,node2=http://10.10.10.11:2380,node3=http://10.10.10.12:2380
 	  networkd_gateway: 172.15.0.1
 	  networkd_dns: 172.15.0.3
-	
+
 	  ssh_authorized_keys: []
 
 
@@ -209,11 +212,11 @@ Any cloud-config/ignition/generic templates or other assets are staged in the to
 	id: etcd-cluster
 	name: Etcd Cluster
 	operating_system: coreos-1053.2.0-stable
-	
+
 	unattended:
 	  type: ignition
 	  use: ignition/etcd.yaml
-	
+
 	metadata:
 	  fleet_role: etcd
 
@@ -241,7 +244,7 @@ Operating systems specify the assets needed to boot a particular OS, and include
 
 ### Writing Templates
 
-Metadata from various sources is `namespaced` in templated files to make it as clear as possible where particular information is expected to be provided. There are three namespaces: 
+Metadata from various sources is `namespaced` in templated files to make it as clear as possible where particular information is expected to be provided. There are three namespaces:
   * env: metadata gained from the environment the host lives in
   * group: collection of metadata gained from a hosts assigned host group
   * host: collection of metadata provided in the inventory file AND an stateful information we have about the host
@@ -249,7 +252,7 @@ Metadata from various sources is `namespaced` in templated files to make it as c
 
 
 An example ignition file for etcd nodes:
-	
+
 	---
 	systemd:
 	  units:

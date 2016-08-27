@@ -1,3 +1,6 @@
+<link rel="stylesheet" type="text/css" href="../doc.css"">
+
+
 # Vaquero Requirements
 
 The Vaquero project is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure.
@@ -48,4 +51,3 @@ Actor: DevOps Engineer
 * Security: integration w/role base systems
 * Security: management of user credentials
 * Security: management of assymetric encryption keys
-

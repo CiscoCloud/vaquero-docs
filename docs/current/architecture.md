@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="../doc.css"">
+
 # Vaquero
 
 The Vaquero project is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure. A running system will be composed of a centralized control plane that automates provisioning of software in one or more datacenters.
@@ -6,63 +8,10 @@ The goal is to provide the ability for teams to manage their infrastructure usin
 
 ## Architecture
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-The diagram linked below shows a high-level view of the overall application architecture. All components should run as containers, but some will need various levels of privilege to perform their required functionality.
-
-![arch](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/architecturediagram.png)
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-The diagram below shows a high-level view of the overall application architecture. All components should run as containers, but some will need various levels of privilege to perform their required functionality.
-
-![Model View Controller](architecture.png)
->>>>>>> 994e824... Updated to current docs
-=======
-The diagram linked below shows a high-level view of the overall application architecture. All components should run as containers, but some will need various levels of privilege to perform their required functionality.
-=======
-The diagram linked below shows a high-level view of the overall application architecture. All components should run as containers, but some will need various levels of privilege to perform their required functionality.
-
-<<<<<<< HEAD
-[architecture diagram][1]
->>>>>>> 51ea2f2... css changes 1
-
-<<<<<<< HEAD
-[architecture diagram][1]
->>>>>>> 51ea2f2... css changes 1
-
-=======
->>>>>>> a719f5c... probs
-=======
-
->>>>>>> 04eed73... Initialized docs site to v1.0
-=======
 The diagram linked below shows a high-level view of the overall application architecture. All components should run as containers, but some will need various levels of privilege to perform their required functionality.
 
 ![arch](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/architecturediagram.png)
 
->>>>>>> 98509d0... Attempted integration with drone
-=======
-The diagram below shows a high-level view of the overall application architecture. All components should run as containers, but some will need various levels of privilege to perform their required functionality.
-
-![Model View Controller](architecture.png)
-
->>>>>>> 994e824... Updated to current docs
-=======
->>>>>>> a719f5c... probs
-=======
-
->>>>>>> 04eed73... Initialized docs site to v1.0
-=======
-The diagram linked below shows a high-level view of the overall application architecture. All components should run as containers, but some will need various levels of privilege to perform their required functionality.
-
-![arch](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/architecturediagram.png)
-
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 ### The Datacenter Node
 
 Each datacenter will be able to operate without an active connection to the master nodes once the active datacenter configuration has been staged to those nodes. The system is composed of multiple services which should be operated with redundancies for availability.
@@ -77,47 +26,7 @@ The `vaquero` process in `agent` mode registers itself with an upstream master a
 
 The agent will have a built-in HTTP server that will be used for API endpoints, as well as asset delivery. The assets delivered can be provided through multiple mechanisms based on configuration, including potentially being cached (uploaded) locally, or passed through from other systems (i.e. CDN).
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 Some endpoints will be passed through directly to internal services, but others will be terminated by the agent (more details in [API documentation]):
-=======
-Some endpoints will be passed through directly to internal services, but others will be terminated by the agent (more details in [API documentation](api.md)):
->>>>>>> 994e824... Updated to current docs
-=======
-Some endpoints will be passed through directly to internal services, but others will be terminated by the agent (more details in [API documentation][2]):
->>>>>>> 51ea2f2... css changes 1
-=======
-Some endpoints will be passed through directly to internal services, but others will be terminated by the agent (more details in [API documentation][1]):
->>>>>>> a719f5c... probs
-=======
-Some endpoints will be passed through directly to internal services, but others will be terminated by the agent (more details in [API documentation]):
->>>>>>> b2a05e1... arch doc problematic
-=======
-Some endpoints will be passed through directly to internal services, but others will be terminated by the agent (more details in [API documentation]):
->>>>>>> 98509d0... Attempted integration with drone
-=======
-Some endpoints will be passed through directly to internal services, but others will be terminated by the agent (more details in [API documentation](api.md)):
->>>>>>> 994e824... Updated to current docs
-=======
-Some endpoints will be passed through directly to internal services, but others will be terminated by the agent (more details in [API documentation][2]):
->>>>>>> 51ea2f2... css changes 1
-=======
-Some endpoints will be passed through directly to internal services, but others will be terminated by the agent (more details in [API documentation][1]):
->>>>>>> a719f5c... probs
-=======
-Some endpoints will be passed through directly to internal services, but others will be terminated by the agent (more details in [API documentation]):
->>>>>>> b2a05e1... arch doc problematic
-=======
-Some endpoints will be passed through directly to internal services, but others will be terminated by the agent (more details in [API documentation]):
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 
 * **/assets** - static assets required to boot client nodes.
 * **/state** - mechanism for client nodes to report state (via API).
@@ -125,142 +34,18 @@ Some endpoints will be passed through directly to internal services, but others 
 
 CoreOS Bare Metal has the following endpoints documented:
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 * [HTTP API]
 * [gRPC API]
-=======
-* [HTTP API](https://github.com/coreos/coreos-baremetal/blob/master/Documentation/api.md)
-* [gRPC API](https://godoc.org/github.com/coreos/coreos-baremetal/bootcfg/client)
->>>>>>> 994e824... Updated to current docs
-=======
-* [HTTP API][3]
-* [gRPC API][4]
->>>>>>> 51ea2f2... css changes 1
-=======
-* [HTTP API][2]
-* [gRPC API][3]
->>>>>>> a719f5c... probs
-=======
-* [HTTP API]
-* [gRPC API]
->>>>>>> b2a05e1... arch doc problematic
-=======
-* [HTTP API]
-* [gRPC API]
->>>>>>> 98509d0... Attempted integration with drone
-=======
-* [HTTP API](https://github.com/coreos/coreos-baremetal/blob/master/Documentation/api.md)
-* [gRPC API](https://godoc.org/github.com/coreos/coreos-baremetal/bootcfg/client)
->>>>>>> 994e824... Updated to current docs
-=======
-* [HTTP API][3]
-* [gRPC API][4]
->>>>>>> 51ea2f2... css changes 1
-=======
-* [HTTP API][2]
-* [gRPC API][3]
->>>>>>> a719f5c... probs
-=======
-* [HTTP API]
-* [gRPC API]
->>>>>>> b2a05e1... arch doc problematic
-=======
-* [HTTP API]
-* [gRPC API]
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 
 ### The Control Node
 
 The overall solution will be driven by a centralized control system node that manage the process of transforming updates for our Source of Truth (SoT) into configurations that can be applied by the datacenter nodes. To perform this transformation, the system will need to process updates from the SoT, compile the changes, and stage those changes for implementation.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 The structure of this data is defined [elsewhere].
 
 #### `vaquero server`
 
 The `vaquero` application in `server` implements a simple HTTP-based API that manages the overall workflow. To this end a few endpoints have been planned (these will be further details in the [API documentation]):
-=======
-=======
->>>>>>> 994e824... Updated to current docs
-The structure of this data is defined [elsewhere](env-data-structure.md).
-
-#### `vaquero server`
-
-The `vaquero` application in `server` implements a simple HTTP-based API that manages the overall workflow. To this end a few endpoints have been planned (these will be further details in the [API documentation](api.md)):
-<<<<<<< HEAD
->>>>>>> 994e824... Updated to current docs
-=======
-The structure of this data is defined [elsewhere][5].
-
-#### `vaquero server`
-
-The `vaquero` application in `server` implements a simple HTTP-based API that manages the overall workflow. To this end a few endpoints have been planned (these will be further details in the [API documentation][6]):
->>>>>>> 51ea2f2... css changes 1
-=======
-The structure of this data is defined [elsewhere][4].
-
-#### `vaquero server`
-
-The `vaquero` application in `server` implements a simple HTTP-based API that manages the overall workflow. To this end a few endpoints have been planned (these will be further details in the [API documentation][5]):
->>>>>>> a719f5c... probs
-=======
-=======
->>>>>>> 98509d0... Attempted integration with drone
-The structure of this data is defined [elsewhere].
-
-#### `vaquero server`
-
-The `vaquero` application in `server` implements a simple HTTP-based API that manages the overall workflow. To this end a few endpoints have been planned (these will be further details in the [API documentation]):
-<<<<<<< HEAD
->>>>>>> b2a05e1... arch doc problematic
-=======
->>>>>>> 98509d0... Attempted integration with drone
-=======
->>>>>>> 994e824... Updated to current docs
-=======
-The structure of this data is defined [elsewhere][5].
-
-#### `vaquero server`
-
-The `vaquero` application in `server` implements a simple HTTP-based API that manages the overall workflow. To this end a few endpoints have been planned (these will be further details in the [API documentation][6]):
->>>>>>> 51ea2f2... css changes 1
-=======
-The structure of this data is defined [elsewhere][4].
-
-#### `vaquero server`
-
-The `vaquero` application in `server` implements a simple HTTP-based API that manages the overall workflow. To this end a few endpoints have been planned (these will be further details in the [API documentation][5]):
->>>>>>> a719f5c... probs
-=======
-=======
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
-The structure of this data is defined [elsewhere].
-
-#### `vaquero server`
-
-The `vaquero` application in `server` implements a simple HTTP-based API that manages the overall workflow. To this end a few endpoints have been planned (these will be further details in the [API documentation]):
-<<<<<<< HEAD
->>>>>>> b2a05e1... arch doc problematic
-=======
->>>>>>> f07cbda4360a5e0829c66f9291f99247830ed7fd
 
 * **/postreceive** - accepts inbound webhooks indicated an update has occurred in the SoT.
 * **/status** - used to inspect current operational state of the Vaquero system, and agent nodes.
