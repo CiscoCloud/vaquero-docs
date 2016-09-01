@@ -45,9 +45,13 @@ Vaquero Documentation
 <li><em>assets</em>: Assets grouped by type. These are generally unattended configs/scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).</li>
 <li><em>os</em>: Individual documents describing family, version, kernel/image location, and boot/installation options for any operating systems used by host groups.</li>
 <li><em>host_groups</em>: Individual documents combining operating system and unattended asset information to describe a target host state.</li>
-<li><p><em>sites</em>: One or more sites (each in it's own subdirectory) that share the same host_group, os, and asset definitions. Each site includes environment-specific information, and an inventory of hosts that apply host_group definitions to machines.</p>
-<p>. ├── assets ├── os ├── host_groups └── sites</p></li>
+<li><em>sites</em>: One or more sites (each in it's own subdirectory) that share the same host_group, os, and asset definitions. Each site includes environment-specific information, and an inventory of hosts that apply host_group definitions to machines.</li>
 </ol>
+<pre><code>.
+├── assets
+├── os
+├── host_groups
+└── sites</code></pre>
 <h3 id="assets">Assets</h3>
 <p>Assets are grouped into named subdirectories based on type. There are currently four types:</p>
 <ol style="list-style-type: decimal">
@@ -70,7 +74,13 @@ Vaquero Documentation
         ├── autoyast.xml
         └── preseed.cfg</code></pre>
 <p>Validation is performed on typed assets to verify that rendered templates produce valid configurations.</p>
-<p>Assets are retrieved dynamically from the Vaquero Agent through typed endpoints. Query parameters are included in the request to render the asset for a particular host: - <code>/cloud-config</code> -- Cloud-config assets - <code>/ignition</code> -- Ignition assets - <code>/kickstart</code> -- Kickstart assets - <code>/untyped</code> -- Untyped assets</p>
+<p>Assets are retrieved dynamically from the Vaquero Agent through typed endpoints. Query parameters are included in the request to render the asset for a particular host:</p>
+<ul>
+<li><code>/cloud-config</code> -- Cloud-config assets</li>
+<li><code>/ignition</code> -- Ignition assets</li>
+<li><code>/kickstart</code> -- Kickstart assets</li>
+<li><code>/untyped</code> -- Untyped assets</li>
+</ul>
 <p>So a host with mac address <code>00:00:00:00:00:01</code> could retrieve it's rendered ignition configuration by requesting</p>
 <pre><code>&lt;agent_url&gt;:&lt;agent_port&gt;/ignition?mac=00:00:00:00:00:01</code></pre>
 <h3 id="operating-systems">Operating Systems</h3>
@@ -212,11 +222,10 @@ cmdline:
   debug: &#39;&#39;
   enforcing: &#39;&#39;</code></pre>
 <p>The iPXE script will be roughly generated as (not taking unattended info from host_group):</p>
-<pre><code>#!ipxe
-
-kernel centos_kernel console=ttyS0,115200 lang=  debug enforcing
-initrd centos_initrd
-boot</code></pre>
+<pre><code>    #!ipxe
+    kernel centos_kernel console=ttyS0,115200 lang=  debug enforcing
+    initrd centos_initrd
+    boot</code></pre>
 <p>Note how <code>lang</code> appears with a trailing <code>=</code>, because it's value was non-empty <code>' '</code></p>
 <h2 id="schemas"><a name="schemas">Schemas</a></h2>
 <p>Some more proper schemas for the various objects.</p>
@@ -295,4 +304,5 @@ boot</code></pre>
 |--------|-----------------------------------------|----------|--------------|---------|
 | kernel | URL for retrieving kernel on boot       | yes      | string       |         |
 | initrd | URL for retrieving initrds/imgs on boot | yes      | string array |         |</code></pre>
+<p>Kernel and initrd values may be templated. They will be rendered on-demand for inidividual hosts. ----------------------------------------|----------|--------------|---------| | kernel | URL for retrieving kernel on boot | yes | string | | | initrd | URL for retrieving initrds/imgs on boot | yes | string array | |</p>
 <p>Kernel and initrd values may be templated. They will be rendered on-demand for inidividual hosts.</p>
