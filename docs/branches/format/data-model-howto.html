@@ -45,9 +45,13 @@ Vaquero Documentation
 <li><em>assets</em>: Assets grouped by type. These are generally unattended configs/scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).</li>
 <li><em>os</em>: Individual documents describing family, version, kernel/image location, and boot/installation options for any operating systems used by host groups.</li>
 <li><em>host_groups</em>: Individual documents combining operating system and unattended asset information to describe a target host state.</li>
-<li><p><em>sites</em>: One or more sites (each in it's own subdirectory) that share the same host_group, os, and asset definitions. Each site includes environment-specific information, and an inventory of hosts that apply host_group definitions to machines.</p>
-<p>. ├── assets ├── os ├── host_groups └── sites</p></li>
+<li><em>sites</em>: One or more sites (each in it's own subdirectory) that share the same host_group, os, and asset definitions. Each site includes environment-specific information, and an inventory of hosts that apply host_group definitions to machines.</li>
 </ol>
+<pre><code>    .
+    ├── assets
+    ├── os
+    ├── host_groups
+    └── sites</code></pre>
 <h3 id="assets">Assets</h3>
 <p>Assets are grouped into named subdirectories based on type. There are currently four types:</p>
 <ol style="list-style-type: decimal">
