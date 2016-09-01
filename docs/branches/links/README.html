@@ -1,0 +1,39 @@
+<h1 id="vaquero">Vaquero</h1>
+<p><a href="https://drone.projectshipped.io/CiscoCloud/vaquero"><img src="https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg" alt="Build Status" /></a></p>
+<p>A bare metal configuration tool that leverages github templates, and CoreOS bare-metal to net boot machines.</p>
+<h1 id="high-level-overview">High Level Overview</h1>
+<h2 id="architecture"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html">Architecture</a></h2>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/architecturediagram.png" alt="arch" /><p class="caption">arch</p>
+</div>
+<h2 id="data-model-templates"><a href="https://github.com/CiscoCloud/vaquero-docs/blob/gh-pages/docs/current/env-data-structure.md">Data Model Templates</a></h2>
+<h2 id="requirements"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html">Requirements</a></h2>
+<h2 id="running-vaquero">Running Vaquero</h2>
+<ol style="list-style-type: decimal">
+<li>Fetch the image: <code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:0.1</code></li>
+<li>Run: <code>docker run shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:0.1</code></li>
+</ol>
+<h2 id="vaquero-validate"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html">Vaquero Validate</a></h2>
+<h2 id="dev-environment-pre-reqs">Dev Environment: Pre-Reqs</h2>
+<ol style="list-style-type: decimal">
+<li><a href="https://golang.org/">Golang</a> environment</li>
+<li>pkg-config</li>
+<li>libssl-dev</li>
+<li><a href="https://libgit2.github.com/">libgit2</a>. Mac OSX: <code>brew install libgit2</code>. Linux: Clone our repo and run <code>./libgit2.sh</code>. Windows: Bootcamp to Linux / OSX.</li>
+</ol>
+<h2 id="dev-environment-fetching-compiling-running-code">Dev Environment: Fetching / Compiling / Running code</h2>
+<ol style="list-style-type: decimal">
+<li><code>git clone https://github.com/CiscoCloud/vaquero.git</code> the Vaquero repo under <code>$GOPATH/src/github.com/CiscoCloud/</code>.</li>
+<li>Build vaquero binary <code>make</code>.</li>
+<li>Run the vaquero binary <code>.bin/vaquero &lt;command&gt; -config config.json</code>.</li>
+</ol>
+<h2 id="sending-webhooks-to-vaquero-master">Sending Webhooks to Vaquero Master</h2>
+<ol style="list-style-type: decimal">
+<li>Install <a href="https://ngrok.com/">ngrok</a> to your local machine, unzip the package, and move the executable to <code>/usr/local/bin</code>.</li>
+<li>Run ngrok on your physical machine <code>ngrok http 4816</code>.</li>
+<li>Create a testing repo to launch webhooks from.</li>
+<li>Give github.com the http endpoint provided by ngrok.</li>
+<li>Launch a webhook to hit the ngrok address.</li>
+</ol>
+<h2 id="docs">Docs</h2>
+<p>Build the documentation by running <code>godoc -http &lt;port&gt;</code> and open localhost:<port> on your web browser</p>
