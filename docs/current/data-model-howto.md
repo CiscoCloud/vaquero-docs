@@ -192,7 +192,7 @@ A booting machine is identified as a particular host based on the selecting info
 Additionally, a specific callback may be made to Vaquero Agent that includes a custom selection parameter
 
 ```
-curl "{{.agent.url}}:{{.agent.port}}/ignition?mac={{.host.mac}}&os=installed" -o ignition.json
+curl "{{.agent.url}}/ignition?mac={{.host.mac}}&os=installed" -o ignition.json
 ```
 
 
@@ -281,26 +281,6 @@ Host information for templating includes the following information, discovered v
 2. domain
 3. hostname
 4. uuid
-
-### TEMPLATING TODO
-
-As a future feature, we will define a series of well defined helper functions that will make for more succinct and readable templates.
-
-For example,
-
-```
-boot:
-  kernel: {{.agent.url}}:{{.agent.port}}/file/coreos_production_pxe.vmlinuz
-```
-
-Might be replaced with,
-
-```
-boot:
-  kernel: {{ AgentFileServer }}/coreos_production_pxe.vmlinuz
-```
-
-Where `AgentFileServer` is a built-in function that translates to `{{.agent.url}}:{{.agent.port}}/file`.
 
 ## <a name="translation-to-ipxe">Translation to iPXE</a>
 
