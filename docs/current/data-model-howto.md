@@ -242,7 +242,7 @@ Metadata is included in three separate places in your configuration:
 Metadata is made available during template execution as separate fields under the template's "dot". The fields are:
 
 1. `.env` for environmental metadata
-2. `.agent` for Vaquero Agent information (all fields from the `agent` object)
+2. `.agent` for Vaquero Agent information (the url for the Vaquero Agent asset server, etc)
 3. `.group` for host_group metadata
 4. `.host` for host metadata, selectors, and limited information discovered via iPXE (mac, uuid, domain, hostname).
 
