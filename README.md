@@ -19,6 +19,6 @@ Updates to this repo automatically generate new documentation which will be publ
 
   See: https://github.com/CiscoCloud/vaquero-docs/tree/gh-pages/docs
 
-* Individual branches will be published, as well.  _NOTE: The script used to publish these docs will cleanup old branches if they've not received updates within the last 7 days._
-
+* Individual branches will be published, as well.
+ 
   https://github.com/CiscoCloud/vaquero-docs/tree/gh-pages/docs/branches
