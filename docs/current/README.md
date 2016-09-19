@@ -31,8 +31,7 @@ A bare metal configuration tool that takes in templates that describe a data cen
 ## [Architecture](https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html)
 ![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/ppt-arch.png)
 
-## [Data Model Templates](https://ciscocloud.github.io/vaquero-docs/docs/current/env-data-structure.html)
-- [Data Model How To](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html)
+## [Data Model Templates](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html)
 - [Example Data Models](https://github.com/gem-test/vaquero)
 
 ## [Requirements](https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html)
