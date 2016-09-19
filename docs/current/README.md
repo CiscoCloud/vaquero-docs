@@ -21,6 +21,8 @@
 
 [![Build Status](https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg)](https://drone.projectshipped.io/CiscoCloud/vaquero)
 
+[Repo](https://github.com/CiscoCloud/vaquero)
+
 A bare metal configuration tool that takes in templates that describe a data center and automatically network boot those machines into the desired state.
 
 # High Level Overview
@@ -28,26 +30,33 @@ A bare metal configuration tool that takes in templates that describe a data cen
 ## [Architecture](https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html)
 ![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/architecturediagram.png)
 
-## [Data Model Templates](https://github.com/CiscoCloud/vaquero-docs/blob/gh-pages/docs/current/env-data-structure.md)
+## [Data Model Templates](https://ciscocloud.github.io/vaquero-docs/docs/current/env-data-structure.html)
+- [Data Model How To](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html)
+- [Example Data Models](https://github.com/gem-test/vaquero)
 
 ## [Requirements](https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html)
 
-## Running Vaquero
-1. Fetch the image: `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:0.1`
-2. Run: `docker run shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:0.1`
+## Running Vaquero from the container
+[Bintray Docker Images](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero)
+
+1. Fetch the image: `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
+2. Run Example: `docker run -v /vagrant/vagrant-config.json:/vaquero/config.json -v /files:/tmp/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.json`
+
+    1. Docker volume to pass the configuration into the container. 
+    2. Docker volume to pass in the assetServer assets (kernel images, etc)
+    3. Set networking to host
 
 ## [Vaquero Validate](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
 
 ## Dev Environment: Pre-Reqs
 
 1. [Golang](https://golang.org/) environment
-2. pkg-config
-3. libssl-dev
-4. [libgit2](https://libgit2.github.com/). Mac OSX: `brew install libgit2`. Linux: Clone our repo and run `./libgit2.sh`. Windows: Bootcamp to Linux / OSX.
+2. [Docker](https://www.docker.com/) 
 
-## Dev Environment: Fetching / Compiling / Running code
 
-1. `git clone https://github.com/CiscoCloud/vaquero.git` the Vaquero repo under `$GOPATH/src/github.com/CiscoCloud/`.
+## Dev Environment: Fetching / Compiling / Running from source
+
+1. `git clone https://github.com/CiscoCloud/vaquero.git $GOPATH/src/github.com/CiscoCloud/vaquero`
 2. Build vaquero binary `make`.
 3. Run the vaquero binary `.bin/vaquero <command> -config config.json`.
 
