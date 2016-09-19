@@ -22,11 +22,12 @@ The Vaquero validator is a built in utility for checking the consistency of your
 
 ## Using vaquero validate
 
-Running `vaquero validate --sot-dir <base_directory>` The base directory structure should be consistent with the [data model](https://github.com/CiscoCloud/vaquero-docs/blob/gh-pages/docs/current/env-data-structure.md).
+- Validating a local SoT: `vaquero validate --sot-dir <base_directory>` The base directory structure should be consistent with the [data model](https://github.com/CiscoCloud/vaquero-docs/blob/gh-pages/docs/current/env-data-structure.md).
+- Validating a git SoT: `vaquero validate --config config.yml` The config file should contain all the parameters required to start vaquero in server mode, specifically GitHook and SoT fields. 
 
 ## Validation Process
 
-The first thing validate does is load the directory tree passed to it.
+The first thing validate does is load the directory tree passed to it (via either a local directory, or git).
 
 - It checks if all links between objects exist
 
@@ -42,4 +43,10 @@ The first thing validate does is load the directory tree passed to it.
 
 - It checks if inventory has hosts
 
-Validation also includes ensuring the ignition files provided are correct. Today we leverage [coreos/fuze](https://github.com/coreos/fuze/tree/master/config) as our method of validating ignition files.
+- It checks if the ignition files provided are valid. Uses [coreos/fuze](https://github.com/coreos/fuze/tree/master/config)
+
+- It checks if the cloud-config files provided are valid. Uses [coreos/coreos-cloudinit](github.com/coreos/coreos-cloudinit/config)
+
+- It checks if the kickstart files provided are valid using a simple internally developed parser. Further validation can be done using the [official validator](http://fedoraproject.org/wiki/Pykickstart)
+
+
