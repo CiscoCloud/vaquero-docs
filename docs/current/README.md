@@ -39,19 +39,6 @@ A bare metal configuration tool that takes in templates that describe a data cen
 ## Running / Configuring Vaquero
 Vaquero can run in multiple modes `server`, `agent`, and `standalone`. This configuration is for standalone mode, which runs server and agent in the same container. 
 
-- ServerApi: The user api for the server. Currently not implemented.
-- AgentApi: The vaquero agent http server used to listen for vaquero server commands
-- AssetServer: The asset server for vaquero agent used by each booting machine to get unattend scripts and kernels.
-- DHCPMode: One of two modes: Proxy or Server
-- DHCPCIDR: The CIDR managed by DHCP
-- SavePath: The vaquero server location to save local configurations on disk
-- Updater: The type of data model updater
-- Gitter: Configuration for listening to git webhooks
-- GitHook: An array for all gitgooks to listen to
-- SoT: An array for specific sources of truth
-- Agent: An array to map SoT's to vaquero agents
-- Log: The base configuration for the project logr
-
 **sa-config.json**
 ```
 ---------------------------------------------------
@@ -112,7 +99,18 @@ Vaquero can run in multiple modes `server`, `agent`, and `standalone`. This conf
 ---------------------------------------------------
 ```
 
-
+- ServerApi: The user api for the server. Currently not implemented.
+- AgentApi: The vaquero agent http server used to listen for vaquero server commands
+- AssetServer: The asset server for vaquero agent used by each booting machine to get unattend scripts and kernels.
+- DHCPMode: One of two modes: Proxy or Server
+- DHCPCIDR: The CIDR managed by DHCP
+- SavePath: The vaquero server location to save local configurations on disk
+- Updater: The type of data model updater
+- Gitter: Configuration for listening to git webhooks
+- GitHook: An array for all gitgooks to listen to
+- SoT: An array for specific sources of truth
+- Agent: An array to map SoT's to vaquero agents
+- Log: The base configuration for the project logr
 
 ## Running Vaquero from the container
 [Bintray Docker Images](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero)
