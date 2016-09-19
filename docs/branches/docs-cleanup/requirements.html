@@ -18,6 +18,7 @@ Vaquero Documentation
 </head><article class="markdown-body">
 
 <h1 id="vaquero-requirements">Vaquero Requirements</h1>
+<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a></p>
 <p>The Vaquero project is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure.</p>
 <p>Use case(s):</p>
 <p>Actor: DevOps Engineer</p>
@@ -25,26 +26,31 @@ Vaquero Documentation
 <li>As a DevOps Engineer, I want to be able to manage my bare metal compute (hardware) as code.</li>
 </ol>
 <h2 id="requirements">Requirements:</h2>
+<h3 id="completed-9192016">Completed : 9/19/2016</h3>
 <ol style="list-style-type: decimal">
 <li>A textual and structured representation of the cluster in a VCS -- the source of truth (SoT).</li>
 <li>Validation of data within SoT -- proper structure, dump work to be performed in human-readable format. (some minimum validation of &quot;known&quot; asset formats?)</li>
-<li>Automatically provision hardware according to the SoT.</li>
-<li>Support for netboot (PXE, TFTP, etc.) of cluster instances.</li>
+<li>Support for netboot (iPXE, TFTP, etc.) of cluster instances.</li>
 <li>Support for delivering O/S assets (kernel, ramdisk, images, cloud-config, etc.) via HTTP. (Assumes iPXE support.)</li>
 <li>Management of multiple clusters of software.</li>
 <li>Integration with GitHub has provider of SoT.</li>
-<li>Management of multiple datacenters via federated architecture.</li>
 <li>System should treat SoT as an immutable reference.</li>
+</ol>
+<h3 id="incomplete">Incomplete</h3>
+<ol start="8" style="list-style-type: decimal">
+<li>Management of multiple datacenters via federated architecture.</li>
 <li>Relationship between SoT to cluster instances via static identifiers (MAC, UUID, others?).</li>
 <li>Manage power state of the hardware.</li>
 <li>Workflow automation to provide managed installs of cluster.</li>
 <li>Workflow automation to provide managed updates of cluster.</li>
+<li>Automatically provision hardware according to the SoT.</li>
 <li>The ability to gate changes from SoT before applying to hardware.</li>
 <li>Support incremental (multistep) cluster provisioning.</li>
 <li>Provide availability in the following network conditions:
 <ul>
 <li>network partition between agent and controller</li>
-<li><del>outage of agent node (and upgrade of agent node)</del></li>
+<li>upgradability of agent node</li>
+<li><del>outage of agent node</del></li>
 </ul></li>
 </ol>
 <h2 id="non-requirements">Non-requirements:</h2>
