@@ -35,6 +35,77 @@ Vaquero Documentation
 <li><a href="https://github.com/gem-test/vaquero">Example Data Models</a></li>
 </ul>
 <h2 id="requirements"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html">Requirements</a></h2>
+<h2 id="running-configuring-vaquero">Running / Configuring Vaquero</h2>
+<p>Vaquero can run in multiple modes <code>server</code>, <code>agent</code>, and <code>standalone</code>. This configuration is for standalone mode, which runs server and agent in the same container.</p>
+<ul>
+<li>ServerApi: The user api for the server. Currently not implemented.</li>
+<li>AgentApi: The vaquero agent http server used to listen for vaquero server commands</li>
+<li>AssetServer: The asset server for vaquero agent used by each booting machine to get unattend scripts and kernels.</li>
+<li>DHCPMode: One of two modes: Proxy or Server</li>
+<li>DHCPCIDR: The CIDR managed by DHCP</li>
+<li>SavePath: The vaquero server location to save local configurations on disk</li>
+<li>Updater: The type of data model updater</li>
+<li>Gitter: Configuration for listening to git webhooks</li>
+<li>GitHook: An array for all gitgooks to listen to</li>
+<li>SoT: An array for specific sources of truth</li>
+<li>Agent: An array to map SoT's to vaquero agents</li>
+<li>Log: The base configuration for the project logr</li>
+</ul>
+<p><strong>sa-config.json</strong></p>
+<pre><code>{
+  &quot;ServerApi&quot; :{
+    &quot;Address&quot;: &quot;127.0.0.1&quot;,
+    &quot;Port&quot;: 24601
+  },
+  &quot;AgentApi&quot; :{
+    &quot;InsecureAddr&quot;: &quot;127.0.0.1&quot;,
+    &quot;InsecurePort&quot;: 24602
+  },
+  &quot;AssetServer&quot; : {
+      &quot;Addr&quot;     :&quot;127.0.0.1&quot;,
+      &quot;Port&quot;: 8080,
+      &quot;BaseDir&quot;:&quot;/tmp/vaquero/files&quot;,
+      &quot;Scheme&quot;:&quot;http&quot;
+  },
+  &quot;DHCPMode&quot;: &quot;server&quot;,
+  &quot;DHCPCIDR&quot;: &quot;127.0.0.1/16&quot;,
+  &quot;SavePath&quot; : &quot;/tmp/vaquero&quot;,
+  &quot;Updater&quot;: &quot;git&quot;,
+  &quot;Gitter&quot;: {
+    &quot;Endpoint&quot;: &quot;/postreceive&quot;,
+    &quot;Timeout&quot;: 2,
+    &quot;Addr&quot;: &quot;127.0.0.1&quot;,
+    &quot;Port&quot;: 9090
+  },
+  &quot;GitHook&quot;: [
+    {
+      &quot;ID&quot;: &quot;vaquero-local&quot;,
+      &quot;Username&quot;: &quot;gem-test&quot;,
+      &quot;Password&quot;: &quot;bc0f9c726d2c4d54c7635eb578c767cc57d89d40&quot;,
+      &quot;URL&quot; : &quot;https://github.com/gem-test/vaquero&quot;,
+      &quot;Secret&quot;: &quot;supersecretcode&quot;
+    }
+  ],
+  &quot;SoT&quot;: [
+    {
+        &quot;HookID&quot;: &quot;vaquero-local&quot;,
+        &quot;ID&quot;: &quot;vaquero-test&quot;,
+        &quot;Branch&quot; : &quot;local&quot;
+    }
+  ],
+  &quot;Agent&quot;: [
+    {
+      &quot;SoTID&quot;: &quot;vaquero-test&quot;,
+      &quot;SiteID&quot;: &quot;test-site&quot;,
+      &quot;UseInsecure&quot;: true
+    }
+  ],
+  &quot;Log&quot;: {
+    &quot;Level&quot;: &quot;debug&quot;,
+    &quot;Location&quot;: &quot;stdout&quot;,
+    &quot;Type&quot;: &quot;text&quot;
+  }
+}</code></pre>
 <h2 id="running-vaquero-from-the-container">Running Vaquero from the container</h2>
 <p><a href="https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero">Bintray Docker Images</a></p>
 <ol style="list-style-type: decimal">
