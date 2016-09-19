@@ -17,6 +17,7 @@
 </head><article class="markdown-body">
 
 # Vaquero Requirements
+[Home](https://ciscocloud.github.io/vaquero-docs/)
 
 The Vaquero project is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure.
 
@@ -28,24 +29,30 @@ Actor: DevOps Engineer
 
 ## Requirements:
 
+### Completed : 9/19/2016
 1. A textual and structured representation of the cluster in a VCS -- the source of truth (SoT).
 2. Validation of data within SoT -- proper structure, dump work to be performed in human-readable format. (some minimum validation of "known" asset formats?)
-3. Automatically provision hardware according to the SoT.
-  1. Support for netboot (PXE, TFTP, etc.) of cluster instances.
-  2. Support for delivering O/S assets (kernel, ramdisk, images, cloud-config, etc.) via HTTP. (Assumes iPXE support.)
-4. Management of multiple clusters of software.
-5. Integration with GitHub has provider of SoT.
-6. Management of multiple datacenters via federated architecture.
+3. Support for netboot (iPXE, TFTP, etc.) of cluster instances.
+4. Support for delivering O/S assets (kernel, ramdisk, images, cloud-config, etc.) via HTTP. (Assumes iPXE support.)
+5. Management of multiple clusters of software.
+6. Integration with GitHub has provider of SoT.
 7. System should treat SoT as an immutable reference.
-8. Relationship between SoT to cluster instances via static identifiers (MAC, UUID, others?).
-9. Manage power state of the hardware.
-10. Workflow automation to provide managed installs of cluster.
-11. Workflow automation to provide managed updates of cluster.
-12. The ability to gate changes from SoT before applying to hardware.
-13. Support incremental (multistep) cluster provisioning.
-14. Provide availability in the following network conditions:
+
+
+### Incomplete 
+8. Management of multiple datacenters via federated architecture.
+9. Relationship between SoT to cluster instances via static identifiers (MAC, UUID, others?).
+10. Manage power state of the hardware.
+11. Workflow automation to provide managed installs of cluster.
+12. Workflow automation to provide managed updates of cluster.
+13. Automatically provision hardware according to the SoT.
+14. The ability to gate changes from SoT before applying to hardware.
+15. Support incremental (multistep) cluster provisioning.
+16. Provide availability in the following network conditions:
     * network partition between agent and controller
-    * ~~outage of agent node (and upgrade of agent node)~~
+    * upgradability of agent node
+    * ~~outage of agent node~~
+
 
 ## Non-requirements:
 
