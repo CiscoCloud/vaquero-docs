@@ -29,7 +29,7 @@ A bare metal configuration tool that takes in templates that describe a data cen
 # High Level Overview
 
 ## [Architecture](https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html)
-![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/architecturediagram.png)
+![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/docs-cleanup/docs/current/ppt-arch.png)
 
 ## [Data Model Templates](https://ciscocloud.github.io/vaquero-docs/docs/current/env-data-structure.html)
 - [Data Model How To](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html)
