@@ -37,20 +37,6 @@ Vaquero Documentation
 <h2 id="requirements"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html">Requirements</a></h2>
 <h2 id="running-configuring-vaquero">Running / Configuring Vaquero</h2>
 <p>Vaquero can run in multiple modes <code>server</code>, <code>agent</code>, and <code>standalone</code>. This configuration is for standalone mode, which runs server and agent in the same container.</p>
-<ul>
-<li>ServerApi: The user api for the server. Currently not implemented.</li>
-<li>AgentApi: The vaquero agent http server used to listen for vaquero server commands</li>
-<li>AssetServer: The asset server for vaquero agent used by each booting machine to get unattend scripts and kernels.</li>
-<li>DHCPMode: One of two modes: Proxy or Server</li>
-<li>DHCPCIDR: The CIDR managed by DHCP</li>
-<li>SavePath: The vaquero server location to save local configurations on disk</li>
-<li>Updater: The type of data model updater</li>
-<li>Gitter: Configuration for listening to git webhooks</li>
-<li>GitHook: An array for all gitgooks to listen to</li>
-<li>SoT: An array for specific sources of truth</li>
-<li>Agent: An array to map SoT's to vaquero agents</li>
-<li>Log: The base configuration for the project logr</li>
-</ul>
 <p><strong>sa-config.json</strong></p>
 <pre><code>---------------------------------------------------
 {
@@ -108,6 +94,20 @@ Vaquero Documentation
   }
 }
 ---------------------------------------------------</code></pre>
+<ul>
+<li>ServerApi: The user api for the server. Currently not implemented.</li>
+<li>AgentApi: The vaquero agent http server used to listen for vaquero server commands</li>
+<li>AssetServer: The asset server for vaquero agent used by each booting machine to get unattend scripts and kernels.</li>
+<li>DHCPMode: One of two modes: Proxy or Server</li>
+<li>DHCPCIDR: The CIDR managed by DHCP</li>
+<li>SavePath: The vaquero server location to save local configurations on disk</li>
+<li>Updater: The type of data model updater</li>
+<li>Gitter: Configuration for listening to git webhooks</li>
+<li>GitHook: An array for all gitgooks to listen to</li>
+<li>SoT: An array for specific sources of truth</li>
+<li>Agent: An array to map SoT's to vaquero agents</li>
+<li>Log: The base configuration for the project logr</li>
+</ul>
 <h2 id="running-vaquero-from-the-container">Running Vaquero from the container</h2>
 <p><a href="https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero">Bintray Docker Images</a></p>
 <ol style="list-style-type: decimal">
