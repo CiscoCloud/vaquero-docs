@@ -21,7 +21,8 @@
 
 [![Build Status](https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg)](https://drone.projectshipped.io/CiscoCloud/vaquero)
 
-[Repo](https://github.com/CiscoCloud/vaquero)
+[Repo](https://github.com/CiscoCloud/vaquero) : Where development of vaquero is taking place.
+[Waffle.io Issue Tracking](https://waffle.io/CiscoCloud/vaquero): How the team is tracking work and progress
 
 A bare metal configuration tool that takes in templates that describe a data center and automatically network boot those machines into the desired state.
 
@@ -43,14 +44,15 @@ A bare metal configuration tool that takes in templates that describe a data cen
 2. Run Example: `docker run -v /vagrant/vagrant-config.json:/vaquero/config.json -v /files:/tmp/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.json`
 
     1. Docker volume to pass the configuration into the container. 
-    2. Docker volume to pass in the assetServer assets (kernel images, etc)
+    2. Docker volume to pass in the assetServer assets (kernel images, undionly.kpxe, etc)
     3. Set networking to host
 
 ## [Vaquero Validate](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
+CLI tool that is for validating your data model before you push it through Vaquero
 
 ## Dev Environment: Pre-Reqs
 
-1. [Golang](https://golang.org/) environment
+1. [Golang](https://golang.org/)
 2. [Docker](https://www.docker.com/) 
 
 
@@ -70,4 +72,4 @@ A bare metal configuration tool that takes in templates that describe a data cen
 5. Launch a webhook to hit the ngrok address.
 
 ## Docs
-Build the documentation by running `godoc -http <port>` and open localhost:<port> on your web browser
+Build the documentation by running `godoc -http <port>` and open `localhost:<port>` on your web browser
