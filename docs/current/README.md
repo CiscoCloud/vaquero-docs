@@ -16,10 +16,12 @@
             </style>
 </head><article class="markdown-body">
 
+<a href="https://ciscocloud.github.io/vaquero-docs/">Home</a>
+
 # Vaquero
 [![Build Status](https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg)](https://drone.projectshipped.io/CiscoCloud/vaquero)
 
-A bare metal configuration tool that leverages github templates, and CoreOS bare-metal to net boot machines.
+A bare metal configuration tool that takes in templates that describe a data center and automatically network boot those machines into the desired state.
 
 # High Level Overview
 
