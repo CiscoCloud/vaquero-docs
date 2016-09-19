@@ -18,49 +18,53 @@ Vaquero Documentation
 </head><article class="markdown-body">
 
 <h1 id="vaquero">Vaquero</h1>
+<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a></p>
+<p>Last Update: 09/2016</p>
 <p>The Vaquero project is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure. A running system will be composed of a centralized control plane that automates provisioning of software in one or more datacenters.</p>
 <p>The goal is to provide the ability for teams to manage their infrastructure using the same tools they use for their applications (revision control, CI/CD pipeline, etc.), and enable similar workflows including automated updates, gating, immutability, A/B deployments, etc. The final outcome will be a fully operational datacenter running heterogeneous deployments of clustered software on bare metal with fully automated deployment and upgrades driven by a CI pipeline.</p>
 <h2 id="architecture">Architecture</h2>
-<p>The diagram linked below shows a high-level view of the overall application architecture. All components should run as containers, but some will need various levels of privilege to perform their required functionality.</p>
+<p>The diagram linked below shows a high-level view of the overall application architecture. All components should run as containers, but some will need various levels of privilege to perform their required functionality. Today vaquero is delivered in one container for operational simplicity. Vaquero can run in multiple modes, server, agent, standalone (the combination of server and agent)</p>
 <div class="figure">
-<img src="https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/architecturediagram.png" />
+<img src="https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/ppt-arch.png" />
 </div>
 <h3 id="the-datacenter-node">The Datacenter Node</h3>
 <p>Each datacenter will be able to operate without an active connection to the master nodes once the active datacenter configuration has been staged to those nodes. The system is composed of multiple services which should be operated with redundancies for availability.</p>
 <h4 id="vaquero-agent"><code>vaquero agent</code></h4>
 <p>The <code>vaquero</code> process in <code>agent</code> mode registers itself with an upstream master and drives provisioning in a local datacenter.</p>
 <ol style="list-style-type: decimal">
-<li><strong>PXE Boot Service</strong> -- implements the necessary protocols to get a node from PXE ROM to a working Linux kernel.</li>
-<li><strong>Lifecycle Service</strong> -- implements the necessary protocols to manage the lifecycle of a server. This can leverage O/S-based mechanisms to hardware-based systems driven by IPMI, etc.</li>
-<li><strong>State Engine</strong> -- implements a state tracking system to manage multi-step configurations, and provide status updates to master nodes.</li>
+<li><strong>PXE Boot Service</strong> -- implements the necessary protocols to get a node from PXE ROM to a working Linux kernel.
+<ul>
+<li>DHCP: Has two run modes. Authoritative and Proxy</li>
+<li>TFTP: Hosts the undionly.kpxe</li>
+</ul></li>
+<li><strong>HTTP Server</strong> - listens for commands from the central Vaquero server to update its assets and data model.</li>
+<li><strong>Asset Server</strong> - implements a file server or reverse proxy to forward requests to a CDN. This delivers unattend boot scripts, kernels, and initrds.</li>
+<li>Future Roadmap: <strong>Lifecycle Service</strong> -- implements the necessary protocols to manage the lifecycle of a server. This can leverage O/S-based mechanisms to hardware-based systems driven by IPMI, etc.</li>
+<li>Future Roadmap: <strong>State Engine</strong> -- implements a state tracking system to manage multi-step configurations, and provide status updates to master nodes.</li>
 </ol>
-<p>The agent will have a built-in HTTP server that will be used for API endpoints, as well as asset delivery. The assets delivered can be provided through multiple mechanisms based on configuration, including potentially being cached (uploaded) locally, or passed through from other systems (i.e. CDN).</p>
-<p>Some endpoints will be passed through directly to internal services, but others will be terminated by the agent (more details in [API documentation]):</p>
-<ul>
-<li><strong>/assets</strong> - static assets required to boot client nodes.</li>
-<li><strong>/state</strong> - mechanism for client nodes to report state (via API).</li>
-<li><strong>/status</strong> - used to inspect current operational state of this agent, and its client nodes.</li>
-</ul>
-<p>CoreOS Bare Metal has the following endpoints documented:</p>
-<ul>
-<li>[HTTP API]</li>
-<li>[gRPC API]</li>
-</ul>
 <h3 id="the-control-node">The Control Node</h3>
 <p>The overall solution will be driven by a centralized control system node that manage the process of transforming updates for our Source of Truth (SoT) into configurations that can be applied by the datacenter nodes. To perform this transformation, the system will need to process updates from the SoT, compile the changes, and stage those changes for implementation.</p>
-<p>The structure of this data is defined [elsewhere].</p>
+<p>The structure of this data is defined <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html">elsewhere</a>.</p>
 <h4 id="vaquero-server"><code>vaquero server</code></h4>
-<p>The <code>vaquero</code> application in <code>server</code> implements a simple HTTP-based API that manages the overall workflow. To this end a few endpoints have been planned (these will be further details in the [API documentation]):</p>
+<p>The <code>vaquero</code> application in <code>server</code> implements the control logic to push data models out to <code>agents</code>.</p>
+<ol style="list-style-type: decimal">
+<li><strong>GitHook Server</strong> - implements a http server that processes github webhooks.</li>
+<li><strong>Client API</strong> - implements an http client that talks to vaquero agents.</li>
+<li>Future Roadmap <strong>User API</strong> - implements functions to retrieve status, stage configurations and execute plans.</li>
+</ol>
+<h5 id="endpoints">Endpoints:</h5>
 <ul>
 <li><strong>/postreceive</strong> - accepts inbound webhooks indicated an update has occurred in the SoT.</li>
-<li><strong>/status</strong> - used to inspect current operational state of the Vaquero system, and agent nodes.</li>
-<li><strong>/prepare</strong> - tells Vaquero system to stage a configuration.</li>
-<li><strong>/execute</strong> - performs the machine provisioning through lifecycle management, etc.</li>
+<li>Future Roadmap <strong>/status</strong> - used to inspect current operational state of the Vaquero system, and agent nodes.</li>
+<li>Future Roadmap <strong>/prepare</strong> - tells Vaquero system to stage a configuration.</li>
+<li>Future Roadmap <strong>/execute</strong> - performs the machine provisioning through lifecycle management, etc.</li>
 </ul>
+<p>The current staging mechanism is human managed in github. It would be done in the same way as a code repository, a merge into a certain branch would push changes through vaquero. If vaquero server receives an invalid data model from github it will not push it out to the agents.</p>
 <h3 id="state-management-coordination">State Management / Coordination</h3>
 <p>There is a need in Vaquero to coordinate work between multiple instances in a reliable way. While no design has been completed around the structure of this data, we anticipate that a strongly consistent data store, such as <code>consul</code> or <code>etcd</code>, will be necessary.</p>
 <h2 id="deployment-and-availability-considerations">Deployment and Availability Considerations</h2>
+<p>Currently, vaquero deploys in a single container for ease of use and deployment. Future plans are to break some of the internal vaquero services out into their own containers.</p>
 <p>As mentioned above, Vaquero will be delivered as several containerized services. To execute the software will require an environment that can run each of these services, and expose various ports to the network. (needs doc)</p>
 <p>No explicit runtime environment is required, aside from a recent Docker engine, and sufficient capacity to run the containers required.</p>
 <p>To achieve a highly-available system, an operator should plan to run redundant instances of the various services, and ensure they're properly connected to the coordination system. (needs docs)</p>
-<p>Finally, the control node can also act as an agent if that is desired. This can be useful to allow the control node to bootstrap agent nodes directly, or if a multi-datacenter deployment is not required.</p>
+<p>Finally, the control node can also act as an agent if that is desired (standalone mode). This can be useful to allow the control node to bootstrap agent nodes directly, or if a multi-datacenter deployment is not required.</p>

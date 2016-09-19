@@ -18,6 +18,7 @@ Vaquero Documentation
 </head><article class="markdown-body">
 
 <h1 id="vaquero-data-model-and-you">Vaquero Data Model and YOU</h1>
+<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> - <a href="https://github.com/gem-test/vaquero">Example Data Models</a></p>
 <h2 id="table-of-contents">Table of Contents</h2>
 <p><a href="#key-concepts">Key Concepts</a></p>
 <p><a href="#vocabulary">Vocabulary</a></p>
@@ -29,8 +30,7 @@ Vaquero Documentation
 <p><a href="#schemas">Schemas</a></p>
 <h3 id="introduction">Introduction</h3>
 <p>The Vaquero data model is meant to be a declarative representation of the state of your datacenter. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.</p>
-<p>You can find a simple example model using CoreOS <a href="https://github.com/gem-test/vaquero">here</a>. A more complex example in a heterogeneous environment, with a multistage boot can be found <a href="https://github.com/gem-test/vaquero/tree/multi">here</a></p>
-<p>We treat this data model as a &quot;single source of truth&quot; (SoT) that describes the operating state of your datacenter. The data model is <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html">parsed and verified</a> by a Vaquero Controller, and then deployed to an on-site Vaquero Agent for execution.</p>
+<p>We treat this data model as a &quot;single source of truth&quot; (SoT) that describes the operating state of your datacenter. The data model is <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html">parsed and verified</a> and then deployed to an on-site Vaquero Agent for execution.</p>
 <h2 id="key-concepts"><a name="key-concepts">Key Concepts</a></h2>
 <p>Your datacenter is expressed as an inventory of <em>hosts</em>. Each host belongs to a <em>host group</em>. Each host group uses a combination of <em>unattended assets</em> and <em>operating system</em> definitions to define a target configured state for a host.</p>
 <h2 id="vocabulary"><a name="vocabulary">Vocabulary</a></h2>
@@ -63,11 +63,11 @@ Vaquero Documentation
 <p>Each asset is placed under a subdirectory according to it's type. Assets are referenced by file name from host groups:</p>
 <pre><code>.
 └── assets
+    ├── cloud-config
+    │   └── base.yml
     ├── ignition
     │   ├── etcd.yml
     │   └── raid-fmt.yml
-    ├── cloud-config
-    │   └── base.yml
     ├── kickstart
     │   └── clevos.yml
     └── untyped
@@ -82,7 +82,7 @@ Vaquero Documentation
 <li><code>/untyped</code> -- Untyped assets</li>
 </ul>
 <p>So a host with mac address <code>00:00:00:00:00:01</code> could retrieve it's rendered ignition configuration by requesting</p>
-<pre><code>&lt;agent_url&gt;:&lt;agent_port&gt;/ignition?mac=00:00:00:00:00:01</code></pre>
+<pre><code>{{.agent.url}}/ignition?mac=00:00:00:00:00:01</code></pre>
 <h3 id="operating-systems">Operating Systems</h3>
 <p>Operating systems exist as individual documents under the <code>os</code> subdirectory. They are referenced by a self-assigned ID described in the document:</p>
 <pre><code>.
@@ -122,7 +122,7 @@ Vaquero Documentation
 <pre><code>#!ipxe
 chain ipxe?uuid=${uuid}&amp;mac=${net0/mac:hexhyp}&amp;domain=${domain}&amp;hostname=${hostname}&amp;domain=${domain}</code></pre>
 <h2 id="serving-files"><a name="serving-files">Serving Files</a></h2>
-<p>Vaquero Agent will expose an endpoint <code>/file</code> for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to configuration.</p>
+<p>Vaquero Agent will expose an endpoint <code>/files</code> for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to configuration.</p>
 <h2 id="identifying-a-host">Identifying a Host</h2>
 <p>A booting machine is identified as a particular host based on the selecting information used. Currently, a host will be identified by <code>mac</code> and <code>uuid</code>, as reported by iPXE.</p>
 <p>Additionally, a specific callback may be made to Vaquero Agent that includes a custom selection parameter</p>
