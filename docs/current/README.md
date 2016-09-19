@@ -21,15 +21,15 @@
 
 [![Build Status](https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg)](https://drone.projectshipped.io/CiscoCloud/vaquero)
 
-[Repo](https://github.com/CiscoCloud/vaquero) : Where development of vaquero is taking place.
-[Waffle.io Issue Tracking](https://waffle.io/CiscoCloud/vaquero): How the team is tracking work and progress
+- [Repo](https://github.com/CiscoCloud/vaquero) : Where development of vaquero is taking place.
+- [Waffle.io Issue Tracking](https://waffle.io/CiscoCloud/vaquero): How the team is tracking work and progress
 
 A bare metal configuration tool that takes in templates that describe a data center and automatically network boot those machines into the desired state.
 
 # High Level Overview
 
 ## [Architecture](https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html)
-![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/docs-cleanup/docs/current/ppt-arch.png)
+![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/ppt-arch.png)
 
 ## [Data Model Templates](https://ciscocloud.github.io/vaquero-docs/docs/current/env-data-structure.html)
 - [Data Model How To](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html)
