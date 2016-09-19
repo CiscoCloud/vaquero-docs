@@ -36,6 +36,82 @@ A bare metal configuration tool that takes in templates that describe a data cen
 
 ## [Requirements](https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html)
 
+## Running / Configuring Vaquero
+Vaquero can run in multiple modes `server`, `agent`, and `standalone`. This configuration is for standalone mode, which runs server and agent in the same container. 
+
+- ServerApi: The user api for the server. Currently not implemented.
+- AgentApi: The vaquero agent http server used to listen for vaquero server commands
+- AssetServer: The asset server for vaquero agent used by each booting machine to get unattend scripts and kernels.
+- DHCPMode: One of two modes: Proxy or Server
+- DHCPCIDR: The CIDR managed by DHCP
+- SavePath: The vaquero server location to save local configurations on disk
+- Updater: The type of data model updater
+- Gitter: Configuration for listening to git webhooks
+- GitHook: An array for all gitgooks to listen to
+- SoT: An array for specific sources of truth
+- Agent: An array to map SoT's to vaquero agents
+- Log: The base configuration for the project logr
+
+**sa-config.json**
+```
+{
+  "ServerApi" :{
+    "Address": "127.0.0.1",
+    "Port": 24601
+  },
+  "AgentApi" :{
+    "InsecureAddr": "127.0.0.1",
+    "InsecurePort": 24602
+  },
+  "AssetServer" : {
+      "Addr"     :"127.0.0.1",
+      "Port": 8080,
+      "BaseDir":"/tmp/vaquero/files",
+      "Scheme":"http"
+  },
+  "DHCPMode": "server",
+  "DHCPCIDR": "127.0.0.1/16",
+  "SavePath" : "/tmp/vaquero",
+  "Updater": "git",
+  "Gitter": {
+    "Endpoint": "/postreceive",
+    "Timeout": 2,
+    "Addr": "127.0.0.1",
+    "Port": 9090
+  },
+  "GitHook": [
+    {
+      "ID": "vaquero-local",
+      "Username": "gem-test",
+      "Password": "bc0f9c726d2c4d54c7635eb578c767cc57d89d40",
+      "URL" : "https://github.com/gem-test/vaquero",
+      "Secret": "supersecretcode"
+    }
+  ],
+  "SoT": [
+    {
+        "HookID": "vaquero-local",
+        "ID": "vaquero-test",
+        "Branch" : "local"
+    }
+  ],
+  "Agent": [
+    {
+      "SoTID": "vaquero-test",
+      "SiteID": "test-site",
+      "UseInsecure": true
+    }
+  ],
+  "Log": {
+    "Level": "debug",
+    "Location": "stdout",
+    "Type": "text"
+  }
+}
+```
+
+
+
 ## Running Vaquero from the container
 [Bintray Docker Images](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero)
 
