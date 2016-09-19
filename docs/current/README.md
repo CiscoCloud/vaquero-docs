@@ -54,6 +54,7 @@ Vaquero can run in multiple modes `server`, `agent`, and `standalone`. This conf
 
 **sa-config.json**
 ```
+---------------------------------------------------
 {
   "ServerApi" :{
     "Address": "127.0.0.1",
@@ -108,6 +109,7 @@ Vaquero can run in multiple modes `server`, `agent`, and `standalone`. This conf
     "Type": "text"
   }
 }
+---------------------------------------------------
 ```
 
 
