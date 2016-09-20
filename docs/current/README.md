@@ -46,6 +46,7 @@ Vaquero can run in multiple modes `server`, `agent`, and `standalone`. This conf
 
 **sa-config.yaml**
 ```
+------------------------------------------
 ---
 ServerApi:
   Address: 127.0.0.1
@@ -81,9 +82,10 @@ Log:
   Level: debug
   Location: stdout
   Type: text
-
+  ------------------------------------------
 ```
 
+#### Explanation of fields: 
 - ServerApi: The user api for the server. Currently not implemented.
 - AgentApi: The vaquero agent http server used to listen for vaquero server commands
 - AssetServer: The asset server for vaquero agent used by each booting machine to get unattend scripts and kernels.
