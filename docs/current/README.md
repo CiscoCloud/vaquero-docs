@@ -34,69 +34,54 @@ A bare metal configuration tool that takes in templates that describe a data cen
 ## [Data Model Templates](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html)
 - [Example Data Models](https://github.com/gem-test/vaquero)
 
+The branches to make note of: 
+- `master` This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature / model type / workflow. 
+- `local` is being used in our CI functional testing. We currently test at two commits in the history. [Init] (https://github.com/gem-test/vaquero/commit/3d0df2db8f04eaeaa30e0542d42aa9d861324e4e) and [Update](https://github.com/gem-test/vaquero/commit/b228c2291c3ae87685b25d1435bfe450bf40456b). 
+- `vagrant` Used for small deployments via vagrant in virtualbox. This branch may not show every feature but it will be leveraged as a small scale example Data Model to deploy a few machines at most.
+
 ## [Requirements](https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html)
 
 ## Running / Configuring Vaquero
 Vaquero can run in multiple modes `server`, `agent`, and `standalone`. This configuration is for standalone mode, which runs server and agent in the same container. 
 
-**sa-config.json**
+**sa-config.yaml**
 ```
----------------------------------------------------
-{
-  "ServerApi" :{
-    "Address": "127.0.0.1",
-    "Port": 24601
-  },
-  "AgentApi" :{
-    "InsecureAddr": "127.0.0.1",
-    "InsecurePort": 24602
-  },
-  "AssetServer" : {
-      "Addr"     :"127.0.0.1",
-      "Port": 8080,
-      "BaseDir":"/tmp/vaquero/files",
-      "Scheme":"http"
-  },
-  "DHCPMode": "server",
-  "DHCPCIDR": "127.0.0.1/16",
-  "SavePath" : "/tmp/vaquero",
-  "Updater": "git",
-  "Gitter": {
-    "Endpoint": "/postreceive",
-    "Timeout": 2,
-    "Addr": "127.0.0.1",
-    "Port": 9090
-  },
-  "GitHook": [
-    {
-      "ID": "vaquero-local",
-      "Username": "gem-test",
-      "Password": "bc0f9c726d2c4d54c7635eb578c767cc57d89d40",
-      "URL" : "https://github.com/gem-test/vaquero",
-      "Secret": "supersecretcode"
-    }
-  ],
-  "SoT": [
-    {
-        "HookID": "vaquero-local",
-        "ID": "vaquero-test",
-        "Branch" : "local"
-    }
-  ],
-  "Agent": [
-    {
-      "SoTID": "vaquero-test",
-      "SiteID": "test-site",
-      "UseInsecure": true
-    }
-  ],
-  "Log": {
-    "Level": "debug",
-    "Location": "stdout",
-    "Type": "text"
-  }
-}
----------------------------------------------------
+---
+ServerApi:
+  Address: 127.0.0.1
+  Port: 24601
+AgentApi:
+  InsecureAddr: 127.0.0.1
+  InsecurePort: 24602
+AssetServer:
+  Addr: 127.0.0.1
+  Port: 8080
+  BaseDir: "/tmp/vaquero/files"
+  Scheme: http
+DHCPMode: server
+DHCPCIDR: 127.0.0.1/16
+SavePath: "/tmp/vaquero"
+Updater: git
+Gitter:
+  Endpoint: "/postreceive"
+  Timeout: 2
+  Addr: 127.0.0.1
+  Port: 9090
+GitHook:
+- ID: vaquero-local
+  Username: gem-test
+  Password: bc0f9c726d2c4d54c7635eb578c767cc57d89d40
+  URL: https://github.com/gem-test/vaquero
+  Secret: supersecretcode
+SoT:
+- HookID: vaquero-local
+  ID: vaquero-test
+  Branch: local
+Log:
+  Level: debug
+  Location: stdout
+  Type: text
+
 ```
 
 - ServerApi: The user api for the server. Currently not implemented.
