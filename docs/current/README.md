@@ -150,4 +150,4 @@ CLI tool that is for validating your data model before you push it through Vaque
 Build the documentation by running `godoc -http <port>` and open `localhost:<port>` on your web browser
 
 Questions / Comments / Feedback
-- To provide feedback to the team please email: [vaquero-feedback@external.cisco.com](vaquero-feedback@external.cisco.com) or open an issue on [CiscoCloud/vaquero-docs](https://github.com/CiscoCloud/vaquero-docs)
+- To provide feedback to the team please email: [vaquero-feedback@external.cisco.com](mailto:vaquero-feedback@external.cisco.com) or open an issue on [CiscoCloud/vaquero-docs](https://github.com/CiscoCloud/vaquero-docs)
