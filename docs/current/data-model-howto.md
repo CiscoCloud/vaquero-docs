@@ -244,7 +244,7 @@ Metadata is made available during template execution as separate fields under th
 1. `.env` for environmental metadata
 2. `.agent` for Vaquero Agent information (the url for the Vaquero Agent asset server, etc)
 3. `.group` for host_group metadata
-4. `.host` for host metadata, selectors, and limited information discovered via iPXE (mac, uuid, domain, hostname).
+4. `.host` for host metadata, selectors, and limited information discovered via iPXE (mac, uuid, domain, hostname). If you want only the hosts selectors, they are included under `.host.selectors`
 
 By way of example, this template snippet defines a networkd configuration:
 
