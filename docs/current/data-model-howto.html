@@ -165,7 +165,7 @@ hosts:
 <li><code>.env</code> for environmental metadata</li>
 <li><code>.agent</code> for Vaquero Agent information (the url for the Vaquero Agent asset server, etc)</li>
 <li><code>.group</code> for host_group metadata</li>
-<li><code>.host</code> for host metadata, selectors, and limited information discovered via iPXE (mac, uuid, domain, hostname).</li>
+<li><code>.host</code> for host metadata, selectors, and limited information discovered via iPXE (mac, uuid, domain, hostname). If you want only the hosts selectors, they are included under <code>.host.selectors</code></li>
 </ol>
 <p>By way of example, this template snippet defines a networkd configuration:</p>
 <pre><code>networkd:
