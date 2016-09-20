@@ -102,7 +102,7 @@ Log:
 [Bintray Docker Images](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero)
 
 1. Fetch the image: `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
-2. Run Example: `docker run -v /vagrant/vagrant-config.json:/vaquero/config.json -v /files:/tmp/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.json`
+2. Run Example: `docker run -v /vagrant/vagrant-config.yaml:/vaquero/config.yaml -v /files:/tmp/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
     1. Docker volume to pass the configuration into the container. 
     2. Docker volume to pass in the assetServer assets (kernel images, undionly.kpxe, etc)
@@ -121,7 +121,7 @@ CLI tool that is for validating your data model before you push it through Vaque
 
 1. `git clone https://github.com/CiscoCloud/vaquero.git $GOPATH/src/github.com/CiscoCloud/vaquero`
 2. Build vaquero binary `make`.
-3. Run the vaquero binary `.bin/vaquero <command> -config sa-config.json`.
+3. Run the vaquero binary `.bin/vaquero <command> -config sa-config.yaml`.
 
 
 ## Sending Webhooks to Vaquero Master
