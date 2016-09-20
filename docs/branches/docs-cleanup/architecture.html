@@ -39,8 +39,8 @@ Vaquero Documentation
 </ul></li>
 <li><strong>HTTP Server</strong> - listens for commands from the central Vaquero server to update its assets and data model.</li>
 <li><strong>Asset Server</strong> - implements a file server or reverse proxy to forward requests to a CDN. This delivers unattend boot scripts, kernels, and initrds.</li>
-<li>Future Roadmap: <strong>Lifecycle Service</strong> -- implements the necessary protocols to manage the lifecycle of a server. This can leverage O/S-based mechanisms to hardware-based systems driven by IPMI, etc.</li>
-<li>Future Roadmap: <strong>State Engine</strong> -- implements a state tracking system to manage multi-step configurations, and provide status updates to master nodes.</li>
+<li><strong>Lifecycle Service (Future Roadmap)</strong> -- implements the necessary protocols to manage the lifecycle of a server. This can leverage O/S-based mechanisms to hardware-based systems driven by IPMI, etc.</li>
+<li><strong>State Engine (Future Roadmap)</strong> -- implements a state tracking system to manage multi-step configurations, and provide status updates to master nodes.</li>
 </ol>
 <h3 id="the-control-node">The Control Node</h3>
 <p>The overall solution will be driven by a centralized control system node that manage the process of transforming updates for our Source of Truth (SoT) into configurations that can be applied by the datacenter nodes. To perform this transformation, the system will need to process updates from the SoT, compile the changes, and stage those changes for implementation.</p>
@@ -50,14 +50,14 @@ Vaquero Documentation
 <ol style="list-style-type: decimal">
 <li><strong>GitHook Server</strong> - implements a http server that processes github webhooks.</li>
 <li><strong>Client API</strong> - implements an http client that talks to vaquero agents.</li>
-<li>Future Roadmap <strong>User API</strong> - implements functions to retrieve status, stage configurations and execute plans.</li>
+<li><strong>User API (Future Roadmap)</strong> - implements functions to retrieve status, stage configurations and execute plans.</li>
 </ol>
 <h5 id="endpoints">Endpoints:</h5>
 <ul>
 <li><strong>/postreceive</strong> - accepts inbound webhooks indicated an update has occurred in the SoT.</li>
-<li>Future Roadmap <strong>/status</strong> - used to inspect current operational state of the Vaquero system, and agent nodes.</li>
-<li>Future Roadmap <strong>/prepare</strong> - tells Vaquero system to stage a configuration.</li>
-<li>Future Roadmap <strong>/execute</strong> - performs the machine provisioning through lifecycle management, etc.</li>
+<li><strong>/status (Future Roadmap)</strong> - used to inspect current operational state of the Vaquero system, and agent nodes.</li>
+<li><strong>/prepare (Future Roadmap)</strong> - tells Vaquero system to stage a configuration.</li>
+<li><strong>/execute (Future Roadmap)</strong> - performs the machine provisioning through lifecycle management, etc.</li>
 </ul>
 <p>The current staging mechanism is human managed in github. It would be done in the same way as a code repository, a merge into a certain branch would push changes through vaquero. If vaquero server receives an invalid data model from github it will not push it out to the agents.</p>
 <h3 id="state-management-coordination">State Management / Coordination</h3>
