@@ -17,7 +17,13 @@
 </head><article class="markdown-body">
 
 # Vaquero Data Model and YOU
+[Home](https://ciscocloud.github.io/vaquero-docs/)
 
+- [Example Data Models](https://github.com/gem-test/vaquero)
+
+## Data Model Diagram to show relationships
+Note re-use of `host groups`, `os` and `assets`. Each site contains an `environment file` and an `inventory file` that lists all related hosts. Hosts are members of a single `host group`. `Host groups` reference `os` and `assets`
+![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/dm-picture.png)
 
 ## Table of Contents
 
@@ -41,10 +47,7 @@
 
 The Vaquero data model is meant to be a declarative representation of the state of your datacenter. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.
 
-You can find a simple example model using CoreOS [here](https://github.com/gem-test/vaquero).
-A more complex example in a heterogeneous environment, with a multistage boot can be found [here](https://github.com/gem-test/vaquero/tree/multi)
-
-We treat this data model as a "single source of truth" (SoT) that describes the operating state of your datacenter. The data model is [parsed and verified](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html) by a Vaquero Controller, and then deployed to an on-site Vaquero Agent for execution.
+We treat this data model as a "single source of truth" (SoT) that describes the operating state of your datacenter. The data model is [parsed and verified](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html) and then deployed to an on-site Vaquero Agent for execution.
 
 ## <a name="key-concepts">Key Concepts</a>
 
@@ -93,11 +96,11 @@ Each asset is placed under a subdirectory according to it's type. Assets are ref
 ```
 .
 └── assets
+    ├── cloud-config
+    │   └── base.yml
     ├── ignition
     │   ├── etcd.yml
     │   └── raid-fmt.yml
-    ├── cloud-config
-    │   └── base.yml
     ├── kickstart
     │   └── clevos.yml
     └── untyped
@@ -118,7 +121,7 @@ Assets are retrieved dynamically from the Vaquero Agent through typed endpoints.
 So a host with mac address `00:00:00:00:00:01` could retrieve it's rendered ignition configuration by requesting
 
 ```
-<agent_url>:<agent_port>/ignition?mac=00:00:00:00:00:01
+{{.agent.url}}/ignition?mac=00:00:00:00:00:01
 ```
 
 ### Operating Systems
@@ -183,7 +186,7 @@ chain ipxe?uuid=${uuid}&mac=${net0/mac:hexhyp}&domain=${domain}&hostname=${hostn
 
 ## <a name="serving-files">Serving Files</a>
 
-Vaquero Agent will expose an endpoint `/file` for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to configuration.
+Vaquero Agent will expose an endpoint `/files` for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to configuration.
 
 ## Identifying a Host
 
@@ -422,6 +425,7 @@ Details for establishing a connection to a site's agent
 | port        | Port for insecure URL                 | yes      | integer | 80                |
 | secure_url  | Secure/remote url for reaching agent  | yes      | string  | https://127.0.0.1 |
 | secure_port | Port for secure URL                   | yes      | integer | 443               |
+| cert_path| A path to the TLS cert                   | yes      | string  |                   |
 ```
 
 The transport (http/s) should be included with the agent URL.

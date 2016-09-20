@@ -17,13 +17,14 @@
 </head><article class="markdown-body">
 
 #Vaquero Validator
+[Home](https://ciscocloud.github.io/vaquero-docs/)
 
 The Vaquero validator is a built in utility for checking the consistency of your configurations. Its purpose is to preemptively report any inconsistencies (mistyped IDs, missing metadata, etc) in your configuration, before you attempt to deploy it.
 
 ## Using vaquero validate
 
-- Validating a local SoT: `vaquero validate --sot-dir <base_directory>` The base directory structure should be consistent with the [data model](https://github.com/CiscoCloud/vaquero-docs/blob/gh-pages/docs/current/env-data-structure.md).
-- Validating a git SoT: `vaquero validate --config config.yml` The config file should contain all the parameters required to start vaquero in server mode, specifically GitHook and SoT fields. 
+- Validating a local SoT: `vaquero validate --sot-dir <base_directory>` The base directory structure should be consistent with the [data model](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html).
+- Validating a git SoT: `vaquero validate --config sa-config.yml` The config file should contain all the parameters required to start vaquero in server mode, specifically GitHook and SoT fields. 
 
 ## Validation Process
 
