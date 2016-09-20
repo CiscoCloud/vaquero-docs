@@ -29,7 +29,7 @@ A bare metal configuration tool that takes in templates that describe a data cen
 # High Level Overview
 
 ## [Architecture](https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html)
-![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/ppt-arch.png)
+![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/branches/docs-cleanup/ppt-arch.png)
 
 ## [Data Model Templates](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html)
 - [Example Data Models](https://github.com/gem-test/vaquero)
@@ -125,7 +125,7 @@ Vaquero can run in multiple modes `server`, `agent`, and `standalone`. This conf
 ## [Vaquero Validate](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
 CLI tool that is for validating your data model before you push it through Vaquero
 
-## Dev Environment: Pre-Reqs
+## Environment: Pre-Reqs
 
 1. [Golang](https://golang.org/)
 2. [Docker](https://www.docker.com/) 
@@ -148,3 +148,6 @@ CLI tool that is for validating your data model before you push it through Vaque
 
 ## Docs
 Build the documentation by running `godoc -http <port>` and open `localhost:<port>` on your web browser
+
+Questions / Comments / Feedback
+- To provide feedback to the team please email: vaquero-feedback@external.cisco.com or open an issue on [CiscoCloud/vaquero-docs](https://github.com/CiscoCloud/vaquero-docs)
