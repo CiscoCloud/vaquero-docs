@@ -425,6 +425,7 @@ Details for establishing a connection to a site's agent
 | port        | Port for insecure URL                 | yes      | integer | 80                |
 | secure_url  | Secure/remote url for reaching agent  | yes      | string  | https://127.0.0.1 |
 | secure_port | Port for secure URL                   | yes      | integer | 443               |
+| cert_path| A path to the TLS cert                   | yes      | string  |                   |
 ```
 
 The transport (http/s) should be included with the agent URL.
