@@ -18,8 +18,10 @@
 
 # Vaquero Data Model and YOU
 [Home](https://ciscocloud.github.io/vaquero-docs/)
+
 - [Example Data Models](https://github.com/gem-test/vaquero)
-![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/docs-cleanup/docs/current/dm-picture.pngdm-picture.png)
+
+![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/docs-cleanup/docs/current/dm-picture.png)
 
 ## Table of Contents
 

@@ -135,7 +135,7 @@ CLI tool that is for validating your data model before you push it through Vaque
 
 1. `git clone https://github.com/CiscoCloud/vaquero.git $GOPATH/src/github.com/CiscoCloud/vaquero`
 2. Build vaquero binary `make`.
-3. Run the vaquero binary `.bin/vaquero <command> -config config.json`.
+3. Run the vaquero binary `.bin/vaquero <command> -config sa-config.json`.
 
 
 ## Sending Webhooks to Vaquero Master
@@ -149,5 +149,6 @@ CLI tool that is for validating your data model before you push it through Vaque
 ## Docs
 Build the documentation by running `godoc -http <port>` and open `localhost:<port>` on your web browser
 
-Questions / Comments / Feedback
-- To provide feedback to the team please email: [vaquero-feedback@external.cisco.com](mailto:vaquero-feedback@external.cisco.com) or open an issue on [CiscoCloud/vaquero-docs](https://github.com/CiscoCloud/vaquero-docs)
+## Questions / Comments / Feedback
+To provide feedback to the team please email: [vaquero-feedback@external.cisco.com](mailto:vaquero-feedback@external.cisco.com) 
+For Issues, open at [CiscoCloud/vaquero-docs](https://github.com/CiscoCloud/vaquero-docs/issues)

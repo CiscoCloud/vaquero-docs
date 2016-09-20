@@ -44,8 +44,8 @@ The `vaquero` process in `agent` mode registers itself with an upstream master a
     - TFTP: Hosts the undionly.kpxe
 2. **HTTP Server** - listens for commands from the central Vaquero server to update its assets and data model. 
 3. **Asset Server** - implements a file server or reverse proxy to forward requests to a CDN. This delivers unattend boot scripts, kernels, and initrds.
-4. Future Roadmap: **Lifecycle Service** -- implements the necessary protocols to manage the lifecycle of a server. This can leverage O/S-based mechanisms to hardware-based systems driven by IPMI, etc.
-5. Future Roadmap: **State Engine** -- implements a state tracking system to manage multi-step configurations, and provide status updates to master nodes.
+4. **Lifecycle Service (Future Roadmap)** -- implements the necessary protocols to manage the lifecycle of a server. This can leverage O/S-based mechanisms to hardware-based systems driven by IPMI, etc.
+5. **State Engine (Future Roadmap)** -- implements a state tracking system to manage multi-step configurations, and provide status updates to master nodes.
 
 ### The Control Node
 
@@ -59,14 +59,14 @@ The `vaquero` application in `server` implements the control logic to push data 
 
 1. **GitHook Server** - implements a http server that processes github webhooks.
 2. **Client API** - implements an http client that talks to vaquero agents.
-3. Future Roadmap **User API** - implements functions to retrieve status, stage configurations and execute plans.
+3. **User API (Future Roadmap)** - implements functions to retrieve status, stage configurations and execute plans.
 
 
 ##### Endpoints: 
 * **/postreceive** - accepts inbound webhooks indicated an update has occurred in the SoT.
-* Future Roadmap **/status** - used to inspect current operational state of the Vaquero system, and agent nodes.
-* Future Roadmap **/prepare** - tells Vaquero system to stage a configuration.
-* Future Roadmap **/execute** - performs the machine provisioning through lifecycle management, etc.
+* **/status (Future Roadmap)** - used to inspect current operational state of the Vaquero system, and agent nodes.
+* **/prepare (Future Roadmap)** - tells Vaquero system to stage a configuration.
+* **/execute (Future Roadmap)** - performs the machine provisioning through lifecycle management, etc.
 
 The current staging mechanism is human managed in github. It would be done in the same way as a code repository, a merge into a certain branch would push changes through vaquero. If vaquero server receives an invalid data model from github it will not push it out to the agents.
 
