@@ -94,7 +94,6 @@ Log:
 - Gitter: Configuration for listening to git webhooks
 - GitHook: An array for all gitgooks to listen to
 - SoT: An array for specific sources of truth
-- Agent: An array to map SoT's to vaquero agents
 - Log: The base configuration for the project logr
 
 ## Running Vaquero from the container
