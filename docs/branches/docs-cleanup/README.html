@@ -34,66 +34,47 @@ Vaquero Documentation
 <ul>
 <li><a href="https://github.com/gem-test/vaquero">Example Data Models</a></li>
 </ul>
+<p>The branches to make note of: - <code>master</code> This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature / model type / workflow. - <code>local</code> is being used in our CI functional testing. We currently test at two commits in the history. [Init] (https://github.com/gem-test/vaquero/commit/3d0df2db8f04eaeaa30e0542d42aa9d861324e4e) and <a href="https://github.com/gem-test/vaquero/commit/b228c2291c3ae87685b25d1435bfe450bf40456b">Update</a>. - <code>vagrant</code> Used for small deployments via vagrant in virtualbox. This branch may not show every feature but it will be leveraged as a small scale example Data Model to deploy a few machines at most.</p>
 <h2 id="requirements"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html">Requirements</a></h2>
 <h2 id="running-configuring-vaquero">Running / Configuring Vaquero</h2>
 <p>Vaquero can run in multiple modes <code>server</code>, <code>agent</code>, and <code>standalone</code>. This configuration is for standalone mode, which runs server and agent in the same container.</p>
-<p><strong>sa-config.json</strong></p>
-<pre><code>---------------------------------------------------
-{
-  &quot;ServerApi&quot; :{
-    &quot;Address&quot;: &quot;127.0.0.1&quot;,
-    &quot;Port&quot;: 24601
-  },
-  &quot;AgentApi&quot; :{
-    &quot;InsecureAddr&quot;: &quot;127.0.0.1&quot;,
-    &quot;InsecurePort&quot;: 24602
-  },
-  &quot;AssetServer&quot; : {
-      &quot;Addr&quot;     :&quot;127.0.0.1&quot;,
-      &quot;Port&quot;: 8080,
-      &quot;BaseDir&quot;:&quot;/tmp/vaquero/files&quot;,
-      &quot;Scheme&quot;:&quot;http&quot;
-  },
-  &quot;DHCPMode&quot;: &quot;server&quot;,
-  &quot;DHCPCIDR&quot;: &quot;127.0.0.1/16&quot;,
-  &quot;SavePath&quot; : &quot;/tmp/vaquero&quot;,
-  &quot;Updater&quot;: &quot;git&quot;,
-  &quot;Gitter&quot;: {
-    &quot;Endpoint&quot;: &quot;/postreceive&quot;,
-    &quot;Timeout&quot;: 2,
-    &quot;Addr&quot;: &quot;127.0.0.1&quot;,
-    &quot;Port&quot;: 9090
-  },
-  &quot;GitHook&quot;: [
-    {
-      &quot;ID&quot;: &quot;vaquero-local&quot;,
-      &quot;Username&quot;: &quot;gem-test&quot;,
-      &quot;Password&quot;: &quot;bc0f9c726d2c4d54c7635eb578c767cc57d89d40&quot;,
-      &quot;URL&quot; : &quot;https://github.com/gem-test/vaquero&quot;,
-      &quot;Secret&quot;: &quot;supersecretcode&quot;
-    }
-  ],
-  &quot;SoT&quot;: [
-    {
-        &quot;HookID&quot;: &quot;vaquero-local&quot;,
-        &quot;ID&quot;: &quot;vaquero-test&quot;,
-        &quot;Branch&quot; : &quot;local&quot;
-    }
-  ],
-  &quot;Agent&quot;: [
-    {
-      &quot;SoTID&quot;: &quot;vaquero-test&quot;,
-      &quot;SiteID&quot;: &quot;test-site&quot;,
-      &quot;UseInsecure&quot;: true
-    }
-  ],
-  &quot;Log&quot;: {
-    &quot;Level&quot;: &quot;debug&quot;,
-    &quot;Location&quot;: &quot;stdout&quot;,
-    &quot;Type&quot;: &quot;text&quot;
-  }
-}
----------------------------------------------------</code></pre>
+<p><strong>sa-config.yaml</strong></p>
+<pre><code>---
+ServerApi:
+  Address: 127.0.0.1
+  Port: 24601
+AgentApi:
+  InsecureAddr: 127.0.0.1
+  InsecurePort: 24602
+AssetServer:
+  Addr: 127.0.0.1
+  Port: 8080
+  BaseDir: &quot;/tmp/vaquero/files&quot;
+  Scheme: http
+DHCPMode: server
+DHCPCIDR: 127.0.0.1/16
+SavePath: &quot;/tmp/vaquero&quot;
+Updater: git
+Gitter:
+  Endpoint: &quot;/postreceive&quot;
+  Timeout: 2
+  Addr: 127.0.0.1
+  Port: 9090
+GitHook:
+- ID: vaquero-local
+  Username: gem-test
+  Password: bc0f9c726d2c4d54c7635eb578c767cc57d89d40
+  URL: https://github.com/gem-test/vaquero
+  Secret: supersecretcode
+SoT:
+- HookID: vaquero-local
+  ID: vaquero-test
+  Branch: local
+Log:
+  Level: debug
+  Location: stdout
+  Type: text
+</code></pre>
 <ul>
 <li>ServerApi: The user api for the server. Currently not implemented.</li>
 <li>AgentApi: The vaquero agent http server used to listen for vaquero server commands</li>
