@@ -29,7 +29,7 @@ The goal is to provide the ability for teams to manage their infrastructure usin
 
 The diagram linked below shows a high-level view of the overall application architecture. All components should run as containers, but some will need various levels of privilege to perform their required functionality. Today vaquero is delivered in one container for operational simplicity. Vaquero can run in multiple modes, server, agent, standalone (the combination of server and agent)
 
-![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/docs-cleanup/docs/current/ppt-arch.png)
+![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/ppt-arch.png)
 
 ### The Datacenter Node
 
