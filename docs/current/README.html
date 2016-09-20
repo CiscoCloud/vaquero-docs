@@ -94,7 +94,7 @@ Log:
 <p><a href="https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero">Bintray Docker Images</a></p>
 <ol style="list-style-type: decimal">
 <li>Fetch the image: <code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></li>
-<li><p>Run Example: <code>docker run -v /vagrant/vagrant-config.json:/vaquero/config.json -v /files:/tmp/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.json</code></p>
+<li><p>Run Example: <code>docker run -v /vagrant/vagrant-config.yaml:/vaquero/config.yaml -v /files:/tmp/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
 <ol style="list-style-type: decimal">
 <li>Docker volume to pass the configuration into the container.</li>
 <li>Docker volume to pass in the assetServer assets (kernel images, undionly.kpxe, etc)</li>
@@ -112,7 +112,7 @@ Log:
 <ol style="list-style-type: decimal">
 <li><code>git clone https://github.com/CiscoCloud/vaquero.git $GOPATH/src/github.com/CiscoCloud/vaquero</code></li>
 <li>Build vaquero binary <code>make</code>.</li>
-<li>Run the vaquero binary <code>.bin/vaquero &lt;command&gt; -config sa-config.json</code>.</li>
+<li>Run the vaquero binary <code>.bin/vaquero &lt;command&gt; -config sa-config.yaml</code>.</li>
 </ol>
 <h2 id="sending-webhooks-to-vaquero-master">Sending Webhooks to Vaquero Master</h2>
 <ol style="list-style-type: decimal">
