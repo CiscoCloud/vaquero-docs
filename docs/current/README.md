@@ -24,7 +24,7 @@
 - [Repo](https://github.com/CiscoCloud/vaquero) : Where development of vaquero is taking place.
 - [Waffle.io Issue Tracking](https://waffle.io/CiscoCloud/vaquero): How the team is tracking work and progress
 
-A bare metal configuration tool that takes in templates that describe a data center and automatically network boot those machines into the desired state.
+A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped.
 
 # High Level Overview
 
