@@ -35,8 +35,11 @@ A bare metal configuration tool that takes in templates that describe a data cen
 - [Example Data Models](https://github.com/gem-test/vaquero)
 
 The branches to make note of: 
+
 - `master` This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature / model type / workflow. 
-- `local` is being used in our CI functional testing. We currently test at two commits in the history. [Init] (https://github.com/gem-test/vaquero/commit/3d0df2db8f04eaeaa30e0542d42aa9d861324e4e) and [Update](https://github.com/gem-test/vaquero/commit/b228c2291c3ae87685b25d1435bfe450bf40456b). 
+
+- `local` is being used in our CI functional testing. We currently test at two commits in the history. [Init](https://github.com/gem-test/vaquero/commit/3d0df2db8f04eaeaa30e0542d42aa9d861324e4e) and [Update](https://github.com/gem-test/vaquero/commit/b228c2291c3ae87685b25d1435bfe450bf40456b). 
+
 - `vagrant` Used for small deployments via vagrant in virtualbox. This branch may not show every feature but it will be leveraged as a small scale example Data Model to deploy a few machines at most.
 
 ## [Requirements](https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html)
