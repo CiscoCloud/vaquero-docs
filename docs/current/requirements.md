@@ -21,9 +21,9 @@
 
 The Vaquero project is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure.
 
-Use case(s):
+### Use Cases:
 
-Actor: DevOps Engineer
+**Actor: DevOps Engineer**
 
 1. As a DevOps Engineer, I want to be able to manage my bare metal compute (hardware) as code.
 
@@ -39,7 +39,7 @@ Actor: DevOps Engineer
 7. System should treat SoT as an immutable reference.
 
 
-### Incomplete 
+### Incomplete
 8. Management of multiple datacenters via federated architecture.
 9. Relationship between SoT to cluster instances via static identifiers (MAC, UUID, others?).
 10. Manage power state of the hardware.
@@ -73,4 +73,3 @@ Actor: DevOps Engineer
 * Security: integration w/role base systems
 * Security: management of user credentials
 * Security: management of assymetric encryption keys
-

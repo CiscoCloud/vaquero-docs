@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -ue
 
 TMP=$(mktemp -d -p "/drone")
@@ -17,4 +18,3 @@ for src in docs/current/*.md; do
     echo Converting ${src} to ${dst}...
     pandoc "${src}" -o "${dst}"
 done
-
