@@ -208,7 +208,7 @@ hosts:
 <ol style="list-style-type: decimal">
 <li>Keys with empty values (i.e. &quot;&quot; or '') are formatted as <code>key</code> in the boot options</li>
 <li>Keys with non-empty values are formatted as <code>key=value</code> in the boot options</li>
-<li>Keys that contain a list will be included once each time for every list element. If a list element cannot be parsed not a string, it is ignored.</li>
+<li>Keys that contain a list will be included once each time for every list element. If a list element cannot be parsed not a string (i.e. is a map, list, etc), it is ignored.</li>
 </ol>
 <p>So for the os</p>
 <pre><code>---
