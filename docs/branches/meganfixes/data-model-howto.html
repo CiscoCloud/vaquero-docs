@@ -17,29 +17,34 @@ Vaquero Documentation
             </style>
 </head><article class="markdown-body">
 
-<h1 id="vaquero-data-model-and-you">Vaquero Data Model and YOU</h1>
+<h1 id="the-vaquero-data-model-and-you">The Vaquero Data Model and YOU</h1>
 <p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a></p>
 <ul>
 <li><a href="https://github.com/gem-test/vaquero">Example Data Models</a></li>
 </ul>
 <h2 id="data-model-diagram-to-show-relationships">Data Model Diagram to show relationships</h2>
-<p>Note re-use of <code>host groups</code>, <code>os</code> and <code>assets</code>. Each site contains an <code>environment file</code> and an <code>inventory file</code> that lists all related hosts. Hosts are members of a single <code>host group</code>. <code>Host groups</code> reference <code>os</code> and <code>assets</code> <img src="https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/dm-picture.png" /></p>
+<p>Each site contains an <code>environment file</code> and an <code>inventory file</code> that lists all related hosts. Hosts are members of a single <code>host group</code>. <code>Host groups</code> reference <code>os</code> and <code>assets</code>. Note re-use of <code>host groups</code>, <code>os</code> and <code>assets</code>.</p>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/dm-picture.png" />
+</div>
 <h2 id="table-of-contents">Table of Contents</h2>
-<p><a href="#key-concepts">Key Concepts</a></p>
-<p><a href="#vocabulary">Vocabulary</a></p>
-<p><a href="#where-things-go">Where things go</a></p>
-<p><a href="#rough-workflow">Rough Workflow</a></p>
-<p><a href="#serving-files">Serving files</a></p>
-<p><a href="#metadata-and-templating">Metadata and Templating</a></p>
-<p><a href="#translation-to-ipxe">Translation to iPXE</a></p>
-<p><a href="#schemas">Schemas</a></p>
+<ol style="list-style-type: decimal">
+<li><p><a href="#key-concepts">Key Concepts</a></p></li>
+<li><p><a href="#vocabulary">Vocabulary</a></p></li>
+<li><p><a href="#where-things-go">Where things go</a></p></li>
+<li><p><a href="#rough-workflow">Rough Workflow</a></p></li>
+<li><p><a href="#serving-files">Serving files</a></p></li>
+<li><p><a href="#metadata-and-templating">Metadata and Templating</a></p></li>
+<li><p><a href="#translation-to-ipxe">Translation to iPXE</a></p></li>
+<li><p><a href="#schemas">Schemas</a></p></li>
+</ol>
 <h3 id="introduction">Introduction</h3>
-<p>The Vaquero data model is meant to be a declarative representation of the state of your datacenter. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.</p>
-<p>We treat this data model as a &quot;single source of truth&quot; (SoT) that describes the operating state of your datacenter. The data model is <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html">parsed and verified</a> and then deployed to an on-site Vaquero Agent for execution.</p>
+<p>The Vaquero data model is meant to be a declarative representation of the state of your data center. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.</p>
+<p>We treat this data model as a &quot;single source of truth&quot; (SoT) that describes the operating state of your data center. The data model is <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html">parsed and verified</a>, then deployed to an on-site Vaquero Agent for execution.</p>
 <h2 id="key-concepts"><a name="key-concepts">Key Concepts</a></h2>
-<p>Your datacenter is expressed as an inventory of <em>hosts</em>. Each host belongs to a <em>host group</em>. Each host group uses a combination of <em>unattended assets</em> and <em>operating system</em> definitions to define a target configured state for a host.</p>
+<p>Your data center is expressed as an inventory of <em>hosts</em>. Each host belongs to a <em>host group</em>. Each host group uses a combination of <em>unattended assets</em> and <em>operating system</em> definitions to define a target configured state for a host.</p>
 <h2 id="vocabulary"><a name="vocabulary">Vocabulary</a></h2>
-<p><em>Site</em>: A managed datacenter, or group of machines managed by a single Vaquero Agent.</p>
+<p><em>Site</em>: A managed data center, or group of machines managed by a single Vaquero Agent.</p>
 <p><em>Host</em>: A single managed machine. Definition includes identifying attributes (selectors), host-specific metadata, information for LOM (IPMI), and an association to a single host group.</p>
 <p><em>Operating System</em>: An &quot;installation&quot; template containing the details to perform a network boot into a particular OS, specifying kernel, initrd, boot command-line parameters, unattended config, etc.</p>
 <p><em>Unattended Assets</em>: An optionally templated unattended config/script (i.e. cloud-init, ignition, kickstart, etc) used for unattended boot and installation operations.</p>
@@ -47,10 +52,10 @@ Vaquero Documentation
 <h2 id="where-things-go"><a name="where-things-go">Where Things Go</a></h2>
 <p>Configuration files are placed in a directory hierarchy. Vaquero parses site configurations by reading files placed in specially named subdirectories. The root of your configuration path has four directories:</p>
 <ol style="list-style-type: decimal">
-<li><em>assets</em>: Assets grouped by type. These are generally unattended configs/scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).</li>
-<li><em>os</em>: Individual documents describing family, version, kernel/image location, and boot/installation options for any operating systems used by host groups.</li>
-<li><em>host_groups</em>: Individual documents combining operating system and unattended asset information to describe a target host state.</li>
-<li><em>sites</em>: One or more sites (each in it's own subdirectory) that share the same host_group, os, and asset definitions. Each site includes environment-specific information, and an inventory of hosts that apply host_group definitions to machines.</li>
+<li><strong>assets</strong>: grouped by type. These are generally unattended configs or scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).</li>
+<li><strong>os</strong>: Individual documents describing family, version, kernel/image location, and boot/installation options for any operating systems used by host groups.</li>
+<li><strong>host_groups</strong>: Individual documents combining operating system and unattended asset information to describe a target host state.</li>
+<li><strong>sites</strong>: One or more sites (each in it's own subdirectory) that share the same host_group, os, and asset definitions. Each site includes environment-specific information, and an inventory of hosts that apply host_group definitions to machines.</li>
 </ol>
 <pre><code>.
 ├── assets
@@ -63,7 +68,7 @@ Vaquero Documentation
 <li>Cloud-Config: <a href="https://coreos.com/os/docs/latest/cloud-config.html">CoreOS Cloudinit System</a></li>
 <li>Ignition: <a href="https://coreos.com/ignition/docs/latest/">CoreOS Ignition</a></li>
 <li>Kickstart: <a href="http://fedoraproject.org/wiki/Anaconda/Kickstart">Fedora Project Kickstart</a></li>
-<li>Untyped: Misc files. Can be used for &quot;unsupported&quot; configuration types.</li>
+<li>Untyped: Miscellaneous files. Can be used for &quot;unsupported&quot; configuration types.</li>
 </ol>
 <p>Each asset is placed under a subdirectory according to it's type. Assets are referenced by file name from host groups:</p>
 <pre><code>.
@@ -86,7 +91,7 @@ Vaquero Documentation
 <li><code>/kickstart</code> -- Kickstart assets</li>
 <li><code>/untyped</code> -- Untyped assets</li>
 </ul>
-<p>So a host with mac address <code>00:00:00:00:00:01</code> could retrieve it's rendered ignition configuration by requesting</p>
+<p>For instance, a host with mac address <code>00:00:00:00:00:01</code> could retrieve it's rendered ignition configuration by requesting</p>
 <pre><code>{{.agent.url}}/ignition?mac=00:00:00:00:00:01</code></pre>
 <h3 id="operating-systems">Operating Systems</h3>
 <p>Operating systems exist as individual documents under the <code>os</code> subdirectory. They are referenced by a self-assigned ID described in the document:</p>
@@ -117,8 +122,8 @@ Vaquero Documentation
 <p>Configurations are roughly executed in the following order:</p>
 <ol style="list-style-type: decimal">
 <li>Host makes DHCP request.</li>
-<li>DHCP causes host to chainload iPXE (undionly.kpxe) and indicates Vaquero Agent as next-server</li>
-<li>Vaquero Agent provides default iPXE script to discover basic host information (mac, uuid, domain, hostname)</li>
+<li>DHCP causes host to chainload iPXE (<code>undionly.kpxe</code>) and indicates Vaquero Agent as next-server</li>
+<li>Vaquero Agent provides a default iPXE script to discover basic host information (mac, uuid, domain, hostname)</li>
 <li>Host requests dynamic iPXE script based on basic information</li>
 <li>Vaquero Agent renders iPXE script using os, host_group, and host information</li>
 <li>Host executes iPXE script, requesting resources (kernel, intitrd, unattended configs/scripts) as required</li>
@@ -127,7 +132,7 @@ Vaquero Documentation
 <pre><code>#!ipxe
 chain ipxe?uuid=${uuid}&amp;mac=${net0/mac:hexhyp}&amp;domain=${domain}&amp;hostname=${hostname}&amp;domain=${domain}</code></pre>
 <h2 id="serving-files"><a name="serving-files">Serving Files</a></h2>
-<p>Vaquero Agent will expose an endpoint <code>/files</code> for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to configuration.</p>
+<p>Vaquero Agent will expose an endpoint <code>/files</code> for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to the configuration file.</p>
 <h2 id="identifying-a-host">Identifying a Host</h2>
 <p>A booting machine is identified as a particular host based on the selecting information used. Currently, a host will be identified by <code>mac</code> and <code>uuid</code>, as reported by iPXE.</p>
 <p>Additionally, a specific callback may be made to Vaquero Agent that includes a custom selection parameter</p>
@@ -137,7 +142,7 @@ chain ipxe?uuid=${uuid}&amp;mac=${net0/mac:hexhyp}&amp;domain=${domain}&amp;host
 <li>Only select a host where all the selectors apply</li>
 <li>Select the host where the most selectors apply</li>
 </ol>
-<p>So for two hosts:</p>
+<p>For example, given these two hosts:</p>
 <pre><code>---
 host_group: group_one
 hosts:
@@ -158,8 +163,7 @@ hosts:
 <li>In any files under <code>assets</code></li>
 <li>In os objects in <code>boot.kernel</code>, <code>boot.initrd</code>, and values in <code>cmdline</code></li>
 </ol>
-<p>Metadata is used primarily to render templated information. It is &quot;unstructured&quot; data, that consists of nested key-value maps, and lists.</p>
-<p>Metadata is included in three separate places in your configuration:</p>
+<p>Metadata is used primarily to render templated information. It is &quot;unstructured&quot; data, consisting of nested key-value maps, and lists. Metadata is included in three separate places in your configuration:</p>
 <ol style="list-style-type: decimal">
 <li>In the environment <code>env.yml</code> file</li>
 <li>In a host_group file</li>
@@ -170,7 +174,7 @@ hosts:
 <li><code>.env</code> for environmental metadata</li>
 <li><code>.agent</code> for Vaquero Agent information (the url for the Vaquero Agent asset server, etc)</li>
 <li><code>.group</code> for host_group metadata</li>
-<li><code>.host</code> for host metadata, selectors, and limited information discovered via iPXE (mac, uuid, domain, hostname). If you want only the hosts selectors, they are included under <code>.host.selectors</code></li>
+<li><code>.host</code> for host metadata, selectors, and limited information discovered via iPXE (mac, uuid, domain, hostname). If you want only the host selectors, they are included under <code>.host.selectors</code></li>
 </ol>
 <p>By way of example, this template snippet defines a networkd configuration:</p>
 <pre><code>networkd:
@@ -201,15 +205,15 @@ hosts:
 <li>uuid</li>
 </ol>
 <h2 id="translation-to-ipxe"><a name="translation-to-ipxe">Translation to iPXE</a></h2>
-<p>Currently, all network boots/installations are performed using iPXE scripts. Operating system boot parameters and cmdline options are translated into iPXE scripts to perform boot/installation tasks.</p>
-<p>Any unattended configs/scripts included in a host_group are inserted during this process. Inconsistencies (i.e. using ignition for a CentOS os) should be detected during validation.</p>
-<h3 id="cmdline-parameters">Cmdline Parameters</h3>
-<p>Rules for translating cmdline parameters:</p>
+<p>Currently, all network boots and installations are performed using iPXE scripts. Operating system boot parameters and command line options are translated into iPXE scripts to perform boot/installation tasks.</p>
+<p>Any unattended configs or scripts included in a host_group are inserted during this process. Inconsistencies (i.e. using ignition for a CentOS operating system) should be detected during validation.</p>
+<h3 id="command-line-parameters">Command Line Parameters</h3>
+<p>Rules for translating command line parameters:</p>
 <ol style="list-style-type: decimal">
 <li>Keys with empty values (i.e. &quot;&quot; or '') are formatted as <code>key</code> in the boot options</li>
 <li>Keys with non-empty values are formatted as <code>key=value</code> in the boot options</li>
 </ol>
-<p>So for the os</p>
+<p>For example, given this OS:</p>
 <pre><code>---
 id: centos-example
 major_version: &#39;7&#39;
@@ -232,9 +236,8 @@ cmdline:
     boot</code></pre>
 <p>Note how <code>lang</code> appears with a trailing <code>=</code>, because it's value was non-empty <code>' '</code></p>
 <h2 id="schemas"><a name="schemas">Schemas</a></h2>
-<p>Some more proper schemas for the various objects.</p>
 <h3 id="host_group">host_group</h3>
-<p>Defines a configured state (combination of os w/ unattended configuration and metadata) that may be applied to a group of hosts.</p>
+<p>Defines a configured state (combination of os with unattended configuration and metadata) that may be applied to a group of hosts.</p>
 <pre><code>|       name       |                  description                  | required |         schema        | default |
 |------------------|-----------------------------------------------|----------|-----------------------|---------|
 | id               | A self-assigned identifier (should be unique) | yes      | string                |         |
@@ -263,7 +266,7 @@ cmdline:
 | bmc       | Details for connecting to the host&#39;s BMC             | no       | bmc    |         |
 | metadata  | unstructured, host-specific information              | no       | object |         |</code></pre>
 <h4 id="inv.bmc-ipmi">inv.bmc (ipmi)</h4>
-<p>Details for single-hosts bmc, used for LOM of the host machine.</p>
+<p>Details for single-hosts bmc, used for lights-out management (LOM) of the host machine.</p>
 <p>NOTE: Only IPMI is supported at this time.</p>
 <pre><code>| name |          description          | required | schema | default |
 |------|-------------------------------|----------|--------|---------|
@@ -273,7 +276,7 @@ cmdline:
 | user | Configured user               | yes      | string |         |
 | pass | Configured password           | yes      | string |         |</code></pre>
 <h3 id="env">env</h3>
-<p>Provides information for a single deployment/datacenter/etc.</p>
+<p>Provides information for a single deployment/data center/etc.</p>
 <pre><code>|   name   |                        description                        | required |   schema  | default |
 |----------|-----------------------------------------------------------|----------|-----------|---------|
 | id       | A self-assigned identifier (should be unique)             | yes      | string    |         |

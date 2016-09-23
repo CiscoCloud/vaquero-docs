@@ -18,12 +18,11 @@ Vaquero Documentation
 </head><article class="markdown-body">
 
 <h1 id="vaquero">Vaquero</h1>
-<h1 id="megans-changes">Megan's changes</h1>
 <p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a></p>
 <p><a href="https://drone.projectshipped.io/CiscoCloud/vaquero"><img src="https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg" alt="Build Status" /></a></p>
 <ul>
-<li><a href="https://github.com/CiscoCloud/vaquero">Repo</a> : Where development of vaquero is taking place.</li>
-<li><a href="https://waffle.io/CiscoCloud/vaquero">Waffle.io Issue Tracking</a>: How the team is tracking work and progress</li>
+<li><a href="https://github.com/CiscoCloud/vaquero">Repo</a> : Vaquero's development home</li>
+<li><a href="https://waffle.io/CiscoCloud/vaquero">Waffle.io Issue Tracking</a>: Progress tracking tool</li>
 </ul>
 <p>A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped.</p>
 <h1 id="high-level-overview">High Level Overview</h1>
@@ -35,15 +34,15 @@ Vaquero Documentation
 <ul>
 <li><a href="https://github.com/gem-test/vaquero">Example Data Models</a></li>
 </ul>
-<p>The branches to make note of:</p>
+<p>Notable branches:</p>
 <ul>
-<li><p><a href="https://github.com/gem-test/vaquero"><code>master</code></a> This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature / model type / workflow.</p></li>
-<li><p><a href="https://github.com/gem-test/vaquero/tree/local"><code>local</code></a> is being used in our CI functional testing. We currently test at two commits in the history. <a href="https://github.com/gem-test/vaquero/commit/3d0df2db8f04eaeaa30e0542d42aa9d861324e4e">Init</a> and <a href="https://github.com/gem-test/vaquero/commit/b228c2291c3ae87685b25d1435bfe450bf40456b">Update</a>.</p></li>
-<li><p><a href="https://github.com/gem-test/vaquero/tree/vagrant"><code>vagrant</code></a> Used for small deployments via vagrant in virtualbox. This branch may not show every feature but it will be leveraged as a small scale example Data Model to deploy a few machines at most.</p></li>
+<li><p><a href="https://github.com/gem-test/vaquero"><code>master</code></a>: This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature, model type, and workflow is up.</p></li>
+<li><p><a href="https://github.com/gem-test/vaquero/tree/local"><code>local</code></a>: Used for CI functional testing. We currently test at two commits in the history. <a href="https://github.com/gem-test/vaquero/commit/3d0df2db8f04eaeaa30e0542d42aa9d861324e4e">Init</a> and <a href="https://github.com/gem-test/vaquero/commit/b228c2291c3ae87685b25d1435bfe450bf40456b">Update</a>.</p></li>
+<li><p><a href="https://github.com/gem-test/vaquero/tree/vagrant"><code>vagrant</code></a>: Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most.</p></li>
 </ul>
 <h2 id="requirements"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html">Requirements</a></h2>
-<h2 id="running-configuring-vaquero">Running / Configuring Vaquero</h2>
-<p>Vaquero can run in multiple modes <code>server</code>, <code>agent</code>, and <code>standalone</code>. This configuration is for standalone mode, which runs server and agent in the same container.</p>
+<h2 id="running-and-configuring-vaquero">Running and Configuring Vaquero</h2>
+<p>Vaquero can run in multiple modes: <code>server</code>, <code>agent</code>, and <code>standalone</code>. This configuration is for standalone mode, which runs server and agent in the same container.</p>
 <p><strong>sa-config.yaml</strong></p>
 <pre><code>************************************************************
 ---
@@ -85,9 +84,9 @@ Log:
 <h4 id="explanation-of-config-fields">Explanation of config fields:</h4>
 <ul>
 <li>ServerApi: The user api for the server. Currently not implemented.</li>
-<li>AgentApi: The vaquero agent http server used to listen for vaquero server commands</li>
-<li>AssetServer: The asset server for vaquero agent used by each booting machine to get unattend scripts and kernels.</li>
-<li>DHCPMode: One of two modes: Proxy or Server</li>
+<li>AgentApi: The vaquero-agent http server used to listen for vaquero server commands.</li>
+<li>AssetServer: The asset server for vaquero agent used by each booting machine to get unattended scripts and kernels.</li>
+<li>DHCPMode: One of two modes, <code>proxy</code> or <code>server</code></li>
 <li>DHCPCIDR: The CIDR managed by DHCP</li>
 <li>SavePath: The vaquero server location to save local configurations on disk</li>
 <li>Updater: The type of data model updater</li>
@@ -102,9 +101,9 @@ Log:
 <li>Fetch the image: <code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></li>
 <li><p>Run Example: <code>docker run -v /vagrant/vagrant-config.yaml:/vaquero/config.yaml -v /files:/tmp/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
 <ol style="list-style-type: decimal">
-<li>Docker volume to pass the configuration into the container.</li>
-<li>Docker volume to pass in the assetServer assets (kernel images, undionly.kpxe, etc)</li>
-<li>Set networking to host</li>
+<li><code>docker volume</code> to pass the configuration into the container.</li>
+<li><code>docker volume</code> to pass in the assetServer assets (kernel images, <code>undionly.kpxe</code>, etc)</li>
+<li>set networking to <code>host</code></li>
 </ol></li>
 </ol>
 <h2 id="vaquero-validate"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html">Vaquero Validate</a></h2>
@@ -114,11 +113,11 @@ Log:
 <li><a href="https://golang.org/">Golang</a></li>
 <li><a href="https://www.docker.com/">Docker</a></li>
 </ol>
-<h2 id="dev-environment-fetching-compiling-running-from-source">Dev Environment: Fetching / Compiling / Running from source</h2>
+<h2 id="dev-environment-fetching-compiling-and-running-from-source">Dev Environment: Fetching, Compiling, and Running from Source</h2>
 <ol style="list-style-type: decimal">
 <li><code>git clone https://github.com/CiscoCloud/vaquero.git $GOPATH/src/github.com/CiscoCloud/vaquero</code></li>
-<li>Build vaquero binary <code>make</code>.</li>
-<li>Run the vaquero binary <code>.bin/vaquero &lt;command&gt; -config sa-config.yaml</code>.</li>
+<li>Build vaquero binary: <code>make</code>.</li>
+<li>Run the vaquero binary: <code>.bin/vaquero &lt;command&gt; -config sa-config.yaml</code>.</li>
 </ol>
 <h2 id="sending-webhooks-to-vaquero-master">Sending Webhooks to Vaquero Master</h2>
 <ol style="list-style-type: decimal">
