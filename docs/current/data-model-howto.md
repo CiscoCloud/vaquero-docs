@@ -297,7 +297,7 @@ Rules for translating cmdline parameters:
 
 1. Keys with empty values (i.e. "" or '') are formatted as `key` in the boot options
 2. Keys with non-empty values are formatted as `key=value` in the boot options
-3. Keys that contain a list will be included once each time for every list element. If a list element cannot be parsed not a string, it is ignored.
+3. Keys that contain a list will be included once each time for every list element. If a list element cannot be parsed not a string (i.e. is a map, list, etc), it is ignored.
 
 So for the os
 
