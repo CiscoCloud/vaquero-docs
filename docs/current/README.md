@@ -17,14 +17,16 @@
 </head><article class="markdown-body">
 
 # Vaquero
+
 [Home](https://ciscocloud.github.io/vaquero-docs/)
 
 [![Build Status](https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg)](https://drone.projectshipped.io/CiscoCloud/vaquero)
 
-- [Repo](https://github.com/CiscoCloud/vaquero) : Where development of vaquero is taking place.
-- [Waffle.io Issue Tracking](https://waffle.io/CiscoCloud/vaquero): How the team is tracking work and progress
+- [Repo](https://github.com/CiscoCloud/vaquero) : Vaquero's development home
+- [Waffle.io Issue Tracking](https://waffle.io/CiscoCloud/vaquero): Progress tracking tool
 
 A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped.
+
 
 # High Level Overview
 
@@ -34,18 +36,18 @@ A bare metal configuration utility that network boots machines based on user def
 ## [Data Model Templates](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html)
 - [Example Data Models](https://github.com/gem-test/vaquero)
 
-The branches to make note of: 
+Notable branches:
 
-- [`master`](https://github.com/gem-test/vaquero) This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature / model type / workflow. 
+- [`master`](https://github.com/gem-test/vaquero): This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature, model type, and workflow is up.
 
-- [`local`](https://github.com/gem-test/vaquero/tree/local) is being used in our CI functional testing. We currently test at two commits in the history. [Init](https://github.com/gem-test/vaquero/commit/3d0df2db8f04eaeaa30e0542d42aa9d861324e4e) and [Update](https://github.com/gem-test/vaquero/commit/b228c2291c3ae87685b25d1435bfe450bf40456b). 
+- [`local`](https://github.com/gem-test/vaquero/tree/local): Used for CI functional testing. We currently test at two commits in the history. [Init](https://github.com/gem-test/vaquero/commit/3d0df2db8f04eaeaa30e0542d42aa9d861324e4e) and [Update](https://github.com/gem-test/vaquero/commit/b228c2291c3ae87685b25d1435bfe450bf40456b).
 
-- [`vagrant`](https://github.com/gem-test/vaquero/tree/vagrant) Used for small deployments via vagrant in virtualbox. This branch may not show every feature but it will be leveraged as a small scale example Data Model to deploy a few machines at most.
+- [`vagrant`](https://github.com/gem-test/vaquero/tree/vagrant): Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most.
 
 ## [Requirements](https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html)
 
-## Running / Configuring Vaquero
-Vaquero can run in multiple modes `server`, `agent`, and `standalone`. This configuration is for standalone mode, which runs server and agent in the same container. 
+## Running and Configuring Vaquero
+Vaquero can run in multiple modes: `server`, `agent`, and `standalone`. This configuration is for standalone mode, which runs server and agent in the same container.
 
 **sa-config.yaml**
 ```
@@ -88,11 +90,11 @@ Log:
   ************************************************************
 ```
 
-#### Explanation of config fields: 
+#### Explanation of config fields:
 - ServerApi: The user api for the server. Currently not implemented.
-- AgentApi: The vaquero agent http server used to listen for vaquero server commands
-- AssetServer: The asset server for vaquero agent used by each booting machine to get unattend scripts and kernels.
-- DHCPMode: One of two modes: Proxy or Server
+- AgentApi: The vaquero-agent http server used to listen for vaquero server commands.
+- AssetServer: The asset server for vaquero agent used by each booting machine to get unattended scripts and kernels.
+- DHCPMode: One of two modes, `proxy` or `server`
 - DHCPCIDR: The CIDR managed by DHCP
 - SavePath: The vaquero server location to save local configurations on disk
 - Updater: The type of data model updater
@@ -105,11 +107,11 @@ Log:
 [Bintray Docker Images](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero)
 
 1. Fetch the image: `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
-2. Run Example: `docker run -v /vagrant/vagrant-config.yaml:/vaquero/config.yaml -v /files:/tmp/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+2. Run the example: `docker run -v /vagrant/vagrant-config.yaml:/vaquero/config.yaml -v /files:/tmp/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
-    1. Docker volume to pass the configuration into the container. 
-    2. Docker volume to pass in the assetServer assets (kernel images, undionly.kpxe, etc)
-    3. Set networking to host
+    1. `docker volume` to pass the configuration into the container.
+    2. `docker volume` to pass in the assetServer assets (kernel images, `undionly.kpxe`, etc)
+    3. set networking to `host`
 
 ## [Vaquero Validate](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
 CLI tool that is for validating your data model before you push it through Vaquero
@@ -117,14 +119,14 @@ CLI tool that is for validating your data model before you push it through Vaque
 ## Environment: Pre-Reqs
 
 1. [Golang](https://golang.org/)
-2. [Docker](https://www.docker.com/) 
+2. [Docker](https://www.docker.com/)
 
 
-## Dev Environment: Fetching / Compiling / Running from source
+## Dev Environment: Fetching, Compiling, and Running from Source
 
 1. `git clone https://github.com/CiscoCloud/vaquero.git $GOPATH/src/github.com/CiscoCloud/vaquero`
-2. Build vaquero binary `make`.
-3. Run the vaquero binary `.bin/vaquero <command> -config sa-config.yaml`.
+2. Build vaquero binary: `make`.
+3. Run the vaquero binary: `.bin/vaquero <command> -config sa-config.yaml`.
 
 
 ## Sending Webhooks to Vaquero Master
@@ -139,5 +141,5 @@ CLI tool that is for validating your data model before you push it through Vaque
 Build the documentation by running `godoc -http <port>` and open `localhost:<port>` on your web browser
 
 ## Questions / Comments / Feedback
-To provide feedback to the team please email: [vaquero-feedback@external.cisco.com](mailto:vaquero-feedback@external.cisco.com) 
+To provide feedback to the team please email: [vaquero-feedback@external.cisco.com](mailto:vaquero-feedback@external.cisco.com)
 For Issues, open at [CiscoCloud/vaquero-docs](https://github.com/CiscoCloud/vaquero-docs/issues)
