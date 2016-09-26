@@ -55,7 +55,7 @@ Vaquero Documentation
 <li><strong>assets</strong>: grouped by type. These are generally unattended configs or scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).</li>
 <li><strong>os</strong>: Individual documents describing family, version, kernel/image location, and boot/installation options for any operating systems used by host groups.</li>
 <li><strong>host_groups</strong>: Individual documents combining operating system and unattended asset information to describe a target host state.</li>
-<li><strong>sites</strong>: One or more sites (each in it's own subdirectory) that share the same host_group, os, and asset definitions. Each site includes environment-specific information, and an inventory of hosts that apply host_group definitions to machines.</li>
+<li><strong>sites</strong>: One or more sites (each in it's own subdirectory) that share the same host_group, os, and asset definitions. Each site includes environment-specific information (Vaquero Agent URLs/certs, subnets, other metadata), and an inventory of hosts that apply host_group definitions to machines.</li>
 </ol>
 <pre><code>.
 ├── assets
@@ -174,7 +174,11 @@ hosts:
 <li><code>.env</code> for environmental metadata</li>
 <li><code>.agent</code> for Vaquero Agent information (the url for the Vaquero Agent asset server, etc)</li>
 <li><code>.group</code> for host_group metadata</li>
-<li><code>.host</code> for host metadata, selectors, and limited information discovered via iPXE (mac, uuid, domain, hostname). If you want only the host selectors, they are included under <code>.host.selectors</code></li>
+<li><code>.host</code> for host metadata, selectors, and limited information discovered via iPXE (mac, uuid, domain, hostname).</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li>host selectors are included under <code>.host.selectors</code></li>
+<li>host subnet information is included under <code>.host.subnet</code></li>
 </ol>
 <p>By way of example, this template snippet defines a networkd configuration:</p>
 <pre><code>networkd:
@@ -184,7 +188,7 @@ hosts:
         [Match]
         MACAddress={{.host.mac}}
         [Network]
-        Gateway={{.env.networkd_gateway}}
+        Gateway={{.host.subnet.gateway}}
         DNS={{.env.networkd_dns}}
         Address={{.host.networkd_address}}</code></pre>
 <p><code>.host.mac</code> is from the host's selectors, <code>.host.networkd_address</code> and the <code>.env</code> fields are specified as metadata in their respective documents.</p>
@@ -195,6 +199,7 @@ hosts:
 <li>ex: <code>.agent.url == http://localhost:8080</code></li>
 <li><code>.host.configUrl</code>: Full URL for retrieving this host's unattended configuration. Will include the url to the Vaquero Agent, path to the configuration type for this host, then the selectors required to identify this particular host</li>
 <li>ex: <code>.host.configUrl == http://localhost:8080/untyped?mac=00:00:00:00:00:01</code></li>
+<li><code>.host.subnet.{address,netmask}</code>: The address and netmask for the host's provisioning subnet (dotted quad notation)</li>
 </ul>
 <h3 id="hosts-with-ipxe">Hosts with iPXE</h3>
 <p>Host information for templating includes the following information, discovered via <a href="http://ipxe.org/cfg">iPXE</a>:</p>
@@ -256,8 +261,9 @@ cmdline:
 <pre><code>|    name    |          description          | required |   schema   | default |
 |------------|-------------------------------|----------|------------|---------|
 | host_group | host_group id                 | yes      | string     |         |
+| subnet     | subnet id (specifed in env)   | yes      | string     |         |
 | hosts      | A list of hosts in this group | yes      | host array |         |</code></pre>
-<h4 id="inv.host">inv.host</h4>
+<h4 id="inventory.host">inventory.host</h4>
 <p>Details for single-hosts bmc</p>
 <pre><code>|    name   |                     description                      | required | schema | default |
 |-----------|------------------------------------------------------|----------|--------|---------|
@@ -277,12 +283,13 @@ cmdline:
 | pass | Configured password           | yes      | string |         |</code></pre>
 <h3 id="env">env</h3>
 <p>Provides information for a single deployment/data center/etc.</p>
-<pre><code>|   name   |                        description                        | required |   schema  | default |
-|----------|-----------------------------------------------------------|----------|-----------|---------|
-| id       | A self-assigned identifier (should be unique)             | yes      | string    |         |
-| name     | A human-readable name for this group                      | no       | string    | id      |
-| agent    | Details for establishing a connection to the site&#39;s agent | yes      | env.agent |         |
-| metadata | unstructured, site-specific information                   | no       | object    |         |</code></pre>
+<pre><code>|   name   |                        description                        | required |      schema      | default |
+|----------|-----------------------------------------------------------|----------|------------------|---------|
+| id       | A self-assigned identifier (should be unique)             | yes      | string           |         |
+| name     | A human-readable name for this group                      | no       | string           | id      |
+| agent    | Details for establishing a connection to the site&#39;s agent | yes      | env.agent        |         |
+| subnets  | List of subnets for this cluster                          | yes      | env.subnet array |         |
+| metadata | unstructured, site-specific information                   | no       | object           |         |</code></pre>
 <h4 id="env.agent">env.agent</h4>
 <p>Details for establishing a connection to a site's agent</p>
 <pre><code>|     name    |              description              | required |  schema |      default      |
@@ -291,8 +298,18 @@ cmdline:
 | port        | Port for insecure URL                 | yes      | integer | 80                |
 | secure_url  | Secure/remote url for reaching agent  | yes      | string  | https://127.0.0.1 |
 | secure_port | Port for secure URL                   | yes      | integer | 443               |
-| cert_path| A path to the TLS cert                   | yes      | string  |                   |</code></pre>
+| cert_path   | A path to the TLS cert                | yes      | string  |                   |</code></pre>
 <p>The transport (http/s) should be included with the agent URL.</p>
+<h4 id="env.subnet">env.subnet</h4>
+<pre><code>|   name   |                     description                      | required |    schema    | default |
+|----------|------------------------------------------------------|----------|--------------|---------|
+| id       | A self-assigned identifier (should be unique in env) | yes      | string       |         |
+| cidr     | CIDR for this subnet                                 | yes      | string       |         |
+| dns      | List of DNS URLs                                     | yes      | string array |         |
+| ntp      | List of NTP URLs                                     | yes      | string array |         |
+| gateway  | Gateway for this subnet                              | no       | string       |         |
+| vlan     | VLAN for the subnet                                  | no       | integer      | 1       |
+| metadata | unstructured, host-specific information              | no       | object       |         |</code></pre>
 <h3 id="os">os</h3>
 <p>Represents a single operating system with boot/installation parameters.</p>
 <pre><code>|      name     |           description            | required |  schema | default |
