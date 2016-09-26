@@ -1,0 +1,75 @@
+<head>
+            
+<meta charset="UTF-8"> <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+Vaquero Documentation
+</title>
+            
+<link rel="stylesheet" type="text/css" href="../doc.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style>
+                .markdown-body {
+                    box-sizing: border-box;
+                    min-width: 200px;
+                    max-width: 980px;
+                    margin: 0 auto;
+                    padding: 45px;
+                }
+            </style>
+</head><article class="markdown-body">
+
+<h1 id="vaquero-requirements">Vaquero Requirements</h1>
+<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a></p>
+<p>The Vaquero project is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure.</p>
+<h3 id="use-cases">Use Cases:</h3>
+<p><strong>Actor: DevOps Engineer</strong></p>
+<ol style="list-style-type: decimal">
+<li>As a DevOps Engineer, I want to be able to manage my bare metal compute (hardware) as code.</li>
+</ol>
+<h2 id="requirements">Requirements:</h2>
+<h3 id="completed-9192016">Completed : 9/19/2016</h3>
+<ol style="list-style-type: decimal">
+<li>A textual and structured representation of the cluster in a VCS -- the source of truth (SoT).</li>
+<li>Validation of data within SoT -- proper structure, dump work to be performed in human-readable format. (some minimum validation of &quot;known&quot; asset formats?)</li>
+<li>Support for netboot (iPXE, TFTP, etc.) of cluster instances.</li>
+<li>Support for delivering O/S assets (kernel, ramdisk, images, cloud-config, etc.) via HTTP. (Assumes iPXE support.)</li>
+<li>Management of multiple clusters of software.</li>
+<li>Integration with GitHub has provider of SoT.</li>
+<li>System should treat SoT as an immutable reference.</li>
+</ol>
+<h3 id="incomplete">Incomplete</h3>
+<ol start="8" style="list-style-type: decimal">
+<li>Management of multiple datacenters via federated architecture.</li>
+<li>Relationship between SoT to cluster instances via static identifiers (MAC, UUID, others?).</li>
+<li>Manage power state of the hardware.</li>
+<li>Workflow automation to provide managed installs of cluster.</li>
+<li>Workflow automation to provide managed updates of cluster.</li>
+<li>Automatically provision hardware according to the SoT.</li>
+<li>The ability to gate changes from SoT before applying to hardware.</li>
+<li>Support incremental (multistep) cluster provisioning.</li>
+<li>Provide availability in the following network conditions:
+<ul>
+<li>network partition between agent and controller</li>
+<li>upgradability of agent node</li>
+<li><del>outage of agent node</del></li>
+</ul></li>
+</ol>
+<h2 id="non-requirements">Non-requirements:</h2>
+<ul>
+<li>Have semantic understanding of installed software.</li>
+<li>Dynamic system inventory.</li>
+<li>Pre-built user interface.</li>
+</ul>
+<h2 id="implementation-details">Implementation details:</h2>
+<ul>
+<li>System will implement REST-based APIs for working w/external systems (i.e. GitHub webhook).</li>
+<li>System will use REST-based APIs for coordination between different nodes.</li>
+<li>System will provide APIs to allow inspection system state.</li>
+<li>System will provide detailed logs of operations.</li>
+<li>Internal APIs will be protected via an authentication mechanism (i.e. bearer token).</li>
+</ul>
+<h2 id="out-of-scope">Out-of-Scope:</h2>
+<ul>
+<li>Security: integration w/role base systems</li>
+<li>Security: management of user credentials</li>
+<li>Security: management of assymetric encryption keys</li>
+</ul>
