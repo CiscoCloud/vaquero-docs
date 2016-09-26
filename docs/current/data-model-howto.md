@@ -16,46 +16,47 @@
             </style>
 </head><article class="markdown-body">
 
-# Vaquero Data Model and YOU
+# The Vaquero Data Model and YOU
 [Home](https://ciscocloud.github.io/vaquero-docs/)
 
 - [Example Data Models](https://github.com/gem-test/vaquero)
 
 ## Data Model Diagram to show relationships
-Note re-use of `host groups`, `os` and `assets`. Each site contains an `environment file` and an `inventory file` that lists all related hosts. Hosts are members of a single `host group`. `Host groups` reference `os` and `assets`
+Each site contains an `environment file` and an `inventory file` that lists all related hosts. Hosts are members of a single `host group`. `Host groups` reference `os` and `assets`. Note re-use of `host groups`, `os` and `assets`.
+
 ![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/dm-picture.png)
 
 ## Table of Contents
 
-[Key Concepts](#key-concepts)
+1. [Key Concepts](#key-concepts)
 
-[Vocabulary](#vocabulary)
+2. [Vocabulary](#vocabulary)
 
-[Where things go](#where-things-go)
+3. [Where things go](#where-things-go)
 
-[Rough Workflow](#rough-workflow)
+4. [Rough Workflow](#rough-workflow)
 
-[Serving files](#serving-files)
+5. [Serving files](#serving-files)
 
-[Metadata and Templating](#metadata-and-templating)
+6. [Metadata and Templating](#metadata-and-templating)
 
-[Translation to iPXE](#translation-to-ipxe)
+7. [Translation to iPXE](#translation-to-ipxe)
 
-[Schemas](#schemas)
+8. [Schemas](#schemas)
 
 ### Introduction
 
-The Vaquero data model is meant to be a declarative representation of the state of your datacenter. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.
+The Vaquero data model is meant to be a declarative representation of the state of your data center. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.
 
-We treat this data model as a "single source of truth" (SoT) that describes the operating state of your datacenter. The data model is [parsed and verified](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html) and then deployed to an on-site Vaquero Agent for execution.
+We treat this data model as a "single source of truth" (SoT) that describes the operating state of your data center. The data model is [parsed and verified](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html), then deployed to an on-site Vaquero Agent for execution.
 
 ## <a name="key-concepts">Key Concepts</a>
 
-Your datacenter is expressed as an inventory of _hosts_. Each host belongs to a _host group_. Each host group uses a combination of _unattended assets_ and _operating system_ definitions to define a target configured state for a host.
+Your data center is expressed as an inventory of _hosts_. Each host belongs to a _host group_. Each host group uses a combination of _unattended assets_ and _operating system_ definitions to define a target configured state for a host.
 
 ## <a name="vocabulary">Vocabulary</a>
 
-*Site*: A managed datacenter, or group of machines managed by a single Vaquero Agent.
+*Site*: A managed data center, or group of machines managed by a single Vaquero Agent.
 
 *Host*: A single managed machine. Definition includes identifying attributes (selectors), host-specific metadata, information for LOM (IPMI), and an association to a single host group.
 
@@ -69,10 +70,10 @@ Your datacenter is expressed as an inventory of _hosts_. Each host belongs to a 
 
 Configuration files are placed in a directory hierarchy. Vaquero parses site configurations by reading files placed in specially named subdirectories. The root of your configuration path has four directories:
 
-1. *assets*: Assets grouped by type. These are generally unattended configs/scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).
-2. *os*: Individual documents describing family, version, kernel/image location, and boot/installation options for any operating systems used by host groups.
-3. *host_groups*: Individual documents combining operating system and unattended asset information to describe a target host state.
-4. *sites*: One or more sites (each in it's own subdirectory) that share the same host_group, os, and asset definitions. Each site includes environment-specific information, and an inventory of hosts that apply host_group definitions to machines.
+1. **assets**: grouped by type. These are generally unattended configs or scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).
+2. **os**: Individual documents describing family, version, kernel/image location, and boot/installation options for any operating systems used by host groups.
+3. **host_groups**: Individual documents combining operating system and unattended asset information to describe a target host state.
+4. **sites**: One or more sites (each in it's own subdirectory) that share the same host_group, os, and asset definitions. Each site includes environment-specific information, and an inventory of hosts that apply host_group definitions to machines.
 
 ```
 .
@@ -89,7 +90,7 @@ Assets are grouped into named subdirectories based on type. There are currently 
 1. Cloud-Config: [CoreOS Cloudinit System](https://coreos.com/os/docs/latest/cloud-config.html)
 2. Ignition: [CoreOS Ignition](https://coreos.com/ignition/docs/latest/)
 3. Kickstart: [Fedora Project Kickstart](http://fedoraproject.org/wiki/Anaconda/Kickstart)
-4. Untyped: Misc files. Can be used for "unsupported" configuration types.
+4. Untyped: Miscellaneous files. Can be used for "unsupported" configuration types.
 
 Each asset is placed under a subdirectory according to it's type. Assets are referenced by file name from host groups:
 
@@ -118,7 +119,7 @@ Assets are retrieved dynamically from the Vaquero Agent through typed endpoints.
 - `/kickstart` -- Kickstart assets
 - `/untyped` -- Untyped assets
 
-So a host with mac address `00:00:00:00:00:01` could retrieve it's rendered ignition configuration by requesting
+For instance, a host with mac address `00:00:00:00:00:01` could retrieve it's rendered ignition configuration by requesting
 
 ```
 {{.agent.url}}/ignition?mac=00:00:00:00:00:01
@@ -170,8 +171,8 @@ Each site has _at least_ two documents, the specially named `env.yml` and at lea
 Configurations are roughly executed in the following order:
 
 1. Host makes DHCP request.
-2. DHCP causes host to chainload iPXE (undionly.kpxe) and indicates Vaquero Agent as next-server
-3. Vaquero Agent provides default iPXE script to discover basic host information (mac, uuid, domain, hostname)
+2. DHCP causes host to chainload iPXE (`undionly.kpxe`) and indicates Vaquero Agent as next-server
+3. Vaquero Agent provides a default iPXE script to discover basic host information (mac, uuid, domain, hostname)
 4. Host requests dynamic iPXE script based on basic information
 5. Vaquero Agent renders iPXE script using os, host_group, and host information
 6. Host executes iPXE script, requesting resources (kernel, intitrd, unattended configs/scripts) as required
@@ -186,7 +187,7 @@ chain ipxe?uuid=${uuid}&mac=${net0/mac:hexhyp}&domain=${domain}&hostname=${hostn
 
 ## <a name="serving-files">Serving Files</a>
 
-Vaquero Agent will expose an endpoint `/files` for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to configuration.
+Vaquero Agent will expose an endpoint `/files` for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to the configuration file.
 
 ## Identifying a Host
 
@@ -204,7 +205,7 @@ When identifying a host, Vaquero Agent will:
 1. Only select a host where all the selectors apply
 2. Select the host where the most selectors apply
 
-So for two hosts:
+For example, given these two hosts:
 
 ```
 ---
@@ -234,9 +235,7 @@ Templates are written using [Go's standard templates](https://golang.org/pkg/tex
 1. In any files under `assets`
 2. In os objects in `boot.kernel`, `boot.initrd`, and values in `cmdline`
 
-Metadata is used primarily to render templated information. It is "unstructured" data, that consists of nested key-value maps, and lists.
-
-Metadata is included in three separate places in your configuration:
+Metadata is used primarily to render templated information. It is "unstructured" data, consisting of nested key-value maps, and lists. Metadata is included in three separate places in your configuration:
 
 1. In the environment `env.yml` file
 2. In a host_group file
@@ -247,7 +246,7 @@ Metadata is made available during template execution as separate fields under th
 1. `.env` for environmental metadata
 2. `.agent` for Vaquero Agent information (the url for the Vaquero Agent asset server, etc)
 3. `.group` for host_group metadata
-4. `.host` for host metadata, selectors, and limited information discovered via iPXE (mac, uuid, domain, hostname). If you want only the hosts selectors, they are included under `.host.selectors`
+4. `.host` for host metadata, selectors, and limited information discovered via iPXE (mac, uuid, domain, hostname). If you want only the host selectors, they are included under `.host.selectors`
 
 By way of example, this template snippet defines a networkd configuration:
 
@@ -287,18 +286,18 @@ Host information for templating includes the following information, discovered v
 
 ## <a name="translation-to-ipxe">Translation to iPXE</a>
 
-Currently, all network boots/installations are performed using iPXE scripts. Operating system boot parameters and cmdline options are translated into iPXE scripts to perform boot/installation tasks.
+Currently, all network boots and installations are performed using iPXE scripts. Operating system boot parameters and command line options are translated into iPXE scripts to perform boot/installation tasks.
 
-Any unattended configs/scripts included in a host_group are inserted during this process. Inconsistencies (i.e. using ignition for a CentOS os) should be detected during validation.
+Any unattended configs or scripts included in a host_group are inserted during this process. Inconsistencies (i.e. using ignition for a CentOS operating system) should be detected during validation.
 
-### Cmdline Parameters
+### Command Line Parameters
 
-Rules for translating cmdline parameters:
+Rules for translating command line parameters:
 
 1. Keys with empty values (i.e. "" or '') are formatted as `key` in the boot options
 2. Keys with non-empty values are formatted as `key=value` in the boot options
 
-So for the os
+For example, given this OS:
 
 ```
 ---
@@ -334,11 +333,9 @@ Note how `lang` appears with a trailing `=`, because it's value was non-empty `'
 
 ## <a name="schemas">Schemas</a>
 
-Some more proper schemas for the various objects.
-
 ### host_group
 
-Defines a configured state (combination of os w/ unattended configuration and metadata) that may be applied to a group of hosts.
+Defines a configured state (combination of os with unattended configuration and metadata) that may be applied to a group of hosts.
 
 ```
 |       name       |                  description                  | required |         schema        | default |
@@ -387,7 +384,7 @@ Details for single-hosts bmc
 
 #### inv.bmc (ipmi)
 
-Details for single-hosts bmc, used for LOM of the host machine.
+Details for single-hosts bmc, used for lights-out management (LOM) of the host machine.
 
 NOTE: Only IPMI is supported at this time.
 
@@ -403,7 +400,7 @@ NOTE: Only IPMI is supported at this time.
 
 ### env
 
-Provides information for a single deployment/datacenter/etc.
+Provides information for a single deployment/data center/etc.
 
 ```
 |   name   |                        description                        | required |   schema  | default |
@@ -459,12 +456,6 @@ Contains information about the kernal/initrds for an operating system.
 | kernel | URL for retrieving kernel on boot       | yes      | string       |         |
 | initrd | URL for retrieving initrds/imgs on boot | yes      | string array |         |
 ```
-
-
-Kernel and initrd values may be templated. They will be rendered on-demand for inidividual hosts.
-----------------------------------------|----------|--------------|---------|
-    | kernel | URL for retrieving kernel on boot       | yes      | string       |         |
-    | initrd | URL for retrieving initrds/imgs on boot | yes      | string array |         |
 
 
 Kernel and initrd values may be templated. They will be rendered on-demand for inidividual hosts.
