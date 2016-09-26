@@ -73,7 +73,7 @@ Configuration files are placed in a directory hierarchy. Vaquero parses site con
 1. **assets**: grouped by type. These are generally unattended configs or scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).
 2. **os**: Individual documents describing family, version, kernel/image location, and boot/installation options for any operating systems used by host groups.
 3. **host_groups**: Individual documents combining operating system and unattended asset information to describe a target host state.
-4. **sites**: One or more sites (each in it's own subdirectory) that share the same host_group, os, and asset definitions. Each site includes environment-specific information, and an inventory of hosts that apply host_group definitions to machines.
+4. **sites**: One or more sites (each in it's own subdirectory) that share the same host_group, os, and asset definitions. Each site includes environment-specific information (Vaquero Agent URLs/certs, subnets, other metadata), and an inventory of hosts that apply host_group definitions to machines.
 
 ```
 .
@@ -366,10 +366,11 @@ Define a collection of hosts that will be configured according to a specific hos
 |    name    |          description          | required |   schema   | default |
 |------------|-------------------------------|----------|------------|---------|
 | host_group | host_group id                 | yes      | string     |         |
+| subnet     | subnet id (specifed in env)   | yes      | string     |         |
 | hosts      | A list of hosts in this group | yes      | host array |         |
 ```
 
-#### inv.host
+#### inventory.host
 
 Details for single-hosts bmc
 
@@ -403,12 +404,13 @@ NOTE: Only IPMI is supported at this time.
 Provides information for a single deployment/data center/etc.
 
 ```
-|   name   |                        description                        | required |   schema  | default |
-|----------|-----------------------------------------------------------|----------|-----------|---------|
-| id       | A self-assigned identifier (should be unique)             | yes      | string    |         |
-| name     | A human-readable name for this group                      | no       | string    | id      |
-| agent    | Details for establishing a connection to the site's agent | yes      | env.agent |         |
-| metadata | unstructured, site-specific information                   | no       | object    |         |
+|   name   |                        description                        | required |      schema      | default |
+|----------|-----------------------------------------------------------|----------|------------------|---------|
+| id       | A self-assigned identifier (should be unique)             | yes      | string           |         |
+| name     | A human-readable name for this group                      | no       | string           | id      |
+| agent    | Details for establishing a connection to the site's agent | yes      | env.agent        |         |
+| subnets  | List of subnets for this cluster                          | yes      | env.subnet array |         |
+| metadata | unstructured, site-specific information                   | no       | object           |         |
 ```
 
 #### env.agent
@@ -422,10 +424,27 @@ Details for establishing a connection to a site's agent
 | port        | Port for insecure URL                 | yes      | integer | 80                |
 | secure_url  | Secure/remote url for reaching agent  | yes      | string  | https://127.0.0.1 |
 | secure_port | Port for secure URL                   | yes      | integer | 443               |
-| cert_path| A path to the TLS cert                   | yes      | string  |                   |
+| cert_path   | A path to the TLS cert                | yes      | string  |                   |
 ```
 
 The transport (http/s) should be included with the agent URL.
+
+#### env.subnet
+
+```
+|   name  |                     description                      | required |    schema    | default |
+|---------|------------------------------------------------------|----------|--------------|---------|
+| id      | A self-assigned identifier (should be unique in env) | yes      | string       |         |
+| name    | A human-readable name for this subnet                | no       | string       | id      |
+| cidr    | CIDR for this subnet                                 | yes      | string       |         |
+| address | Address for this subnet                              | yes      | string       |         |
+| netmask | Netmask for this subnet                              | yes      | string       |         |
+| gateway | Gateway for this subnet                              | yes      | string       |         |
+| vlan    | VLAN for the subnet                                  | no       | integer      | 1       |
+| dns     | List of DNS URLs                                     | yes      | string array |         |
+| ntp     | List of NTP URLs                                     | yes      | string array |         |
+```
+
 
 ### os
 
