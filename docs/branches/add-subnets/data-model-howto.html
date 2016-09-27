@@ -265,12 +265,13 @@ cmdline:
 | hosts      | A list of hosts in this group | yes      | host array |         |</code></pre>
 <h4 id="inventory.host">inventory.host</h4>
 <p>Details for single-hosts bmc</p>
-<pre><code>|    name   |                     description                      | required | schema | default |
-|-----------|------------------------------------------------------|----------|--------|---------|
-| name      | unique name among hosts in the same group            | yes      | string |         |
-| selectors | map of string keys/values used to identify this host | yes      | object |         |
-| bmc       | Details for connecting to the host&#39;s BMC             | no       | bmc    |         |
-| metadata  | unstructured, host-specific information              | no       | object |         |</code></pre>
+<pre><code>|    name   |                     description                      | required | schema |  default  |
+|-----------|------------------------------------------------------|----------|--------|-----------|
+| name      | unique name among hosts in the same group            | yes      | string |           |
+| hostname  | hostname for DHCP                                    | no       | string | self.name |
+| selectors | map of string keys/values used to identify this host | yes      | object |           |
+| bmc       | Details for connecting to the host&#39;s BMC             | no       | bmc    |           |
+| metadata  | unstructured, host-specific information              | no       | object |           |</code></pre>
 <h4 id="inv.bmc-ipmi">inv.bmc (ipmi)</h4>
 <p>Details for single-hosts bmc, used for lights-out management (LOM) of the host machine.</p>
 <p>NOTE: Only IPMI is supported at this time.</p>
@@ -307,8 +308,9 @@ cmdline:
 | cidr     | CIDR for this subnet                                 | yes      | string       |         |
 | dns      | List of DNS URLs                                     | yes      | string array |         |
 | ntp      | List of NTP URLs                                     | yes      | string array |         |
+| domain   | Client DNS domain                                    | no       | string       |         |
 | gateway  | Gateway for this subnet                              | no       | string       |         |
-| vlan     | VLAN for the subnet                                  | no       | integer      | 1       |
+| vlan     | VLAN for the subnet                                  | no       | integer      |       1 |
 | metadata | unstructured, host-specific information              | no       | object       |         |</code></pre>
 <h3 id="os">os</h3>
 <p>Represents a single operating system with boot/installation parameters.</p>
