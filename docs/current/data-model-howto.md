@@ -299,6 +299,7 @@ Rules for translating command line parameters:
 
 1. Keys with empty values (i.e. "" or '') are formatted as `key` in the boot options
 2. Keys with non-empty values are formatted as `key=value` in the boot options
+3. Keys that contain a list will be included once each time for every list element. If a list element cannot be parsed not a string (i.e. is a map, list, etc), it is ignored.
 
 For example, given this OS:
 
@@ -314,7 +315,15 @@ boot:
   initrd:
   - centos_initrd
 cmdline:
-  console: ttyS0,115200
+  console: 
+    - ttyS0,115200
+    - ttyS1
+    - nested_map: is
+      ignored: true
+    - same:
+      - with
+      - nested
+      - lists
   lang: ' '
   debug: ''
   enforcing: ''
@@ -325,7 +334,7 @@ The iPXE script will be roughly generated as (not taking unattended info from ho
 
 ```
     #!ipxe
-    kernel centos_kernel console=ttyS0,115200 lang=  debug enforcing
+    kernel centos_kernel console=ttyS0,115200 console=ttyS1 lang=  debug enforcing
     initrd centos_initrd
     boot
 ```
