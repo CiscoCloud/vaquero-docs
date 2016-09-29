@@ -129,6 +129,43 @@ CLI tool that is for validating your data model before you push it through Vaque
 3. Run the vaquero binary: `.bin/vaquero <command> -config sa-config.yaml`.
 
 
+## Vaquero with Systemd and Docker
+Vaquero can be started as a service using Systemd and Docker.
+
+**/etc/systemd/system/docker-vaquero.service**
+```
+[Unit]
+Description=Vaquero Container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker run --net host -v /home/admin/vaquero/config.yaml:/config.yaml -v /home/admin/var:/var --name vaquero shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /config.yaml
+ExecStop=/usr/bin/docker stop vaquero
+ExecStopPost=/usr/bin/docker rm -f vaquero
+
+[Install]
+WantedBy=default.target
+```
+
+This example does:
+
+1. Starts a Docker container named `vaquero` after the Docker service has started.
+2. It starts using the parameters passed into `ExecStart`
+3. `ExecStop` stops the `vaquero` container and is run when stopping the service.
+4. `ExecStopPost` removes the `vaquero` container and is run after stopping the service.
+5. It tries to restart the service.
+
+Tips:
+
+1. Make sure the Docker service is enabled on startup `sudo systemctl enable docker`
+2. Check that the `docker-vaquero` service isn't dying `sudo systemctl status docker-vaquero`
+3. See if the Docker container exists `sudo docker ps`
+4. Flush the changes `sudo systemctl daemon-reload`
+5. Restart both the `docker` and the `docker-vaquero` services `sudo systemctl restart docker`
+
+
 ## Sending Webhooks to Vaquero Master
 
 1. Install [ngrok](https://ngrok.com/) to your local machine, unzip the package, and move the executable to `/usr/local/bin`.
