@@ -142,6 +142,7 @@ http://d280dbea.ngrok.io/
 5. Launch a webhook to hit the ngrok address.
     1. The `GitHook.Username`,`GitHook.Password`, and `GitHook.Secret` should be set in configuration to connect to the webhook of the `GitHook.URL`.
     2. Note that the `GitHook.Secret` can be left blank and should correspond to the Secret created when setting up the webhook on GitHub.
+    3. Pushing to the repo, or `Redeliver Payload` on GitHub will launch a webhook.
 
 ## Docs
 Build the documentation by running `godoc -http <port>` and open `localhost:<port>` on your web browser
