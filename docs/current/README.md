@@ -113,23 +113,7 @@ Log:
     2. `docker volume` to pass in the assetServer assets (kernel images, `undionly.kpxe`, etc)
     3. set networking to `host`
 
-## [Vaquero Validate](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
-CLI tool that is for validating your data model before you push it through Vaquero
-
-## Environment: Pre-Reqs
-
-1. [Golang](https://golang.org/)
-2. [Docker](https://www.docker.com/)
-
-
-## Dev Environment: Fetching, Compiling, and Running from Source
-
-1. `git clone https://github.com/CiscoCloud/vaquero.git $GOPATH/src/github.com/CiscoCloud/vaquero`
-2. Build vaquero binary: `make`.
-3. Run the vaquero binary: `.bin/vaquero <command> -config sa-config.yaml`.
-
-
-## Vaquero with Systemd and Docker
+## Vaquero with Systemd
 Vaquero can be started as a service using Systemd and Docker.
 
 **/etc/systemd/system/docker-vaquero.service**
@@ -164,6 +148,23 @@ Tips:
 3. See if the Docker container exists `sudo docker ps`
 4. Flush the changes `sudo systemctl daemon-reload`
 5. Restart both the `docker` and the `docker-vaquero` services `sudo systemctl restart docker`
+
+
+## [Vaquero Validate](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
+CLI tool that is for validating your data model before you push it through Vaquero
+
+## Environment: Pre-Reqs
+
+1. [Golang](https://golang.org/)
+2. [Docker](https://www.docker.com/)
+
+
+## Dev Environment: Fetching, Compiling, and Running from Source
+
+1. `git clone https://github.com/CiscoCloud/vaquero.git $GOPATH/src/github.com/CiscoCloud/vaquero`
+2. Build vaquero binary: `make`.
+3. Run the vaquero binary: `.bin/vaquero <command> -config sa-config.yaml`.
+
 
 
 ## Sending Webhooks to Vaquero Master
