@@ -108,7 +108,7 @@ Log:
 </ol>
 <h2 id="vaquero-with-systemd">Vaquero with Systemd</h2>
 <p>Vaquero can be started as a service using Systemd and Docker.</p>
-<p><strong>/etc/systemd/system/docker-vaquero.service</strong></p>
+<p><strong>/etc/systemd/system/vaquero.service</strong></p>
 <pre><code>[Unit]
 Description=Vaquero Container
 Requires=docker.service
@@ -116,7 +116,7 @@ After=docker.service
 
 [Service]
 Restart=always
-ExecStart=/usr/bin/docker run --net host -v /home/admin/vaquero/config.yaml:/config.yaml -v /home/admin/var:/var --name vaquero shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /config.yaml
+ExecStart=/usr/bin/docker run --net host -v /var/vaquero/config.yaml:/config.yaml -v /var/vaquero/files:/var --name vaquero shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /config.yaml
 ExecStop=/usr/bin/docker stop vaquero
 ExecStopPost=/usr/bin/docker rm -f vaquero
 
@@ -133,10 +133,10 @@ WantedBy=default.target</code></pre>
 <p>Tips:</p>
 <ol style="list-style-type: decimal">
 <li>Make sure the Docker service is enabled on startup <code>sudo systemctl enable docker</code></li>
-<li>Check that the <code>docker-vaquero</code> service isn't dying <code>sudo systemctl status docker-vaquero</code></li>
+<li>Check that the <code>vaquero</code> service isn't dying <code>sudo systemctl status vaquero</code></li>
 <li>See if the Docker container exists <code>sudo docker ps</code></li>
 <li>Flush the changes <code>sudo systemctl daemon-reload</code></li>
-<li>Restart both the <code>docker</code> and the <code>docker-vaquero</code> services <code>sudo systemctl restart docker</code></li>
+<li>Restart both the <code>docker</code> and the <code>vaquero</code> services <code>sudo systemctl restart docker</code></li>
 </ol>
 <h2 id="vaquero-validate"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html">Vaquero Validate</a></h2>
 <p>CLI tool that is for validating your data model before you push it through Vaquero</p>
