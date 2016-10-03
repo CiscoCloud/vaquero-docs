@@ -117,7 +117,6 @@ Log:
 CLI tool that is for validating your data model before you push it through Vaquero
 
 ## Environment: Pre-Reqs
-http://d280dbea.ngrok.io/
 1. [Golang](https://golang.org/)
 2. [Docker](https://www.docker.com/)
 
