@@ -148,7 +148,7 @@ Tips:
 3. See if the Docker container exists `sudo docker ps`
 4. Flush the changes `sudo systemctl daemon-reload`
 5. Restart both the `docker` and the `vaquero` services `sudo systemctl restart docker`
-
+6. Make sure that pathing is correct for config and files required
 
 ## [Vaquero Validate](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
 CLI tool that is for validating your data model before you push it through Vaquero
