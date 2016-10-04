@@ -113,6 +113,43 @@ Log:
     2. `docker volume` to pass in the assetServer assets (kernel images, `undionly.kpxe`, etc)
     3. set networking to `host`
 
+## Vaquero with Systemd
+Vaquero can be started as a service using Systemd and Docker.
+
+**/etc/systemd/system/vaquero.service**
+```
+[Unit]
+Description=Vaquero Container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker run --net host -v /var/vaquero/config.yaml:/config.yaml -v /var/vaquero/files:/var --name vaquero shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /config.yaml
+ExecStop=/usr/bin/docker stop vaquero
+ExecStopPost=/usr/bin/docker rm -f vaquero
+
+[Install]
+WantedBy=default.target
+```
+
+This example does:
+
+1. Starts a Docker container named `vaquero` after the Docker service has started.
+2. It starts using the parameters passed into `ExecStart`
+3. `ExecStop` stops the `vaquero` container and is run when stopping the service.
+4. `ExecStopPost` removes the `vaquero` container and is run after stopping the service.
+5. It tries to restart the service.
+
+Tips:
+
+1. Make sure the Docker service is enabled on startup `sudo systemctl enable docker`
+2. Check that the `vaquero` service isn't dying `sudo systemctl status vaquero`
+3. See if the Docker container exists `sudo docker ps`
+4. Flush the changes `sudo systemctl daemon-reload`
+5. Restart both the `docker` and the `vaquero` services `sudo systemctl restart docker`
+6. Make sure that pathing is correct for config and files required
+
 ## [Vaquero Validate](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
 CLI tool that is for validating your data model before you push it through Vaquero
 
@@ -127,6 +164,7 @@ CLI tool that is for validating your data model before you push it through Vaque
 1. `git clone https://github.com/CiscoCloud/vaquero.git $GOPATH/src/github.com/CiscoCloud/vaquero`
 2. Build vaquero binary: `make`.
 3. Run the vaquero binary: `.bin/vaquero <command> -config sa-config.yaml`.
+
 
 
 ## Sending Webhooks to Vaquero Master
