@@ -155,10 +155,23 @@ WantedBy=default.target</code></pre>
 <h2 id="sending-webhooks-to-vaquero-master">Sending Webhooks to Vaquero Master</h2>
 <ol style="list-style-type: decimal">
 <li>Install <a href="https://ngrok.com/">ngrok</a> to your local machine, unzip the package, and move the executable to <code>/usr/local/bin</code>.</li>
-<li>Run ngrok on your physical machine <code>ngrok http 4816</code>.</li>
+<li>Run ngrok on your physical machine <code>ngrok http 127.0.0.1:4816</code> or <code>ngrok http 4816</code>.
+<ol style="list-style-type: decimal">
+<li>Make sure that the address and port are the same as the Git Hook server in the config.</li>
+<li>It should follow <code>ngrok http &lt;Gitter.Addr&gt;:&lt;Gitter.Port&gt;</code></li>
+</ol></li>
 <li>Create a testing repo to launch webhooks from.</li>
-<li>Give github.com the http endpoint provided by ngrok.</li>
-<li>Launch a webhook to hit the ngrok address.</li>
+<li>Give github.com the http endpoint provided by ngrok <code>http://0000ffff.ngrok.io/postreceive/vaquero-local</code>.
+<ol style="list-style-type: decimal">
+<li>This should be something like <code>&lt;ngrok address&gt;/&lt;Gitter.Endpoint&gt;/&lt;GitHook.ID&gt;</code>.</li>
+<li>The <code>Gitter.Endpoint</code> and the <code>GitHook.ID</code> are from the config.</li>
+</ol></li>
+<li>Launch a webhook to hit the ngrok address.
+<ol style="list-style-type: decimal">
+<li>The <code>GitHook.Username</code>,<code>GitHook.Password</code>, and <code>GitHook.Secret</code> should be set in configuration to connect to the webhook of the <code>GitHook.URL</code>.</li>
+<li>Note that the <code>GitHook.Secret</code> can be left blank and should correspond to the Secret created when setting up the webhook on GitHub.</li>
+<li>Pushing to the repo, or <code>Redeliver Payload</code> on GitHub will launch a webhook.</li>
+</ol></li>
 </ol>
 <h2 id="docs">Docs</h2>
 <p>Build the documentation by running <code>godoc -http &lt;port&gt;</code> and open <code>localhost:&lt;port&gt;</code> on your web browser</p>
