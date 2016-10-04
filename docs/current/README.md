@@ -132,10 +132,17 @@ CLI tool that is for validating your data model before you push it through Vaque
 ## Sending Webhooks to Vaquero Master
 
 1. Install [ngrok](https://ngrok.com/) to your local machine, unzip the package, and move the executable to `/usr/local/bin`.
-2. Run ngrok on your physical machine `ngrok http 4816`.
+2. Run ngrok on your physical machine `ngrok http 127.0.0.1:4816` or `ngrok http 4816`.
+    1. Make sure that the address and port are the same as the Git Hook server in the config.
+    2. It should follow `ngrok http <Gitter.Addr>:<Gitter.Port>`
 3. Create a testing repo to launch webhooks from.
-4. Give github.com the http endpoint provided by ngrok.
+4. Give github.com the http endpoint provided by ngrok `http://0000ffff.ngrok.io/postreceive/vaquero-local`.
+    1. This should be something like `<ngrok address>/<Gitter.Endpoint>/<GitHook.ID>`.
+    2. The `Gitter.Endpoint` and the `GitHook.ID` are from the config.
 5. Launch a webhook to hit the ngrok address.
+    1. The `GitHook.Username`,`GitHook.Password`, and `GitHook.Secret` should be set in configuration to connect to the webhook of the `GitHook.URL`.
+    2. Note that the `GitHook.Secret` can be left blank and should correspond to the Secret created when setting up the webhook on GitHub.
+    3. Pushing to the repo, or `Redeliver Payload` on GitHub will launch a webhook.
 
 ## Docs
 Build the documentation by running `godoc -http <port>` and open `localhost:<port>` on your web browser
