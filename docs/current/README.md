@@ -18,7 +18,7 @@
 
 # Vaquero
 
-[Docs Home](https://ciscocloud.github.io/vaquero-docs/)
+[Home](https://ciscocloud.github.io/vaquero-docs/)
 
 [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
