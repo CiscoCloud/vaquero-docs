@@ -1,0 +1,35 @@
+# Static config
+dhcp-range=10.10.10.0,static
+
+# Bad address
+dhcp-host=00:00:00:00:00:01,172.10.10.10
+
+dhcp-option=3
+dhcp-option=6
+
+# Send extra options which are tagged as "red" to any machine one
+# of whose DHCP userclass strings includes the substring "accounts"
+dhcp-userclass=set:ipxe,iPXE
+
+dhcp-boot=tag:#ipxe,undionly.kpxe
+dhcp-boot=tag:ipxe,http://10.10.10.9:8080/boot-ipxe
+
+# Enable dnsmasq's built-in TFTP server
+enable-tftp
+
+# Set the root directory for files available via FTP.
+tftp-root=/var/ftpd
+
+# Being a bully
+dhcp-authoritative
+
+# For debugging purposes, log each DNS query as it passes through
+# dnsmasq.
+log-queries
+
+# Log lots of extra information about DHCP transactions.
+log-dhcp
+
+# Include another lot of configuration options.
+#conf-file=/etc/dnsmasq.more.conf
+conf-dir=/etc/dnsmasq.d

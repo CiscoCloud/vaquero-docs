@@ -1,0 +1,25 @@
+---
+ServerApi:
+  Address: 10.0.2.15
+  Port: 24601
+AgentApi:
+  InsecureAddr: 10.10.10.9
+  InsecurePort: 24602
+AssetServer:
+  Addr: 10.10.10.9
+  Port: 8080
+  BaseDir: "/var/vaquero/files"
+  Scheme: http
+DHCPMode: server
+DHCPCIDR: "10.10.10.9/24"
+SavePath: "/var/vaquero/save"
+LocalDir:
+  PollInterval: 10
+SoT:
+- Local:
+    ID: vaquero-local
+    Root: /vagrant/local
+Log:
+  Level: debug
+  Location: stdout
+  Type: text

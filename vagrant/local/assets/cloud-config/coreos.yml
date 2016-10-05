@@ -1,0 +1,104 @@
+#cloud-config
+write_files:
+  - path: "/tmp/setup.sh"
+    permissions: "0755"
+    owner: "root"
+    content: |
+      #!/bin/bash
+
+      # find and format root device
+      ROOTDEV=`lsblk -p | grep disk | awk '{print $1}' | head -1`
+      # check if the partition already exists
+      PARTED=`lsblk -p | grep part | grep ${ROOTDEV} | awk '{print $1}' | head -1`
+      if [[ ${PARTED} != \`-${ROOTDEV}1 ]]; then
+        sgdisk --zap-all $ROOTDEV
+        parted -s $ROOTDEV mktable gpt
+        parted -s $ROOTDEV mkpart root 0% 100%
+        ROOTDEV=${ROOTDEV}1
+
+        mkfs.ext4 -c -L ROOTVOL -F ${ROOTDEV}
+
+        # need to reboot to pick up the new root volume
+        sync
+        fsck -y ${ROOTDEV}
+        if [ $? -ne 0 ]; then
+           echo "FSCK FAILED!  CHECK FILESYTEM MANUALLY!!" > /dev/console
+        else
+           sleep 5
+           reboot
+        fi
+      fi
+
+coreos:
+
+  update:
+    group: stable
+    reboot-strategy: off
+
+  etcd2:
+  {{ if eq .host.role "kube-master" }}
+    # local master enpoints
+    name: {{ .host.mstr }}
+    initial-advertise-peer-urls: http://{{.host.ip}}:2380
+    advertise-client-urls: http://{{.host.ip}}:2379
+    listen-peer-urls: http://0.0.0.0:2380
+
+    # cross-origin resource sharing
+    cors: "*"
+  {{ else }}
+      # TODO: check that role == "kube-node" here? Or is it only ever kube-master/kube-node
+    proxy: on
+  {{ end }}
+    # cluster endpoints
+    listen-client-urls: http://0.0.0.0:2379
+    # Or could include in env
+    initial-cluster: {{ range $i, $node := .env.etcd_nodes }}{{ if $i }},{{end}}{{$node.name}}=http://{{$node.ip}}:2380{{end}}
+
+  fleet:
+  {{ if index .host "mstr" }}
+    metadata: "role={{.host.role}},kube-master={{.host.mstr}},vlan={{.env.net.vlan}},vlan-{{.env.net.vlan}}=true{{if index .host "fleetadd"}}{{.host.fleetadd}}{{end}}"
+  {{ else }}
+    metadata: "role={{.host.role}},vlan={{.env.net.vlan}},vlan-{{.env.net.vlan}}=true{{if index .host "fleetadd"}}{{.host.fleetadd}}{{end}}"
+  {{ end }}
+
+
+  units:
+    - name: setup.service
+      command: start
+      content: |
+        [Unit]
+        Description=Setup VIPER CoreOS
+        Author=VIPER
+
+        [Service]
+        ExecStart=/tmp/setup.sh
+
+    - name: etcd2.service
+      command: start
+    - name: fleet.service
+      command: start
+    - name: docker.service
+      drop-ins:
+        - name: 10-docker-opts.conf
+          content: |
+            [Service]
+            # Setting max log size to 10M
+            Environment="DOCKER_OPTS=--log-driver=json-file --log-opt max-size=10m"
+    - name: early-docker.service
+      drop-ins:
+        - name: 10-docker-opts.conf
+          content: |
+            [Service]
+            # Setting max log size to 10M
+            Environment="DOCKER_OPTS=--log-driver=json-file --log-opt max-size=10m"
+
+{{ if index .env "ssh_authorized_keys" }}
+ssh_authorized_keys:
+  {{ range $element := .env.ssh_authorized_keys }}
+  - {{$element}}
+  {{ end }}
+{{ else }}
+users:
+  - name: core
+    passwd: {{ .group.root_pass }}
+{{ end }}
