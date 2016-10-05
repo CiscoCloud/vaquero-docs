@@ -2,7 +2,7 @@
             
 <meta charset="UTF-8"> <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--> <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-Vaquero Documentation
+Vaquero README
 </title>
             
 <link rel="stylesheet" type="text/css" href="../doc.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
@@ -19,81 +19,79 @@ Vaquero Documentation
 
 <h1 id="vaquero">Vaquero</h1>
 <p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a></p>
+<p><a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
 <p><a href="https://drone.projectshipped.io/CiscoCloud/vaquero"><img src="https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg" alt="Build Status" /></a></p>
 <ul>
-<li><a href="https://github.com/CiscoCloud/vaquero">Repo</a> : Vaquero's development home</li>
+<li><a href="https://github.com/CiscoCloud/vaquero">Private Dev Repo</a> : Vaquero's development home</li>
 <li><a href="https://waffle.io/CiscoCloud/vaquero">Waffle.io Issue Tracking</a>: Progress tracking tool</li>
 </ul>
-<p>A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped.</p>
-<h1 id="high-level-overview">High Level Overview</h1>
-<h2 id="architecture"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html">Architecture</a></h2>
+<p>A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped unattend boot scripts. The only requirement to deploy vaquero is docker. See the <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/getting-started.html">Getting Started</a> page for details on deploying vaquero in virtualbox.</p>
+<h1 id="architecture"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html">Architecture</a></h1>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/ppt-arch.png" />
 </div>
-<h2 id="data-model-templates"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html">Data Model Templates</a></h2>
-<ul>
-<li><a href="https://github.com/gem-test/vaquero">Example Data Models</a></li>
-</ul>
-<p>Notable branches:</p>
+<h2 id="data-model-templates-in-depth"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html">Data Model Templates In Depth</a></h2>
+<p>Data Models are used by vaquero as the &quot;Source of Truth&quot; to describe your data center. Data Models define machine operating systems, subnets and boot scripts. We provide some <a href="https://github.com/gem-test/vaquero">example data models</a> as a reference to build your own.</p>
+<p>Notable branches in the example repo:</p>
 <ul>
 <li><p><a href="https://github.com/gem-test/vaquero"><code>master</code></a>: This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature, model type, and workflow is up.</p></li>
 <li><p><a href="https://github.com/gem-test/vaquero/tree/local"><code>local</code></a>: Used for CI functional testing. We currently test at two commits in the history. <a href="https://github.com/gem-test/vaquero/commit/3d0df2db8f04eaeaa30e0542d42aa9d861324e4e">Init</a> and <a href="https://github.com/gem-test/vaquero/commit/b228c2291c3ae87685b25d1435bfe450bf40456b">Update</a>.</p></li>
 <li><p><a href="https://github.com/gem-test/vaquero/tree/vagrant"><code>vagrant</code></a>: Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most.</p></li>
 </ul>
-<h2 id="requirements"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html">Requirements</a></h2>
-<h2 id="running-and-configuring-vaquero">Running and Configuring Vaquero</h2>
-<p>Vaquero can run in multiple modes: <code>server</code>, <code>agent</code>, and <code>standalone</code>. This configuration is for standalone mode, which runs server and agent in the same container.</p>
-<p><strong>sa-config.yaml</strong></p>
-<pre><code>************************************************************
----
+<h2 id="project-requirements"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html">Project Requirements</a></h2>
+<h2 id="configuring-and-running-vaquero">Configuring and Running Vaquero</h2>
+<p>Vaquero can run in multiple modes: <code>server</code>, <code>agent</code>, and <code>standalone</code>. This configuration is for standalone mode, which runs server and agent in the same container. See the <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html">architecture page</a> for more details about server and agent.</p>
+<ul>
+<li>See the <a href="architecture%20page](https://ciscocloud.github.io/vaquero-docs/docs/current/getting-started.html)">Getting Started</a> page for details on deploying vaquero in virtualbox.</li>
+</ul>
+<p><strong>sample-standalone-config.yaml</strong> ************************************************************</p>
+<pre><code>---
 ServerApi:
-  Address: 127.0.0.1
-  Port: 24601
+ Address: &quot;127.0.0.1&quot;
+ Port: 24601
 AgentApi:
-  InsecureAddr: 127.0.0.1
-  InsecurePort: 24602
+ InsecureAddr: &quot;127.0.0.1&quot;
+ InsecurePort: 24602
 AssetServer:
-  Addr: 127.0.0.1
-  Port: 8080
-  BaseDir: &quot;/tmp/vaquero/files&quot;
-  Scheme: http
+ Addr: &quot;127.0.0.1&quot;
+ Port: 8080
+ BaseDir: &quot;/tmp/vaquero/files&quot;
+ Scheme: http
 DHCPMode: server
-DHCPCIDR: 127.0.0.1/16
+DHCPCIDR: &quot;127.0.0.1/16&quot;
 SavePath: &quot;/tmp/vaquero&quot;
-Updater: git
 Gitter:
-  Endpoint: &quot;/postreceive&quot;
-  Timeout: 2
-  Addr: 127.0.0.1
-  Port: 9090
+ Endpoint: &quot;/postreceive&quot;
+ Timeout: 2
+ Addr: &quot;127.0.0.1&quot;
+ Port: 9090
 GitHook:
-- ID: vaquero-local
-  Username: gem-test
-  Password: bc0f9c726d2c4d54c7635eb578c767cc57d89d40
-  URL: https://github.com/gem-test/vaquero
-  Secret: supersecretcode
+ - ID: &quot;vaquero-local&quot;
+   Token: &lt;GIT_TOKEN&gt;
+   URL: &quot;https://github.com/gem-test/vaquero&quot;
+   Secret: &lt;GIT_SECRET&gt;
 SoT:
-- HookID: vaquero-local
-  ID: vaquero-test
-  Branch: local
+- Git:
+     HookID: &quot;vaquero-local&quot;
+     ID: &quot;vaquero-test&quot;
+     Branch: local
 Log:
-  Level: debug
-  Location: stdout
-  Type: text
-  ************************************************************</code></pre>
+ Level: debug
+ Location: stdout
+ LogType: text</code></pre>
+<hr />
 <h4 id="explanation-of-config-fields">Explanation of config fields:</h4>
 <ul>
 <li>ServerApi: The user api for the server. Currently not implemented.</li>
 <li>AgentApi: The vaquero-agent http server used to listen for vaquero server commands.</li>
 <li>AssetServer: The asset server for vaquero agent used by each booting machine to get unattended scripts and kernels.</li>
-<li>DHCPMode: One of two modes, <code>proxy</code> or <code>server</code></li>
-<li>DHCPCIDR: The CIDR managed by DHCP</li>
-<li>SavePath: The vaquero server location to save local configurations on disk</li>
-<li>Updater: The type of data model updater</li>
-<li>Gitter: Configuration for listening to git webhooks</li>
-<li>GitHook: An array for all gitgooks to listen to</li>
-<li>SoT: An array for specific sources of truth</li>
-<li>Log: The base configuration for the project logr</li>
+<li>DHCPMode: One of two modes, <code>proxy</code> or <code>server</code>. Leaving the DHCP fields empty will disable all DHCP vaquero functionality.</li>
+<li>DHCPCIDR: The CIDR managed by DHCP.</li>
+<li>SavePath: The vaquero server location to save local configurations on disk.</li>
+<li>Gitter: Configuration for listening to git webhooks.</li>
+<li>GitHook: An array for all githooks to listen to.</li>
+<li>SoT: An array for specific sources of truth.</li>
+<li>Log: The base configuration for the project logr.</li>
 </ul>
 <h2 id="running-vaquero-from-the-container">Running Vaquero from the container</h2>
 <p><a href="https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero">Bintray Docker Images</a></p>
@@ -108,7 +106,7 @@ Log:
 </ol>
 <h2 id="vaquero-with-systemd">Vaquero with Systemd</h2>
 <p>Vaquero can be started as a service using Systemd and Docker.</p>
-<p><strong>/etc/systemd/system/vaquero.service</strong></p>
+<p><strong>/etc/systemd/system/vaquero.service</strong> ************************************************************</p>
 <pre><code>[Unit]
 Description=Vaquero Container
 Requires=docker.service
@@ -122,6 +120,7 @@ ExecStopPost=/usr/bin/docker rm -f vaquero
 
 [Install]
 WantedBy=default.target</code></pre>
+<hr />
 <p>This example does:</p>
 <ol style="list-style-type: decimal">
 <li>Starts a Docker container named <code>vaquero</code> after the Docker service has started.</li>
@@ -141,17 +140,6 @@ WantedBy=default.target</code></pre>
 </ol>
 <h2 id="vaquero-validate"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html">Vaquero Validate</a></h2>
 <p>CLI tool that is for validating your data model before you push it through Vaquero</p>
-<h2 id="environment-pre-reqs">Environment: Pre-Reqs</h2>
-<ol style="list-style-type: decimal">
-<li><a href="https://golang.org/">Golang</a></li>
-<li><a href="https://www.docker.com/">Docker</a></li>
-</ol>
-<h2 id="dev-environment-fetching-compiling-and-running-from-source">Dev Environment: Fetching, Compiling, and Running from Source</h2>
-<ol style="list-style-type: decimal">
-<li><code>git clone https://github.com/CiscoCloud/vaquero.git $GOPATH/src/github.com/CiscoCloud/vaquero</code></li>
-<li>Build vaquero binary: <code>make</code>.</li>
-<li>Run the vaquero binary: <code>.bin/vaquero &lt;command&gt; -config sa-config.yaml</code>.</li>
-</ol>
 <h2 id="sending-webhooks-to-vaquero-master">Sending Webhooks to Vaquero Master</h2>
 <ol style="list-style-type: decimal">
 <li>Install <a href="https://ngrok.com/">ngrok</a> to your local machine, unzip the package, and move the executable to <code>/usr/local/bin</code>.</li>
