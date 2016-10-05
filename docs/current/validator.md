@@ -2,7 +2,7 @@
             <meta charset="UTF-8">
             <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Vaquero Documentation</title>
+            <title>Vaquero Validator</title>
             <link rel="stylesheet" type="text/css" href="../doc.css">
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
             <style>
@@ -19,6 +19,8 @@
 # Vaquero Validator
 
 [Home](https://ciscocloud.github.io/vaquero-docs/)
+
+[Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 The Vaquero validator is a built in utility for checking the consistency of your configurations. Its purpose is to preemptively report any inconsistencies (mistyped IDs, missing metadata, etc) in your configuration before you attempt to deploy it.
 
