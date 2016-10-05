@@ -27,7 +27,7 @@
 - [Private Dev Repo](https://github.com/CiscoCloud/vaquero) : Vaquero's development home
 - [Waffle.io Issue Tracking](https://waffle.io/CiscoCloud/vaquero): Progress tracking tool
 
-A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped unattend boot scripts. The only requirement to deploy vaquero is docker. See the [Getting Started](architecture page](https://ciscocloud.github.io/vaquero-docs/docs/current/getting-started.html) page for details on deploying vaquero in virtualbox.
+A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped unattend boot scripts. The only requirement to deploy vaquero is docker. See the [Getting Started](https://ciscocloud.github.io/vaquero-docs/docs/current/getting-started.html) page for details on deploying vaquero in virtualbox.
 
 # [Architecture](https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html)
 ![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/ppt-arch.png)
