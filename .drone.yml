@@ -1,5 +1,7 @@
 branches:
-  exclude: [ gh-pages, VagrantEnv ]
+  exclude:
+    - gh-pages
+    - VagrantEnv
 
 pipeline:
   build:
