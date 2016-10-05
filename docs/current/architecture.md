@@ -18,6 +18,7 @@
 
 # Vaquero: Architecture
 [Home](https://ciscocloud.github.io/vaquero-docs/)
+
 [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 **Last Updated**: September 2016
