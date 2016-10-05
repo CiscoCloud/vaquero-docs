@@ -18,6 +18,7 @@
 
 # Vaquero Requirements
 [Home](https://ciscocloud.github.io/vaquero-docs/)
+[Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 The Vaquero project is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure.
 

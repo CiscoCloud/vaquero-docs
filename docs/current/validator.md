@@ -19,6 +19,7 @@
 # Vaquero Validator
 
 [Home](https://ciscocloud.github.io/vaquero-docs/)
+[Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 The Vaquero validator is a built in utility for checking the consistency of your configurations. Its purpose is to preemptively report any inconsistencies (mistyped IDs, missing metadata, etc) in your configuration before you attempt to deploy it.
 

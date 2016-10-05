@@ -18,6 +18,7 @@
 
 # The Vaquero Data Model and YOU
 [Home](https://ciscocloud.github.io/vaquero-docs/)
+[Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 - [Example Data Models](https://github.com/gem-test/vaquero)
 
@@ -315,7 +316,7 @@ boot:
   initrd:
   - centos_initrd
 cmdline:
-  console: 
+  console:
     - ttyS0,115200
     - ttyS1
     - nested_map: is
