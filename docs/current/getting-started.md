@@ -49,6 +49,7 @@
 ## Source of Truth Types
 
 See the different [configurations](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config).
+
 1. git*.yaml uses github as a source of truth
 2. local*.yaml uses a local directory as a source of truth.
 
