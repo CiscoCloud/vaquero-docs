@@ -141,4 +141,4 @@ This assumes there is a running vaquero instance as described above with either 
 
 ##### Running the validator
 
-`docker run -v /vaquero/local:/vaquero/local shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate <OPTIONS>`
+`docker run -v /vagrant/local:/vaquero/local shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate <OPTIONS>`
