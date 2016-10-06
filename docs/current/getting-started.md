@@ -32,7 +32,7 @@
     1. `vagrant up vaquero_server`
     2. `vagrant ssh vaquero_server`
     3. `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
-    4. `docker run -v /vagrant/config/git-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host"
+    4. `docker run -v /vagrant/config/git-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host"`
 - Vaquero running it's DHCP Proxy with another DHCP server handing out IP addresses to the subnet.
     1. `vagrant up vaquero_proxy dnsmasq`
     2. `vagrant ssh vaquero_proxy`
