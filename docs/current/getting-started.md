@@ -24,6 +24,74 @@
 
 
 ## [Virtual environment](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv)
-- Vagrant deploying vaquero on Virtualbox VMs. Validated on OSX and Windows.
+- Deploying vaquero via Vagrant on Virtualbox VMs. Validated on OSX and Windows.
 
-### First Time deployment
+## DHCP Deployment Types
+
+- Vaquero running it's DHCP Server
+    1. `vagrant up vaquero_server`
+    2. `vagrant ssh vaquero_server`
+    3. `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
+    4. `docker run -v /vagrant/config/git-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host"
+- Vaquero running it's DHCP Proxy with another DHCP server handing out IP addresses to the subnet.
+    1. `vagrant up vaquero_proxy dnsmasq`
+    2. `vagrant ssh vaquero_proxy`
+    3. `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
+    4. `docker run -v /vagrant/config/git-proxy.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+
+- Separate DHCP / TFTP in the subnet that lists vaquero as "next-server". Vaquero is not running any DHCP / TFTP services.
+    1. `vagrant up vaquero_dnsmasq`
+    2. `vagrant ssh vaquero_dnsmasq`
+    3. `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
+    4. `docker run -v /vagrant/config/git-dnsmasq.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+
+
+## Source of Truth Types
+
+See the different [configurations](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config).
+1. git*.yaml uses github as a source of truth
+2. local*.yaml uses a local directory as a source of truth.
+
+
+## Demo Lab
+
+Vaquero provides this vagrant environment as a sandbox to work with vaquero before actual deployment. We also provide a few different demos to showcase what vaquero has to offer and how the data model is set up.
+
+### Demo Lab layout
+```
+|-------------------|-------------|---------------|
+|    Mac address    |  IP Address |      Demo     |
+|-------------------|-------------|---------------|
+| 00:00:00:00:00:01 | 10.10.10.11 | SANDBOX       |
+| 00:00:00:00:00:02 | 10.10.10.12 | SANDBOX       |
+| 00:00:00:00:00:03 | 10.10.10.13 | SANDBOX       |
+| 00:00:00:00:00:04 | 10.10.10.14 | SANDBOX       |
+| 00:00:00:00:00:05 | 10.10.10.15 | SANDBOX       |
+| 00:00:00:00:00:06 | 10.10.10.16 | SANDBOX       |
+| 00:00:00:00:00:07 | 10.10.10.17 | SANDBOX       |
+| 00:00:00:00:00:08 | 10.10.10.18 | SANDBOX       |
+| 00:00:00:00:00:09 | 10.10.10.19 | SANDBOX       |
+|-------------------|-------------|---------------|
+| 00:00:00:00:00:21 | 10.10.10.21 | core-cloud    |
+| 00:00:00:00:00:22 | 10.10.10.22 | core-cloud    |
+| 00:00:00:00:00:23 | 10.10.10.23 | core-cloud    |
+| 00:00:00:00:00:24 | 10.10.10.24 | core-cloud    |
+|-------------------|-------------|---------------|
+| 00:00:00:00:00:31 | 10.10.10.31 | core-ignition |
+| 00:00:00:00:00:32 | 10.10.10.32 | core-ignition |
+| 00:00:00:00:00:33 | 10.10.10.33 | core-ignition |
+| 00:00:00:00:00:34 | 10.10.10.34 | core-ignition |
+|-------------------|-------------|---------------|
+| 00:00:00:00:00:41 | 10.10.10.41 | centos        |
+|-------------------|-------------|---------------|
+```
+
+1. etcd cluster on Coreos via cloud-config: `./create-cluster/cluster.sh -d core-cloud`
+
+2. etcd cluster on Coreos via ignition: `./create-cluster/cluster.sh -d core-ignition`
+
+3. Centos7 base via kickstart: `./create-cluster/cluster.sh -d centos`
+
+### Your very own github that updates via githooks
+
+### Your very own local directory that updates based on our configurable refresh
