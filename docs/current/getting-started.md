@@ -28,7 +28,7 @@
 
 ## 1. clone the vagrant repo
 
-`git clone https://github.com/CiscoCloud/vaquero-docs.git && git checkout VagrantEnv`
+`git clone https://github.com/CiscoCloud/vaquero-docs.git && cd vaquero-docs && git checkout VagrantEnv`
 
 
 ## 2. add your git token
