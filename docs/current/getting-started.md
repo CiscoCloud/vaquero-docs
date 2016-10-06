@@ -50,8 +50,8 @@
 
 See the different [configurations](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config).
 
-1. git*.yaml uses github as a source of truth
-2. local*.yaml uses a local directory as a source of truth.
+1. `git*.yaml` uses github as a source of truth
+2. `local*.yaml` uses a local directory as a source of truth.
 
 
 ## Demo Lab
@@ -87,12 +87,16 @@ Vaquero provides this vagrant environment as a sandbox to work with vaquero befo
 |-------------------|-------------|---------------|
 ```
 
+## Canned Demos
+This assumes there is a running vaquero instance as described above with either the provided github repo or local data model.
+
 1. etcd cluster on Coreos via cloud-config: `./create-cluster/cluster.sh -d core-cloud`
 
 2. etcd cluster on Coreos via ignition: `./create-cluster/cluster.sh -d core-ignition`
 
 3. Centos7 base via kickstart: `./create-cluster/cluster.sh -d centos`
 
-### Your very own github that updates via githooks
 
-### Your very own local directory that updates based on our configurable refresh
+### Using the sandbox via github
+
+### Using the sandbox via local dir
