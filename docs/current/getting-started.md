@@ -100,11 +100,11 @@ Vaquero provides this vagrant environment as a sandbox to work with vaquero befo
 ## canned demos
 This assumes there is a running vaquero instance as described above with either the provided github repo or local data model.
 
-1. etcd cluster on Coreos via cloud-config: `./create-cluster/cluster.sh -d core-cloud`
+- etcd cluster on Coreos via cloud-config: `./create-cluster/cluster.sh -d core-cloud`
 
-2. etcd cluster on Coreos via ignition: `./create-cluster/cluster.sh -d core-ignition`
+- etcd cluster on Coreos via ignition: `./create-cluster/cluster.sh -d core-ignition`
 
-3. Centos7 base via kickstart: `./create-cluster/cluster.sh -d centos`
+- Centos7 base via kickstart: `./create-cluster/cluster.sh -d centos`
 
 
 ### using the sandbox via github
