@@ -50,8 +50,8 @@
 
 - other DHCP / TFTP that lists vaquero as "next-server". vaquero is not running any DHCP / TFTP services.
 
-    1. `vagrant up vaquero_dnsmasq`
-    2. `vagrant ssh vaquero_dnsmasq`
+    1. `vagrant up vaquero_other`
+    2. `vagrant ssh vaquero_other`
 
 
 ## 4. pull the latest docker image
