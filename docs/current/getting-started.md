@@ -125,6 +125,6 @@ This assumes there is a running vaquero instance as described above with either 
 - Centos7 base via kickstart: `./create-cluster/cluster.sh -d centos`
 
 
-### using the sandbox via github
+### using the sandbox ip space via github
 
-### using the sandbox via local dir
+### using the sandbox ip space via local dir
