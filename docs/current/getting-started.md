@@ -26,32 +26,42 @@
 ## [Virtual environment](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv)
 - Deploying vaquero via Vagrant on Virtualbox VMs. Validated on OSX and Windows.
 
-## DHCP Deployment Types
+## Standing up the host to run vaquero. 3 DHCP options: server, proxy, other
 
-- Vaquero running it's DHCP Server
+- Vaquero DHCP Server.
+
     1. `vagrant up vaquero_server`
     2. `vagrant ssh vaquero_server`
-    3. `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
-    4. `docker run -v /vagrant/config/git-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host"`
-- Vaquero running it's DHCP Proxy with another DHCP server handing out IP addresses to the subnet.
+
+- Vaquero DHCP Proxy with another DHCP server handing out IP addresses to the subnet.
+
     1. `vagrant up vaquero_proxy dnsmasq`
     2. `vagrant ssh vaquero_proxy`
-    3. `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
-    4. `docker run -v /vagrant/config/git-proxy.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
-- Separate DHCP / TFTP in the subnet that lists vaquero as "next-server". Vaquero is not running any DHCP / TFTP services.
+- Other DHCP / TFTP that lists vaquero as "next-server". Vaquero is not running any DHCP / TFTP services.
+
     1. `vagrant up vaquero_dnsmasq`
     2. `vagrant ssh vaquero_dnsmasq`
-    3. `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
-    4. `docker run -v /vagrant/config/git-dnsmasq.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
+## Pull the latest docker image
+
+`docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
 
 ## Source of Truth Types
 
 See the different [configurations](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config).
 
 1. `git*.yaml` uses [github](https://github.com/gem-test/vaquero/tree/vagrant) as a source of truth
+
+    1. DHCP SERVER: `docker run -v /vagrant/config/git-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host"`
+    2. DHCP PROXY: `docker run -v /vagrant/config/git-proxy.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+    3. DHCP OTHER: `docker run -v /vagrant/config/git-dnsmasq.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+
 2. `local*.yaml` uses a [local directory](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/local) as a source of truth.
+
+    1. DHCP SERVER: `docker run -v /vagrant/config/local-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host"`
+    2. DHCP PROXY: `docker run -v /vagrant/config/local-proxy.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+    3. DHCP OTHER: `docker run -v /vagrant/config/local-dnsmasq.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
 
 ## Demo Lab
