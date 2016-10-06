@@ -50,14 +50,14 @@ Vaquero Getting Started
 <p><code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></p>
 <h2 id="run-vaquero-with-1-of-the-source-of-truth-types-and-corresponding-dhcp-option">5. run vaquero with 1 of the source of truth types and corresponding DHCP option</h2>
 <p>See the different <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config">configurations</a>.</p>
-<h4 id="git-.yaml-uses-github-as-a-source-of-truth"><code>git-*.yaml</code> uses <a href="https://github.com/gem-test/vaquero/tree/vagrant">github</a> as a source of truth</h4>
+<h4 id="configurations-in-config-named-git-.yaml-use-github-as-a-source-of-truth">configurations in <code>/config</code> named <code>git-*.yaml</code> use <a href="https://github.com/gem-test/vaquero/tree/vagrant">github</a> as a source of truth</h4>
 <h5 id="dhcp-server">DHCP server:</h5>
 <p><code>docker run -v /vagrant/config/git-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
 <h5 id="dhcp-proxy">DHCP proxy:</h5>
 <p><code>docker run -v /vagrant/config/git-proxy.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
 <h5 id="dhcp-other">DHCP other:</h5>
 <p><code>docker run -v /vagrant/config/git-dnsmasq.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
-<h4 id="local-.yaml-uses-a-local-directory-as-a-source-of-truth."><code>local-*.yaml</code> uses a <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/local">local directory</a> as a source of truth.</h4>
+<h4 id="configurations-in-config-named-local-.yaml-use-a-local-directory-as-a-source-of-truth.">configurations in <code>/config</code> named <code>local-*.yaml</code> use a <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/local">local directory</a> as a source of truth.</h4>
 <h5 id="dhcp-server-1">DHCP server:</h5>
 <p><code>docker run -v /vagrant/config/local-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
 <h5 id="dhcp-proxy-1">DHCP proxy:</h5>
