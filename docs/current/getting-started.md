@@ -26,7 +26,11 @@
 ## [Virtual environment](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv)
 - Deploying vaquero via Vagrant on VirtualBox VMs. Validated on OSX and Windows. The VM is Centos7 that has docker installed.
 
-## 1. starting VM to run vaquero with 1 of the DHCP options
+## 1. add your git token
+
+`./provision_scripts/replace.sh <GIT_TOKEN>`
+
+## 2. starting VM to run vaquero with 1 of the DHCP options
 
 - vaquero DHCP server.
 
@@ -43,7 +47,9 @@
     1. `vagrant up vaquero_dnsmasq`
     2. `vagrant ssh vaquero_dnsmasq`
 
-## 2. pull the latest docker image
+
+
+## 3. pull the latest docker image
 
 `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
 
