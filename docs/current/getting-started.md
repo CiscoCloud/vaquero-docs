@@ -140,6 +140,4 @@ This assumes there is a running vaquero instance as described above with either 
 ### using the sandbox ip space via local dir
 
 ##### Running the validator
-```
-docker run shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validator <OPTIONS>
-```
+`docker run shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validator <OPTIONS>`
