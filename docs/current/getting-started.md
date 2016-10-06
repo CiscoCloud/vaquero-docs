@@ -50,8 +50,8 @@
 
 See the different [configurations](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config).
 
-1. `git*.yaml` uses github as a source of truth
-2. `local*.yaml` uses a local directory as a source of truth.
+1. `git*.yaml` uses [github](https://github.com/gem-test/vaquero/tree/vagrant) as a source of truth
+2. `local*.yaml` uses a [local directory](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/local) as a source of truth.
 
 
 ## Demo Lab
