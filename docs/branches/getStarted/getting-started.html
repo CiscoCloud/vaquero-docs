@@ -24,9 +24,11 @@ Vaquero Getting Started
 <ul>
 <li>Deploying vaquero via Vagrant on VirtualBox VMs. Validated on OSX and Windows. The VM is Centos7 that has docker installed.</li>
 </ul>
-<h2 id="add-your-git-token">1. add your git token</h2>
+<h2 id="clone-our-repo-and">1. clone our repo and</h2>
+<p><code>git clone https://github.com/CiscoCloud/vaquero-docs.git &amp;&amp; git checkout VagrantEnv</code></p>
+<h2 id="add-your-git-token">2. add your git token</h2>
 <p><code>./provision_scripts/replace.sh &lt;GIT_TOKEN&gt;</code></p>
-<h2 id="starting-vm-to-run-vaquero-with-1-of-the-dhcp-options">2. starting VM to run vaquero with 1 of the DHCP options</h2>
+<h2 id="starting-vm-to-run-vaquero-with-1-of-the-dhcp-options">3. starting VM to run vaquero with 1 of the DHCP options</h2>
 <ul>
 <li><p>vaquero DHCP server.</p>
 <ol style="list-style-type: decimal">
@@ -44,9 +46,9 @@ Vaquero Getting Started
 <li><code>vagrant ssh vaquero_dnsmasq</code></li>
 </ol></li>
 </ul>
-<h2 id="pull-the-latest-docker-image">3. pull the latest docker image</h2>
+<h2 id="pull-the-latest-docker-image">4. pull the latest docker image</h2>
 <p><code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></p>
-<h2 id="run-vaquero-with-1-of-the-source-of-truth-types-and-corresponding-dhcp-option">3. run vaquero with 1 of the source of truth types and corresponding DHCP option</h2>
+<h2 id="run-vaquero-with-1-of-the-source-of-truth-types-and-corresponding-dhcp-option">5. run vaquero with 1 of the source of truth types and corresponding DHCP option</h2>
 <p>See the different <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config">configurations</a>.</p>
 <ul>
 <li><p><code>git-*.yaml</code> uses <a href="https://github.com/gem-test/vaquero/tree/vagrant">github</a> as a source of truth</p>
