@@ -24,35 +24,41 @@ Vaquero Getting Started
 <ul>
 <li>Deploying vaquero via Vagrant on Virtualbox VMs. Validated on OSX and Windows.</li>
 </ul>
-<h2 id="dhcp-deployment-types">DHCP Deployment Types</h2>
+<h2 id="standing-up-the-host-to-run-vaquero.-3-dhcp-options-server-proxy-other">Standing up the host to run vaquero. 3 DHCP options: server, proxy, other</h2>
 <ul>
-<li>Vaquero running it's DHCP Server
+<li><p>Vaquero DHCP Server.</p>
 <ol style="list-style-type: decimal">
 <li><code>vagrant up vaquero_server</code></li>
 <li><code>vagrant ssh vaquero_server</code></li>
-<li><code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></li>
-<li><code>docker run -v /vagrant/config/git-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot;</code></li>
 </ol></li>
-<li>Vaquero running it's DHCP Proxy with another DHCP server handing out IP addresses to the subnet.
+<li><p>Vaquero DHCP Proxy with another DHCP server handing out IP addresses to the subnet.</p>
 <ol style="list-style-type: decimal">
 <li><code>vagrant up vaquero_proxy dnsmasq</code></li>
 <li><code>vagrant ssh vaquero_proxy</code></li>
-<li><code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></li>
-<li><code>docker run -v /vagrant/config/git-proxy.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></li>
 </ol></li>
-<li>Separate DHCP / TFTP in the subnet that lists vaquero as &quot;next-server&quot;. Vaquero is not running any DHCP / TFTP services.
+<li><p>Other DHCP / TFTP that lists vaquero as &quot;next-server&quot;. Vaquero is not running any DHCP / TFTP services.</p>
 <ol style="list-style-type: decimal">
 <li><code>vagrant up vaquero_dnsmasq</code></li>
 <li><code>vagrant ssh vaquero_dnsmasq</code></li>
-<li><code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></li>
-<li><code>docker run -v /vagrant/config/git-dnsmasq.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></li>
 </ol></li>
 </ul>
+<h2 id="pull-the-latest-docker-image">Pull the latest docker image</h2>
+<p><code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></p>
 <h2 id="source-of-truth-types">Source of Truth Types</h2>
 <p>See the different <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config">configurations</a>.</p>
 <ol style="list-style-type: decimal">
-<li><code>git*.yaml</code> uses <a href="https://github.com/gem-test/vaquero/tree/vagrant">github</a> as a source of truth</li>
-<li><code>local*.yaml</code> uses a <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/local">local directory</a> as a source of truth.</li>
+<li><p><code>git*.yaml</code> uses <a href="https://github.com/gem-test/vaquero/tree/vagrant">github</a> as a source of truth</p>
+<ol style="list-style-type: decimal">
+<li>DHCP SERVER: <code>docker run -v /vagrant/config/git-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot;</code></li>
+<li>DHCP PROXY: <code>docker run -v /vagrant/config/git-proxy.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></li>
+<li>DHCP OTHER: <code>docker run -v /vagrant/config/git-dnsmasq.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></li>
+</ol></li>
+<li><p><code>local*.yaml</code> uses a <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/local">local directory</a> as a source of truth.</p>
+<ol style="list-style-type: decimal">
+<li>DHCP SERVER: <code>docker run -v /vagrant/config/local-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot;</code></li>
+<li>DHCP PROXY: <code>docker run -v /vagrant/config/local-proxy.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></li>
+<li>DHCP OTHER: <code>docker run -v /vagrant/config/local-dnsmasq.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></li>
+</ol></li>
 </ol>
 <h2 id="demo-lab">Demo Lab</h2>
 <p>Vaquero provides this vagrant environment as a sandbox to work with vaquero before actual deployment. We also provide a few different demos to showcase what vaquero has to offer and how the data model is set up.</p>
