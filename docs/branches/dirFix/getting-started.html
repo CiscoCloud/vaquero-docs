@@ -1,0 +1,105 @@
+<head>
+            
+<meta charset="UTF-8"> <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+Vaquero Getting Started
+</title>
+            
+<link rel="stylesheet" type="text/css" href="../doc.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style>
+                .markdown-body {
+                    box-sizing: border-box;
+                    min-width: 200px;
+                    max-width: 980px;
+                    margin: 0 auto;
+                    padding: 45px;
+                }
+            </style>
+</head><article class="markdown-body">
+
+<h1 id="getting-started">getting started</h1>
+<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a></p>
+<p><a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
+<h2 id="virtual-environment"><a href="https://github.com/CiscoCloud/vaquero-vagrant">Virtual environment</a></h2>
+<ul>
+<li>Deploying vaquero via Vagrant on VirtualBox VMs. Validated on OSX and Windows. The VM is Centos7 that has docker installed.</li>
+</ul>
+<h2 id="clone-the-vagrant-repo">1. clone the vagrant repo</h2>
+<p><code>git clone https://github.com/CiscoCloud/vaquero-vagrant.git &amp;&amp; cd vaquero-vagrant</code></p>
+<h2 id="add-your-git-token">2. add your git token</h2>
+<p><code>./provision_scripts/replace.sh &lt;GIT_TOKEN&gt;</code></p>
+<h2 id="starting-vm-to-run-vaquero-with-1-of-the-dhcp-options">3. starting VM to run vaquero with 1 of the DHCP options</h2>
+<ul>
+<li><p>vaquero DHCP server.</p>
+<ol style="list-style-type: decimal">
+<li><code>vagrant up vaquero_server</code></li>
+<li><code>vagrant ssh vaquero_server</code></li>
+</ol></li>
+<li><p>vaquero DHCP proxy with another DHCP server handing out IP addresses to the subnet.</p>
+<ol style="list-style-type: decimal">
+<li><code>vagrant up vaquero_proxy dnsmasq</code></li>
+<li><code>vagrant ssh vaquero_proxy</code></li>
+</ol></li>
+<li><p>other DHCP / TFTP that lists vaquero as &quot;next-server&quot;. vaquero is not running any DHCP / TFTP services.</p>
+<ol style="list-style-type: decimal">
+<li><code>vagrant up vaquero_other</code></li>
+<li><code>vagrant ssh vaquero_other</code></li>
+</ol></li>
+</ul>
+<h2 id="pull-the-latest-docker-image">4. pull the latest docker image</h2>
+<p><code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></p>
+<h2 id="run-vaquero-with-1-of-the-source-of-truth-types-and-corresponding-dhcp-option">5. run vaquero with 1 of the source of truth types and corresponding DHCP option</h2>
+<p>See the different <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config">configurations</a>.</p>
+<h4 id="configurations-in-config-named-git-.yaml-use-github-as-a-source-of-truth">configurations in <code>/config</code> named <code>git-*.yaml</code> use <a href="https://github.com/gem-test/vaquero/tree/vagrant">github</a> as a source of truth</h4>
+<h5 id="dhcp-server">DHCP server:</h5>
+<p><code>docker run -v /vagrant/config/git-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
+<h5 id="dhcp-proxy">DHCP proxy:</h5>
+<p><code>docker run -v /vagrant/config/git-proxy.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
+<h5 id="dhcp-other">DHCP other:</h5>
+<p><code>docker run -v /vagrant/config/git-dnsmasq.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
+<h4 id="configurations-in-config-named-local-.yaml-use-a-local-directory-as-a-source-of-truth.">configurations in <code>/config</code> named <code>local-*.yaml</code> use a <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/local">local directory</a> as a source of truth.</h4>
+<h5 id="dhcp-server-1">DHCP server:</h5>
+<p><code>docker run -v /vagrant/config/local-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
+<h5 id="dhcp-proxy-1">DHCP proxy:</h5>
+<p><code>docker run -v /vagrant/config/local-proxy.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
+<h5 id="dhcp-other-1">DHCP other:</h5>
+<p><code>docker run -v /vagrant/config/local-dnsmasq.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
+<h2 id="demo-lab">demo lab</h2>
+<p>Vaquero provides this vagrant environment as a sandbox to work with vaquero before actual deployment. We also provide a few different demos to showcase what vaquero has to offer and how the data model is set up.</p>
+<h3 id="demo-lab-layout">Demo Lab layout</h3>
+<pre><code>|-------------------|-------------|---------------|
+|    Mac address    |  IP Address |      Demo     |
+|-------------------|-------------|---------------|
+| 00:00:00:00:00:01 | 10.10.10.11 | SANDBOX       |
+| 00:00:00:00:00:02 | 10.10.10.12 | SANDBOX       |
+| 00:00:00:00:00:03 | 10.10.10.13 | SANDBOX       |
+| 00:00:00:00:00:04 | 10.10.10.14 | SANDBOX       |
+| 00:00:00:00:00:05 | 10.10.10.15 | SANDBOX       |
+| 00:00:00:00:00:06 | 10.10.10.16 | SANDBOX       |
+| 00:00:00:00:00:07 | 10.10.10.17 | SANDBOX       |
+| 00:00:00:00:00:08 | 10.10.10.18 | SANDBOX       |
+| 00:00:00:00:00:09 | 10.10.10.19 | SANDBOX       |
+|-------------------|-------------|---------------|
+| 00:00:00:00:00:21 | 10.10.10.21 | core-cloud    |
+| 00:00:00:00:00:22 | 10.10.10.22 | core-cloud    |
+| 00:00:00:00:00:23 | 10.10.10.23 | core-cloud    |
+| 00:00:00:00:00:24 | 10.10.10.24 | core-cloud    |
+|-------------------|-------------|---------------|
+| 00:00:00:00:00:31 | 10.10.10.31 | core-ignition |
+| 00:00:00:00:00:32 | 10.10.10.32 | core-ignition |
+| 00:00:00:00:00:33 | 10.10.10.33 | core-ignition |
+| 00:00:00:00:00:34 | 10.10.10.34 | core-ignition |
+|-------------------|-------------|---------------|
+| 00:00:00:00:00:41 | 10.10.10.41 | centos        |
+|-------------------|-------------|---------------|</code></pre>
+<h2 id="canned-demos">canned demos</h2>
+<p>This assumes there is a running vaquero instance as described above with either the provided github repo or local data model.</p>
+<ul>
+<li><p>etcd cluster on Coreos via cloud-config: <code>./create-cluster/cluster.sh -d core-cloud</code></p></li>
+<li><p>etcd cluster on Coreos via ignition: <code>./create-cluster/cluster.sh -d core-ignition</code></p></li>
+<li><p>Centos7 base via kickstart: <code>./create-cluster/cluster.sh -d centos</code></p></li>
+</ul>
+<h3 id="using-the-sandbox-ip-space-via-github">using the sandbox ip space via github</h3>
+<h3 id="using-the-sandbox-ip-space-via-local-dir">using the sandbox ip space via local dir</h3>
+<h5 id="running-the-validator">Running the validator</h5>
+<p><code>docker run -v /vagrant/local:/vaquero/local shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate &lt;OPTIONS&gt;</code></p>
