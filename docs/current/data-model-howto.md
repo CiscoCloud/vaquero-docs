@@ -21,7 +21,7 @@
 
 [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
-- [Example Data Models](https://github.com/gem-test/vaquero)
+- [Example Data Models](https://github.com/CiscoCloud/vaquero-examples)
 
 ## Data Model Diagram to show relationships
 Each site contains an `environment file` and an `inventory file` that lists all related hosts. Hosts are members of a single `host group`. `Host groups` reference `os` and `assets`. Note re-use of `host groups`, `os` and `assets`.

@@ -33,15 +33,15 @@ A bare metal configuration utility that network boots machines based on user def
 ![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/ppt-arch.png)
 
 ## [Data Model Templates In Depth](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html)
-Data Models are used by vaquero as the "Source of Truth" to describe your data center. Data Models define machine operating systems, subnets and boot scripts. We provide some [example data models](https://github.com/gem-test/vaquero) as a reference to build your own.
+Data Models are used by vaquero as the "Source of Truth" to describe your data center. Data Models define machine operating systems, subnets and boot scripts. We provide some [example data models](https://github.com/CiscoCloud/vaquero-examples) as a reference to build your own.
 
 Notable branches in the example repo:
 
-- [`master`](https://github.com/gem-test/vaquero): This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature, model type, and workflow is up.
+- [`master`](https://github.com/CiscoCloud/vaquero-examples): This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature, model type, and workflow is up.
 
-- [`local`](https://github.com/gem-test/vaquero/tree/local): Used for CI functional testing. We currently test at two commits in the history. [Init](https://github.com/gem-test/vaquero/commit/3d0df2db8f04eaeaa30e0542d42aa9d861324e4e) and [Update](https://github.com/gem-test/vaquero/commit/b228c2291c3ae87685b25d1435bfe450bf40456b).
+- [`local`](https://github.com/CiscoCloud/vaquero-examples/tree/local): Used for CI functional testing. We currently test at two commits in the history. [Init](https://github.com/CiscoCloud/vaquero-examples/commit/3d0df2db8f04eaeaa30e0542d42aa9d861324e4e) and [Update](https://github.com/CiscoCloud/vaquero-examples/commit/b228c2291c3ae87685b25d1435bfe450bf40456b).
 
-- [`vagrant`](https://github.com/gem-test/vaquero/tree/vagrant): Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most.
+- [`vagrant`](https://github.com/CiscoCloud/vaquero-examples/tree/vagrant): Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most.
 
 ## [Project Requirements](https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html)
 
@@ -76,7 +76,7 @@ Gitter:
 GitHook:
  - ID: "vaquero-local"
    Token: <GIT_TOKEN>
-   URL: "https://github.com/gem-test/vaquero"
+   URL: "https://github.com/CiscoCloud/vaquero-examples"
    Secret: <GIT_SECRET>
 SoT:
 - Git:
