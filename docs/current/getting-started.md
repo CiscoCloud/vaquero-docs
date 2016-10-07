@@ -96,7 +96,7 @@ See the different [configurations](https://github.com/CiscoCloud/vaquero-docs/tr
 
 Vaquero provides this vagrant environment as a sandbox to work with vaquero before actual deployment. We also provide a few different demos to showcase what vaquero has to offer and how the data model is set up.
 
-### Demo Lab layout
+### demo lab layout
 ```
 |-------------------|-------------|---------------|
 |    Mac address    |  IP Address |      Demo     |
@@ -137,8 +137,19 @@ This assumes there is a running vaquero instance as described above with either 
 
 ### using the sandbox ip space via github
 
+1.  Go through steps 1-4.
+2. Create your own github repo to contain your own data model
+3. If your machine is not routable set up [ngrok and the githook as described in the README](https://ciscocloud.github.io/vaquero-docs/docs/current/README.html)
+4. Create your own vaquero configuration based off `config/git-*.yaml` examples. Update the Gitter fields and SoT section to reflect your repo. Run vaquero.
+5. Pull down your repo and make updates to your repository and see githooks in vaquero
+
+
 ### using the sandbox ip space via local dir
 
+1. Go through steps 1-4
+2. Update the `local/` data model.
+
 ##### Running the validator
+After sshing into the vagrant VM, with the container on it.
 
 `docker run -v /vagrant/local:/vaquero/local shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate <OPTIONS>`
