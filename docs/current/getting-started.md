@@ -63,7 +63,7 @@
 
 See the different [configurations](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config).
 
-#### configurations in `/config` named `git-*.yaml` use [github](https://github.com/gem-test/vaquero/tree/vagrant) as a source of truth
+#### configurations in `/config` named `git-*.yaml` use [github](https://github.com/CiscoCloud/vaquero-examples/tree/vagrant) as a source of truth
 
 ##### DHCP server:
 
