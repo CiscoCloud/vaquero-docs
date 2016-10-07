@@ -23,12 +23,12 @@
 [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 
-## [Virtual environment](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv)
+## [Virtual environment](https://github.com/CiscoCloud/vaquero-vagrant)
 - Deploying vaquero via Vagrant on VirtualBox VMs. Validated on OSX and Windows. The VM is Centos7 that has docker installed.
 
 ## 1. clone the vagrant repo
 
-`git clone https://github.com/CiscoCloud/vaquero-docs.git && cd vaquero-docs && git checkout VagrantEnv`
+`git clone https://github.com/CiscoCloud/vaquero-vagrant.git && cd vaquero-docs`
 
 
 ## 2. add your git token
