@@ -135,16 +135,17 @@ This assumes there is a running vaquero instance as described above with either 
 - Centos7 base via kickstart: `./create-cluster/cluster.sh -d centos`
 
 
-### using the sandbox ip space via github
+### using the sandbox mac space via github
 
-1.  Go through steps 1-4.
+1. Go through steps 1-4.
 2. Create your own github repo to contain your own data model
 3. If your machine is not routable set up [ngrok and the githook as described in the README](https://ciscocloud.github.io/vaquero-docs/docs/current/README.html)
-4. Create your own vaquero configuration based off `config/git-*.yaml` examples. Update the Gitter fields and SoT section to reflect your repo. Run vaquero.
-5. Pull down your repo and make updates to your repository and see githooks in vaquero
+4. Create your own vaquero configuration based off `config/git-*.yaml` examples. Update the Gitter fields (URL) and SoT (branch) section to reflect your repo.
+5. Start vaquero and ensure the zipball API info log refers to your repo and is a success
+6. Update your github repo, see webhook
 
 
-### using the sandbox ip space via local dir
+### using the sandbox mac space via local dir
 
 1. Go through steps 1-4
 2. Update the `local/` data model.
