@@ -150,7 +150,11 @@ This assumes there is a running vaquero instance as described above with either 
 1. Go through steps 1-4
 2. Update the `local/` data model.
 
-##### Running the validator
+##### [Running the validator](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
 After sshing into the vagrant VM, with the container on it.
 
-`docker run -v /vagrant/local:/vaquero/local shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate <OPTIONS>`
+Validator using a git repo
+`docker run -v <SRC_CFG>:<DEST_CFG> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --config <DEST_CFG>`
+
+Validator using a local dir
+`docker run -v <SRC_DIR>:<DEST_DIR> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --sot <DEST_DIR>`
