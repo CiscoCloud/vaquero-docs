@@ -99,15 +99,16 @@ Vaquero Getting Started
 <li><p>etcd cluster on Coreos via ignition: <code>./create-cluster/cluster.sh -d core-ignition</code></p></li>
 <li><p>Centos7 base via kickstart: <code>./create-cluster/cluster.sh -d centos</code></p></li>
 </ul>
-<h3 id="using-the-sandbox-ip-space-via-github">using the sandbox ip space via github</h3>
+<h3 id="using-the-sandbox-mac-space-via-github">using the sandbox mac space via github</h3>
 <ol style="list-style-type: decimal">
 <li>Go through steps 1-4.</li>
 <li>Create your own github repo to contain your own data model</li>
 <li>If your machine is not routable set up <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/README.html">ngrok and the githook as described in the README</a></li>
-<li>Create your own vaquero configuration based off <code>config/git-*.yaml</code> examples. Update the Gitter fields and SoT section to reflect your repo. Run vaquero.</li>
-<li>Pull down your repo and make updates to your repository and see githooks in vaquero</li>
+<li>Create your own vaquero configuration based off <code>config/git-*.yaml</code> examples. Update the Gitter fields (URL) and SoT (branch) section to reflect your repo.</li>
+<li>Start vaquero and ensure the zipball API info log refers to your repo and is a success</li>
+<li>Update your github repo, see webhook</li>
 </ol>
-<h3 id="using-the-sandbox-ip-space-via-local-dir">using the sandbox ip space via local dir</h3>
+<h3 id="using-the-sandbox-mac-space-via-local-dir">using the sandbox mac space via local dir</h3>
 <ol style="list-style-type: decimal">
 <li>Go through steps 1-4</li>
 <li>Update the <code>local/</code> data model.</li>
