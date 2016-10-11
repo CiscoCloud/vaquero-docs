@@ -53,40 +53,40 @@ Vaquero can run in multiple modes: `server`, `agent`, and `standalone`. This con
 **sample-standalone-config.yaml**
 ************************************************************
 ```
----
 ServerApi:
- Address: "127.0.0.1"
- Port: 24601
+  Address: "127.0.0.1"
+  Port: 24601
 AgentApi:
- InsecureAddr: "127.0.0.1"
- InsecurePort: 24602
+  InsecureAddr: "127.0.0.1"
+  InsecurePort: 24602
 AssetServer:
- Addr: "127.0.0.1"
- Port: 8080
- BaseDir: "/tmp/vaquero/files"
- Scheme: http
-DHCPMode: server
-DHCPCIDR: "127.0.0.1/16"
+  Addr: "127.0.0.1"
+  Port: 8080
+  BaseDir: "/tmp/vaquero/files"
+  Scheme: http
+DHCP:
+  Mode: server
+  Addr: "0.0.0.0"
 SavePath: "/tmp/vaquero"
 Gitter:
- Endpoint: "/postreceive"
- Timeout: 2
- Addr: "127.0.0.1"
- Port: 9090
+  Endpoint: "/postreceive"
+  Timeout: 2
+  Addr: "127.0.0.1"
+  Port: 9090
 GitHook:
- - ID: "vaquero-local"
-   Token: <GIT_TOKEN>
-   URL: "https://github.com/CiscoCloud/vaquero-examples"
-   Secret: <GIT_SECRET>
+  - ID: "vaquero-local"
+    Token: <GIT_TOKEN>
+    URL: "https://github.com/CiscoCloud/vaquero-examples"
+    Secret: <GIT_SECRET>
 SoT:
 - Git:
-     HookID: "vaquero-local"
-     ID: "vaquero-test"
-     Branch: local
+    HookID: "vaquero-local"
+    ID: "vaquero-test"
+    Branch: local
 Log:
- Level: debug
- Location: stdout
- LogType: text
+  Level: info
+  Location: stdout
+  LogType: text
 ```
 ************************************************************
 
@@ -94,8 +94,7 @@ Log:
 - ServerApi: The user api for the server. Currently not implemented.
 - AgentApi: The vaquero-agent http server used to listen for vaquero server commands.
 - AssetServer: The asset server for vaquero agent used by each booting machine to get unattended scripts and kernels.
-- DHCPMode: One of two modes, `proxy` or `server`. Leaving the DHCP fields empty will disable all DHCP vaquero functionality.
-- DHCPCIDR: The CIDR managed by DHCP.
+- DHCP: One of two modes, `proxy` or `server`. DHCP endpoint address. Leaving the DHCP fields empty will disable all DHCP vaquero functionality.
 - SavePath: The vaquero server location to save local configurations on disk.
 - Gitter: Configuration for listening to git webhooks.
 - GitHook: An array for all githooks to listen to.
