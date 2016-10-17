@@ -99,9 +99,10 @@ Log:
 - AgentApi: The vaquero-agent http server used to listen for vaquero server commands.
 - AssetServer: The asset server for vaquero agent used by each booting machine to get unattended scripts and kernels.
 - DHCPMode: `proxy`, `server`.  Leaving the DHCPMode field empty will disable all DHCP vaquero functionality.  
-  - DHCPMode: Proxy enables ProxyDHCP. ProxyDHCP works with an existing DHCP Server to provide PXEBoot functionality, while leaving the managing and assigning of IP addresses to the other DHCP Server. ONLY enable this if you already have a DHCP server with entries for all the hosts in your Data Model.
 
-  - DHCPMode: server runs vaquero as a DHCP server.  Vaquero does not manage free address pools or leases; it simply assigns based of the static configuration defined in the data model.
+    - DHCPMode: Proxy enables ProxyDHCP. ProxyDHCP works with an existing DHCP Server to provide PXEBoot functionality, while leaving the managing and assigning of IP addresses to the other DHCP Server. ONLY enable this if you already have a DHCP server with entries for all the hosts in your Data Model.
+
+    - DHCPMode: server runs vaquero as a DHCP server.  Vaquero does not manage free address pools or leases; it simply assigns based of the static configuration defined in the data model.
 
 - SavePath: The vaquero server location to save local configurations on disk.
 - Gitter: Configuration for listening to git webhooks.
