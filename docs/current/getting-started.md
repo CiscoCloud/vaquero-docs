@@ -26,6 +26,10 @@
 ## [Virtual environment](https://github.com/CiscoCloud/vaquero-vagrant)
 - Deploying vaquero via Vagrant on VirtualBox VMs. Validated on OSX and Windows. The VM is Centos7 that has docker installed.
 
+[Intro Video : Running the VM](https://cisco.box.com/s/tmd818xyj1126kf7nxqmimtxtuy7fxfr)
+
+[Video : Running the container and booting a machine](https://cisco.box.com/s/7n84iungc6u0k0i9yxct04skgbp1fmpg)
+
 ## 1. clone the vagrant repo
 
 `git clone https://github.com/CiscoCloud/vaquero-vagrant.git && cd vaquero-vagrant`
@@ -96,7 +100,7 @@ See the different [configurations](https://github.com/CiscoCloud/vaquero-docs/tr
 
 Vaquero provides this vagrant environment as a sandbox to work with vaquero before actual deployment. We also provide a few different demos to showcase what vaquero has to offer and how the data model is set up.
 
-### Demo Lab layout
+### demo lab layout
 ```
 |-------------------|-------------|---------------|
 |    Mac address    |  IP Address |      Demo     |
@@ -128,6 +132,8 @@ Vaquero provides this vagrant environment as a sandbox to work with vaquero befo
 ## canned demos
 This assumes there is a running vaquero instance as described above with either the provided github repo or local data model.
 
+[Video](https://cisco.box.com/s/lsohd9v7ik1rx1af3fthng1w87o9ig36)
+
 - etcd cluster on Coreos via cloud-config: `./create-cluster/cluster.sh -d core-cloud`
 
 - etcd cluster on Coreos via ignition: `./create-cluster/cluster.sh -d core-ignition`
@@ -135,10 +141,31 @@ This assumes there is a running vaquero instance as described above with either 
 - Centos7 base via kickstart: `./create-cluster/cluster.sh -d centos`
 
 
-### using the sandbox ip space via github
+### using the sandbox mac space via github
 
-### using the sandbox ip space via local dir
+1. Go through steps 1-4.
+2. Create your own github repo to contain your own data model
+3. If your machine is not routable set up [ngrok and the githook as described in the README](https://ciscocloud.github.io/vaquero-docs/docs/current/README.html)
+4. Create your own vaquero configuration based off `config/git-*.yaml` examples. Update the Gitter fields (URL) and SoT (branch) section to reflect your repo.
+5. Start vaquero and ensure the zipball API info log refers to your repo and is a success
+6. Update your github repo, see webhook
+7. Run `./create-cluster/cluster -c <count>` to start <count> VM's starting at mac `:01` and counting up
 
-##### Running the validator
+[Video](https://cisco.box.com/s/b4d4d5v3i3yph4lvcoplydqny7p6qun4)
 
-`docker run -v /vagrant/local:/vaquero/local shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate <OPTIONS>`
+### using the sandbox mac space via local dir
+
+1. Go through steps 1-4
+2. Update the `local/` data model.
+3. Run `./create-cluster/cluster -c <count>` to start <count> VM's starting at mac `:01` and counting up
+
+[Video](https://cisco.box.com/s/cbvci60f1v6b3bcajq2ejtfizr3z0ss6)
+
+### [Running the validator](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
+After sshing into the vagrant VM, with the container on it.
+
+Validator using a git repo
+`docker run -v <SRC_CFG>:<DEST_CFG> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --config <DEST_CFG>`
+
+Validator using a local dir
+`docker run -v <SRC_DIR>:<DEST_DIR> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --sot <DEST_DIR>`
