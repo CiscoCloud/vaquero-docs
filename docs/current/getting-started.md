@@ -161,7 +161,7 @@ This assumes there is a running vaquero instance as described above with either 
 
 [Video](https://cisco.box.com/s/cbvci60f1v6b3bcajq2ejtfizr3z0ss6)
 
-#### [Running the validator](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
+### [Running the validator](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
 After sshing into the vagrant VM, with the container on it.
 
 Validator using a git repo
