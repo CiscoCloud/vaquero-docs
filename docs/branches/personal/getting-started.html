@@ -24,6 +24,8 @@ Vaquero Getting Started
 <ul>
 <li>Deploying vaquero via Vagrant on VirtualBox VMs. Validated on OSX and Windows. The VM is Centos7 that has docker installed.</li>
 </ul>
+<p><a href="https://cisco.box.com/s/tmd818xyj1126kf7nxqmimtxtuy7fxfr">Intro Video : Running the VM</a></p>
+<p><a href="https://cisco.box.com/s/7n84iungc6u0k0i9yxct04skgbp1fmpg">Video : Running the container and booting a machine</a></p>
 <h2 id="clone-the-vagrant-repo">1. clone the vagrant repo</h2>
 <p><code>git clone https://github.com/CiscoCloud/vaquero-vagrant.git &amp;&amp; cd vaquero-vagrant</code></p>
 <h2 id="add-your-git-token">2. add your git token</h2>
@@ -94,6 +96,7 @@ Vaquero Getting Started
 |-------------------|-------------|---------------|</code></pre>
 <h2 id="canned-demos">canned demos</h2>
 <p>This assumes there is a running vaquero instance as described above with either the provided github repo or local data model.</p>
+<p><a href="https://cisco.box.com/s/lsohd9v7ik1rx1af3fthng1w87o9ig36">Video</a></p>
 <ul>
 <li><p>etcd cluster on Coreos via cloud-config: <code>./create-cluster/cluster.sh -d core-cloud</code></p></li>
 <li><p>etcd cluster on Coreos via ignition: <code>./create-cluster/cluster.sh -d core-ignition</code></p></li>
@@ -107,12 +110,16 @@ Vaquero Getting Started
 <li>Create your own vaquero configuration based off <code>config/git-*.yaml</code> examples. Update the Gitter fields (URL) and SoT (branch) section to reflect your repo.</li>
 <li>Start vaquero and ensure the zipball API info log refers to your repo and is a success</li>
 <li>Update your github repo, see webhook</li>
+<li>Run <code>./create-cluster/cluster -c &lt;count&gt;</code> to start <count> VM's starting at mac <code>:01</code> and counting up</li>
 </ol>
+<p><a href="https://cisco.box.com/s/b4d4d5v3i3yph4lvcoplydqny7p6qun4">Video</a></p>
 <h3 id="using-the-sandbox-mac-space-via-local-dir">using the sandbox mac space via local dir</h3>
 <ol style="list-style-type: decimal">
 <li>Go through steps 1-4</li>
 <li>Update the <code>local/</code> data model.</li>
+<li>Run <code>./create-cluster/cluster -c &lt;count&gt;</code> to start <count> VM's starting at mac <code>:01</code> and counting up</li>
 </ol>
+<p><a href="https://cisco.box.com/s/cbvci60f1v6b3bcajq2ejtfizr3z0ss6">Video</a></p>
 <h5 id="running-the-validator"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html">Running the validator</a></h5>
 <p>After sshing into the vagrant VM, with the container on it.</p>
 <p>Validator using a git repo <code>docker run -v &lt;SRC_CFG&gt;:&lt;DEST_CFG&gt; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --config &lt;DEST_CFG&gt;</code></p>
