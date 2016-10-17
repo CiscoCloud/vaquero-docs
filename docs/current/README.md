@@ -64,9 +64,7 @@ AssetServer:
   Port: 8080
   BaseDir: "/tmp/vaquero/files"
   Scheme: http
-DHCP:
-  Mode: server
-  Addr: "0.0.0.0"
+DHCPMode: server
 SavePath: "/tmp/vaquero"
 Gitter:
   Endpoint: "/postreceive"
@@ -78,15 +76,21 @@ GitHook:
     Token: <GIT_TOKEN>
     URL: "https://github.com/CiscoCloud/vaquero-examples"
     Secret: <GIT_SECRET>
+LocalDir:
+  PollInterval: 10
 SoT:
 - Git:
     HookID: "vaquero-local"
     ID: "vaquero-test"
     Branch: local
+- Local:
+    ID: vaquero-local2
+    Root: /vagrant/local
 Log:
   Level: info
   Location: stdout
   LogType: text
+
 ```
 ************************************************************
 
@@ -94,11 +98,16 @@ Log:
 - ServerApi: The user api for the server. Currently not implemented.
 - AgentApi: The vaquero-agent http server used to listen for vaquero server commands.
 - AssetServer: The asset server for vaquero agent used by each booting machine to get unattended scripts and kernels.
-- DHCP: One of two modes, `proxy` or `server`. DHCP endpoint address. Leaving the DHCP fields empty will disable all DHCP vaquero functionality.
+- DHCPMode: `proxy`, `server`.  Leaving the DHCPMode field empty will disable all DHCP vaquero functionality.  
+  - DHCPMode: Proxy enables ProxyDHCP. ProxyDHCP works with an existing DHCP Server to provide PXEBoot functionality, while leaving the managing and assigning of IP addresses to the other DHCP Server. ONLY enable this if you already have a DHCP server with entries for all the hosts in your Data Model.
+
+  - DHCPMode: server runs vaquero as a DHCP server.  Vaquero does not manage free address pools or leases; it simply assigns based of the static configuration defined in the data model.
+
 - SavePath: The vaquero server location to save local configurations on disk.
 - Gitter: Configuration for listening to git webhooks.
 - GitHook: An array for all githooks to listen to.
-- SoT: An array for specific sources of truth.
+- LocalDir: PollInterval is the number of seconds between checks to that directory for updates.
+- SoT: An array for specific sources of truth. Git updater, that used github as its source of truth, receives webhooks from github. Local: will use a local directory to update.
 - Log: The base configuration for the project logr.
 
 ## Running Vaquero from the container
