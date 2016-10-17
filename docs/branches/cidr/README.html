@@ -56,9 +56,7 @@ AssetServer:
   Port: 8080
   BaseDir: &quot;/tmp/vaquero/files&quot;
   Scheme: http
-DHCP:
-  Mode: server
-  Addr: &quot;0.0.0.0&quot;
+DHCPMode: server
 SavePath: &quot;/tmp/vaquero&quot;
 Gitter:
   Endpoint: &quot;/postreceive&quot;
@@ -70,27 +68,36 @@ GitHook:
     Token: &lt;GIT_TOKEN&gt;
     URL: &quot;https://github.com/CiscoCloud/vaquero-examples&quot;
     Secret: &lt;GIT_SECRET&gt;
+LocalDir:
+  PollInterval: 10
 SoT:
 - Git:
     HookID: &quot;vaquero-local&quot;
     ID: &quot;vaquero-test&quot;
     Branch: local
+- Local:
+    ID: vaquero-local2
+    Root: /vagrant/local
 Log:
   Level: info
   Location: stdout
-  LogType: text</code></pre>
+  LogType: text
+</code></pre>
 <hr />
 <h4 id="explanation-of-config-fields">Explanation of config fields:</h4>
 <ul>
 <li>ServerApi: The user api for the server. Currently not implemented.</li>
 <li>AgentApi: The vaquero-agent http server used to listen for vaquero server commands.</li>
 <li>AssetServer: The asset server for vaquero agent used by each booting machine to get unattended scripts and kernels.</li>
-<li>DHCP: One of two modes, <code>proxy</code> or <code>server</code>. DHCP endpoint address. Leaving the DHCP fields empty will disable all DHCP vaquero functionality.</li>
+<li>DHCPMode: <code>proxy</code>, <code>server</code>. Leaving the DHCPMode field empty will disable all DHCP vaquero functionality.<br /></li>
+<li><p>DHCPMode: Proxy enables ProxyDHCP. ProxyDHCP works with an existing DHCP Server to provide PXEBoot functionality, while leaving the managing and assigning of IP addresses to the other DHCP Server. ONLY enable this if you already have a DHCP server with entries for all the hosts in your Data Model.</p></li>
+<li><p>DHCPMode: server runs vaquero as a DHCP server. Vaquero does not manage free address pools or leases; it simply assigns based of the static configuration defined in the data model.</p></li>
 <li>SavePath: The vaquero server location to save local configurations on disk.</li>
 <li>Gitter: Configuration for listening to git webhooks.</li>
 <li>GitHook: An array for all githooks to listen to.</li>
-<li>SoT: An array for specific sources of truth.</li>
-<li>Log: The base configuration for the project logr.</li>
+<li>LocalDir: PollInterval is the number of seconds between checks to that directory for updates.</li>
+<li>SoT: An array for specific sources of truth. Git updater, that used github as its source of truth, receives webhooks from github. Local: will use a local directory to update.</li>
+<li><p>Log: The base configuration for the project logr.</p></li>
 </ul>
 <h2 id="running-vaquero-from-the-container">Running Vaquero from the container</h2>
 <p><a href="https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero">Bintray Docker Images</a></p>
