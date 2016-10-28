@@ -446,17 +446,35 @@ The transport (http/s) should be included with the agent URL.
 #### env.subnet
 
 ```
-|   name   |                     description                      | required |    schema    | default |
-|----------|------------------------------------------------------|----------|--------------|---------|
-| id       | A self-assigned identifier (should be unique in env) | yes      | string       |         |
-| cidr     | CIDR for this subnet                                 | yes      | string       |         |
-| dns      | List of DNS URLs                                     | yes      | string array |         |
-| ntp      | List of NTP URLs                                     | yes      | string array |         |
-| gateway  | Gateway for this subnet                              | no       | string       |         |
-| vlan     | VLAN for the subnet                                  | no       | integer      | 1       |
-| metadata | unstructured, host-specific information              | no       | object       |         |
+|   name       |                     description                      | required |    schema          | default |
+|--------------|------------------------------------------------------|----------|--------------------|---------|
+| id           | A self-assigned identifier (should be unique in env) | yes      | string             |         |
+| cidr         | CIDR for this subnet                                 | yes      | string             |         |
+| dns          | List of DNS URLs                                     | yes      | string array       |         |
+| ntp          | List of NTP URLs                                     | yes      | string array       |         |
+| gateway      | Gateway for this subnet                              | no       | string             |         |
+| domain_name  | Domain name for this subnet                          | no       | string             |         |
+| vlan         | VLAN for the subnet                                  | no       | integer            | 1       |
+| dhcp_options | Additional DHCP options                              | no       | dhcp_options array |         |
+| metadata     | unstructured, host-specific information              | no       | object             |         |
 ```
 
+#### env.subnet.dhcp_options
+
+Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/rfc2132) or listed in [this IANA table](http://www.iana.org/assignments/bootp-dhcp-parameters/bootp-dhcp-parameters.xhtml) of BOOTP Vendor Extensions and DHCP Options.
+
+```
+|   name  |                     description                      | required |    schema          | default |
+|---------|------------------------------------------------------|----------|--------------------|---------|
+| option  | DHCP option tag.                                     | yes      | uint8              |         |
+| value   | List of DNS URLs                                     | yes      | variable           |         |
+| type    | Denotes the type of `value`. Accepted values:        | yes      | string             |         |
+|         | string, uint8, uint16, uint32, int8, int16, int32    |          |                    |         |
+|         | addresses*, base64**                                 |          |                    |         |         |         |                                                      |          |                    |         |
+```
+\* Type `addresses` is a comma seperated list of ip addresses.
+
+\** Type `base64` is a base64 encoded value.
 
 ### os
 
