@@ -476,6 +476,8 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 
 \** Type `base64` is a base64 encoded value.
 
+Examples are included [here](dhcp-options.md).
+
 ### os
 
 Represents a single operating system with boot/installation parameters.
