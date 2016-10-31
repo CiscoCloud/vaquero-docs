@@ -472,7 +472,7 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 |         | string, uint8, uint16, uint32, int8, int16, int32    |          |                    |         |
 |         | addresses*, base64**                                 |          |                    |         |         |         |                                                      |          |                    |         |
 ```
-\* Type `addresses` is a comma seperated list of ip addresses.
+\* Type `addresses` is a comma seperated string of ip addresses.
 
 \** Type `base64` is a base64 encoded value.
 
