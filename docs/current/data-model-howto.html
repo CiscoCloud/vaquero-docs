@@ -311,15 +311,29 @@ cmdline:
 | cert_path   | A path to the TLS cert                | yes      | string  |                   |</code></pre>
 <p>The transport (http/s) should be included with the agent URL.</p>
 <h4 id="env.subnet">env.subnet</h4>
-<pre><code>|   name   |                     description                      | required |    schema    | default |
-|----------|------------------------------------------------------|----------|--------------|---------|
-| id       | A self-assigned identifier (should be unique in env) | yes      | string       |         |
-| cidr     | CIDR for this subnet                                 | yes      | string       |         |
-| dns      | List of DNS URLs                                     | yes      | string array |         |
-| ntp      | List of NTP URLs                                     | yes      | string array |         |
-| gateway  | Gateway for this subnet                              | no       | string       |         |
-| vlan     | VLAN for the subnet                                  | no       | integer      | 1       |
-| metadata | unstructured, host-specific information              | no       | object       |         |</code></pre>
+<pre><code>|   name       |                     description                      | required |    schema          | default |
+|--------------|------------------------------------------------------|----------|--------------------|---------|
+| id           | A self-assigned identifier (should be unique in env) | yes      | string             |         |
+| cidr         | CIDR for this subnet                                 | yes      | string             |         |
+| dns          | List of DNS URLs                                     | yes      | string array       |         |
+| ntp          | List of NTP URLs                                     | yes      | string array       |         |
+| gateway      | Gateway for this subnet                              | no       | string             |         |
+| domain_name  | Domain name for this subnet                          | no       | string             |         |
+| vlan         | VLAN for the subnet                                  | no       | integer            | 1       |
+| dhcp_options | Additional DHCP options                              | no       | dhcp_options array |         |
+| metadata     | unstructured, host-specific information              | no       | object             |         |</code></pre>
+<h4 id="env.subnet.dhcp_options">env.subnet.dhcp_options</h4>
+<p>Represents a single DHCP Option as defined in <a href="http://www.iana.org/go/rfc2132">RFC2132</a> or listed in <a href="http://www.iana.org/assignments/bootp-dhcp-parameters/bootp-dhcp-parameters.xhtml">this IANA table</a> of BOOTP Vendor Extensions and DHCP Options.</p>
+<pre><code>|   name  |                     description                      | required |    schema          | default |
+|---------|------------------------------------------------------|----------|--------------------|---------|
+| option  | DHCP option tag.                                     | yes      | uint8              |         |
+| value   | List of DNS URLs                                     | yes      | variable           |         |
+| type    | Denotes the type of `value`. Accepted values:        | yes      | string             |         |
+|         | string, uint8, uint16, uint32, int8, int16, int32    |          |                    |         |
+|         | addresses*, base64**                                 |          |                    |         |         |         |                                                      |          |                    |         |</code></pre>
+<p>* Type <code>addresses</code> is a comma seperated string of ip addresses.</p>
+<p>** Type <code>base64</code> is a base64 encoded value.</p>
+<p><a href="dhcp-options.md">Examples</a></p>
 <h3 id="os">os</h3>
 <p>Represents a single operating system with boot/installation parameters.</p>
 <pre><code>|      name     |           description            | required |  schema | default |
