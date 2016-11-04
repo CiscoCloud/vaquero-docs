@@ -22,16 +22,57 @@ Vaquero Getting Started
 <p><a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
 <p>Vaquero's DHCP server sends it's DHCP Options based on fields in <code>env.subnet</code>, defined in the Data Model's <code>env.yaml.</code></p>
 <p>The options set implicitly by Vaquero are shown below:</p>
-<pre><code>| option tag | option name     | source                 |
-|:-----------|:----------------|:-----------------------|
-| 1          | subnet mask     | env.subnet.cidr        |
-| 3          | router          | env.subnet.gateway     |
-| 6          | DNS             | env.subnet.dns         |
-| 12         | hostname        | env.subnet.hostname    |
-| 15         | domain name     | env.subnet.domain_name |
-| 42         | ntp servers     | env.subnet.ntp         |
-| 43         | vendor specific | *                      |
-| 54         | server id       | env.subnet.cidr        |</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">option tag</th>
+<th align="left">option name</th>
+<th align="left">source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">subnet mask</td>
+<td align="left">env.subnet.cidr</td>
+</tr>
+<tr class="even">
+<td align="left">3</td>
+<td align="left">router</td>
+<td align="left">env.subnet.gateway</td>
+</tr>
+<tr class="odd">
+<td align="left">6</td>
+<td align="left">DNS</td>
+<td align="left">env.subnet.dns</td>
+</tr>
+<tr class="even">
+<td align="left">12</td>
+<td align="left">hostname</td>
+<td align="left">env.subnet.hostname</td>
+</tr>
+<tr class="odd">
+<td align="left">15</td>
+<td align="left">domain name</td>
+<td align="left">env.subnet.domain_name</td>
+</tr>
+<tr class="even">
+<td align="left">42</td>
+<td align="left">ntp servers</td>
+<td align="left">env.subnet.ntp</td>
+</tr>
+<tr class="odd">
+<td align="left">43</td>
+<td align="left">vendor specific</td>
+<td align="left">*</td>
+</tr>
+<tr class="even">
+<td align="left">54</td>
+<td align="left">server id</td>
+<td align="left">env.subnet.cidr</td>
+</tr>
+</tbody>
+</table>
 <p>* vendor specific is set by vaquero during PXEBoot.</p>
 <h2 id="custom-options">Custom Options</h2>
 <p>There may be a situation where additional options are required. Additional options can be configured in the format defined in the data model <a href="https://github.com/CiscoCloud/vaquero-docs/blob/master/docs/current/data-model-howto.md#envsubnet">subnet docs</a>.</p>
