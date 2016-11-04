@@ -61,41 +61,145 @@ Vaquero Getting Started
 <h3 id="demo-lab-layout">Demo Lab layout</h3>
 <h4 id="vagrant-vm-table">Vagrant VM Table</h4>
 <p>There are <code>*</code>'s in the third space because VMs can be on the 10.10.10 or the 10.10.11 network. If no http relay is in effect all machines will be on the 10.10.10 network, if relay is active, vaquero services will be moved to 10.10.11 while booting hosts will be on 10.10.10.</p>
-<pre><code>|:---------------|:----------------------|
-| Vagrant VM     | IP Address            |
-| -------------- | --------------------- |
-| Relay gateway  | 10.10.*.3             |
-| Free           | 10.10.*.4             |
-| Vaquero server | 10.10.*.5 - 10.10.*.7 |
-| Vaquero agent  | 10.10.*.8 - 10.10.*.9 |
-| -------------- | --------------------- |</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Vagrant VM</th>
+<th align="left">IP Address</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Relay gateway</td>
+<td align="left">10.10.<em>.3 | | Free | 10.10.</em>.4</td>
+</tr>
+<tr class="even">
+<td align="left">Vaquero server</td>
+<td align="left">10.10.<em>.5 - 10.10.</em>.7</td>
+</tr>
+<tr class="odd">
+<td align="left">Vaquero agent</td>
+<td align="left">10.10.<em>.8 - 10.10.</em>.9</td>
+</tr>
+</tbody>
+</table>
 <h4 id="booting-host-table">Booting Host Table</h4>
-<pre><code>Booting Host Table
-|:--------------------|:--------------|:----------------|
-| Mac address         | IP Address    | Demo            |
-| ------------------- | ------------- | --------------- |
-| 00:00:00:00:00:01   | 10.10.10.11   | SANDBOX         |
-| 00:00:00:00:00:02   | 10.10.10.12   | SANDBOX         |
-| 00:00:00:00:00:03   | 10.10.10.13   | SANDBOX         |
-| 00:00:00:00:00:04   | 10.10.10.14   | SANDBOX         |
-| 00:00:00:00:00:05   | 10.10.10.15   | SANDBOX         |
-| 00:00:00:00:00:06   | 10.10.10.16   | SANDBOX         |
-| 00:00:00:00:00:07   | 10.10.10.17   | SANDBOX         |
-| 00:00:00:00:00:08   | 10.10.10.18   | SANDBOX         |
-| 00:00:00:00:00:09   | 10.10.10.19   | SANDBOX         |
-| ------------------- | ------------- | --------------- |
-| 00:00:00:00:00:21   | 10.10.10.21   | core-cloud      |
-| 00:00:00:00:00:22   | 10.10.10.22   | core-cloud      |
-| 00:00:00:00:00:23   | 10.10.10.23   | core-cloud      |
-| 00:00:00:00:00:24   | 10.10.10.24   | core-cloud      |
-| ------------------- | ------------- | --------------- |
-| 00:00:00:00:00:31   | 10.10.10.31   | core-ignition   |
-| 00:00:00:00:00:32   | 10.10.10.32   | core-ignition   |
-| 00:00:00:00:00:33   | 10.10.10.33   | core-ignition   |
-| 00:00:00:00:00:34   | 10.10.10.34   | core-ignition   |
-| ------------------- | ------------- | --------------- |
-| 00:00:00:00:00:41   | 10.10.10.41   | centos          |
-| ------------------- | ------------- | --------------- |</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Mac address</th>
+<th align="left">IP Address</th>
+<th align="left">Demo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">00:00:00:00:00:01</td>
+<td align="left">10.10.10.11</td>
+<td align="left">SANDBOX</td>
+</tr>
+<tr class="even">
+<td align="left">00:00:00:00:00:02</td>
+<td align="left">10.10.10.12</td>
+<td align="left">SANDBOX</td>
+</tr>
+<tr class="odd">
+<td align="left">00:00:00:00:00:03</td>
+<td align="left">10.10.10.13</td>
+<td align="left">SANDBOX</td>
+</tr>
+<tr class="even">
+<td align="left">00:00:00:00:00:04</td>
+<td align="left">10.10.10.14</td>
+<td align="left">SANDBOX</td>
+</tr>
+<tr class="odd">
+<td align="left">00:00:00:00:00:05</td>
+<td align="left">10.10.10.15</td>
+<td align="left">SANDBOX</td>
+</tr>
+<tr class="even">
+<td align="left">00:00:00:00:00:06</td>
+<td align="left">10.10.10.16</td>
+<td align="left">SANDBOX</td>
+</tr>
+<tr class="odd">
+<td align="left">00:00:00:00:00:07</td>
+<td align="left">10.10.10.17</td>
+<td align="left">SANDBOX</td>
+</tr>
+<tr class="even">
+<td align="left">00:00:00:00:00:08</td>
+<td align="left">10.10.10.18</td>
+<td align="left">SANDBOX</td>
+</tr>
+<tr class="odd">
+<td align="left">00:00:00:00:00:09</td>
+<td align="left">10.10.10.19</td>
+<td align="left">SANDBOX</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">00:00:00:00:00:21</td>
+<td align="left">10.10.10.21</td>
+<td align="left">core-cloud</td>
+</tr>
+<tr class="even">
+<td align="left">00:00:00:00:00:22</td>
+<td align="left">10.10.10.22</td>
+<td align="left">core-cloud</td>
+</tr>
+<tr class="odd">
+<td align="left">00:00:00:00:00:23</td>
+<td align="left">10.10.10.23</td>
+<td align="left">core-cloud</td>
+</tr>
+<tr class="even">
+<td align="left">00:00:00:00:00:24</td>
+<td align="left">10.10.10.24</td>
+<td align="left">core-cloud</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">00:00:00:00:00:31</td>
+<td align="left">10.10.10.31</td>
+<td align="left">core-ignition</td>
+</tr>
+<tr class="odd">
+<td align="left">00:00:00:00:00:32</td>
+<td align="left">10.10.10.32</td>
+<td align="left">core-ignition</td>
+</tr>
+<tr class="even">
+<td align="left">00:00:00:00:00:33</td>
+<td align="left">10.10.10.33</td>
+<td align="left">core-ignition</td>
+</tr>
+<tr class="odd">
+<td align="left">00:00:00:00:00:34</td>
+<td align="left">10.10.10.34</td>
+<td align="left">core-ignition</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">00:00:00:00:00:41</td>
+<td align="left">10.10.10.41</td>
+<td align="left">centos</td>
+</tr>
+</tbody>
+</table>
 <h2 id="canned-demos">canned demos</h2>
 <p>This assumes there is a running vaquero instance as described above with either the provided github repo or local data model.</p>
 <p><a href="https://cisco.box.com/s/lsohd9v7ik1rx1af3fthng1w87o9ig36">Video</a></p>
