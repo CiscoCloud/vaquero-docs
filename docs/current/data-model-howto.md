@@ -352,8 +352,8 @@ Note how `lang` appears with a trailing `=`, because it's value was non-empty `'
 Defines a configured state (combination of os with unattended configuration and metadata) that may be applied to a group of hosts.
 
 ```
-|       name       |                  description                  | required |         schema        | default |
-|------------------|-----------------------------------------------|----------|-----------------------|---------|
+| name             | description                                   | required | schema                | default |
+|:-----------------|:----------------------------------------------|:---------|:----------------------|:--------|
 | id               | A self-assigned identifier (should be unique) | yes      | string                |         |
 | name             | A human-readable name for this group          | no       | string                | id      |
 | operating_system | The ID of the os associated with this group   | yes      | string                |         |
@@ -366,8 +366,8 @@ Defines a configured state (combination of os with unattended configuration and 
 Allow a network boot or installation to proceed automatically by providing canned answers.
 
 ```
-| name |                       description                       | required | schema | default |
-|------|---------------------------------------------------------|----------|--------|---------|
+| name | description                                             | required | schema | default |
+|:-----|:--------------------------------------------------------|:---------|:-------|:--------|
 | type | The type of unattended config/script to use             | yes      | string |         |
 | use  | The file name used to find the unattended config/script | yes      | string |         |
 ```
@@ -377,8 +377,8 @@ Allow a network boot or installation to proceed automatically by providing canne
 Define a collection of hosts that will be configured according to a specific host_group.
 
 ```
-|    name    |          description          | required |   schema   | default |
-|------------|-------------------------------|----------|------------|---------|
+| name       | description                   | required | schema     | default |
+|:-----------|:------------------------------|:---------|:-----------|:--------|
 | host_group | host_group id                 | yes      | string     |         |
 | subnet     | subnet id (specifed in env)   | yes      | string     |         |
 | hosts      | A list of hosts in this group | yes      | host array |         |
@@ -389,8 +389,8 @@ Define a collection of hosts that will be configured according to a specific hos
 Details for single-hosts bmc
 
 ```
-|    name   |                     description                      | required | schema | default |
-|-----------|------------------------------------------------------|----------|--------|---------|
+| name      | description                                          | required | schema | default |
+|:----------|:-----------------------------------------------------|:---------|:-------|:--------|
 | name      | unique name among hosts in the same group            | yes      | string |         |
 | selectors | map of string keys/values used to identify this host | yes      | object |         |
 | bmc       | Details for connecting to the host's BMC             | no       | bmc    |         |
@@ -404,8 +404,8 @@ Details for single-hosts bmc, used for lights-out management (LOM) of the host m
 NOTE: Only IPMI is supported at this time.
 
 ```
-| name |          description          | required | schema | default |
-|------|-------------------------------|----------|--------|---------|
+| name | description                   | required | schema | default |
+|:-----|:------------------------------|:---------|:-------|:--------|
 | type | The type of BMC the host uses | yes      | string | ipmi    |
 | ip   | IP Address of IPMI interface  | yes      | string |         |
 | mac  | MAC Address of IPMI inteface  | no       | string |         |
@@ -418,8 +418,8 @@ NOTE: Only IPMI is supported at this time.
 Provides information for a single deployment/data center/etc.
 
 ```
-|   name   |                        description                        | required |      schema      | default |
-|----------|-----------------------------------------------------------|----------|------------------|---------|
+| name     | description                                               | required | schema           | default |
+|:---------|:----------------------------------------------------------|:---------|:-----------------|:--------|
 | id       | A self-assigned identifier (should be unique)             | yes      | string           |         |
 | name     | A human-readable name for this group                      | no       | string           | id      |
 | agent    | Details for establishing a connection to the site's agent | yes      | env.agent        |         |
@@ -432,8 +432,8 @@ Provides information for a single deployment/data center/etc.
 Details for establishing a connection to a site's agent
 
 ```
-|     name    |              description              | required |  schema |      default      |
-|-------------|---------------------------------------|----------|---------|-------------------|
+| name        | description                           | required | schema  | default           |
+|:------------|:--------------------------------------|:---------|:--------|:------------------|
 | url         | Insecure/local url for reaching agent | yes      | string  | http://127.0.0.1  |
 | port        | Port for insecure URL                 | yes      | integer | 80                |
 | secure_url  | Secure/remote url for reaching agent  | yes      | string  | https://127.0.0.1 |
@@ -446,8 +446,8 @@ The transport (http/s) should be included with the agent URL.
 #### env.subnet
 
 ```
-|   name       |                     description                      | required |    schema          | default |
-|--------------|------------------------------------------------------|----------|--------------------|---------|
+| name         | description                                          | required | schema             | default |
+|:-------------|:-----------------------------------------------------|:---------|:-------------------|:--------|
 | id           | A self-assigned identifier (should be unique in env) | yes      | string             |         |
 | cidr         | CIDR for this subnet                                 | yes      | string             |         |
 | dns          | List of DNS URLs                                     | yes      | string array       |         |
@@ -464,27 +464,27 @@ The transport (http/s) should be included with the agent URL.
 Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/rfc2132) or listed in [this IANA table](http://www.iana.org/assignments/bootp-dhcp-parameters/bootp-dhcp-parameters.xhtml) of BOOTP Vendor Extensions and DHCP Options.
 
 ```
-|   name  |                     description                      | required |    schema          | default |
-|---------|------------------------------------------------------|----------|--------------------|---------|
-| option  | DHCP option tag.                                     | yes      | uint8              |         |
-| value   | List of DNS URLs                                     | yes      | variable           |         |
-| type    | Denotes the type of `value`. Accepted values:        | yes      | string             |         |
-|         | string, uint8, uint16, uint32, int8, int16, int32    |          |                    |         |
-|         | addresses*, base64**                                 |          |                    |         |         |         |                                                      |          |                    |         |
+| name   | description                                       | required | schema   | default                                                                                                      |
+|:-------|:--------------------------------------------------|:---------|:---------|:-------------------------------------------------------------------------------------------------------------|
+| option | DHCP option tag.                                  | yes      | uint8    |                                                                                                              |
+| value  | List of DNS URLs                                  | yes      | variable |                                                                                                              |
+| type   | Denotes the type of `value`. Accepted values:     | yes      | string   |                                                                                                              |
+|        | string, uint8, uint16, uint32, int8, int16, int32 |          |          |                                                                                                              |
+|        | addresses*, base64**                              |          |          | |         |         |                                                      |          |                    | |
 ```
 \* Type `addresses` is a comma seperated string of ip addresses.
 
 \** Type `base64` is a base64 encoded value.
 
-[Examples](dhcp-options.md)
+[Examples](https://ciscocloud.github.io/vaquero-docs/docs/current/dhcp-options.html)
 
 ### os
 
 Represents a single operating system with boot/installation parameters.
 
 ```
-|      name     |           description            | required |  schema | default |
-|---------------|----------------------------------|----------|---------|---------|
+| name          | description                      | required | schema  | default |
+|:--------------|:---------------------------------|:---------|:--------|:--------|
 | id            | self-assigned identifier         | yes      | string  |         |
 | name          | human-readable name              | yes      | string  | id      |
 | major_version | major version                    | yes      | string  |         |
@@ -502,8 +502,8 @@ Cmdline values may be templated. They will be rendered on-demand for inidividual
 Contains information about the kernal/initrds for an operating system.
 
 ```
-|  name  |               description               | required |    schema    | default |
-|--------|-----------------------------------------|----------|--------------|---------|
+| name   | description                             | required | schema       | default |
+|:-------|:----------------------------------------|:---------|:-------------|:--------|
 | kernel | URL for retrieving kernel on boot       | yes      | string       |         |
 | initrd | URL for retrieving initrds/imgs on boot | yes      | string array |         |
 ```
