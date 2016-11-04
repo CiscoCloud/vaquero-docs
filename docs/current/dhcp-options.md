@@ -1,13 +1,34 @@
+<head>
+            <meta charset="UTF-8">
+            <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Vaquero Getting Started</title>
+            <link rel="stylesheet" type="text/css" href="../doc.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+            <style>
+                .markdown-body {
+                    box-sizing: border-box;
+                    min-width: 200px;
+                    max-width: 980px;
+                    margin: 0 auto;
+                    padding: 45px;
+                }
+            </style>
+</head><article class="markdown-body">
+
 # DHCP Options
+[Home](https://ciscocloud.github.io/vaquero-docs/)
+
+[Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 Vaquero's DHCP server sends it's DHCP Options based on fields in `env.subnet`, defined
 in the Data Model's `env.yaml.`
 
 The options set implicitly by Vaquero are shown below:
 
-```
+
 | option tag | option name     | source                 |
-|------------|-----------------|------------------------|
+|:-----------|:----------------|:-----------------------|
 | 1          | subnet mask     | env.subnet.cidr        |
 | 3          | router          | env.subnet.gateway     |
 | 6          | DNS             | env.subnet.dns         |
@@ -16,7 +37,7 @@ The options set implicitly by Vaquero are shown below:
 | 42         | ntp servers     | env.subnet.ntp         |
 | 43         | vendor specific | *                      |
 | 54         | server id       | env.subnet.cidr        |
-```
+
 \* vendor specific is set by vaquero during PXEBoot.
 
 ## Custom Options
