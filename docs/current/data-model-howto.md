@@ -351,7 +351,7 @@ Note how `lang` appears with a trailing `=`, because it's value was non-empty `'
 
 Defines a configured state (combination of os with unattended configuration and metadata) that may be applied to a group of hosts.
 
-```
+
 | name             | description                                   | required | schema                | default |
 |:-----------------|:----------------------------------------------|:---------|:----------------------|:--------|
 | id               | A self-assigned identifier (should be unique) | yes      | string                |         |
@@ -359,43 +359,43 @@ Defines a configured state (combination of os with unattended configuration and 
 | operating_system | The ID of the os associated with this group   | yes      | string                |         |
 | unattended       | Unattended config/script details              | no       | host_group.unattended |         |
 | metadata         | unstructured, host_group-specific information | no       | object                |         |
-```
+
 
 #### host_group.unattended
 
 Allow a network boot or installation to proceed automatically by providing canned answers.
 
-```
+
 | name | description                                             | required | schema | default |
 |:-----|:--------------------------------------------------------|:---------|:-------|:--------|
 | type | The type of unattended config/script to use             | yes      | string |         |
 | use  | The file name used to find the unattended config/script | yes      | string |         |
-```
+
 
 ### inventory
 
 Define a collection of hosts that will be configured according to a specific host_group.
 
-```
+
 | name       | description                   | required | schema     | default |
 |:-----------|:------------------------------|:---------|:-----------|:--------|
 | host_group | host_group id                 | yes      | string     |         |
 | subnet     | subnet id (specifed in env)   | yes      | string     |         |
 | hosts      | A list of hosts in this group | yes      | host array |         |
-```
+
 
 #### inventory.host
 
 Details for single-hosts bmc
 
-```
+
 | name      | description                                          | required | schema | default |
 |:----------|:-----------------------------------------------------|:---------|:-------|:--------|
 | name      | unique name among hosts in the same group            | yes      | string |         |
 | selectors | map of string keys/values used to identify this host | yes      | object |         |
 | bmc       | Details for connecting to the host's BMC             | no       | bmc    |         |
 | metadata  | unstructured, host-specific information              | no       | object |         |
-```
+
 
 #### inv.bmc (ipmi)
 
@@ -403,7 +403,7 @@ Details for single-hosts bmc, used for lights-out management (LOM) of the host m
 
 NOTE: Only IPMI is supported at this time.
 
-```
+
 | name | description                   | required | schema | default |
 |:-----|:------------------------------|:---------|:-------|:--------|
 | type | The type of BMC the host uses | yes      | string | ipmi    |
@@ -411,13 +411,13 @@ NOTE: Only IPMI is supported at this time.
 | mac  | MAC Address of IPMI inteface  | no       | string |         |
 | user | Configured user               | yes      | string |         |
 | pass | Configured password           | yes      | string |         |
-```
+
 
 ### env
 
 Provides information for a single deployment/data center/etc.
 
-```
+
 | name     | description                                               | required | schema           | default |
 |:---------|:----------------------------------------------------------|:---------|:-----------------|:--------|
 | id       | A self-assigned identifier (should be unique)             | yes      | string           |         |
@@ -425,13 +425,13 @@ Provides information for a single deployment/data center/etc.
 | agent    | Details for establishing a connection to the site's agent | yes      | env.agent        |         |
 | subnets  | List of subnets for this cluster                          | yes      | env.subnet array |         |
 | metadata | unstructured, site-specific information                   | no       | object           |         |
-```
+
 
 #### env.agent
 
 Details for establishing a connection to a site's agent
 
-```
+
 | name        | description                           | required | schema  | default           |
 |:------------|:--------------------------------------|:---------|:--------|:------------------|
 | url         | Insecure/local url for reaching agent | yes      | string  | http://127.0.0.1  |
@@ -439,13 +439,13 @@ Details for establishing a connection to a site's agent
 | secure_url  | Secure/remote url for reaching agent  | yes      | string  | https://127.0.0.1 |
 | secure_port | Port for secure URL                   | yes      | integer | 443               |
 | cert_path   | A path to the TLS cert                | yes      | string  |                   |
-```
+
 
 The transport (http/s) should be included with the agent URL.
 
 #### env.subnet
 
-```
+
 | name         | description                                          | required | schema             | default |
 |:-------------|:-----------------------------------------------------|:---------|:-------------------|:--------|
 | id           | A self-assigned identifier (should be unique in env) | yes      | string             |         |
@@ -457,13 +457,13 @@ The transport (http/s) should be included with the agent URL.
 | vlan         | VLAN for the subnet                                  | no       | integer            | 1       |
 | dhcp_options | Additional DHCP options                              | no       | dhcp_options array |         |
 | metadata     | unstructured, host-specific information              | no       | object             |         |
-```
+
 
 #### env.subnet.dhcp_options
 
 Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/rfc2132) or listed in [this IANA table](http://www.iana.org/assignments/bootp-dhcp-parameters/bootp-dhcp-parameters.xhtml) of BOOTP Vendor Extensions and DHCP Options.
 
-```
+
 | name   | description                                       | required | schema   | default                                                                                                      |
 |:-------|:--------------------------------------------------|:---------|:---------|:-------------------------------------------------------------------------------------------------------------|
 | option | DHCP option tag.                                  | yes      | uint8    |                                                                                                              |
@@ -471,7 +471,7 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 | type   | Denotes the type of `value`. Accepted values:     | yes      | string   |                                                                                                              |
 |        | string, uint8, uint16, uint32, int8, int16, int32 |          |          |                                                                                                              |
 |        | addresses*, base64**                              |          |          | |         |         |                                                      |          |                    | |
-```
+
 \* Type `addresses` is a comma seperated string of ip addresses.
 
 \** Type `base64` is a base64 encoded value.
@@ -482,7 +482,7 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 
 Represents a single operating system with boot/installation parameters.
 
-```
+
 | name          | description                      | required | schema  | default |
 |:--------------|:---------------------------------|:---------|:--------|:--------|
 | id            | self-assigned identifier         | yes      | string  |         |
@@ -493,7 +493,7 @@ Represents a single operating system with boot/installation parameters.
 | release_name  | release name (i.e. stable, beta) | no       | string  |         |
 | boot          | kernal & initrd img info         | yes      | os.boot |         |
 | cmdline       | boot/installation options        | no       | object  |         |
-```
+
 
 Cmdline values may be templated. They will be rendered on-demand for inidividual hosts.
 
@@ -501,12 +501,12 @@ Cmdline values may be templated. They will be rendered on-demand for inidividual
 
 Contains information about the kernal/initrds for an operating system.
 
-```
+
 | name   | description                             | required | schema       | default |
 |:-------|:----------------------------------------|:---------|:-------------|:--------|
 | kernel | URL for retrieving kernel on boot       | yes      | string       |         |
 | initrd | URL for retrieving initrds/imgs on boot | yes      | string array |         |
-```
+
 
 
 Kernel and initrd values may be templated. They will be rendered on-demand for inidividual hosts.

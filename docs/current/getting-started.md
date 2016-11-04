@@ -101,10 +101,10 @@ See the different [configurations](https://github.com/CiscoCloud/vaquero-docs/tr
 Vaquero provides this vagrant environment as a sandbox to work with vaquero before actual deployment. We also provide a few different demos to showcase what vaquero has to offer and how the data model is set up.
 
 ### demo lab layout
-```
-|-------------------|-------------|---------------|
-|    Mac address    |  IP Address |      Demo     |
-|-------------------|-------------|---------------|
+
+
+| Mac address       | IP Address  | Demo          |
+|:------------------|:------------|:--------------|
 | 00:00:00:00:00:01 | 10.10.10.11 | SANDBOX       |
 | 00:00:00:00:00:02 | 10.10.10.12 | SANDBOX       |
 | 00:00:00:00:00:03 | 10.10.10.13 | SANDBOX       |
@@ -114,20 +114,19 @@ Vaquero provides this vagrant environment as a sandbox to work with vaquero befo
 | 00:00:00:00:00:07 | 10.10.10.17 | SANDBOX       |
 | 00:00:00:00:00:08 | 10.10.10.18 | SANDBOX       |
 | 00:00:00:00:00:09 | 10.10.10.19 | SANDBOX       |
-|-------------------|-------------|---------------|
+|                   |             |               |
 | 00:00:00:00:00:21 | 10.10.10.21 | core-cloud    |
 | 00:00:00:00:00:22 | 10.10.10.22 | core-cloud    |
 | 00:00:00:00:00:23 | 10.10.10.23 | core-cloud    |
 | 00:00:00:00:00:24 | 10.10.10.24 | core-cloud    |
-|-------------------|-------------|---------------|
+|                   |             |               |
 | 00:00:00:00:00:31 | 10.10.10.31 | core-ignition |
 | 00:00:00:00:00:32 | 10.10.10.32 | core-ignition |
 | 00:00:00:00:00:33 | 10.10.10.33 | core-ignition |
 | 00:00:00:00:00:34 | 10.10.10.34 | core-ignition |
-|-------------------|-------------|---------------|
+|                   |             |               |
 | 00:00:00:00:00:41 | 10.10.10.41 | centos        |
-|-------------------|-------------|---------------|
-```
+
 
 ## canned demos
 This assumes there is a running vaquero instance as described above with either the provided github repo or local data model.
