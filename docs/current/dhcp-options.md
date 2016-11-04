@@ -17,6 +17,9 @@
 </head><article class="markdown-body">
 
 # DHCP Options
+[Home](https://ciscocloud.github.io/vaquero-docs/)
+
+[Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 Vaquero's DHCP server sends it's DHCP Options based on fields in `env.subnet`, defined
 in the Data Model's `env.yaml.`
