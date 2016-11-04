@@ -1,0 +1,34 @@
+<h1 id="dhcp-options">DHCP Options</h1>
+<p>Vaquero's DHCP server sends it's DHCP Options based on fields in <code>env.subnet</code>, defined in the Data Model's <code>env.yaml.</code></p>
+<p>The options set implicitly by Vaquero are shown below:</p>
+<pre><code>| option tag | option name     | source                 |
+|------------|-----------------|------------------------|
+| 1          | subnet mask     | env.subnet.cidr        |
+| 3          | router          | env.subnet.gateway     |
+| 6          | DNS             | env.subnet.dns         |
+| 12         | hostname        | env.subnet.hostname    |
+| 15         | domain name     | env.subnet.domain_name |
+| 42         | ntp servers     | env.subnet.ntp         |
+| 43         | vendor specific | *                      |
+| 54         | server id       | env.subnet.cidr        |</code></pre>
+<p>* vendor specific is set by vaquero during PXEBoot.</p>
+<h2 id="custom-options">Custom Options</h2>
+<p>There may be a situation where additional options are required. Additional options can be configured in the format defined in the data model <a href="https://github.com/CiscoCloud/vaquero-docs/blob/master/docs/current/data-model-howto.md#envsubnet">subnet docs</a>.</p>
+<p>Below we list a few use cases for custom DHCP Options and the corresponding <code>env.subnet.dhcp_options</code> to use. ### Example 1: Custom IP Time-To-Live:</p>
+<p>IP TTL is DHCP Option 23 and it's value is an unsigned 8 bit integer. The following <code>env.subnet.dhcp_option</code> will set the TTL to 128:</p>
+<pre><code>dhcp_options:
+    - option: 23
+      type: uint8
+      value: 128</code></pre>
+<h3 id="example-2-broadcast-address-option">Example 2: Broadcast Address Option:</h3>
+<p>Using a custom Broadcast Address is DHCP Option 28 and it's value is 4 bytes representing an ip address. The following <code>env.subnet.dhcp_options</code> will set the broadcast address to &quot;10.0.0.251&quot;:</p>
+<pre><code>dhcp_options:
+    - option: 28
+      type: addresses
+      value: &quot;10.0.0.251&quot;</code></pre>
+<h3 id="example-3-smtp-servers-option">Example 3: SMTP Servers Option:</h3>
+<p>Simple Mail Transport Protocol Servers are DHCP Option 69 and is a variable number of bytes representing a list of SMTP+ server ip addresses. The following <code>env.subnet.dhcp_options</code> will set the SMTP+ option to &quot;10.0.0.251,10.0.0.253,10.0.0.9&quot;:</p>
+<pre><code>dhcp_options:
+    - option: 69
+      type: addresses
+      value: &quot;10.0.0.251,10.0.0.253,10.0.0.9&quot;</code></pre>
