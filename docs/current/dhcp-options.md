@@ -26,7 +26,7 @@ in the Data Model's `env.yaml.`
 
 The options set implicitly by Vaquero are shown below:
 
-```
+
 | option tag | option name     | source                 |
 |:-----------|:----------------|:-----------------------|
 | 1          | subnet mask     | env.subnet.cidr        |
@@ -37,7 +37,7 @@ The options set implicitly by Vaquero are shown below:
 | 42         | ntp servers     | env.subnet.ntp         |
 | 43         | vendor specific | *                      |
 | 54         | server id       | env.subnet.cidr        |
-```
+
 \* vendor specific is set by vaquero during PXEBoot.
 
 ## Custom Options
