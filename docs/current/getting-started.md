@@ -36,15 +36,15 @@
 
 
 ## 2. starting VM(s) to run vaquero on
-Firstly we can run vaquero in standalone mode or in separated server and agent modes. Standalone is both modes running out of the same container and its intended use is for testing and POCs. Production deployments should have multiple servers and agents that are separate. (As I write this in Early November 2016, we are in progress for HA servers)
+Firstly we can run vaquero in standalone mode or in separated server and agent modes. Standalone is both modes running out of the same container and its intended use is for testing and POCs. Production deployments should have multiple servers and agents that are separate. (As I write this in early November 2016, we are in progress for HA servers)
 
-We look at some ENVIRONMENT variables to decide how to start vaquero.
-- `VS_NUM`: An integer number of how many vaquero server VMs to start
+Lets look at some ENVIRONMENT variables to decide how to set up the VM infrastructure.
+- `VS_NUM`: An integer number of how many vaquero server VMs to start. Default: 1 (this can be used for standalone mode)
 - `VA_NUM`: An integer number of how many vaquero agent VMs to start
-- `V_DEV`: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling `V_DEV` allocates 2 vCPUs and 2048 GBs of RAM.
-- `V_RELAY`: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed `helper` machine that will act as the gateway between the subnets.
+- `V_DEV`: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling `V_DEV` allocates 2 vCPUs and 2048MBs of RAM.
+- `V_RELAY`: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed `gateway` machine that will forward packets between the subnets.
 
-By default we only set `VS_NUM=0` and nothing else will be set if not specified.
+By default we only set `VS_NUM=1`.
 
 - To deploy one vaquero VM to run standalone mode. `vagrant up`
 
@@ -53,9 +53,9 @@ By default we only set `VS_NUM=0` and nothing else will be set if not specified.
 - To deploy 3 vaquero servers and 3 vaquero agents with the relay. `VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up`
 
   #### Beware
-  **NOTE: you must set these environment variables in your session or pre-prend the ENV vars to every `vagrant` command.**
+  **NOTE: you must set these environment variables in your session or prepend the ENV vars to every `vagrant` command.**
 
-  For example: `VS_NUM=3 vagrant up` will stand up 3 vaquero server VMs. Running `vagrant destroy -f` will only destroy the first instance, you must run `VS_NUM=3 vagrant destroy -f` to clean up all of them. Include *every* ENV var for *every* vagrant command, even things like `vagrant ssh`.
+  For example: `VS_NUM=3 vagrant up` will stand up 3 vaquero server VMs. Running `vagrant destroy -f` will only destroy the first instance, you must run `VS_NUM=3 vagrant destroy -f` to clean up all of them. Include *every* ENV var for *every* vagrant command, even things like `vagrant ssh vs-3`.
 
 ## 3. pull the latest docker image
 
@@ -63,6 +63,8 @@ By default we only set `VS_NUM=0` and nothing else will be set if not specified.
 
 
 ## 4. run vaquero with 1 of the source of truth types (we default DHCP to run in server mode)
+
+If you want to run vaquero in DHCP proxy mode, edit the configuration in `config/` and start the dnsmasq VM by running: `vagrant up dnsmasq`. This will stand up dnsmasq VM running a DHCP server that only serves IP addresses.
 
 See the different [configurations](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config).
 
@@ -82,15 +84,15 @@ Vaquero provides this vagrant environment as a sandbox to work with vaquero befo
 ### Demo Lab layout
 
 #### Vagrant VM Table
-There are `*`'s in the third space because VMs can be on the 10.10.10 or the 10.10.11 network. If no http relay is in effect all machines will be on the 10.10.10 network, if relay is active, vaquero services will be moved to 10.10.11 while booting hosts will be on 10.10.10.
+There are `*`'s in the third space because VMs can be on the 10.10.10.0/24 or the 10.10.11.0/24 network. If no http relay is in effect all machines will be on the 10.10.10.0/24 network, if relay is active, vaquero services will be moved to 10.10.11.0/24 while booting hosts will be on 10.10.10.10/24
 
 
-| Vagrant VM     | IP Address            |
-|:---------------|:----------------------|
-| Relay gateway  | 10.10.*.3             |
-| Free           | 10.10.*.4             |
-| Vaquero server | 10.10.*.5 - 10.10.*.7 |
-| Vaquero agent  | 10.10.*.8 - 10.10.*.9 |
+| Vagrant VM     | IP Address              |
+|:---------------|:------------------------|
+| Relay gateway  | 10.10.10.3 & 10.10.11.3 |
+| Free           | 10.10.*.4               |
+| Vaquero server | 10.10.*.5 - 10.10.*.7   |
+| Vaquero agent  | 10.10.*.8 - 10.10.*.10  |
 
 
 #### Booting Host Table
