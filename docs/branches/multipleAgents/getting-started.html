@@ -22,40 +22,32 @@ Vaquero Getting Started
 <p><a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
 <h2 id="virtual-environment"><a href="https://github.com/CiscoCloud/vaquero-vagrant">Virtual environment</a></h2>
 <ul>
-<li>Deploying vaquero via Vagrant on VirtualBox VMs. Validated on OSX and Windows. The VM is Centos7 that has docker installed.</li>
+<li>Deploying vaquero via Vagrant on VirtualBox VMs. Validated on OSX and Windows. The vaquero base VM is Centos7 that has docker installed, kernels and initrds as well.</li>
 </ul>
 <p><a href="https://cisco.box.com/s/tmd818xyj1126kf7nxqmimtxtuy7fxfr">Intro Video : Running the VM</a></p>
 <p><a href="https://cisco.box.com/s/7n84iungc6u0k0i9yxct04skgbp1fmpg">Video : Running the container and booting a machine</a></p>
 <h2 id="clone-the-vagrant-repo">1. clone the vagrant repo</h2>
 <p><code>git clone https://github.com/CiscoCloud/vaquero-vagrant.git &amp;&amp; cd vaquero-vagrant</code></p>
-<h2 id="add-your-git-token">2. add your git token</h2>
-<p><code>./provision_scripts/replace.sh &lt;GIT_TOKEN&gt;</code></p>
-<h2 id="starting-vm-to-run-vaquero-with-1-of-the-dhcp-options">3. starting VM to run vaquero with 1 of the DHCP options</h2>
-<ul>
-<li><p>vaquero DHCP server.</p>
-<ol style="list-style-type: decimal">
-<li><code>vagrant up vaquero_server</code></li>
-<li><code>vagrant ssh vaquero_server</code></li>
-</ol></li>
-<li><p>vaquero DHCP proxy with another DHCP server handing out IP addresses to the subnet.</p>
-<ol style="list-style-type: decimal">
-<li><code>vagrant up vaquero_proxy dnsmasq</code></li>
-<li><code>vagrant ssh vaquero_proxy</code></li>
-</ol></li>
-<li><p>other DHCP / TFTP that lists vaquero as &quot;next-server&quot;. vaquero is not running any DHCP / TFTP services.</p>
-<ol style="list-style-type: decimal">
-<li><code>vagrant up vaquero_other</code></li>
-<li><code>vagrant ssh vaquero_other</code></li>
-</ol></li>
-</ul>
-<h2 id="pull-the-latest-docker-image">4. pull the latest docker image</h2>
+<h2 id="starting-vms-to-run-vaquero-on">2. starting VM(s) to run vaquero on</h2>
+<p>Firstly we can run vaquero in standalone mode or in separated server and agent modes. Standalone is both modes running out of the same container and its intended use is for testing and POCs. Production deployments should have multiple servers and agents that are separate. (As I write this in Early November 2016, we are in progress for HA servers)</p>
+<p>We look at some ENVIRONMENT variables to decide how to start vaquero. - <code>VS_NUM</code>: An integer number of how many vaquero server VMs to start - <code>VA_NUM</code>: An integer number of how many vaquero agent VMs to start - <code>V_DEV</code>: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling <code>V_DEV</code> allocates 2 vCPUs and 2048 GBs of RAM. - <code>V_RELAY</code>: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed <code>helper</code> machine that will act as the gateway between the subnets.</p>
+<p>By default we only set <code>VS_NUM=0</code> and nothing else will be set if not specified.</p>
+<p>To deploy one vaquero VM to run standalone mode.</p>
+<pre><code>vagrant up</code></pre>
+<p>To deploy one vaquero server and one vaquero agent.</p>
+<pre><code>VA_NUM=1 vagrant up</code></pre>
+<p>To deploy 3 vaquero servers and 3 vaquero agents with the relay.</p>
+<pre><code>VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up</code></pre>
+<p>#### Beware <strong>NOTE: you must set these environment variables in your session or pre-prend the ENV vars to every <code>vagrant</code> command.</strong></p>
+<p>For example: <code>VS_NUM=3 vagrant up</code> will stand up 3 vaquero server VMs. Running <code>vagrant destroy -f</code> will only destroy the first instance, you must run <code>VS_NUM=3 vagrant destroy -f</code> to clean up all of them. Include <em>every</em> ENV var for <em>every</em> vagrant command, even things like <code>vagrant ssh</code>.</p>
+<h2 id="pull-the-latest-docker-image">3. pull the latest docker image</h2>
 <p><code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></p>
-<h2 id="run-vaquero-with-1-of-the-source-of-truth-types-and-corresponding-dhcp-option">5. run vaquero with 1 of the source of truth types and corresponding DHCP option</h2>
+<h2 id="run-vaquero-with-1-of-the-source-of-truth-types-we-default-dhcp-to-run-in-server-mode">4. run vaquero with 1 of the source of truth types (we default DHCP to run in server mode)</h2>
 <p>See the different <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config">configurations</a>.</p>
-<h5 id="dhcp-server">DHCP server:</h5>
-<p><code>docker run -v /vagrant/config/git-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
-<h5 id="dhcp-server-1">DHCP server:</h5>
-<p><code>docker run -v /vagrant/config/local-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
+<h5 id="git-sot">Git SoT:</h5>
+<p><code>docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
+<h5 id="dir-sot">Dir SoT:</h5>
+<p><code>docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
 <h2 id="demo-lab">demo lab</h2>
 <p>Vaquero provides this vagrant environment as a sandbox to work with vaquero before actual deployment. We also provide a few different demos to showcase what vaquero has to offer and how the data model is set up.</p>
 <h3 id="demo-lab-layout">Demo Lab layout</h3>
@@ -139,34 +131,24 @@ Vaquero Getting Started
 <td align="left">SANDBOX</td>
 </tr>
 <tr class="even">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
 <td align="left">00:00:00:00:00:21</td>
 <td align="left">10.10.10.21</td>
 <td align="left">core-cloud</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">00:00:00:00:00:22</td>
 <td align="left">10.10.10.22</td>
 <td align="left">core-cloud</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">00:00:00:00:00:23</td>
 <td align="left">10.10.10.23</td>
 <td align="left">core-cloud</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">00:00:00:00:00:24</td>
 <td align="left">10.10.10.24</td>
 <td align="left">core-cloud</td>
-</tr>
-<tr class="odd">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
 </tr>
 <tr class="even">
 <td align="left">00:00:00:00:00:31</td>
@@ -189,11 +171,6 @@ Vaquero Getting Started
 <td align="left">core-ignition</td>
 </tr>
 <tr class="even">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
 <td align="left">00:00:00:00:00:41</td>
 <td align="left">10.10.10.41</td>
 <td align="left">centos</td>
@@ -211,9 +188,13 @@ Vaquero Getting Started
 <h3 id="using-the-sandbox-mac-space-via-github">using the sandbox mac space via github</h3>
 <ol style="list-style-type: decimal">
 <li>Go through steps 1-4.</li>
+<li>add your git token to the vaquero configuration
+<ul>
+<li><code>./provision_scripts/replace.sh &lt;GIT_TOKEN&gt;</code></li>
+</ul></li>
 <li>Create your own github repo to contain your own data model</li>
 <li>If your machine is not routable set up <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/README.html">ngrok and the githook as described in the README</a></li>
-<li>Create your own vaquero configuration based off <code>config/git-*.yaml</code> examples. Update the Gitter fields (URL) and SoT (branch) section to reflect your repo.</li>
+<li>Create your own vaquero configuration based off <code>config/git-sot.yaml</code> examples. Update the Gitter fields (URL) and SoT (branch) section to reflect your repo.</li>
 <li>Start vaquero and ensure the zipball API info log refers to your repo and is a success</li>
 <li>Update your github repo, see webhook</li>
 <li>Run <code>./create-cluster/cluster -c &lt;count&gt;</code> to start <count> VM's starting at mac <code>:01</code> and counting up</li>
