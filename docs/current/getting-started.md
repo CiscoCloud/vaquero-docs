@@ -24,7 +24,7 @@
 
 
 ## [Virtual environment](https://github.com/CiscoCloud/vaquero-vagrant)
-- Deploying vaquero via Vagrant on VirtualBox VMs. Validated on OSX and Windows. The VM is Centos7 that has docker installed.
+- Deploying vaquero via Vagrant on VirtualBox VMs. Validated on OSX and Windows. The vaquero base VM is Centos7 that has docker installed, kernels and initrds as well.
 
 [Intro Video : Running the VM](https://cisco.box.com/s/tmd818xyj1126kf7nxqmimtxtuy7fxfr)
 
@@ -35,45 +35,53 @@
 `git clone https://github.com/CiscoCloud/vaquero-vagrant.git && cd vaquero-vagrant`
 
 
-## 2. add your git token
+## 2. starting VM(s) to run vaquero on
+Firstly we can run vaquero in standalone mode or in separated server and agent modes. Standalone is both modes running out of the same container and its intended use is for testing and POCs. Production deployments should have multiple servers and agents that are separate. (As I write this in Early November 2016, we are in progress for HA servers)
 
-`./provision_scripts/replace.sh <GIT_TOKEN>`
+We look at some ENVIRONMENT variables to decide how to start vaquero.
+- `VS_NUM`: An integer number of how many vaquero server VMs to start
+- `VA_NUM`: An integer number of how many vaquero agent VMs to start
+- `V_DEV`: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling `V_DEV` allocates 2 vCPUs and 2048 GBs of RAM.
+- `V_RELAY`: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed `helper` machine that will act as the gateway between the subnets.
 
+By default we only set `VS_NUM=0` and nothing else will be set if not specified.
 
-## 3. starting VM to run vaquero with 1 of the DHCP options
+To deploy one vaquero VM to run standalone mode.
+```
+vagrant up
+```
 
-- vaquero DHCP server.
+To deploy one vaquero server and one vaquero agent.
+```
+VA_NUM=1 vagrant up
+```
 
-    1. `vagrant up vaquero_server`
-    2. `vagrant ssh vaquero_server`
+To deploy 3 vaquero servers and 3 vaquero agents with the relay.
+```
+VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up
+```
 
-- vaquero DHCP proxy with another DHCP server handing out IP addresses to the subnet.
+  #### Beware
+  **NOTE: you must set these environment variables in your session or pre-prend the ENV vars to every `vagrant` command.**
 
-    1. `vagrant up vaquero_proxy dnsmasq`
-    2. `vagrant ssh vaquero_proxy`
+  For example: `VS_NUM=3 vagrant up` will stand up 3 vaquero server VMs. Running `vagrant destroy -f` will only destroy the first instance, you must run `VS_NUM=3 vagrant destroy -f` to clean up all of them. Include *every* ENV var for *every* vagrant command, even things like `vagrant ssh`.
 
-- other DHCP / TFTP that lists vaquero as "next-server". vaquero is not running any DHCP / TFTP services.
-
-    1. `vagrant up vaquero_other`
-    2. `vagrant ssh vaquero_other`
-
-
-## 4. pull the latest docker image
+## 3. pull the latest docker image
 
 `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
 
 
-## 5. run vaquero with 1 of the source of truth types and corresponding DHCP option
+## 4. run vaquero with 1 of the source of truth types (we default DHCP to run in server mode)
 
 See the different [configurations](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config).
 
-##### DHCP server:
+##### Git SoT:
 
-`docker run -v /vagrant/config/git-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
-#####  DHCP server:
+##### Dir SoT:
 
-`docker run -v /vagrant/config/local-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
 
 ## demo lab
@@ -108,17 +116,14 @@ There are `*`'s in the third space because VMs can be on the 10.10.10 or the 10.
 | 00:00:00:00:00:07 | 10.10.10.17 | SANDBOX       |
 | 00:00:00:00:00:08 | 10.10.10.18 | SANDBOX       |
 | 00:00:00:00:00:09 | 10.10.10.19 | SANDBOX       |
-|                   |             |               |
 | 00:00:00:00:00:21 | 10.10.10.21 | core-cloud    |
 | 00:00:00:00:00:22 | 10.10.10.22 | core-cloud    |
 | 00:00:00:00:00:23 | 10.10.10.23 | core-cloud    |
 | 00:00:00:00:00:24 | 10.10.10.24 | core-cloud    |
-|                   |             |               |
 | 00:00:00:00:00:31 | 10.10.10.31 | core-ignition |
 | 00:00:00:00:00:32 | 10.10.10.32 | core-ignition |
 | 00:00:00:00:00:33 | 10.10.10.33 | core-ignition |
 | 00:00:00:00:00:34 | 10.10.10.34 | core-ignition |
-|                   |             |               |
 | 00:00:00:00:00:41 | 10.10.10.41 | centos        |
 
 
@@ -138,12 +143,14 @@ This assumes there is a running vaquero instance as described above with either 
 ### using the sandbox mac space via github
 
 1. Go through steps 1-4.
-2. Create your own github repo to contain your own data model
-3. If your machine is not routable set up [ngrok and the githook as described in the README](https://ciscocloud.github.io/vaquero-docs/docs/current/README.html)
-4. Create your own vaquero configuration based off `config/git-*.yaml` examples. Update the Gitter fields (URL) and SoT (branch) section to reflect your repo.
-5. Start vaquero and ensure the zipball API info log refers to your repo and is a success
-6. Update your github repo, see webhook
-7. Run `./create-cluster/cluster -c <count>` to start <count> VM's starting at mac `:01` and counting up
+2. add your git token to the vaquero configuration
+    - `./provision_scripts/replace.sh <GIT_TOKEN>`
+3. Create your own github repo to contain your own data model
+4. If your machine is not routable set up [ngrok and the githook as described in the README](https://ciscocloud.github.io/vaquero-docs/docs/current/README.html)
+5. Create your own vaquero configuration based off `config/git-sot.yaml` examples. Update the Gitter fields (URL) and SoT (branch) section to reflect your repo.
+6. Start vaquero and ensure the zipball API info log refers to your repo and is a success
+7. Update your github repo, see webhook
+8. Run `./create-cluster/cluster -c <count>` to start <count> VM's starting at mac `:01` and counting up
 
 [Video](https://cisco.box.com/s/b4d4d5v3i3yph4lvcoplydqny7p6qun4)
 
