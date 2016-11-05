@@ -46,20 +46,11 @@ We look at some ENVIRONMENT variables to decide how to start vaquero.
 
 By default we only set `VS_NUM=0` and nothing else will be set if not specified.
 
-To deploy one vaquero VM to run standalone mode.
-```
-vagrant up
-```
+- To deploy one vaquero VM to run standalone mode. `vagrant up`
 
-To deploy one vaquero server and one vaquero agent.
-```
-VA_NUM=1 vagrant up
-```
+- To deploy one vaquero server and one vaquero agent. `VA_NUM=1 vagrant up`
 
-To deploy 3 vaquero servers and 3 vaquero agents with the relay.
-```
-VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up
-```
+- To deploy 3 vaquero servers and 3 vaquero agents with the relay. `VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up`
 
   #### Beware
   **NOTE: you must set these environment variables in your session or pre-prend the ENV vars to every `vagrant` command.**
