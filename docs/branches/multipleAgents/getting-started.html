@@ -32,12 +32,11 @@ Vaquero Getting Started
 <p>Firstly we can run vaquero in standalone mode or in separated server and agent modes. Standalone is both modes running out of the same container and its intended use is for testing and POCs. Production deployments should have multiple servers and agents that are separate. (As I write this in Early November 2016, we are in progress for HA servers)</p>
 <p>We look at some ENVIRONMENT variables to decide how to start vaquero. - <code>VS_NUM</code>: An integer number of how many vaquero server VMs to start - <code>VA_NUM</code>: An integer number of how many vaquero agent VMs to start - <code>V_DEV</code>: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling <code>V_DEV</code> allocates 2 vCPUs and 2048 GBs of RAM. - <code>V_RELAY</code>: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed <code>helper</code> machine that will act as the gateway between the subnets.</p>
 <p>By default we only set <code>VS_NUM=0</code> and nothing else will be set if not specified.</p>
-<p>To deploy one vaquero VM to run standalone mode.</p>
-<pre><code>vagrant up</code></pre>
-<p>To deploy one vaquero server and one vaquero agent.</p>
-<pre><code>VA_NUM=1 vagrant up</code></pre>
-<p>To deploy 3 vaquero servers and 3 vaquero agents with the relay.</p>
-<pre><code>VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up</code></pre>
+<ul>
+<li><p>To deploy one vaquero VM to run standalone mode. <code>vagrant up</code></p></li>
+<li><p>To deploy one vaquero server and one vaquero agent. <code>VA_NUM=1 vagrant up</code></p></li>
+<li><p>To deploy 3 vaquero servers and 3 vaquero agents with the relay. <code>VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up</code></p></li>
+</ul>
 <p>#### Beware <strong>NOTE: you must set these environment variables in your session or pre-prend the ENV vars to every <code>vagrant</code> command.</strong></p>
 <p>For example: <code>VS_NUM=3 vagrant up</code> will stand up 3 vaquero server VMs. Running <code>vagrant destroy -f</code> will only destroy the first instance, you must run <code>VS_NUM=3 vagrant destroy -f</code> to clean up all of them. Include <em>every</em> ENV var for <em>every</em> vagrant command, even things like <code>vagrant ssh</code>.</p>
 <h2 id="pull-the-latest-docker-image">3. pull the latest docker image</h2>
