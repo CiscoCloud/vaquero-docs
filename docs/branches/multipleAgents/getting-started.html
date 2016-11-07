@@ -51,6 +51,7 @@ Vaquero Getting Started
 <p>If you want to run vaquero in DHCP proxy mode, edit the configuration in <code>config/</code> and start the dnsmasq VM by running: <code>vagrant up dnsmasq</code>. This will stand up dnsmasq VM running a DHCP server that only serves IP addresses.</p>
 <p>See the different <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config">configurations</a>.</p>
 <h5 id="git-sot">git SoT:</h5>
+<p><em>You must add your personal git token into the <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config">config</a> for this to work.</em></p>
 <p><code>docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
 <h5 id="dir-sot">dir SoT:</h5>
 <p><code>docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
@@ -198,10 +199,7 @@ Vaquero Getting Started
 <h3 id="using-the-sandbox-mac-space-via-github">using the sandbox mac space via github</h3>
 <ol style="list-style-type: decimal">
 <li>Go through steps 1-4.</li>
-<li>add your git token to the vaquero configuration
-<ul>
-<li><code>./provision_scripts/replace.sh &lt;GIT_TOKEN&gt;</code></li>
-</ul></li>
+<li>You must add your personal git token into the <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config">config</a> for this to work.</li>
 <li>Create your own github repo to contain your own data model</li>
 <li>If your machine is not routable set up <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/README.html">ngrok and the githook as described in the README</a></li>
 <li>Create your own vaquero configuration based off <code>config/git-sot.yaml</code> examples. Update the Gitter fields (URL) and SoT (branch) section to reflect your repo.</li>
