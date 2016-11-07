@@ -35,7 +35,7 @@ Vaquero Getting Started
 <li><code>VS_NUM</code>: An integer number of how many vaquero server VMs to start. Default: 1 (this can be used for standalone mode)</li>
 <li><code>VA_NUM</code>: An integer number of how many vaquero agent VMs to start</li>
 <li><code>V_DEV</code>: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling <code>V_DEV</code> allocates 2 vCPUs and 2048MBs of RAM.</li>
-<li><code>V_RELAY</code>: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed <code>gateway</code> machine that will forward packets between the subnets.</li>
+<li><code>V_RELAY</code>: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed <code>gateway</code> machine that will forward packets between the subnets. <em>The data model must be updated to reflect the new IPs / subnet. The fastest way to run with relay is using the local_dir and run the <code>provision_scripts/relay-setup.sh</code> script, run <code>/provision_scripts/relay-reset.sh</code> to bring the data model back to the start state. If you want to do it via github, you must make your own repo and update the server and agent IPs.</em></li>
 </ul>
 <p>By default we only set <code>VS_NUM=1</code>.</p>
 <ul>
