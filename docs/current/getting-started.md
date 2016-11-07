@@ -70,6 +70,8 @@ See the different [configurations](https://github.com/CiscoCloud/vaquero-docs/tr
 
 ##### git SoT:
 
+*You must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config) for this to work.*
+
 `docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
 ##### dir SoT:
@@ -136,8 +138,7 @@ This assumes there is a running vaquero instance as described above with either 
 ### using the sandbox mac space via github
 
 1. Go through steps 1-4.
-2. add your git token to the vaquero configuration
-    - `./provision_scripts/replace.sh <GIT_TOKEN>`
+2. You must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config) for this to work.
 3. Create your own github repo to contain your own data model
 4. If your machine is not routable set up [ngrok and the githook as described in the README](https://ciscocloud.github.io/vaquero-docs/docs/current/README.html)
 5. Create your own vaquero configuration based off `config/git-sot.yaml` examples. Update the Gitter fields (URL) and SoT (branch) section to reflect your repo.
