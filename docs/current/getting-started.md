@@ -43,7 +43,7 @@ Lets look at some ENVIRONMENT variables to decide how to set up the VM infrastru
   - `VS_NUM`: An integer number of how many vaquero server VMs to start. Default: 1 (this can be used for standalone mode)
   - `VA_NUM`: An integer number of how many vaquero agent VMs to start
   - `V_DEV`: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling `V_DEV` allocates 2 vCPUs and 2048MBs of RAM.
-  - `V_RELAY`: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed `gateway` machine that will forward packets between the subnets.
+  - `V_RELAY`: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed `gateway` machine that will forward packets between the subnets. *The data model must be updated to reflect the new IPs / subnet. The fastest way to run with relay is using the local_dir and run the `provision_scripts/relay-setup.sh` script, run `/provision_scripts/relay-reset.sh` to bring the data model back to the start state. If you want to do it via github, you must make your own repo and update the server and agent IPs.*
 
 By default we only set `VS_NUM=1`.
 
