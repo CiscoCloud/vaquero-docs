@@ -66,11 +66,11 @@ By default we only set `VS_NUM=1`.
 
 If you want to run vaquero in DHCP proxy mode, edit the configuration in `config/` and start the dnsmasq VM by running: `vagrant up dnsmasq`. This will stand up dnsmasq VM running a DHCP server that only serves IP addresses.
 
-See the different [configurations](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config).
+See the different [configurations](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config).
 
 ##### git SoT:
 
-*You must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config) for this to work.*
+*You must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config) for this to work.*
 
 `docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
@@ -156,7 +156,7 @@ This assumes there is a running vaquero instance as described above with either 
 
 [Video](https://cisco.box.com/s/cbvci60f1v6b3bcajq2ejtfizr3z0ss6)
 
-### [running the validator](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
+### [running the validator OR preview](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
 After sshing into the vagrant VM, with the container on it. Preview will work in the same way.
 
 Validator using a git repo
