@@ -30,7 +30,13 @@ Vaquero Getting Started
 <p><code>git clone https://github.com/CiscoCloud/vaquero-vagrant.git &amp;&amp; cd vaquero-vagrant</code></p>
 <h2 id="starting-vms-to-run-vaquero-on">2. starting VM(s) to run vaquero on</h2>
 <p>Firstly we can run vaquero in standalone mode or in separated server and agent modes. Standalone is both modes running out of the same container and its intended use is for testing and POCs. Production deployments should have multiple servers and agents that are separate. (As I write this in early November 2016, we are in progress for HA servers)</p>
-<p>Lets look at some ENVIRONMENT variables to decide how to set up the VM infrastructure. - <code>VS_NUM</code>: An integer number of how many vaquero server VMs to start. Default: 1 (this can be used for standalone mode) - <code>VA_NUM</code>: An integer number of how many vaquero agent VMs to start - <code>V_DEV</code>: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling <code>V_DEV</code> allocates 2 vCPUs and 2048MBs of RAM. - <code>V_RELAY</code>: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed <code>gateway</code> machine that will forward packets between the subnets.</p>
+<p>Lets look at some ENVIRONMENT variables to decide how to set up the VM infrastructure.</p>
+<ul>
+<li><code>VS_NUM</code>: An integer number of how many vaquero server VMs to start. Default: 1 (this can be used for standalone mode)</li>
+<li><code>VA_NUM</code>: An integer number of how many vaquero agent VMs to start</li>
+<li><code>V_DEV</code>: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling <code>V_DEV</code> allocates 2 vCPUs and 2048MBs of RAM.</li>
+<li><code>V_RELAY</code>: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed <code>gateway</code> machine that will forward packets between the subnets.</li>
+</ul>
 <p>By default we only set <code>VS_NUM=1</code>.</p>
 <ul>
 <li><p>To deploy one vaquero VM to run standalone mode. <code>vagrant up</code></p></li>
