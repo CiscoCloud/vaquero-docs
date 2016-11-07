@@ -23,7 +23,7 @@
 [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 
-## [Virtual environment](https://github.com/CiscoCloud/vaquero-vagrant)
+## [virtual environment](https://github.com/CiscoCloud/vaquero-vagrant)
 - Deploying vaquero via Vagrant on VirtualBox VMs. Validated on OSX and Windows. The vaquero base VM is Centos7 that has docker installed, kernels and initrds as well.
 
 [Intro Video : Running the VM](https://cisco.box.com/s/tmd818xyj1126kf7nxqmimtxtuy7fxfr)
@@ -52,8 +52,7 @@ By default we only set `VS_NUM=1`.
 
 - To deploy 3 vaquero servers and 3 vaquero agents with the relay. `VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up`
 
-#### WARNING
-  **NOTE: you must set these environment variables in your session or prepend the ENV vars to every `vagrant` command.**
+#### **WARNING: You must set these environment variables in your session or prepend the ENV vars to every `vagrant` command.**
 
   For example: `VS_NUM=3 vagrant up` will stand up 3 vaquero server VMs. Running `vagrant destroy -f` will only destroy the first instance, you must run `VS_NUM=3 vagrant destroy -f` to clean up all of them. Include *every* ENV var for *every* vagrant command, even things like `vagrant ssh vs-3`.
 
@@ -68,22 +67,22 @@ If you want to run vaquero in DHCP proxy mode, edit the configuration in `config
 
 See the different [configurations](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config).
 
-##### Git SoT:
+##### git SoT:
 
 `docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
-##### Dir SoT:
+##### dir SoT:
 
 `docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
 
 ## demo lab
 
-Vaquero provides this vagrant environment as a sandbox to work with vaquero before actual deployment. We also provide a few different demos to showcase what vaquero has to offer and how the data model is set up.
+Vaquero provides this vagrant environment as a sandbox to work with vaquero before deployment. We provide 10 mac -> IP mappings that are free for your use / testing, the machines labeled SANDBOX would be free. We also provide two example data models, one as a [github](https://github.com/CiscoCloud/vaquero-examples/tree/vagrant) SoT and a local dir SoT, [vaquero-vagrant](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/local). These define the demo machines and are a working data model to use as an example when you develop your own SoT.
 
-### Demo Lab layout
+### virtual env layout
 
-#### Vagrant VM Table
+#### vagrant VM table
 There are `*`'s in the third space because VMs can be on the 10.10.10.0/24 or the 10.10.11.0/24 network. If no http relay is in effect all machines will be on the 10.10.10.0/24 network, if relay is active, vaquero services will be moved to 10.10.11.0/24 while booting hosts will be on 10.10.10.10/24
 
 
@@ -95,7 +94,7 @@ There are `*`'s in the third space because VMs can be on the 10.10.10.0/24 or th
 | Vaquero agent  | 10.10.\*.8 - 10.10.\*.10 |
 
 
-#### Booting Host Table
+#### booting host table
 
 
 | Mac address       | IP Address  | Demo          |
@@ -155,8 +154,8 @@ This assumes there is a running vaquero instance as described above with either 
 
 [Video](https://cisco.box.com/s/cbvci60f1v6b3bcajq2ejtfizr3z0ss6)
 
-### [Running the validator](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
-After sshing into the vagrant VM, with the container on it.
+### [running the validator](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
+After sshing into the vagrant VM, with the container on it. Preview will work in the same way.
 
 Validator using a git repo
 `docker run -v <SRC_CFG>:<DEST_CFG> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --config <DEST_CFG>`
