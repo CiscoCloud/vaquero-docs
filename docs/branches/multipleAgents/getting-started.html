@@ -49,9 +49,9 @@ Vaquero Getting Started
 <p><code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></p>
 <h2 id="run-vaquero-with-1-of-the-source-of-truth-types-we-default-dhcp-to-run-in-server-mode">4. run vaquero with 1 of the source of truth types (we default DHCP to run in server mode)</h2>
 <p>If you want to run vaquero in DHCP proxy mode, edit the configuration in <code>config/</code> and start the dnsmasq VM by running: <code>vagrant up dnsmasq</code>. This will stand up dnsmasq VM running a DHCP server that only serves IP addresses.</p>
-<p>See the different <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config">configurations</a>.</p>
+<p>See the different <a href="https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config">configurations</a>.</p>
 <h5 id="git-sot">git SoT:</h5>
-<p><em>You must add your personal git token into the <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config">config</a> for this to work.</em></p>
+<p><em>You must add your personal git token into the <a href="https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config">config</a> for this to work.</em></p>
 <p><code>docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
 <h5 id="dir-sot">dir SoT:</h5>
 <p><code>docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
@@ -215,7 +215,7 @@ Vaquero Getting Started
 <li>Run <code>./create-cluster/cluster -c &lt;count&gt;</code> to start <count> VM's starting at mac <code>:01</code> and counting up</li>
 </ol>
 <p><a href="https://cisco.box.com/s/cbvci60f1v6b3bcajq2ejtfizr3z0ss6">Video</a></p>
-<h3 id="running-the-validator"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html">running the validator</a></h3>
+<h3 id="running-the-validator-or-preview"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html">running the validator OR preview</a></h3>
 <p>After sshing into the vagrant VM, with the container on it. Preview will work in the same way.</p>
 <p>Validator using a git repo <code>docker run -v &lt;SRC_CFG&gt;:&lt;DEST_CFG&gt; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --config &lt;DEST_CFG&gt;</code></p>
 <p>Validator using a local dir <code>docker run -v &lt;SRC_DIR&gt;:&lt;DEST_DIR&gt; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --sot &lt;DEST_DIR&gt;</code></p>
