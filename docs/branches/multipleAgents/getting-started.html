@@ -37,7 +37,8 @@ Vaquero Getting Started
 <li><p>To deploy one vaquero server and one vaquero agent. <code>VA_NUM=1 vagrant up</code></p></li>
 <li><p>To deploy 3 vaquero servers and 3 vaquero agents with the relay. <code>VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up</code></p></li>
 </ul>
-<p>#### Beware <strong>NOTE: you must set these environment variables in your session or prepend the ENV vars to every <code>vagrant</code> command.</strong></p>
+<h4 id="warning">WARNING</h4>
+<p><strong>NOTE: you must set these environment variables in your session or prepend the ENV vars to every <code>vagrant</code> command.</strong></p>
 <p>For example: <code>VS_NUM=3 vagrant up</code> will stand up 3 vaquero server VMs. Running <code>vagrant destroy -f</code> will only destroy the first instance, you must run <code>VS_NUM=3 vagrant destroy -f</code> to clean up all of them. Include <em>every</em> ENV var for <em>every</em> vagrant command, even things like <code>vagrant ssh vs-3</code>.</p>
 <h2 id="pull-the-latest-docker-image">3. pull the latest docker image</h2>
 <p><code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></p>
