@@ -52,7 +52,7 @@ By default we only set `VS_NUM=1`.
 
 - To deploy 3 vaquero servers and 3 vaquero agents with the relay. `VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up`
 
-  #### Beware
+#### WARNING
   **NOTE: you must set these environment variables in your session or prepend the ENV vars to every `vagrant` command.**
 
   For example: `VS_NUM=3 vagrant up` will stand up 3 vaquero server VMs. Running `vagrant destroy -f` will only destroy the first instance, you must run `VS_NUM=3 vagrant destroy -f` to clean up all of them. Include *every* ENV var for *every* vagrant command, even things like `vagrant ssh vs-3`.
