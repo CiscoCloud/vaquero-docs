@@ -39,18 +39,19 @@
 Firstly we can run vaquero in standalone mode or in separated server and agent modes. Standalone is both modes running out of the same container and its intended use is for testing and POCs. Production deployments should have multiple servers and agents that are separate. (As I write this in early November 2016, we are in progress for HA servers)
 
 Lets look at some ENVIRONMENT variables to decide how to set up the VM infrastructure.
-- `VS_NUM`: An integer number of how many vaquero server VMs to start. Default: 1 (this can be used for standalone mode)
-- `VA_NUM`: An integer number of how many vaquero agent VMs to start
-- `V_DEV`: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling `V_DEV` allocates 2 vCPUs and 2048MBs of RAM.
-- `V_RELAY`: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed `gateway` machine that will forward packets between the subnets.
+
+  - `VS_NUM`: An integer number of how many vaquero server VMs to start. Default: 1 (this can be used for standalone mode)
+  - `VA_NUM`: An integer number of how many vaquero agent VMs to start
+  - `V_DEV`: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling `V_DEV` allocates 2 vCPUs and 2048MBs of RAM.
+  - `V_RELAY`: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed `gateway` machine that will forward packets between the subnets.
 
 By default we only set `VS_NUM=1`.
 
-- To deploy one vaquero VM to run standalone mode. `vagrant up`
+  - To deploy one vaquero VM to run standalone mode. `vagrant up`
 
-- To deploy one vaquero server and one vaquero agent. `VA_NUM=1 vagrant up`
+  - To deploy one vaquero server and one vaquero agent. `VA_NUM=1 vagrant up`
 
-- To deploy 3 vaquero servers and 3 vaquero agents with the relay. `VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up`
+  - To deploy 3 vaquero servers and 3 vaquero agents with the relay. `VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up`
 
 #### **WARNING: You must set these environment variables in your session or prepend the ENV vars to every `vagrant` command.**
 
