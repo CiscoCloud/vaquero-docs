@@ -87,12 +87,12 @@ Vaquero provides this vagrant environment as a sandbox to work with vaquero befo
 There are `*`'s in the third space because VMs can be on the 10.10.10.0/24 or the 10.10.11.0/24 network. If no http relay is in effect all machines will be on the 10.10.10.0/24 network, if relay is active, vaquero services will be moved to 10.10.11.0/24 while booting hosts will be on 10.10.10.10/24
 
 
-| Vagrant VM     | IP Address              |
-|:---------------|:------------------------|
-| Relay gateway  | 10.10.10.3 & 10.10.11.3 |
-| Free           | 10.10.*.4               |
-| Vaquero server | 10.10.*.5 - 10.10.*.7   |
-| Vaquero agent  | 10.10.*.8 - 10.10.*.10  |
+| Vagrant VM     | IP Address               |
+|:---------------|:-------------------------|
+| Relay gateway  | 10.10.10.3 & 10.10.11.3  |
+| Free           | 10.10.\*.4               |
+| Vaquero server | 10.10.\*.5 - 10.10.\*.7  |
+| Vaquero agent  | 10.10.\*.8 - 10.10.\*.10 |
 
 
 #### Booting Host Table
