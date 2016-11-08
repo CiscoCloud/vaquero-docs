@@ -24,9 +24,9 @@
 
 
 ## [virtual environment](https://github.com/CiscoCloud/vaquero-vagrant)
-- Deploying vaquero via Vagrant on VirtualBox VMs. Validated on OSX and Windows. The vaquero base VM is Centos7 that has docker installed, kernels and initrds as well.
+Repo for deploying vaquero via vagrant on VirtualBox VMs. Validated on OSX and Windows. Base VM image is Centos7 with docker, kernels and initrds pre-installed.
 
-[Intro Video : Running the VM](https://cisco.box.com/s/tmd818xyj1126kf7nxqmimtxtuy7fxfr)
+[Video : Running the VM](https://cisco.box.com/s/tmd818xyj1126kf7nxqmimtxtuy7fxfr)
 
 [Video : Running the container and booting a machine](https://cisco.box.com/s/7n84iungc6u0k0i9yxct04skgbp1fmpg)
 
@@ -35,36 +35,50 @@
 `git clone https://github.com/CiscoCloud/vaquero-vagrant.git && cd vaquero-vagrant`
 
 
-## 2. starting VM(s) to run vaquero on
-Firstly we can run vaquero in standalone mode or in separated server and agent modes. Standalone is both modes running out of the same container and its intended use is for testing and POCs. Production deployments should have multiple servers and agents that are separate. (As I write this in early November 2016, we are in progress for HA servers)
+## 2. boot vaquero VMs
+Vaquero can run in standalone or in separate server/agent modes. "Standalone" refers to both the agent and server running out of the same container, and is intended for use in testing and in POCs. Production deployments should have multiple (separate) servers and agents. [As of early November 2016, HA servers are in progress.]
 
-Lets look at some ENVIRONMENT variables to decide how to set up the VM infrastructure.
+Lets look at the ENVIRONMENT variables that can be configured for the VM infrastructure:
 
   - `VS_NUM`: An integer number of how many vaquero server VMs to start. Default: 1 (this can be used for standalone mode)
   - `VA_NUM`: An integer number of how many vaquero agent VMs to start
   - `V_DEV`: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling `V_DEV` allocates 2 vCPUs and 2048MBs of RAM.
   - `V_RELAY`: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed `gateway` machine that will forward packets between the subnets. *The data model must be updated to reflect the new IPs / subnet. The fastest way to run with relay is using the local_dir and run the `provision_scripts/relay-setup.sh` script, run `/provision_scripts/relay-reset.sh` to bring the data model back to the start state. If you want to do it via github, you must make your own repo and update the server and agent IPs.*
 
-By default we only set `VS_NUM=1`.
+By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
 
-  - To deploy one vaquero VM to run standalone mode. `vagrant up`
 
-  - To deploy one vaquero server and one vaquero agent. `VA_NUM=1 vagrant up`
+#### a) Run Commands with Environment Vars  
+  - `vagrant up`: deploys one vaquero VM in standalone mode
 
-  - To deploy 3 vaquero servers and 3 vaquero agents with the relay. `VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up`
+  - `VA_NUM=1 vagrant up`: deploys one vaquero server and one vaquero agent.
 
-#### **WARNING: You must set these environment variables in your session or prepend the ENV vars to every `vagrant` command.**
+  - `VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up`: deploys 3 vaquero servers and 3 vaquero agents with the relay.
+
+##### *WARNING*: You must set these environment variables in your session or prepend the ENV vars to every `vagrant` command.
 
   For example: `VS_NUM=3 vagrant up` will stand up 3 vaquero server VMs. Running `vagrant destroy -f` will only destroy the first instance, you must run `VS_NUM=3 vagrant destroy -f` to clean up all of them. Include *every* ENV var for *every* vagrant command, even things like `vagrant ssh vs-3`.
+
+#### b) Update Data Model to Reflect VM IPs
+
+Once vaquero is running, you must update the server and agent IP addresses in the vagrant `local` dir, which is accessible through `vagrant ssh <machine_name>`. Vaquero servers can run on IPs `10.10.*.[5-7]`, and agents can run on IPs `10.10.*.[8-10]`.
+ It's important that only the local DM is updated, rather than the entire source of truth. For instance, given a multi-agent configuration, every site's `env.yaml` should get updated as follows, where the last digit can be an integer from 8-10:  
+
+        agent:
+         url: "http://10.10.10.8"
+
+
+Once the data model is updated, you should see the change reflected in the vaquero logs. If no log output for the change is present, ensure you are on a proper log-level (eg. INFO).
+
 
 ## 3. pull the latest docker image
 
 `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
 
 
-## 4. run vaquero with 1 of the source of truth types (we default DHCP to run in server mode)
+## 4. run vaquero with one of the source of truth types
 
-If you want to run vaquero in DHCP proxy mode, edit the configuration in `config/` and start the dnsmasq VM by running: `vagrant up dnsmasq`. This will stand up dnsmasq VM running a DHCP server that only serves IP addresses.
+We default DHCP to run in server mode. If you want to run vaquero in DHCP proxy mode, edit the configuration in `config/` and start the dnsmasq VM by running: `vagrant up dnsmasq`. This will stand up dnsmasq VM running a DHCP server that only serves IP addresses.
 
 See the different [configurations](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config).
 
