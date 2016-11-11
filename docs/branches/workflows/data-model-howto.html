@@ -252,15 +252,68 @@ cmdline:
 <h2 id="schemas"><a name="schemas">Schemas</a></h2>
 <h3 id="boot">boot</h3>
 <p>Defines a configured state (combination of os with unattended configuration and metadata) that may be applied to a group of hosts.</p>
-<pre><code>|       name       |                        description                        | required |      schema     | default |
-|------------------|-----------------------------------------------------------|----------|-----------------|---------|
-| id               | A self-assigned identifier (should be unique)             | yes      | string          |         |
-| name             | A human-readable name for this group                      | no       | string          | id      |
-| operating_system | The ID of the os associated with this group               | yes      | string          |         |
-| unattended       | Unattended config/script details                          | no       | boot.unattended |         |
-| metadata         | unstructured, boot-specific information                   | no       | object          |         |
-| validate         | A series of containers run to ensure proper configuration | no       | container       |         |
-| before_shutdown  | Containers to run before a manual reboot/reprovision      | no       | container       |         |</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">id</td>
+<td align="left">A self-assigned identifier (should be unique)</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">name</td>
+<td align="left">A human-readable name for this group</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left">id</td>
+</tr>
+<tr class="odd">
+<td align="left">operating_system</td>
+<td align="left">The ID of the os associated with this group</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">unattended</td>
+<td align="left">Unattended config/script details</td>
+<td align="left">no</td>
+<td align="left">boot.unattended</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">metadata</td>
+<td align="left">unstructured, boot-specific information</td>
+<td align="left">no</td>
+<td align="left">object</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">validate</td>
+<td align="left">A series of containers run to ensure proper configuration</td>
+<td align="left">no</td>
+<td align="left">container</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">before_shutdown</td>
+<td align="left">Containers to run before a manual reboot/reprovision</td>
+<td align="left">no</td>
+<td align="left">container</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
 <h4 id="boot.unattended">boot.unattended</h4>
 <p>Allow a network boot or installation to proceed automatically by providing canned answers.</p>
 <table>
@@ -520,42 +573,222 @@ cmdline:
 <p>* Type <code>addresses</code> is a comma seperated string of ip addresses.</p>
 <p>** Type <code>base64</code> is a base64 encoded value.</p>
 <p><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/dhcp-options.html">Examples</a></p>
-<pre><code>|   name   |                     description                      | required |    schema    | default |
-|----------|------------------------------------------------------|----------|--------------|---------|
-| id       | A self-assigned identifier (should be unique in env) | yes      | string       |         |
-| cidr     | CIDR for this subnet                                 | yes      | string       |         |
-| dns      | List of DNS URLs                                     | yes      | string array |         |
-| ntp      | List of NTP URLs                                     | yes      | string array |         |
-| domain   | Client DNS domain                                    | no       | string       |         |
-| gateway  | Gateway for this subnet                              | no       | string       |         |
-| vlan     | VLAN for the subnet                                  | no       | integer      |       1 |</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">id</td>
+<td align="left">A self-assigned identifier (should be unique in env)</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">cidr</td>
+<td align="left">CIDR for this subnet</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">dns</td>
+<td align="left">List of DNS URLs</td>
+<td align="left">yes</td>
+<td align="left">string array</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">ntp</td>
+<td align="left">List of NTP URLs</td>
+<td align="left">yes</td>
+<td align="left">string array</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">domain</td>
+<td align="left">Client DNS domain</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">gateway</td>
+<td align="left">Gateway for this subnet</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">vlan</td>
+<td align="left">VLAN for the subnet</td>
+<td align="left">no</td>
+<td align="left">integer</td>
+<td align="left">1</td>
+</tr>
+</tbody>
+</table>
 <h4 id="host">host</h4>
-<pre><code>|    name    |                    description                     | required |   schema  | default |
-|------------|----------------------------------------------------|----------|-----------|---------|
-| name       | Name for the host machine.                         | yes      | string    |         |
-| interfaces | Network intefaces for this host                    | no       | interface |         |
-| metadata   | unstructured, host-specific information            | no       | object    |         |
-| workflow   | The ID of the workflow used to provision this host | yes      | string    |         |
-</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">name</td>
+<td align="left">Name for the host machine.</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">interfaces</td>
+<td align="left">Network intefaces for this host</td>
+<td align="left">no</td>
+<td align="left">interface</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">metadata</td>
+<td align="left">unstructured, host-specific information</td>
+<td align="left">no</td>
+<td align="left">object</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">workflow</td>
+<td align="left">The ID of the workflow used to provision this host</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
 <h4 id="interface">interface</h4>
-<pre><code>|     name    |                        description                         | required |     schema    | default |
-|-------------|------------------------------------------------------------|----------|---------------|---------|
-| type        | Interface type. Physical/bmc                               | yes      | string        |         |
-| mac         | MAC address identifying this interface                     | yes      | string        |         |
-| subnet      | ID of subnet (specified in env)                            | yes      | string        |         |
-| bmc         | Details for BMC interface                                  | no       | interface.bmc |         |
-| identifier  | Identifier for interface                                   | no       | string        |         |
-| ignore_dhcp | If true, stops Vaquero from provisioning on this interface | no       | boolean       |         |
-| ipv4        | IPv4 address                                               | yes      | dotted quad   |         |
-| ipv6        | IPv6 address                                               | no       | string        |         |
-| hostname    | Hostname for machine                                       | no       | string        |         |
-</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">type</td>
+<td align="left">Interface type. Physical/bmc</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">mac</td>
+<td align="left">MAC address identifying this interface</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">subnet</td>
+<td align="left">ID of subnet (specified in env)</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">bmc</td>
+<td align="left">Details for BMC interface</td>
+<td align="left">no</td>
+<td align="left">interface.bmc</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">identifier</td>
+<td align="left">Identifier for interface</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">ignore_dhcp</td>
+<td align="left">If true, stops Vaquero from provisioning on this interface</td>
+<td align="left">no</td>
+<td align="left">boolean</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">ipv4</td>
+<td align="left">IPv4 address</td>
+<td align="left">yes</td>
+<td align="left">dotted quad</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">ipv6</td>
+<td align="left">IPv6 address</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">hostname</td>
+<td align="left">Hostname for machine</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
 <h4 id="interface.bmc">interface.bmc</h4>
-<pre><code>|   name   |                    description                     | required | schema | default |
-|----------|----------------------------------------------------|----------|--------|---------|
-| type     | Specifies protocol type. IPMI/CIMC                 | yes      | string |         |
-| username | User for managing BMC                              | yes      | string |         |
-| password | Password for specified user                        | yes      | string |         |</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">type</td>
+<td align="left">Specifies protocol type. IPMI/CIMC</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">username</td>
+<td align="left">User for managing BMC</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">password</td>
+<td align="left">Password for specified user</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
 <h3 id="os">os</h3>
 <p>Represents a single operating system with boot/installation parameters.</p>
 <table>
@@ -660,12 +893,65 @@ cmdline:
 <p>Kernel and initrd values may be templated. They will be rendered on-demand for inidividual hosts.</p>
 <h4 id="workflow">workflow</h4>
 <p>A workflow chains multiple boots together to provision a host. The workflow is also responsible for specifying basic policy for rebutting hosts that use it.</p>
-<pre><code>|      name      |                       description                       | required |        schema        | default |
-|----------------|---------------------------------------------------------|----------|----------------------|---------|
-| id             | self-assigned identifier                                | yes      | string               |         |
-| workflow       | Series of boots to provision the host                   | yes      | workflow.stage array |         |
-| max_concurrent | Max simultaneous hosts actively provisioning            | no       | int                  |       0 |
-| safe_deps      | IDs of safe dependency workflows                        | no       | string array         |         |
-| block_deps     | IDs of blocking dependency workflows                    | no       | string array         |         |
-| validate_on    | IDs of workflows that cause this workflow to revalidate | no       | string array         |         |
-| max_fail       | How many hosts can fail before halted                   | no       | int                  |       0 |</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">id</td>
+<td align="left">self-assigned identifier</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">workflow</td>
+<td align="left">Series of boots to provision the host</td>
+<td align="left">yes</td>
+<td align="left">workflow.stage array</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">max_concurrent</td>
+<td align="left">Max simultaneous hosts actively provisioning</td>
+<td align="left">no</td>
+<td align="left">int</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">safe_deps</td>
+<td align="left">IDs of safe dependency workflows</td>
+<td align="left">no</td>
+<td align="left">string array</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">block_deps</td>
+<td align="left">IDs of blocking dependency workflows</td>
+<td align="left">no</td>
+<td align="left">string array</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">validate_on</td>
+<td align="left">IDs of workflows that cause this workflow to revalidate</td>
+<td align="left">no</td>
+<td align="left">string array</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">max_fail</td>
+<td align="left">How many hosts can fail before halted</td>
+<td align="left">no</td>
+<td align="left">int</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
