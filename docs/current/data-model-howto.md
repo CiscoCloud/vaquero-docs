@@ -74,14 +74,14 @@ Configuration files are placed in a directory hierarchy. Vaquero parses site con
 
 1. **assets**: grouped by type. These are generally unattended configs or scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).
 2. **os**: Individual documents describing family, version, kernel/image location, and boot/installation options for any operating systems used by host groups.
-3. **host_groups**: Individual documents combining operating system and unattended asset information to describe a target host state.
-4. **sites**: One or more sites (each in it's own subdirectory) that share the same host_group, os, and asset definitions. Each site includes environment-specific information (Vaquero Agent URLs/certs, subnets, other metadata), and an inventory of hosts that apply host_group definitions to machines.
+3. **boot**: Individual documents combining operating system and unattended asset information to describe a target host state.
+4. **sites**: One or more sites (each in it's own subdirectory) that share the same boot, os, and asset definitions. Each site includes environment-specific information (Vaquero Agent URLs/certs, subnets, other metadata), and an inventory of hosts that apply boot definitions to machines.
 
 ```
 .
 ├── assets
 ├── os
-├── host_groups
+├── boot
 └── sites
 ```
 
@@ -141,18 +141,18 @@ Operating systems exist as individual documents under the `os` subdirectory. The
 
 ### Host Groups
 
-Host groups exist as individual documents under the `host_groups` subdirectory. They are referenced by a self-assigned ID described in the document:
+Host groups exist as individual documents under the `boot` subdirectory. They are referenced by a self-assigned ID described in the document:
 
 ```
 .
-└── host_groups
+└── boot
     ├── etcd-cluster.yml
     └── etcd-proxy.yml
 ```
 
 ### Sites
 
-Sites are represented by individual subdirectories. One directory == one site == one managed group of machines. Each SoT can contain multiple sites. Each of these sites shares the same assets/host_groups/os configuration files.
+Sites are represented by individual subdirectories. One directory == one site == one managed group of machines. Each SoT can contain multiple sites. Each of these sites shares the same assets/boot/os configuration files.
 
 Each site has _at least_ two documents, the specially named `env.yml` and at least one document describing an inventory of hosts. You may use YAML's triple-dash `---` separator to combine multiple inventory documents into one file.
 
@@ -176,7 +176,7 @@ Configurations are roughly executed in the following order:
 2. DHCP causes host to chainload iPXE (`undionly.kpxe`) and indicates Vaquero Agent as next-server
 3. Vaquero Agent provides a default iPXE script to discover basic host information (mac, uuid, domain, hostname)
 4. Host requests dynamic iPXE script based on basic information
-5. Vaquero Agent renders iPXE script using os, host_group, and host information
+5. Vaquero Agent renders iPXE script using os, boot, and host information
 6. Host executes iPXE script, requesting resources (kernel, intitrd, unattended configs/scripts) as required
 
 The default ipxe script chains back to Vaquero Agent, injecting basic information:
@@ -211,13 +211,13 @@ For example, given these two hosts:
 
 ```
 ---
-host_group: group_one
+boot: group_one
 hosts:
 - name: host1
   selectors:
     mac: 00:00:00:00:00:01
 ---
-host_group: group_two
+boot: group_two
 hosts:
 - name: host1_plus_some
   selectors:
@@ -240,17 +240,23 @@ Templates are written using [Go's standard templates](https://golang.org/pkg/tex
 Metadata is used primarily to render templated information. It is "unstructured" data, consisting of nested key-value maps, and lists. Metadata is included in three separate places in your configuration:
 
 1. In the environment `env.yml` file
-2. In a host_group file
+2. In a boot file
 3. In an inventory document, under each host
 
-Metadata is made available during template execution as separate fields under the template's "dot". The fields are:
+Metadata is made available during template execution as separate fields under the template's "dot". With a few exceptions, each entry directly relates to the scheme. The cases where proxies or other values are included are noted:
 
-1. `.env` for environmental metadata
-2. `.agent` for Vaquero Agent information (the url for the Vaquero Agent asset server, etc)
-3. `.group` for host_group metadata
-4. `.host` for host metadata, selectors, and limited information discovered via iPXE (mac, uuid, domain, hostname).
-  a. host selectors are included under `.host.selectors`
-  b. host subnet information is included under `.host.subnet`
+1. `.env`: the site's Environment information.
+  - `.env.agentURL`: The scheme://host:port that the host can use to reach Vaquero Agent.
+2. `.boot`: the current Boot
+  - `.boot.configURL`: The scheme://host:port/path?query needed to retrieve the unattended configuration information for the boot. Used for manually inserting config retrieval, i.e. ClevOS answers.
+  - `.boot.{operating_system,os}`: the OS ID is replaced with the Operating System object that it refers to
+3. `.host`: the current Host
+  - `.host.interfaces.subnet`: subnet ID is replaced with Subnet object that it refers to
+4. `.interface`: the Interface that the Host is using to connect with Vaquero Agent
+  - `.interface.subnet`: subnet ID is replaced with Subnet object that it refers to
+
+* Any object/scheme that includes `metadata` proxies the same information under `md`
+* ex: `env.metadata.initial_etcd_cluster` == `env.md.initial_etcd_cluster`
 
 By way of example, this template snippet defines a networkd configuration:
 
@@ -260,40 +266,18 @@ networkd:
     - name: 10-static.network
       contents: |
         [Match]
-        MACAddress={{.host.mac}}
+        MACAddress={{.interface.mac}}
         [Network]
-        Gateway={{.host.subnet.gateway}}
-        DNS={{.env.networkd_dns}}
-        Address={{.host.networkd_address}}
+        Gateway={{.interface.subnet.gateway}}
+        DNS={{index .interface.subnet.dns 0}}
+        Address={{.interface.ipv4}}
 ```
-
-
-`.host.mac` is from the host's selectors, `.host.networkd_address` and the `.env` fields are specified as metadata in their respective documents.
-
-### Special Metadata Entries
-
-Some metadata is generated by Vaquero Agent to include some useful information in your template. There are a handful of special values here (which may grow over time):
-
-- `.agent.url`: The full url (`scheme://host:port`) for the Vaquero Agent asset server. Hosts will contact this for retrieving statically hosted files, unattended configurations, etc.
-  - ex: `.agent.url == http://localhost:8080`
-- `.host.configUrl`: Full URL for retrieving this host's unattended configuration. Will include the url to the Vaquero Agent, path to the configuration type for this host, then the selectors required to identify this particular host
-  - ex: `.host.configUrl == http://localhost:8080/untyped?mac=00:00:00:00:00:01`
-- `.host.subnet.{address,netmask}`: The address and netmask for the host's provisioning subnet (dotted quad notation)
-
-### Hosts with iPXE
-
-Host information for templating includes the following information, discovered via [iPXE](http://ipxe.org/cfg):
-
-1. mac
-2. domain
-3. hostname
-4. uuid
 
 ## <a name="translation-to-ipxe">Translation to iPXE</a>
 
 Currently, all network boots and installations are performed using iPXE scripts. Operating system boot parameters and command line options are translated into iPXE scripts to perform boot/installation tasks.
 
-Any unattended configs or scripts included in a host_group are inserted during this process. Inconsistencies (i.e. using ignition for a CentOS operating system) should be detected during validation.
+Any unattended configs or scripts included in a boot are inserted during this process. Inconsistencies (i.e. using ignition for a CentOS operating system) should be detected during validation.
 
 ### Command Line Parameters
 
@@ -332,7 +316,7 @@ cmdline:
 ```
 
 
-The iPXE script will be roughly generated as (not taking unattended info from host_group):
+The iPXE script will be roughly generated as (not taking unattended info from boot):
 
 ```
     #!ipxe
@@ -347,21 +331,23 @@ Note how `lang` appears with a trailing `=`, because it's value was non-empty `'
 
 ## <a name="schemas">Schemas</a>
 
-### host_group
+### boot
 
 Defines a configured state (combination of os with unattended configuration and metadata) that may be applied to a group of hosts.
 
+```
+|       name       |                        description                        | required |      schema     | default |
+|------------------|-----------------------------------------------------------|----------|-----------------|---------|
+| id               | A self-assigned identifier (should be unique)             | yes      | string          |         |
+| name             | A human-readable name for this group                      | no       | string          | id      |
+| operating_system | The ID of the os associated with this group               | yes      | string          |         |
+| unattended       | Unattended config/script details                          | no       | boot.unattended |         |
+| metadata         | unstructured, boot-specific information                   | no       | object          |         |
+| validate         | A series of containers run to ensure proper configuration | no       | container       |         |
+| before_shutdown  | Containers to run before a manual reboot/reprovision      | no       | container       |         |
+```
 
-| name             | description                                   | required | schema                | default |
-|:-----------------|:----------------------------------------------|:---------|:----------------------|:--------|
-| id               | A self-assigned identifier (should be unique) | yes      | string                |         |
-| name             | A human-readable name for this group          | no       | string                | id      |
-| operating_system | The ID of the os associated with this group   | yes      | string                |         |
-| unattended       | Unattended config/script details              | no       | host_group.unattended |         |
-| metadata         | unstructured, host_group-specific information | no       | object                |         |
-
-
-#### host_group.unattended
+#### boot.unattended
 
 Allow a network boot or installation to proceed automatically by providing canned answers.
 
@@ -371,47 +357,9 @@ Allow a network boot or installation to proceed automatically by providing canne
 | type | The type of unattended config/script to use             | yes      | string |         |
 | use  | The file name used to find the unattended config/script | yes      | string |         |
 
+#### container
 
-### inventory
-
-Define a collection of hosts that will be configured according to a specific host_group.
-
-
-| name       | description                   | required | schema     | default |
-|:-----------|:------------------------------|:---------|:-----------|:--------|
-| host_group | host_group id                 | yes      | string     |         |
-| subnet     | subnet id (specifed in env)   | yes      | string     |         |
-| hosts      | A list of hosts in this group | yes      | host array |         |
-
-
-#### inventory.host
-
-Details for single-hosts bmc
-
-
-| name      | description                                          | required | schema | default |
-|:----------|:-----------------------------------------------------|:---------|:-------|:--------|
-| name      | unique name among hosts in the same group            | yes      | string |         |
-| selectors | map of string keys/values used to identify this host | yes      | object |         |
-| bmc       | Details for connecting to the host's BMC             | no       | bmc    |         |
-| metadata  | unstructured, host-specific information              | no       | object |         |
-
-
-#### inv.bmc (ipmi)
-
-Details for single-hosts bmc, used for lights-out management (LOM) of the host machine.
-
-NOTE: Only IPMI is supported at this time.
-
-
-| name | description                   | required | schema | default |
-|:-----|:------------------------------|:---------|:-------|:--------|
-| type | The type of BMC the host uses | yes      | string | ipmi    |
-| ip   | IP Address of IPMI interface  | yes      | string |         |
-| mac  | MAC Address of IPMI inteface  | no       | string |         |
-| user | Configured user               | yes      | string |         |
-| pass | Configured password           | yes      | string |         |
-
+TBD
 
 ### env
 
@@ -445,7 +393,6 @@ The transport (http/s) should be included with the agent URL.
 
 #### env.subnet
 
-
 | name         | description                                          | required | schema             | default |
 |:-------------|:-----------------------------------------------------|:---------|:-------------------|:--------|
 | id           | A self-assigned identifier (should be unique in env) | yes      | string             |         |
@@ -477,6 +424,57 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 \** Type `base64` is a base64 encoded value.
 
 [Examples](https://ciscocloud.github.io/vaquero-docs/docs/current/dhcp-options.html)
+
+```
+|   name   |                     description                      | required |    schema    | default |
+|----------|------------------------------------------------------|----------|--------------|---------|
+| id       | A self-assigned identifier (should be unique in env) | yes      | string       |         |
+| cidr     | CIDR for this subnet                                 | yes      | string       |         |
+| dns      | List of DNS URLs                                     | yes      | string array |         |
+| ntp      | List of NTP URLs                                     | yes      | string array |         |
+| domain   | Client DNS domain                                    | no       | string       |         |
+| gateway  | Gateway for this subnet                              | no       | string       |         |
+| vlan     | VLAN for the subnet                                  | no       | integer      |       1 |
+```
+
+#### host
+
+```
+|    name    |                    description                     | required |   schema  | default |
+|------------|----------------------------------------------------|----------|-----------|---------|
+| name       | Name for the host machine.                         | yes      | string    |         |
+| interfaces | Network intefaces for this host                    | no       | interface |         |
+| metadata   | unstructured, host-specific information            | no       | object    |         |
+| workflow   | The ID of the workflow used to provision this host | yes      | string    |         |
+
+```
+
+#### interface
+
+```
+|     name    |                        description                         | required |     schema    | default |
+|-------------|------------------------------------------------------------|----------|---------------|---------|
+| type        | Interface type. Physical/bmc                               | yes      | string        |         |
+| mac         | MAC address identifying this interface                     | yes      | string        |         |
+| subnet      | ID of subnet (specified in env)                            | yes      | string        |         |
+| bmc         | Details for BMC interface                                  | no       | interface.bmc |         |
+| identifier  | Identifier for interface                                   | no       | string        |         |
+| ignore_dhcp | If true, stops Vaquero from provisioning on this interface | no       | boolean       |         |
+| ipv4        | IPv4 address                                               | yes      | dotted quad   |         |
+| ipv6        | IPv6 address                                               | no       | string        |         |
+| hostname    | Hostname for machine                                       | no       | string        |         |
+
+```
+
+#### interface.bmc
+
+```
+|   name   |                    description                     | required | schema | default |
+|----------|----------------------------------------------------|----------|--------|---------|
+| type     | Specifies protocol type. IPMI/CIMC                 | yes      | string |         |
+| username | User for managing BMC                              | yes      | string |         |
+| password | Password for specified user                        | yes      | string |         |
+```
 
 ### os
 
@@ -510,3 +508,21 @@ Contains information about the kernal/initrds for an operating system.
 
 
 Kernel and initrd values may be templated. They will be rendered on-demand for inidividual hosts.
+
+#### workflow
+
+A workflow chains multiple boots together to provision a host. The workflow is also responsible for specifying basic policy for rebutting hosts that use it.
+
+```
+|      name      |                       description                       | required |        schema        | default |
+|----------------|---------------------------------------------------------|----------|----------------------|---------|
+| id             | self-assigned identifier                                | yes      | string               |         |
+| workflow       | Series of boots to provision the host                   | yes      | workflow.stage array |         |
+| max_concurrent | Max simultaneous hosts actively provisioning            | no       | int                  |       0 |
+| safe_deps      | IDs of safe dependency workflows                        | no       | string array         |         |
+| block_deps     | IDs of blocking dependency workflows                    | no       | string array         |         |
+| validate_on    | IDs of workflows that cause this workflow to revalidate | no       | string array         |         |
+| max_fail       | How many hosts can fail before halted                   | no       | int                  |       0 |
+```
+
+
