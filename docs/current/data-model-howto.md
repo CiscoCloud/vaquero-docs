@@ -335,9 +335,8 @@ Note how `lang` appears with a trailing `=`, because it's value was non-empty `'
 
 Defines a configured state (combination of os with unattended configuration and metadata) that may be applied to a group of hosts.
 
-```
 |       name       |                        description                        | required |      schema     | default |
-|------------------|-----------------------------------------------------------|----------|-----------------|---------|
+|:-----------------|:----------------------------------------------------------|:---------|:----------------|:--------|
 | id               | A self-assigned identifier (should be unique)             | yes      | string          |         |
 | name             | A human-readable name for this group                      | no       | string          | id      |
 | operating_system | The ID of the os associated with this group               | yes      | string          |         |
@@ -345,7 +344,6 @@ Defines a configured state (combination of os with unattended configuration and 
 | metadata         | unstructured, boot-specific information                   | no       | object          |         |
 | validate         | A series of containers run to ensure proper configuration | no       | container       |         |
 | before_shutdown  | Containers to run before a manual reboot/reprovision      | no       | container       |         |
-```
 
 #### boot.unattended
 
@@ -425,9 +423,8 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 
 [Examples](https://ciscocloud.github.io/vaquero-docs/docs/current/dhcp-options.html)
 
-```
 |   name   |                     description                      | required |    schema    | default |
-|----------|------------------------------------------------------|----------|--------------|---------|
+|:---------|:-----------------------------------------------------|:---------|:-------------|:--------|
 | id       | A self-assigned identifier (should be unique in env) | yes      | string       |         |
 | cidr     | CIDR for this subnet                                 | yes      | string       |         |
 | dns      | List of DNS URLs                                     | yes      | string array |         |
@@ -435,25 +432,21 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 | domain   | Client DNS domain                                    | no       | string       |         |
 | gateway  | Gateway for this subnet                              | no       | string       |         |
 | vlan     | VLAN for the subnet                                  | no       | integer      |       1 |
-```
 
 #### host
 
-```
 |    name    |                    description                     | required |   schema  | default |
-|------------|----------------------------------------------------|----------|-----------|---------|
+|:-----------|:---------------------------------------------------|:---------|:----------|:--------|
 | name       | Name for the host machine.                         | yes      | string    |         |
 | interfaces | Network intefaces for this host                    | no       | interface |         |
 | metadata   | unstructured, host-specific information            | no       | object    |         |
 | workflow   | The ID of the workflow used to provision this host | yes      | string    |         |
 
-```
 
 #### interface
 
-```
 |     name    |                        description                         | required |     schema    | default |
-|-------------|------------------------------------------------------------|----------|---------------|---------|
+|:------------|:-----------------------------------------------------------|:---------|:--------------|:--------|
 | type        | Interface type. Physical/bmc                               | yes      | string        |         |
 | mac         | MAC address identifying this interface                     | yes      | string        |         |
 | subnet      | ID of subnet (specified in env)                            | yes      | string        |         |
@@ -464,17 +457,13 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 | ipv6        | IPv6 address                                               | no       | string        |         |
 | hostname    | Hostname for machine                                       | no       | string        |         |
 
-```
-
 #### interface.bmc
 
-```
-|   name   |                    description                     | required | schema | default |
-|----------|----------------------------------------------------|----------|--------|---------|
-| type     | Specifies protocol type. IPMI/CIMC                 | yes      | string |         |
-| username | User for managing BMC                              | yes      | string |         |
-| password | Password for specified user                        | yes      | string |         |
-```
+|    name   |                     description                     |  required |  schema |  default |
+|:----------|:----------------------------------------------------|:----------|:--------|:---------|
+| type      | Specifies protocol type. IPMI/CIMC                  | yes       | string  |          |
+| username  | User for managing BMC                               | yes       | string  |          |
+| password  | Password for specified user                         | yes       | string  |          |
 
 ### os
 
@@ -513,16 +502,12 @@ Kernel and initrd values may be templated. They will be rendered on-demand for i
 
 A workflow chains multiple boots together to provision a host. The workflow is also responsible for specifying basic policy for rebutting hosts that use it.
 
-```
-|      name      |                       description                       | required |        schema        | default |
-|----------------|---------------------------------------------------------|----------|----------------------|---------|
-| id             | self-assigned identifier                                | yes      | string               |         |
-| workflow       | Series of boots to provision the host                   | yes      | workflow.stage array |         |
-| max_concurrent | Max simultaneous hosts actively provisioning            | no       | int                  |       0 |
-| safe_deps      | IDs of safe dependency workflows                        | no       | string array         |         |
-| block_deps     | IDs of blocking dependency workflows                    | no       | string array         |         |
-| validate_on    | IDs of workflows that cause this workflow to revalidate | no       | string array         |         |
-| max_fail       | How many hosts can fail before halted                   | no       | int                  |       0 |
-```
-
-
+|      name       |                       description                        | required  |        schema         | default  |
+|:----------------|:---------------------------------------------------------|:----------|:----------------------|:---------|
+| id              | self-assigned identifier                                 | yes       | string                |          |
+| workflow        | Series of boots to provision the host                    | yes       | workflow.stage array  |          |
+| max_concurrent  | Max simultaneous hosts actively provisioning             | no        | int                   |       0  |
+| safe_deps       | IDs of safe dependency workflows                         | no        | string array          |          |
+| block_deps      | IDs of blocking dependency workflows                     | no        | string array          |          |
+| validate_on     | IDs of workflows that cause this workflow to revalidate  | no        | string array          |          |
+| max_fail        | How many hosts can fail before halted                    | no        | int                   |       0  |
