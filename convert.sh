@@ -5,10 +5,10 @@ TMP=$(mktemp -d -p "/drone")
 git clone -b gh-pages $(git config remote.origin.url) "${TMP}"
 
 TARGET="${TMP}/docs/current"
-if [[ $DRONE_BRANCH != master ]]; then
-    TARGET="${TMP}/docs/branches/${DRONE_BRANCH/\//--}"
-elif [[ -n ${DRONE_TAG:-} ]]; then
+if [[ -n ${DRONE_TAG:-} ]]; then
     TARGET="${TMP}/docs/${DRONE_TAG}"
+elif [[ $DRONE_BRANCH != master ]]; then
+    TARGET="${TMP}/docs/branches/${DRONE_BRANCH/\//--}"
 fi
 
 mkdir -vp "${TARGET}"
