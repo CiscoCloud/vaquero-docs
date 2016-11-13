@@ -42,7 +42,7 @@ Lets look at the ENVIRONMENT variables that can be configured for the VM infrast
 
   - `VS_NUM`: An integer number of how many vaquero server VMs to start. Default: 1 (this can be used for standalone mode)
   - `VA_NUM`: An integer number of how many vaquero agent VMs to start
-  - `V_DEV`: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling `V_DEV` allocates 2 vCPUs and 2048MBs of RAM.
+  - `V_DEV`: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling `V_DEV` allocates 2 vCPUs and 2048MBs of RAM. Vagrant will also attempt to sync the host `GOPATH` to `/home/vagrant/go`
   - `V_RELAY`: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed `gateway` machine that will forward packets between the subnets. *The data model must be updated to reflect the new IPs / subnet. The fastest way to run with relay is using the local_dir and run the `provision_scripts/relay-setup.sh` script, run `/provision_scripts/relay-reset.sh` to bring the data model back to the start state. If you want to do it via github, you must make your own repo and update the server and agent IPs.*
 
 By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
@@ -59,18 +59,6 @@ By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
 
   For example: `VS_NUM=3 vagrant up` will stand up 3 vaquero server VMs. Running `vagrant destroy -f` will only destroy the first instance, you must run `VS_NUM=3 vagrant destroy -f` to clean up all of them. Include *every* ENV var for *every* vagrant command, even things like `vagrant ssh vs-3`.
 
-#### b) Update Data Model to Reflect VM IPs
-
-Once vaquero is running, you must update the server and agent IP addresses in the vagrant `local` dir, which is accessible through `vagrant ssh <machine_name>`. Vaquero servers can run on IPs `10.10.*.[5-7]`, and agents can run on IPs `10.10.*.[8-10]`.
- It's important that only the local DM is updated, rather than the entire source of truth. For instance, given a multi-agent configuration, every site's `env.yaml` should get updated as follows, where the last digit can be an integer from 8-10:  
-
-        agent:
-         url: "http://10.10.10.8"
-
-
-Once the data model is updated, you should see the change reflected in the vaquero logs. If no log output for the change is present, ensure you are on a proper log-level (eg. INFO).
-
-
 ## 3. pull the latest docker image
 
 `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
@@ -82,6 +70,8 @@ We default DHCP to run in server mode. If you want to run vaquero in DHCP proxy 
 
 See the different [configurations](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config).
 
+### Standalone mode
+
 ##### git SoT:
 
 *You must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config) for this to work.*
@@ -92,6 +82,20 @@ See the different [configurations](https://github.com/CiscoCloud/vaquero-vagrant
 
 `docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
+
+### separate server and agent
+
+1. Update data model to reflect VM IPs. Look at the site's `env.yml` and ensure the agent IP is correct. See the `vagrant VM table` below to see IPs for `vs` and `va` VMs
+
+2. Ensure server configuration and agent configuration match the IPs of the VM's. We have provided two example configs for separate server and agent using the local dir SoT in the vagrant repo. `VS_NUM=1 VA_NUM=1`
+
+##### separate server dir SoT
+
+`docker run -v /vagrant/config/dir-sot-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+
+##### separate agent dir SoT
+
+`docker run -v /vagrant/config/dir-sot-agent.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
 ## demo lab
 
