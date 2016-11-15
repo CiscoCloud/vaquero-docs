@@ -58,39 +58,34 @@ ServerApi:
   Port: 24601
 AgentApi:
   InsecureAddr: "127.0.0.1"
-  InsecurePort: 24602
+  InsecurePort: 24604
 AssetServer:
   Addr: "127.0.0.1"
-  Port: 8080
-  BaseDir: "/tmp/vaquero/files"
+  Port: 24602
+  BaseDir: "/var/vaquero/files"
   Scheme: http
 DHCPMode: server
+SavePath: "/var/vaquero"
 Etcd:
   Endpoints:
   - "http://127.0.0.1:2379"
   Timeout: 5
   Retry: 3
-SavePath: "/tmp/vaquero"
 Gitter:
   Endpoint: "/postreceive"
   Timeout: 2
   Addr: "127.0.0.1"
-  Port: 9090
+  Port: 24603
 GitHook:
   - ID: "vaquero-local"
-    Token: <GIT_TOKEN>
+    Token: eb1b7577029d2a032ed6db405fdf163506d03861
     URL: "https://github.com/CiscoCloud/vaquero-examples"
-    Secret: <GIT_SECRET>
-LocalDir:
-  PollInterval: 10
+    Secret: supersecretcode
 SoT:
 - Git:
     HookID: "vaquero-local"
     ID: "vaquero-test"
     Branch: local
-- Local:
-    ID: vaquero-local2
-    Root: /vagrant/local
 Log:
   Level: info
   Location: stdout
@@ -106,8 +101,8 @@ Log:
 - `Gitter`: Configuration for listening to git webhooks.
 - `GitHook`: An array for all githooks to listen to.
 - `SoT:` An array for specific sources of truth. Git updater receives webhooks from github. Local: will use a local directory to update.
-- `Etcd`: (for high-availability servers only) specifies the information used to connect a running CoreOS Etcd instance to vaquero's own Etcd client. Etcd is used to keep track of state, data models, and other information in a persistent, distributed KV store.
-- `DHCPMode`: Leaving the DHCPMode field empty will disable all DHCP Vaquero functionality. Using "proxy" enables ProxyDHCP. ProxyDHCP works with an existing DHCP Server to provide PXEBoot functionality, while leaving the managing and assigning of IP addresses to the other DHCP Server. Only enable this if you already have a DHCP server with entries for all the hosts in your Data Model. Using "server" runs Vaquero as a DHCP server.  Vaquero does not manage free address pools or leases; it simply assigns based of the static configuration defined in the data model.
+- `Etcd`: (for a vaquero server cluster / HA) specifies the information used to connect a running CoreOS Etcd instance to vaquero's own Etcd client. Etcd is used to keep track of state, data models, and other information in a persistent, distributed KV store.
+- `DHCPMode`: Leaving the DHCPMode field empty will disable all DHCP Vaquero functionality. "Proxy" enables ProxyDHCP, which works with an existing DHCP Server to provide PXEBoot functionality. (Only enable proxy if you already have a DHCP server with entries for all the hosts in your Data Model.) Using "server" runs Vaquero as a DHCP server.
 
 
 ### Configuration Fields In Detail
@@ -116,38 +111,37 @@ Log:
 
 | Mode  | Name | Required?  | Description  | Default  |
 |---|---|---|---|---|
-| All | Log/Level  | no  | Minimum Logging Level (debug, info, warning, error, fatal, panic)  |info   |  
+| All | Log/Level  | no  | Minimum Logging Level (debug, info, warning, error, fatal, panic)  | info   |  
 | All  | Log/Location  | no  | Place to log: (stdout, stderr, `filename`)  | stdout  |
 |  All | Log/Type  | no  | Text / JSON output (text/json)  | text  |
-|  All | SavePath  | no  |  Base folder for vaquero save files | /tmp/vaquero  |
+|  All | SavePath  | no  |  Base folder for vaquero save files | /var/vaquero  |
 |  Agent | AgentAPI/InsecureAddr  | no  |  IP Address on which to serve the agent REST API | 127.0.0.1  |
-|  Agent | AgentAPI/InsecurePort  | no  |  Port on which to serve the agent REST API | 80 |
-|  Agent | Assets/CdnScheme  | no  |  The IP Address of the cdn endpoint to reverse proxy to | http |
+|  Agent | AgentAPI/InsecurePort  | no  |  Port on which to serve the agent REST API | 24602 |
+|  Agent | Assets/CdnScheme  | no  |  Cdn scheme | http |
+|  Agent | Assets/CdnAddr  | no  |  The address of the cdn endpoint to reverse proxy to | http |
 |  Agent | Assets/CdnPort  | no  |  The port of the cdn endpoint to reverse proxy to | **?** |
 |  Agent | AssetServer/Addr | no  |  The IP Address to serve the agent asset server | 127.0.0.1 |
 |  Agent | AssetServer/Port | no  |  The port to serve the agent asset server | 20468 |
 |  Agent | AssetServer/Scheme | no  |  Asset server scheme : http / https | http |
 |  Agent | AssetServer/BaseDir | no  |  Agent directory to serve files from | /tmp/vaquero/files |
-|  Agent | DHCPMode | no  |  Agent DHCP Mode: authoritative / proxy | server |
-|  Agent | DHCPMode | no  |  Agent DHCP Mode: authoritative / proxy | server |
-|  Server | ServerAPI/Address | no  |  The IP Address to serve the server REST API on | 127.0.0.2 |
-|  Server | ServerAPI/Port | no  |  The port to serve the server REST API on | 81 |
-|  Server | Gitter/Endpoint | no  |  githook endpoint to receive webhooks | /postreceive |
-|  Server | Gitter/Address | no  |  githook listening address | 0.0.0.0 |
-|  Server | Gitter/Port | no  |  githook listening port | 82 |
-|  Server | Gitter/Timeout | no  |  githook timeout, in seconds | 2 |
+|  Agent | DHCPMode | no  |  Agent DHCP Mode: server / proxy | server |
+|  Agent, Server | Gitter/Endpoint | no  |  githook endpoint to receive webhooks | /postreceive |
+|  Agent, Server | Gitter/Address | no  |  githook listening address | 127.0.0.1 |
+|  Agent, Server | Gitter/Port | no  |  githook listening port | 24603 |
+|  Agent, Server | Gitter/Timeout | no  |  githook timeout, in seconds | 2 |
+|  Agent, Server | GitHook/ID | no  |  githook ID | none |
+|  Agent, Server | GitHook/Token | no  | hook token, generated on github/settings | none |
+|  Agent, Server | GitHook/Token | no  | hook token, generated on github/settings | none |
+|  Agent, Server | GitHook/URL | no  | url for githook | none |
+|  Agent, Server | GitHook/Secret | no  | secret for githook | none |
 |  Server | Etcd/Endpoints | no  |  s/etcd database endpoints/etcd initial cluster endpoints: format- e1,e2,e3 | 127.0.0.1:2379 |
+|  Server | ServerAPI/Address | no  |  The IP Address to serve the server REST API on | 127.0.0.1 |
+|  Server | ServerAPI/Port | no  |  The port to serve the server REST API on | 24601 |
 |  Server | Etcd/Retry | no  |  number of retries for etcd operations | 3 |
 |  Server | Etcd/Timeout | no  |  etcd dial and request timeout, in seconds | 5 |
-|  Server | GitHook/ID | no  |  githook ID | none |
-|  Server | GitHook/Token | no  | hook token, generated on github/settings | none |
-|  Server | GitHook/Token | no  | hook token, generated on github/settings | none |
-|  Server | GitHook/URL | no  | url for githook | none |
-|  Server | GitHook/Secret | no  | secret for githook | none |
-|  Server | LocalDir/PollInterval | no  | number of seconds between checks to that directory for updates | 10 |
-|  Server | SoT/Git/HookID | no  | git hookID | none |
-|  Server | SoT/Git/ID | no  | ID (?) | none |
-|  Server | SoT/Git/Branch | no  | SoT branch name | none |
+|  Server | SoT/Git/HookID | yes  | git hookID | none |
+|  Server | SoT/Git/ID | yes  | ID (?) | none |
+|  Server | SoT/Git/Branch | yes  | SoT branch name | none |
 
 
 ## Running Vaquero from the container
