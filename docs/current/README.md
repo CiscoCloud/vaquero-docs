@@ -51,7 +51,7 @@ Vaquero can run in multiple modes: `server`, `agent`, and `standalone`. "Standal
 See the [architecture page](https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html) for more details about server and agent.
 
 ************************************************************
-**sample-standalone-config.yaml`:**
+**sample-standalone-config.yaml:**
 ```
 ServerApi:
   Address: "127.0.0.1"
@@ -115,6 +115,15 @@ Log:
 | All  | Log/Location  | no  | Place to log: (stdout, stderr, `filename`)  | stdout  |
 |  All | Log/Type  | no  | Text / JSON output (text/json)  | text  |
 |  All | SavePath  | no  |  Base folder for vaquero save files | /var/vaquero  |
+|  All | Gitter/Endpoint | no  |  githook endpoint to receive webhooks | /postreceive |
+|  All | Gitter/Address | no  |  githook listening address | 127.0.0.1 |
+|  All | Gitter/Port | no  |  githook listening port | 24603 |
+|  All | Gitter/Timeout | no  |  githook timeout, in seconds | 2 |
+|  All | GitHook/ID | no  |  githook ID | none |
+|  All | GitHook/Token | no  | hook token, generated on github/settings | none |
+|  All | GitHook/Token | no  | hook token, generated on github/settings | none |
+|  All | GitHook/URL | no  | url for githook | none |
+|  All | GitHook/Secret | no  | secret for githook | none |
 |  Agent | AgentAPI/InsecureAddr  | no  |  IP Address on which to serve the agent REST API | 127.0.0.1  |
 |  Agent | AgentAPI/InsecurePort  | no  |  Port on which to serve the agent REST API | 24602 |
 |  Agent | Assets/CdnScheme  | no  |  Cdn scheme | http |
@@ -125,15 +134,6 @@ Log:
 |  Agent | AssetServer/Scheme | no  |  Asset server scheme : http / https | http |
 |  Agent | AssetServer/BaseDir | no  |  Agent directory to serve files from | /tmp/vaquero/files |
 |  Agent | DHCPMode | no  |  Agent DHCP Mode: server / proxy | server |
-|  Agent, Server | Gitter/Endpoint | no  |  githook endpoint to receive webhooks | /postreceive |
-|  Agent, Server | Gitter/Address | no  |  githook listening address | 127.0.0.1 |
-|  Agent, Server | Gitter/Port | no  |  githook listening port | 24603 |
-|  Agent, Server | Gitter/Timeout | no  |  githook timeout, in seconds | 2 |
-|  Agent, Server | GitHook/ID | no  |  githook ID | none |
-|  Agent, Server | GitHook/Token | no  | hook token, generated on github/settings | none |
-|  Agent, Server | GitHook/Token | no  | hook token, generated on github/settings | none |
-|  Agent, Server | GitHook/URL | no  | url for githook | none |
-|  Agent, Server | GitHook/Secret | no  | secret for githook | none |
 |  Server | Etcd/Endpoints | no  |  s/etcd database endpoints/etcd initial cluster endpoints: format- e1,e2,e3 | 127.0.0.1:2379 |
 |  Server | ServerAPI/Address | no  |  The IP Address to serve the server REST API on | 127.0.0.1 |
 |  Server | ServerAPI/Port | no  |  The port to serve the server REST API on | 24601 |
