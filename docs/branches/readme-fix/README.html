@@ -93,12 +93,242 @@ Log:
 <li><code>SavePath</code>: The Vaquero server location to save local configurations on disk.</li>
 <li><code>Gitter</code>: Configuration for listening to git webhooks.</li>
 <li><code>GitHook</code>: An array for all githooks to listen to.</li>
-<li><code>SoT:</code> An array for specific sources of truth. Git updater receives webhooks from github. Local: will use a local directory to update. /<em>- <code>Etcd</code>: (for a vaquero server cluster / HA) specifies the information used to connect a running CoreOS Etcd instance to vaquero's own Etcd client. Etcd is used to keep track of state, data models, and other information in a persistent, distributed KV store.</em>/</li>
+<li><code>SoT:</code> An array for specific sources of truth. Git updater receives webhooks from github. Local: will use a local directory to update.</li>
+<li><code>Etcd</code>: (for a vaquero server cluster / HA) specifies the information used to connect a running CoreOS Etcd instance to vaquero's own Etcd client. Etcd is used to keep track of state, data models, and other information in a persistent, distributed KV store.</li>
 <li><code>DHCPMode</code>: Leaving the DHCPMode field empty will disable all DHCP Vaquero functionality. &quot;Proxy&quot; enables ProxyDHCP, which works with an existing DHCP Server to provide PXEBoot functionality. (Only enable proxy if you already have a DHCP server with entries for all the hosts in your Data Model.) Using &quot;server&quot; runs Vaquero as a DHCP server.</li>
 </ul>
 <h3 id="configuration-fields-in-detail">Configuration Fields In Detail</h3>
 <p>(Fields indicated as &quot;Agent&quot; and &quot;Server&quot; are by default included in Standalone mode. Forward-slashes in field names indicate YAML hierarchy)</p>
-<p>| Mode | Name | Required? | Description | Default | |---|---|---|---|---| | All | Log/Level | no | Minimum Logging Level (debug, info, warning, error, fatal, panic) | info |<br />| All | Log/Location | no | Place to log: (stdout, stderr, <code>filename</code>) | stdout | | All | Log/Type | no | Text / JSON output (text/json) | text | | All | SavePath | no | Base folder for vaquero save files | /var/vaquero | | All | Gitter/Endpoint | no | githook endpoint to receive webhooks | /postreceive | | All | Gitter/Address | no | githook listening address | 127.0.0.1 | | All | Gitter/Port | no | githook listening port | 24603 | | All | Gitter/Timeout | no | githook timeout, in seconds | 2 | | All | GitHook/ID | no | githook ID | none | | All | GitHook/Token | no | hook token, generated on github/settings | none | | All | GitHook/Token | no | hook token, generated on github/settings | none | | All | GitHook/URL | no | url for githook | none | | All | GitHook/Secret | no | secret for githook | none | | Agent | AgentAPI/InsecureAddr | no | IP Address on which to serve the agent REST API | 127.0.0.1 | | Agent | AgentAPI/InsecurePort | no | Port on which to serve the agent REST API | 24602 | | Agent | Assets/CdnScheme | no | Cdn scheme | http | | Agent | Assets/CdnAddr | no | The address of the cdn endpoint to reverse proxy to | http | | Agent | Assets/CdnPort | no | The port of the cdn endpoint to reverse proxy to | <strong>?</strong> | | Agent | AssetServer/Addr | no | The IP Address to serve the agent asset server | 127.0.0.1 | | Agent | AssetServer/Port | no | The port to serve the agent asset server | 20468 | | Agent | AssetServer/Scheme | no | Asset server scheme : http / https | http | | Agent | AssetServer/BaseDir | no | Agent directory to serve files from | /tmp/vaquero/files | | Agent | DHCPMode | no | Agent DHCP Mode: server / proxy | server | | Server | ServerAPI/Address | no | The IP Address to serve the server REST API on | 127.0.0.1 | | Server | ServerAPI/Port | no | The port to serve the server REST API on | 24601 | /<em>| Server | Etcd/Endpoints | no | s/etcd database endpoints/etcd initial cluster endpoints: format- e1,e2,e3 | 127.0.0.1:2379 | | Server | Etcd/Retry | no | number of retries for etcd operations | 3 | | Server | Etcd/Timeout | no | etcd dial and request timeout, in seconds | 5 |</em>/ | Server | SoT/Git/HookID | yes | git hookID | none | | Server | SoT/Git/ID | yes | ID (?) | none | | Server | SoT/Git/Branch | yes | SoT branch name | none |</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Mode</th>
+<th align="left">Name</th>
+<th align="left">Required?</th>
+<th align="left">Description</th>
+<th align="left">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">All</td>
+<td align="left">Log/Level</td>
+<td align="left">no</td>
+<td align="left">Minimum Logging Level (debug, info, warning, error, fatal, panic)</td>
+<td align="left">info</td>
+</tr>
+<tr class="even">
+<td align="left">All</td>
+<td align="left">Log/Location</td>
+<td align="left">no</td>
+<td align="left">Place to log: (stdout, stderr, <code>filename</code>)</td>
+<td align="left">stdout</td>
+</tr>
+<tr class="odd">
+<td align="left">All</td>
+<td align="left">Log/Type</td>
+<td align="left">no</td>
+<td align="left">Text / JSON output (text/json)</td>
+<td align="left">text</td>
+</tr>
+<tr class="even">
+<td align="left">All</td>
+<td align="left">SavePath</td>
+<td align="left">no</td>
+<td align="left">Base folder for vaquero save files</td>
+<td align="left">/var/vaquero</td>
+</tr>
+<tr class="odd">
+<td align="left">All</td>
+<td align="left">Gitter/Endpoint</td>
+<td align="left">no</td>
+<td align="left">githook endpoint to receive webhooks</td>
+<td align="left">/postreceive</td>
+</tr>
+<tr class="even">
+<td align="left">All</td>
+<td align="left">Gitter/Address</td>
+<td align="left">no</td>
+<td align="left">githook listening address</td>
+<td align="left">127.0.0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">All</td>
+<td align="left">Gitter/Port</td>
+<td align="left">no</td>
+<td align="left">githook listening port</td>
+<td align="left">24603</td>
+</tr>
+<tr class="even">
+<td align="left">All</td>
+<td align="left">Gitter/Timeout</td>
+<td align="left">no</td>
+<td align="left">githook timeout, in seconds</td>
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">All</td>
+<td align="left">GitHook/ID</td>
+<td align="left">no</td>
+<td align="left">githook ID</td>
+<td align="left">none</td>
+</tr>
+<tr class="even">
+<td align="left">All</td>
+<td align="left">GitHook/Token</td>
+<td align="left">no</td>
+<td align="left">hook token, generated on github/settings</td>
+<td align="left">none</td>
+</tr>
+<tr class="odd">
+<td align="left">All</td>
+<td align="left">GitHook/Token</td>
+<td align="left">no</td>
+<td align="left">hook token, generated on github/settings</td>
+<td align="left">none</td>
+</tr>
+<tr class="even">
+<td align="left">All</td>
+<td align="left">GitHook/URL</td>
+<td align="left">no</td>
+<td align="left">url for githook</td>
+<td align="left">none</td>
+</tr>
+<tr class="odd">
+<td align="left">All</td>
+<td align="left">GitHook/Secret</td>
+<td align="left">no</td>
+<td align="left">secret for githook</td>
+<td align="left">none</td>
+</tr>
+<tr class="even">
+<td align="left">Agent</td>
+<td align="left">AgentAPI/InsecureAddr</td>
+<td align="left">no</td>
+<td align="left">IP Address on which to serve the agent REST API</td>
+<td align="left">127.0.0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">Agent</td>
+<td align="left">AgentAPI/InsecurePort</td>
+<td align="left">no</td>
+<td align="left">Port on which to serve the agent REST API</td>
+<td align="left">24602</td>
+</tr>
+<tr class="even">
+<td align="left">Agent</td>
+<td align="left">Assets/CdnScheme</td>
+<td align="left">no</td>
+<td align="left">Cdn scheme</td>
+<td align="left">http</td>
+</tr>
+<tr class="odd">
+<td align="left">Agent</td>
+<td align="left">Assets/CdnAddr</td>
+<td align="left">no</td>
+<td align="left">The address of the cdn endpoint to reverse proxy to</td>
+<td align="left">http</td>
+</tr>
+<tr class="even">
+<td align="left">Agent</td>
+<td align="left">Assets/CdnPort</td>
+<td align="left">no</td>
+<td align="left">The port of the cdn endpoint to reverse proxy to</td>
+<td align="left"><strong>?</strong></td>
+</tr>
+<tr class="odd">
+<td align="left">Agent</td>
+<td align="left">AssetServer/Addr</td>
+<td align="left">no</td>
+<td align="left">The IP Address to serve the agent asset server</td>
+<td align="left">127.0.0.1</td>
+</tr>
+<tr class="even">
+<td align="left">Agent</td>
+<td align="left">AssetServer/Port</td>
+<td align="left">no</td>
+<td align="left">The port to serve the agent asset server</td>
+<td align="left">20468</td>
+</tr>
+<tr class="odd">
+<td align="left">Agent</td>
+<td align="left">AssetServer/Scheme</td>
+<td align="left">no</td>
+<td align="left">Asset server scheme : http / https</td>
+<td align="left">http</td>
+</tr>
+<tr class="even">
+<td align="left">Agent</td>
+<td align="left">AssetServer/BaseDir</td>
+<td align="left">no</td>
+<td align="left">Agent directory to serve files from</td>
+<td align="left">/tmp/vaquero/files</td>
+</tr>
+<tr class="odd">
+<td align="left">Agent</td>
+<td align="left">DHCPMode</td>
+<td align="left">no</td>
+<td align="left">Agent DHCP Mode: server / proxy</td>
+<td align="left">server</td>
+</tr>
+<tr class="even">
+<td align="left">Server</td>
+<td align="left">ServerAPI/Address</td>
+<td align="left">no</td>
+<td align="left">The IP Address to serve the server REST API on</td>
+<td align="left">127.0.0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">Server</td>
+<td align="left">ServerAPI/Port</td>
+<td align="left">no</td>
+<td align="left">The port to serve the server REST API on</td>
+<td align="left">24601</td>
+</tr>
+<tr class="even">
+<td align="left">Server</td>
+<td align="left">Etcd/Endpoints</td>
+<td align="left">no</td>
+<td align="left">s/etcd database endpoints/etcd initial cluster endpoints: format- e1,e2,e3</td>
+<td align="left">127.0.0.1:2379</td>
+</tr>
+<tr class="odd">
+<td align="left">Server</td>
+<td align="left">Etcd/Retry</td>
+<td align="left">no</td>
+<td align="left">number of retries for etcd operations</td>
+<td align="left">3</td>
+</tr>
+<tr class="even">
+<td align="left">Server</td>
+<td align="left">Etcd/Timeout</td>
+<td align="left">no</td>
+<td align="left">etcd dial and request timeout, in seconds</td>
+<td align="left">5</td>
+</tr>
+<tr class="odd">
+<td align="left">Server</td>
+<td align="left">SoT/Git/HookID</td>
+<td align="left">yes</td>
+<td align="left">git hookID</td>
+<td align="left">none</td>
+</tr>
+<tr class="even">
+<td align="left">Server</td>
+<td align="left">SoT/Git/ID</td>
+<td align="left">yes</td>
+<td align="left">ID (?)</td>
+<td align="left">none</td>
+</tr>
+<tr class="odd">
+<td align="left">Server</td>
+<td align="left">SoT/Git/Branch</td>
+<td align="left">yes</td>
+<td align="left">SoT branch name</td>
+<td align="left">none</td>
+</tr>
+</tbody>
+</table>
 <h2 id="running-vaquero-from-the-container">Running Vaquero from the container</h2>
 <p><a href="https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero">Bintray Docker Images</a></p>
 <ol style="list-style-type: decimal">
