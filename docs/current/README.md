@@ -109,40 +109,39 @@ Log:
 
 (Fields indicated as "Agent" and "Server" are by default included in Standalone mode. Forward-slashes in field names indicate YAML hierarchy)
 
-| Mode  | Name | Required?  | Description  | Default  |
-|---|---|---|---|---|
-| All | Log/Level  | no  | Minimum Logging Level (debug, info, warning, error, fatal, panic)  | info   |  
-| All  | Log/Location  | no  | Place to log: (stdout, stderr, `filename`)  | stdout  |
-|  All | Log/Type  | no  | Text / JSON output (text/json)  | text  |
-|  All | SavePath  | no  |  Base folder for vaquero save files | /var/vaquero  |
-|  All | Gitter/Endpoint | no  |  githook endpoint to receive webhooks | /postreceive |
-|  All | Gitter/Address | no  |  githook listening address | 127.0.0.1 |
-|  All | Gitter/Port | no  |  githook listening port | 24603 |
-|  All | Gitter/Timeout | no  |  githook timeout, in seconds | 2 |
-|  All | GitHook/ID | no  |  githook ID | none |
-|  All | GitHook/Token | no  | hook token, generated on github/settings | none |
-|  All | GitHook/Token | no  | hook token, generated on github/settings | none |
-|  All | GitHook/URL | no  | url for githook | none |
-|  All | GitHook/Secret | no  | secret for githook | none |
-|  Agent | AgentAPI/InsecureAddr  | no  |  IP Address on which to serve the agent REST API | 127.0.0.1  |
-|  Agent | AgentAPI/InsecurePort  | no  |  Port on which to serve the agent REST API | 24602 |
-|  Agent | Assets/CdnScheme  | no  |  Cdn scheme | http |
-|  Agent | Assets/CdnAddr  | no  |  The address of the cdn endpoint to reverse proxy to | http |
-|  Agent | Assets/CdnPort  | no  |  The port of the cdn endpoint to reverse proxy to | **?** |
-|  Agent | AssetServer/Addr | no  |  The IP Address to serve the agent asset server | 127.0.0.1 |
-|  Agent | AssetServer/Port | no  |  The port to serve the agent asset server | 20468 |
-|  Agent | AssetServer/Scheme | no  |  Asset server scheme : http / https | http |
-|  Agent | AssetServer/BaseDir | no  |  Agent directory to serve files from | /tmp/vaquero/files |
-|  Agent | DHCPMode | no  |  Agent DHCP Mode: server / proxy | server |
-|  Server | ServerAPI/Address | no  |  The IP Address to serve the server REST API on | 127.0.0.1 |
-|  Server | ServerAPI/Port | no  |  The port to serve the server REST API on | 24601 |
-|  Server | Etcd/Endpoints | no  |  s/etcd database endpoints/etcd initial cluster endpoints: format- e1,e2,e3 | 127.0.0.1:2379 |
-|  Server | Etcd/Retry | no  |  number of retries for etcd operations | 3 |
-|  Server | Etcd/Timeout | no  |  etcd dial and request timeout, in seconds | 5 |
-|  Server | SoT/Git/HookID | yes  | git hookID | none |
-|  Server | SoT/Git/ID | yes  | ID (?) | none |
-|  Server | SoT/Git/Branch | yes  | SoT branch name | none |
-
+| Mode   | Name                  | Required? | Description                                                                | Default            |
+|--------|-----------------------|-----------|----------------------------------------------------------------------------|--------------------|
+| All    | Log/Level             | no        | Minimum Logging Level (debug, info, warning, error, fatal, panic)          | info               |
+| All    | Log/Location          | no        | Place to log: (stdout, stderr, `filename`)                                 | stdout             |
+| All    | Log/Type              | no        | Text / JSON output (text/json)                                             | text               |
+| All    | SavePath              | no        | Base folder for vaquero save files                                         | /var/vaquero       |
+| All    | Gitter/Endpoint       | no        | githook endpoint to receive webhooks                                       | /postreceive       |
+| All    | Gitter/Address        | no        | githook listening address                                                  | 127.0.0.1          |
+| All    | Gitter/Port           | no        | githook listening port                                                     | 24603              |
+| All    | Gitter/Timeout        | no        | githook timeout, in seconds                                                | 2                  |
+| All    | GitHook/ID            | no        | githook ID                                                                 | none               |
+| All    | GitHook/Token         | no        | hook token, generated on github/settings                                   | none               |
+| All    | GitHook/Token         | no        | hook token, generated on github/settings                                   | none               |
+| All    | GitHook/URL           | no        | url for githook                                                            | none               |
+| All    | GitHook/Secret        | no        | secret for githook                                                         | none               |
+| Agent  | AgentAPI/InsecureAddr | no        | IP Address on which to serve the agent REST API                            | 127.0.0.1          |
+| Agent  | AgentAPI/InsecurePort | no        | Port on which to serve the agent REST API                                  | 24602              |
+| Agent  | Assets/CdnScheme      | no        | Cdn scheme                                                                 | http               |
+| Agent  | Assets/CdnAddr        | no        | The address of the cdn endpoint to reverse proxy to                        | http               |
+| Agent  | Assets/CdnPort        | no        | The port of the cdn endpoint to reverse proxy to                           | **?**              |
+| Agent  | AssetServer/Addr      | no        | The IP Address to serve the agent asset server                             | 127.0.0.1          |
+| Agent  | AssetServer/Port      | no        | The port to serve the agent asset server                                   | 20468              |
+| Agent  | AssetServer/Scheme    | no        | Asset server scheme : http / https                                         | http               |
+| Agent  | AssetServer/BaseDir   | no        | Agent directory to serve files from                                        | /tmp/vaquero/files |
+| Agent  | DHCPMode              | no        | Agent DHCP Mode: server / proxy                                            | server             |
+| Server | ServerAPI/Address     | no        | The IP Address to serve the server REST API on                             | 127.0.0.1          |
+| Server | ServerAPI/Port        | no        | The port to serve the server REST API on                                   | 24601              |
+| Server | Etcd/Endpoints        | no        | s/etcd database endpoints/etcd initial cluster endpoints: format- e1,e2,e3 | 127.0.0.1:2379     |
+| Server | Etcd/Retry            | no        | number of retries for etcd operations                                      | 3                  |
+| Server | Etcd/Timeout          | no        | etcd dial and request timeout, in seconds                                  | 5                  |
+| Server | SoT/Git/HookID        | yes       | git hookID                                                                 | none               |
+| Server | SoT/Git/ID            | yes       | ID (?)                                                                     | none               |
+| Server | SoT/Git/Branch        | yes       | SoT branch name                                                            | none               |
 
 ## Running Vaquero from the container
 [Bintray Docker Images](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero)
