@@ -79,7 +79,7 @@ Gitter:
   Addr: "127.0.0.1"
   Port: 24603
 GitHook:
-  - ID: "vaquero-local"
+  - ID: "vaquero-master"
     Token: <GIT_TOKEN>
     URL: "https://github.com/CiscoCloud/vaquero-examples"
     Secret: supersecretcode
@@ -103,7 +103,7 @@ Log:
 - `Gitter`: Configuration for listening to git webhooks.
 - `GitHook`: An array for all githooks to listen to.
 - `SoT:` An array for specific sources of truth. Git updater receives webhooks from github. Local: will use a local directory to update.
-- `Etcd`: (for a vaquero server cluster / HA) specifies the information used to connect a running CoreOS Etcd instance to vaquero's own Etcd client. Etcd is used to keep track of state, data models, and other information in a persistent, distributed KV store.
+- `Etcd`: (for a vaquero server cluster / HA) specifies the information used to connect a running etcd cluster to vaquero's own Etcd client. Etcd is used to keep track of state, data models, and other information in a persistent, distributed KV store.
 - `DHCPMode`:Using "server" runs Vaquero as a DHCP server.  Vaquero does not manage free address pools or leases; it simply assigns based of the static configuration defined in the data model. **Note that DHCPMode defaults to server.** Using "proxy" enables ProxyDHCP. ProxyDHCP works with an existing DHCP Server to provide PXEBoot functionality, while leaving the managing and assigning of IP addresses to the other DHCP Server. Only enable this if you already have a DHCP server with entries for all the hosts in your Data Model.
 
 
@@ -118,24 +118,24 @@ Log:
 | All    | Log/Type              | no        | Text / JSON output (text/json)                                             | text               |
 | All    | SavePath              | no        | Base folder for vaquero save files                                         | /var/vaquero       |
 | All    | Gitter/Endpoint       | no        | githook endpoint to receive webhooks                                       | /postreceive       |
-| All    | Gitter/Address        | no        | githook listening address                                                  | 0.0.0.0          |
+| All    | Gitter/Address        | no        | githook listening address                                                  | 127.0.0.1          |
 | All    | Gitter/Port           | no        | githook listening port                                                     | 24603              |
 | All    | Gitter/Timeout        | no        | githook timeout, in seconds                                                | 2                  |
 | All    | GitHook/ID            | no        | githook ID                                                                 | none               |
 | All    | GitHook/Token         | no        | hook token, generated on github/settings                                   | none               |              |
 | All    | GitHook/URL           | no        | url for githook                                                            | none               |
 | All    | GitHook/Secret        | no        | secret for githook                                                         | none               |
-| Agent  | AgentAPI/InsecureAddr | no        | IP Address on which to serve the agent REST API                            | 0.0.0.0          |
+| Agent  | AgentAPI/InsecureAddr | no        | IP Address on which to serve the agent REST API                            | 127.0.0.1          |
 | Agent  | AgentAPI/InsecurePort | no        | Port on which to serve the agent REST API                                  | 24602              |
 | Agent  | Assets/CdnScheme      | no        | Cdn scheme                                                                 | none               |
 | Agent  | Assets/CdnAddr        | no        | The address of the cdn endpoint to reverse proxy to                        | http               |
 | Agent  | Assets/CdnPort        | no        | The port of the cdn endpoint to reverse proxy to                           | 0             |
-| Agent  | AssetServer/Addr      | no        | The IP Address to serve the agent asset server                             | 0.0.0.0          |
+| Agent  | AssetServer/Addr      | no        | The IP Address to serve the agent asset server                             | 127.0.0.1          |
 | Agent  | AssetServer/Port      | no        | The port to serve the agent asset server                                   | 20468              |
 | Agent  | AssetServer/Scheme    | no        | Asset server scheme : http / https                                         | http               |
 | Agent  | AssetServer/BaseDir   | no        | Agent directory to serve files from                                        | /var/vaquero/files |
 | Agent  | DHCPMode              | no        | Agent DHCP Mode: server / proxy                                            | server             |
-| Server | ServerAPI/Address     | no        | The IP Address to serve the server REST API on                             | 0.0.0.0          |
+| Server | ServerAPI/Address     | no        | The IP Address to serve the server REST API on                             | 127.0.0.1          |
 | Server | ServerAPI/Port        | no        | The port to serve the server REST API on                                   | 24601              |
 | Server | Etcd/Endpoints        | no        | s/etcd database endpoints/etcd initial cluster endpoints: format- e1,e2,e3 | 127.0.0.1:2379     |
 | Server | Etcd/Retry            | no        | number of retries for etcd operations                                      | 3                  |
