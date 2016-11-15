@@ -45,7 +45,7 @@ Vaquero README
 <p>Vaquero can run in multiple modes: <code>server</code>, <code>agent</code>, and <code>standalone</code>. &quot;Standalone&quot; refers to running server and agent in the same container. A standalone configuration file, combining information needed to run both agent and server, is shown below.</p>
 <p>See the <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html">architecture page</a> for more details about server and agent.</p>
 <hr />
-<p><strong>sample-standalone-config.yaml`:</strong></p>
+<p><strong>sample-standalone-config.yaml:</strong></p>
 <pre><code>ServerApi:
   Address: &quot;127.0.0.1&quot;
   Port: 24601
@@ -139,137 +139,137 @@ Log:
 <td align="left">/var/vaquero</td>
 </tr>
 <tr class="odd">
-<td align="left">Agent</td>
-<td align="left">AgentAPI/InsecureAddr</td>
-<td align="left">no</td>
-<td align="left">IP Address on which to serve the agent REST API</td>
-<td align="left">127.0.0.1</td>
-</tr>
-<tr class="even">
-<td align="left">Agent</td>
-<td align="left">AgentAPI/InsecurePort</td>
-<td align="left">no</td>
-<td align="left">Port on which to serve the agent REST API</td>
-<td align="left">24602</td>
-</tr>
-<tr class="odd">
-<td align="left">Agent</td>
-<td align="left">Assets/CdnScheme</td>
-<td align="left">no</td>
-<td align="left">Cdn scheme</td>
-<td align="left">http</td>
-</tr>
-<tr class="even">
-<td align="left">Agent</td>
-<td align="left">Assets/CdnAddr</td>
-<td align="left">no</td>
-<td align="left">The address of the cdn endpoint to reverse proxy to</td>
-<td align="left">http</td>
-</tr>
-<tr class="odd">
-<td align="left">Agent</td>
-<td align="left">Assets/CdnPort</td>
-<td align="left">no</td>
-<td align="left">The port of the cdn endpoint to reverse proxy to</td>
-<td align="left"><strong>?</strong></td>
-</tr>
-<tr class="even">
-<td align="left">Agent</td>
-<td align="left">AssetServer/Addr</td>
-<td align="left">no</td>
-<td align="left">The IP Address to serve the agent asset server</td>
-<td align="left">127.0.0.1</td>
-</tr>
-<tr class="odd">
-<td align="left">Agent</td>
-<td align="left">AssetServer/Port</td>
-<td align="left">no</td>
-<td align="left">The port to serve the agent asset server</td>
-<td align="left">20468</td>
-</tr>
-<tr class="even">
-<td align="left">Agent</td>
-<td align="left">AssetServer/Scheme</td>
-<td align="left">no</td>
-<td align="left">Asset server scheme : http / https</td>
-<td align="left">http</td>
-</tr>
-<tr class="odd">
-<td align="left">Agent</td>
-<td align="left">AssetServer/BaseDir</td>
-<td align="left">no</td>
-<td align="left">Agent directory to serve files from</td>
-<td align="left">/tmp/vaquero/files</td>
-</tr>
-<tr class="even">
-<td align="left">Agent</td>
-<td align="left">DHCPMode</td>
-<td align="left">no</td>
-<td align="left">Agent DHCP Mode: server / proxy</td>
-<td align="left">server</td>
-</tr>
-<tr class="odd">
-<td align="left">Agent, Server</td>
+<td align="left">All</td>
 <td align="left">Gitter/Endpoint</td>
 <td align="left">no</td>
 <td align="left">githook endpoint to receive webhooks</td>
 <td align="left">/postreceive</td>
 </tr>
 <tr class="even">
-<td align="left">Agent, Server</td>
+<td align="left">All</td>
 <td align="left">Gitter/Address</td>
 <td align="left">no</td>
 <td align="left">githook listening address</td>
 <td align="left">127.0.0.1</td>
 </tr>
 <tr class="odd">
-<td align="left">Agent, Server</td>
+<td align="left">All</td>
 <td align="left">Gitter/Port</td>
 <td align="left">no</td>
 <td align="left">githook listening port</td>
 <td align="left">24603</td>
 </tr>
 <tr class="even">
-<td align="left">Agent, Server</td>
+<td align="left">All</td>
 <td align="left">Gitter/Timeout</td>
 <td align="left">no</td>
 <td align="left">githook timeout, in seconds</td>
 <td align="left">2</td>
 </tr>
 <tr class="odd">
-<td align="left">Agent, Server</td>
+<td align="left">All</td>
 <td align="left">GitHook/ID</td>
 <td align="left">no</td>
 <td align="left">githook ID</td>
 <td align="left">none</td>
 </tr>
 <tr class="even">
-<td align="left">Agent, Server</td>
+<td align="left">All</td>
 <td align="left">GitHook/Token</td>
 <td align="left">no</td>
 <td align="left">hook token, generated on github/settings</td>
 <td align="left">none</td>
 </tr>
 <tr class="odd">
-<td align="left">Agent, Server</td>
+<td align="left">All</td>
 <td align="left">GitHook/Token</td>
 <td align="left">no</td>
 <td align="left">hook token, generated on github/settings</td>
 <td align="left">none</td>
 </tr>
 <tr class="even">
-<td align="left">Agent, Server</td>
+<td align="left">All</td>
 <td align="left">GitHook/URL</td>
 <td align="left">no</td>
 <td align="left">url for githook</td>
 <td align="left">none</td>
 </tr>
 <tr class="odd">
-<td align="left">Agent, Server</td>
+<td align="left">All</td>
 <td align="left">GitHook/Secret</td>
 <td align="left">no</td>
 <td align="left">secret for githook</td>
 <td align="left">none</td>
+</tr>
+<tr class="even">
+<td align="left">Agent</td>
+<td align="left">AgentAPI/InsecureAddr</td>
+<td align="left">no</td>
+<td align="left">IP Address on which to serve the agent REST API</td>
+<td align="left">127.0.0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">Agent</td>
+<td align="left">AgentAPI/InsecurePort</td>
+<td align="left">no</td>
+<td align="left">Port on which to serve the agent REST API</td>
+<td align="left">24602</td>
+</tr>
+<tr class="even">
+<td align="left">Agent</td>
+<td align="left">Assets/CdnScheme</td>
+<td align="left">no</td>
+<td align="left">Cdn scheme</td>
+<td align="left">http</td>
+</tr>
+<tr class="odd">
+<td align="left">Agent</td>
+<td align="left">Assets/CdnAddr</td>
+<td align="left">no</td>
+<td align="left">The address of the cdn endpoint to reverse proxy to</td>
+<td align="left">http</td>
+</tr>
+<tr class="even">
+<td align="left">Agent</td>
+<td align="left">Assets/CdnPort</td>
+<td align="left">no</td>
+<td align="left">The port of the cdn endpoint to reverse proxy to</td>
+<td align="left"><strong>?</strong></td>
+</tr>
+<tr class="odd">
+<td align="left">Agent</td>
+<td align="left">AssetServer/Addr</td>
+<td align="left">no</td>
+<td align="left">The IP Address to serve the agent asset server</td>
+<td align="left">127.0.0.1</td>
+</tr>
+<tr class="even">
+<td align="left">Agent</td>
+<td align="left">AssetServer/Port</td>
+<td align="left">no</td>
+<td align="left">The port to serve the agent asset server</td>
+<td align="left">20468</td>
+</tr>
+<tr class="odd">
+<td align="left">Agent</td>
+<td align="left">AssetServer/Scheme</td>
+<td align="left">no</td>
+<td align="left">Asset server scheme : http / https</td>
+<td align="left">http</td>
+</tr>
+<tr class="even">
+<td align="left">Agent</td>
+<td align="left">AssetServer/BaseDir</td>
+<td align="left">no</td>
+<td align="left">Agent directory to serve files from</td>
+<td align="left">/tmp/vaquero/files</td>
+</tr>
+<tr class="odd">
+<td align="left">Agent</td>
+<td align="left">DHCPMode</td>
+<td align="left">no</td>
+<td align="left">Agent DHCP Mode: server / proxy</td>
+<td align="left">server</td>
 </tr>
 <tr class="even">
 <td align="left">Server</td>
