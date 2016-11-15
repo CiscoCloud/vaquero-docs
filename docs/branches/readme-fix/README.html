@@ -68,15 +68,15 @@ Gitter:
   Addr: &quot;127.0.0.1&quot;
   Port: 24603
 GitHook:
-  - ID: &quot;vaquero-master&quot;
+  - ID: &quot;vaquero-sot&quot;
     Token: &lt;GIT_TOKEN&gt;
     URL: &quot;https://github.com/CiscoCloud/vaquero-examples&quot;
     Secret: supersecretcode
 SoT:
 - Git:
-    HookID: &quot;vaquero-local&quot;
+    HookID: &quot;vaquero-sot&quot;
     ID: &quot;vaquero-test&quot;
-    Branch: local
+    Branch: master
 Log:
   Level: info
   Location: stdout
@@ -85,7 +85,7 @@ Log:
 <hr />
 <h3 id="configuration-fields-overview">Configuration Fields Overview</h3>
 <ul>
-<li><code>ServerApi</code>: The user api for the server. Currently not implemented.</li>
+<li><code>ServerApi</code>: The user api for the server. Currently in progress.</li>
 <li><code>AgentApi</code>: The vaquero-agent http server used to listen for Vaquero server commands.</li>
 <li><code>AssetServer</code>: The asset server for Vaquero agent used by each booting machine to get unattended scripts and kernels.</li>
 <li><code>SavePath</code>: The Vaquero server location to save local configurations on disk.</li>
@@ -167,28 +167,28 @@ Log:
 <tr class="odd">
 <td align="left">All</td>
 <td align="left">GitHook/ID</td>
-<td align="left">no</td>
+<td align="left">yes, if git SOT</td>
 <td align="left">githook ID</td>
 <td align="left">none</td>
 </tr>
 <tr class="even">
 <td align="left">All</td>
 <td align="left">GitHook/Token</td>
-<td align="left">no</td>
+<td align="left">yes, if git SOT</td>
 <td align="left">hook token, generated on github/settings</td>
 <td align="left">none</td>
 </tr>
 <tr class="odd">
 <td align="left">All</td>
 <td align="left">GitHook/URL</td>
-<td align="left">no</td>
+<td align="left">yes, if git SOT</td>
 <td align="left">url for githook</td>
 <td align="left">none</td>
 </tr>
 <tr class="even">
 <td align="left">All</td>
 <td align="left">GitHook/Secret</td>
-<td align="left">no</td>
+<td align="left">yes, if git SOT</td>
 <td align="left">secret for githook</td>
 <td align="left">none</td>
 </tr>
@@ -300,26 +300,41 @@ Log:
 <tr class="even">
 <td align="left">Server</td>
 <td align="left">SoT/Git/HookID</td>
-<td align="left">yes</td>
+<td align="left">yes, if git SOT</td>
 <td align="left">git hookID</td>
 <td align="left">none</td>
 </tr>
 <tr class="odd">
 <td align="left">Server</td>
 <td align="left">SoT/Git/ID</td>
-<td align="left">yes</td>
+<td align="left">yes, if git SOT</td>
 <td align="left">ID (?)</td>
 <td align="left">none</td>
 </tr>
 <tr class="even">
 <td align="left">Server</td>
 <td align="left">SoT/Git/Branch</td>
-<td align="left">yes</td>
+<td align="left">yes, if git SOT</td>
 <td align="left">SoT branch name</td>
+<td align="left">none</td>
+</tr>
+<tr class="odd">
+<td align="left">Server</td>
+<td align="left">SoT/Local/ID</td>
+<td align="left">yes, if local dir</td>
+<td align="left">local dir ID</td>
+<td align="left">none</td>
+</tr>
+<tr class="even">
+<td align="left">Server</td>
+<td align="left">SoT/Local/Root</td>
+<td align="left">yes, if local dir</td>
+<td align="left">local root dir</td>
 <td align="left">none</td>
 </tr>
 </tbody>
 </table>
+<p> Server | LocalDir/PollInterval | no | number of seconds between checks to that directory for updates | 10 |</p>
 <h2 id="running-vaquero-from-the-container">Running Vaquero from the container</h2>
 <p><a href="https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero">Bintray Docker Images</a></p>
 <ol style="list-style-type: decimal">
