@@ -79,15 +79,15 @@ Gitter:
   Addr: "127.0.0.1"
   Port: 24603
 GitHook:
-  - ID: "vaquero-master"
+  - ID: "vaquero-sot"
     Token: <GIT_TOKEN>
     URL: "https://github.com/CiscoCloud/vaquero-examples"
     Secret: supersecretcode
 SoT:
 - Git:
-    HookID: "vaquero-local"
+    HookID: "vaquero-sot"
     ID: "vaquero-test"
-    Branch: local
+    Branch: master
 Log:
   Level: info
   Location: stdout
@@ -96,7 +96,7 @@ Log:
 ```
 ************************************************************
 ### Configuration Fields Overview
-- `ServerApi`: The user api for the server. Currently not implemented.
+- `ServerApi`: The user api for the server. Currently in progress.
 - `AgentApi`: The vaquero-agent http server used to listen for Vaquero server commands.
 - `AssetServer`: The asset server for Vaquero agent used by each booting machine to get unattended scripts and kernels.
 - `SavePath`: The Vaquero server location to save local configurations on disk.
@@ -121,10 +121,10 @@ Log:
 | All    | Gitter/Address        | no        | githook listening address                                                  | 127.0.0.1          |
 | All    | Gitter/Port           | no        | githook listening port                                                     | 24603              |
 | All    | Gitter/Timeout        | no        | githook timeout, in seconds                                                | 2                  |
-| All    | GitHook/ID            | no        | githook ID                                                                 | none               |
-| All    | GitHook/Token         | no        | hook token, generated on github/settings                                   | none               |              |
-| All    | GitHook/URL           | no        | url for githook                                                            | none               |
-| All    | GitHook/Secret        | no        | secret for githook                                                         | none               |
+| All    | GitHook/ID            | yes, if git SOT        | githook ID                                                                 | none               |
+| All    | GitHook/Token         | yes, if git SOT        | hook token, generated on github/settings                                   | none               |
+| All    | GitHook/URL           | yes, if git SOT        | url for githook                                                            | none               |
+| All    | GitHook/Secret        | yes, if git SOT        | secret for githook                                                         | none               |
 | Agent  | AgentAPI/InsecureAddr | no        | IP Address on which to serve the agent REST API                            | 127.0.0.1          |
 | Agent  | AgentAPI/InsecurePort | no        | Port on which to serve the agent REST API                                  | 24602              |
 | Agent  | Assets/CdnScheme      | no        | Cdn scheme                                                                 | none               |
@@ -140,9 +140,14 @@ Log:
 | Server | Etcd/Endpoints        | no        | s/etcd database endpoints/etcd initial cluster endpoints: format- e1,e2,e3 | 127.0.0.1:2379     |
 | Server | Etcd/Retry            | no        | number of retries for etcd operations                                      | 3                  |
 | Server | Etcd/Timeout          | no        | etcd dial and request timeout, in seconds                                  | 5                  |
-| Server | SoT/Git/HookID        | yes       | git hookID                                                                 | none               |
-| Server | SoT/Git/ID            | yes       | ID (?)                                                                     | none               |
-| Server | SoT/Git/Branch        | yes       | SoT branch name                                                            | none               |
+| Server | SoT/Git/HookID        | yes, if git SOT        | git hookID                                                                 | none               |
+| Server | SoT/Git/ID            | yes, if git SOT      | ID (?)                                                                     | none               |
+| Server | SoT/Git/Branch        | yes, if git SOT      | SoT branch name                                                            | none               |
+| Server | SoT/Local/ID            | yes, if local dir       | local dir ID                                                                   | none               |
+| Server | SoT/Local/Root        | yes, if local dir       | local root dir                                                           | none               |
+
+|  Server | LocalDir/PollInterval | no  | number of seconds between checks to that directory for updates | 10 |
+
 
 ## Running Vaquero from the container
 [Bintray Docker Images](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero)
