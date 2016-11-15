@@ -78,7 +78,7 @@ Gitter:
   Port: 24603
 GitHook:
   - ID: "vaquero-local"
-    Token: eb1b7577029d2a032ed6db405fdf163506d03861
+    Token: <GIT_TOKEN>
     URL: "https://github.com/CiscoCloud/vaquero-examples"
     Secret: supersecretcode
 SoT:
