@@ -18,74 +18,76 @@
 
 # Vaquero
 
-[Home](https://ciscocloud.github.io/vaquero-docs/)
-
-[Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
+[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html)
 
 [![Build Status](https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg)](https://drone.projectshipped.io/CiscoCloud/vaquero)
 
 - [Private Dev Repo](https://github.com/CiscoCloud/vaquero) : Vaquero's development home
 - [Waffle.io Issue Tracking](https://waffle.io/CiscoCloud/vaquero): Progress tracking tool
 
-A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped unattend boot scripts. The only requirement to deploy vaquero is docker. See the [Getting Started](https://ciscocloud.github.io/vaquero-docs/docs/current/getting-started.html) page for details on deploying vaquero in virtualbox.
+A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped unattend boot scripts.
+
+The only thing you need pre-installed to run Vaquero is [Docker](https://www.docker.com/).
+
+See the [Getting Started](https://ciscocloud.github.io/vaquero-docs/docs/current/getting-started.html) page for details on deploying Vaquero in virtualbox.
 
 # [Architecture](https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html)
-![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/ppt-arch.png)
+![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/arch-revision.png)
 
-## [Data Model Templates In Depth](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html)
-Data Models are used by vaquero as the "Source of Truth" to describe your data center. Data Models define machine operating systems, subnets and boot scripts. We provide some [example data models](https://github.com/CiscoCloud/vaquero-examples) as a reference to build your own.
+## [Data Model Templates](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html)
+Data Models are used by Vaquero as the "Source of Truth" to describe your data center. Data Models define machine operating systems, subnets, and boot scripts. We provide some [example data models](https://github.com/CiscoCloud/vaquero-examples) as a reference to build your own.
 
-Notable branches in the example repo:
+Two notable branches in the example repo:
 
-- [`master`](https://github.com/CiscoCloud/vaquero-examples): This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature, model type, and workflow is up.
+- [`master`](https://github.com/CiscoCloud/vaquero-examples): This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature, model type, and workflow is up. The master branch will be configured to run on localhost.
 
-- [`local`](https://github.com/CiscoCloud/vaquero-examples/tree/local): Used for CI functional testing. We currently test at two commits in the history. [Init](https://github.com/CiscoCloud/vaquero-examples/commit/3d0df2db8f04eaeaa30e0542d42aa9d861324e4e) and [Update](https://github.com/CiscoCloud/vaquero-examples/commit/b228c2291c3ae87685b25d1435bfe450bf40456b).
-
-- [`vagrant`](https://github.com/CiscoCloud/vaquero-examples/tree/vagrant): Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most.
-
-## [Project Requirements](https://ciscocloud.github.io/vaquero-docs/docs/current/requirements.html)
+- [`vagrant`](https://github.com/CiscoCloud/vaquero-examples/tree/vagrant): Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most. This branch will contain a data model that will include definitions for the demos. See the [Getting Started](https://ciscocloud.github.io/vaquero-docs/docs/current/getting-started.html) page for for more info about the demos.
 
 ## Configuring and Running Vaquero
-Vaquero can run in multiple modes: `server`, `agent`, and `standalone`. This configuration is for standalone mode, which runs server and agent in the same container. See the [architecture page](https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html) for more details about server and agent.
 
-- See the [Getting Started](architecture page](https://ciscocloud.github.io/vaquero-docs/docs/current/getting-started.html)) page for details on deploying vaquero in virtualbox.
+The diagram below depicts what a production (multi-agent, multi-server) deployment of Vaquero might look like.
+![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/many-vaqueros.png)
 
-**sample-standalone-config.yaml**
+Vaquero can run in multiple modes: `server`, `agent`, and `standalone`. "Standalone" refers to running server and agent in the same container. A standalone configuration file, combining information needed to run both agent and server, is shown below.
+
+See the [architecture page](https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html) for more details about server and agent.
+
 ************************************************************
+**sample-standalone-config.yaml:**
 ```
 ServerApi:
   Address: "127.0.0.1"
   Port: 24601
 AgentApi:
   InsecureAddr: "127.0.0.1"
-  InsecurePort: 24602
+  InsecurePort: 24604
 AssetServer:
   Addr: "127.0.0.1"
-  Port: 8080
-  BaseDir: "/tmp/vaquero/files"
+  Port: 24602
+  BaseDir: "/var/vaquero/files"
   Scheme: http
 DHCPMode: server
-SavePath: "/tmp/vaquero"
+SavePath: "/var/vaquero"
+Etcd:
+  Endpoints:
+  - "http://127.0.0.1:2379"
+  Timeout: 5
+  Retry: 3
 Gitter:
   Endpoint: "/postreceive"
   Timeout: 2
   Addr: "127.0.0.1"
-  Port: 9090
+  Port: 24603
 GitHook:
-  - ID: "vaquero-local"
+  - ID: "vaquero-sot"
     Token: <GIT_TOKEN>
     URL: "https://github.com/CiscoCloud/vaquero-examples"
-    Secret: <GIT_SECRET>
-LocalDir:
-  PollInterval: 10
+    Secret: supersecretcode
 SoT:
 - Git:
-    HookID: "vaquero-local"
+    HookID: "vaquero-sot"
     ID: "vaquero-test"
-    Branch: local
-- Local:
-    ID: vaquero-local2
-    Root: /vagrant/local
+    Branch: master
 Log:
   Level: info
   Location: stdout
@@ -93,23 +95,58 @@ Log:
 
 ```
 ************************************************************
+### Configuration Fields Overview
+- `ServerApi`: The user api for the server. Currently in progress.
+- `AgentApi`: The vaquero-agent http server used to listen for Vaquero server commands.
+- `AssetServer`: The asset server for Vaquero agent used by each booting machine to get unattended scripts and kernels.
+- `SavePath`: The Vaquero server location to save local configurations on disk.
+- `Gitter`: Configuration for listening to git webhooks.
+- `GitHook`: An array for all githooks to listen to.
+- `SoT:` An array for specific sources of truth. Git updater receives webhooks from github. Local: will use a local directory to update.
+- `Etcd`: (for a vaquero server cluster / HA) specifies the information used to connect a running etcd cluster to vaquero's own Etcd client. Etcd is used to keep track of state, data models, and other information in a persistent, distributed KV store.
+- `DHCPMode`:Using "server" runs Vaquero as a DHCP server.  Vaquero does not manage free address pools or leases; it simply assigns based of the static configuration defined in the data model. **Note that DHCPMode defaults to server.** Using "proxy" enables ProxyDHCP. ProxyDHCP works with an existing DHCP Server to provide PXEBoot functionality, while leaving the managing and assigning of IP addresses to the other DHCP Server. Only enable this if you already have a DHCP server with entries for all the hosts in your Data Model.
 
-#### Explanation of config fields:
-- ServerApi: The user api for the server. Currently not implemented.
-- AgentApi: The vaquero-agent http server used to listen for vaquero server commands.
-- AssetServer: The asset server for vaquero agent used by each booting machine to get unattended scripts and kernels.
-- DHCPMode: `proxy`, `server`.  Leaving the DHCPMode field empty will disable all DHCP vaquero functionality.  
 
-    - DHCPMode: Proxy enables ProxyDHCP. ProxyDHCP works with an existing DHCP Server to provide PXEBoot functionality, while leaving the managing and assigning of IP addresses to the other DHCP Server. ONLY enable this if you already have a DHCP server with entries for all the hosts in your Data Model.
+### Configuration Fields In Detail
 
-    - DHCPMode: server runs vaquero as a DHCP server.  Vaquero does not manage free address pools or leases; it simply assigns based of the static configuration defined in the data model.
+(Fields indicated as "Agent" and "Server" are by default included in Standalone mode. Forward-slashes in field names indicate YAML hierarchy)
 
-- SavePath: The vaquero server location to save local configurations on disk.
-- Gitter: Configuration for listening to git webhooks.
-- GitHook: An array for all githooks to listen to.
-- LocalDir: PollInterval is the number of seconds between checks to that directory for updates.
-- SoT: An array for specific sources of truth. Git updater, that used github as its source of truth, receives webhooks from github. Local: will use a local directory to update.
-- Log: The base configuration for the project logr.
+| Mode   | Name                  | Required? | Description                                                                | Default            |
+|--------|-----------------------|-----------|----------------------------------------------------------------------------|--------------------|
+| All    | Log/Level             | no        | Minimum Logging Level (debug, info, warning, error, fatal, panic)          | info               |
+| All    | Log/Location          | no        | Place to log: (stdout, stderr, `filename`)                                 | stdout             |
+| All    | Log/Type              | no        | Text / JSON output (text/json)                                             | text               |
+| All    | SavePath              | no        | Base folder for vaquero save files                                         | /var/vaquero       |
+| Agent  | AgentAPI/InsecureAddr | no        | IP Address on which to serve the agent REST API                            | 127.0.0.1          |
+| Agent  | AgentAPI/InsecurePort | no        | Port on which to serve the agent REST API                                  | 24602              |
+| Agent  | Assets/CdnScheme      | no        | Cdn scheme                                                                 | none               |
+| Agent  | Assets/CdnAddr        | no        | The address of the cdn endpoint to reverse proxy to                        | http               |
+| Agent  | Assets/CdnPort        | no        | The port of the cdn endpoint to reverse proxy to                           | 0             |
+| Agent  | AssetServer/Addr      | no        | The IP Address to serve the agent asset server                             | 127.0.0.1          |
+| Agent  | AssetServer/Port      | no        | The port to serve the agent asset server                                   | 20468              |
+| Agent  | AssetServer/Scheme    | no        | Asset server scheme : http / https                                         | http               |
+| Agent  | AssetServer/BaseDir   | no        | Agent directory to serve files from                                        | /var/vaquero/files |
+| Agent  | DHCPMode              | no        | Agent DHCP Mode: server / proxy                                            | server             |
+| Server | ServerAPI/Address     | no        | The IP Address to serve the server REST API on                             | 127.0.0.1          |
+| Server | ServerAPI/Port        | no        | The port to serve the server REST API on                                   | 24601              |
+| Server | Etcd/Endpoints        | no        | etcd initial cluster endpoints: format- e1,e2,e3 | 127.0.0.1:2379     |
+| Server | Etcd/Retry            | no        | number of retries for etcd operations                                      | 3                  |
+| Server | Etcd/Timeout          | no        | etcd dial and request timeout, in seconds                                  | 5                  |
+| Server    | Gitter/Endpoint       | no        | githook endpoint to receive webhooks                                       | /postreceive       |
+| Server    | Gitter/Address        | no        | githook listening address                                                  | 127.0.0.1          |
+| Server    | Gitter/Port           | no        | githook listening port                                                     | 24603              |
+| Server    | Gitter/Timeout        | no        | githook timeout, in seconds                                                | 2                  |
+| Server    | GitHook/ID            | yes, if git SOT        | githook ID                                                                 | none               |
+| Server    | GitHook/Token         | yes, if git SOT        | hook token, generated on github/settings                                   | none               |
+| Server    | GitHook/URL           | yes, if git SOT        | url for githook                                                            | none               |
+| Server    | GitHook/Secret        | yes, if git SOT        | secret for githook                                                         | none               |
+| Server | SoT/Git/HookID        | yes, if git SOT        | git hookID                                                                 | none               |
+| Server | SoT/Git/ID            | yes, if git SOT      | ID (?)                                                                     | none               |
+| Server | SoT/Git/Branch        | yes, if git SOT      | SoT branch name                                                            | none               |
+| Server | SoT/Local/ID            | yes, if local dir       | local dir ID                                                                   | none               |
+| Server | SoT/Local/Root        | yes, if local dir       | local root dir                                                           | none               |
+|  Server | LocalDir/PollInterval | no  | number of seconds between checks to that directory for updates | 10 |
+
 
 ## Running Vaquero from the container
 [Bintray Docker Images](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero)
@@ -134,7 +171,7 @@ After=docker.service
 
 [Service]
 Restart=always
-ExecStart=/usr/bin/docker run --net host -v /var/vaquero/config.yaml:/config.yaml -v /var/vaquero/files:/var --name vaquero shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /config.yaml
+ExecStart=/usr/bin/docker run --net host -v /var/vaquero/config.yaml:/config.yaml -v /var/vaquero/files:/var --name Vaquero shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /config.yaml
 ExecStop=/usr/bin/docker stop vaquero
 ExecStopPost=/usr/bin/docker rm -f vaquero
 
@@ -180,6 +217,7 @@ CLI tool that is for validating your data model before you push it through Vaque
 
 ## Docs
 Build the documentation by running `godoc -http <port>` and open `localhost:<port>` on your web browser
+
 
 ## Questions / Comments / Feedback
 To provide feedback to the team please email: [vaquero-feedback@external.cisco.com](mailto:vaquero-feedback@external.cisco.com)
