@@ -145,7 +145,6 @@ Log:
 | Server | SoT/Git/Branch        | yes, if git SOT      | SoT branch name                                                            | none               |
 | Server | SoT/Local/ID            | yes, if local dir       | local dir ID                                                                   | none               |
 | Server | SoT/Local/Root        | yes, if local dir       | local root dir                                                           | none               |
-
 |  Server | LocalDir/PollInterval | no  | number of seconds between checks to that directory for updates | 10 |
 
 
