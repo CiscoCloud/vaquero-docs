@@ -59,6 +59,9 @@ By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
 
   For example: `VS_NUM=3 vagrant up` will stand up 3 vaquero server VMs. Running `vagrant destroy -f` will only destroy the first instance, you must run `VS_NUM=3 vagrant destroy -f` to clean up all of them. Include *every* ENV var for *every* vagrant command, even things like `vagrant ssh vs-3`.
 
+  **Etcd check:** Once the VM(s) are booted and before running vaquero, ssh into one of your server machines. Perform a cluster health check:
+  `ETCDCTL_API=2 etcdctl cluster-health`. If an error message appears, wait until all machines are live, then perform the cluster health check again.   
+
 ## 3. pull the latest docker image
 
 `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
@@ -69,6 +72,7 @@ By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
 We default DHCP to run in server mode. If you want to run vaquero in DHCP proxy mode, edit the configuration in `config/` and start the dnsmasq VM by running: `vagrant up dnsmasq`. This will stand up dnsmasq VM running a DHCP server that only serves IP addresses.
 
 See the different [configurations](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config).
+
 
 ### Standalone mode
 
@@ -98,6 +102,7 @@ See the different [configurations](https://github.com/CiscoCloud/vaquero-vagrant
 ##### separate agent dir SoT
 
 `docker run -v /vagrant/config/dir-sot-agent.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest agent --config /vaquero/config.yaml`
+
 
 ## demo lab
 
