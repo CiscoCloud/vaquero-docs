@@ -101,7 +101,7 @@ Log:
 - `Gitter`: Configuration for listening to git webhooks.
 - `GitHook`: An array for all githooks to listen to.
 - `SoT:` An array for specific sources of truth. Git updater receives webhooks from github. Local: will use a local directory to update.
-/*- `Etcd`: (for a vaquero server cluster / HA) specifies the information used to connect a running CoreOS Etcd instance to vaquero's own Etcd client. Etcd is used to keep track of state, data models, and other information in a persistent, distributed KV store.*/
+- `Etcd`: (for a vaquero server cluster / HA) specifies the information used to connect a running CoreOS Etcd instance to vaquero's own Etcd client. Etcd is used to keep track of state, data models, and other information in a persistent, distributed KV store.
 - `DHCPMode`: Leaving the DHCPMode field empty will disable all DHCP Vaquero functionality. "Proxy" enables ProxyDHCP, which works with an existing DHCP Server to provide PXEBoot functionality. (Only enable proxy if you already have a DHCP server with entries for all the hosts in your Data Model.) Using "server" runs Vaquero as a DHCP server.
 
 
@@ -136,9 +136,9 @@ Log:
 |  Agent | DHCPMode | no  |  Agent DHCP Mode: server / proxy | server |
 |  Server | ServerAPI/Address | no  |  The IP Address to serve the server REST API on | 127.0.0.1 |
 |  Server | ServerAPI/Port | no  |  The port to serve the server REST API on | 24601 |
-/*|  Server | Etcd/Endpoints | no  |  s/etcd database endpoints/etcd initial cluster endpoints: format- e1,e2,e3 | 127.0.0.1:2379 |
+|  Server | Etcd/Endpoints | no  |  s/etcd database endpoints/etcd initial cluster endpoints: format- e1,e2,e3 | 127.0.0.1:2379 |
 |  Server | Etcd/Retry | no  |  number of retries for etcd operations | 3 |
-|  Server | Etcd/Timeout | no  |  etcd dial and request timeout, in seconds | 5 |*/
+|  Server | Etcd/Timeout | no  |  etcd dial and request timeout, in seconds | 5 |
 |  Server | SoT/Git/HookID | yes  | git hookID | none |
 |  Server | SoT/Git/ID | yes  | ID (?) | none |
 |  Server | SoT/Git/Branch | yes  | SoT branch name | none |
