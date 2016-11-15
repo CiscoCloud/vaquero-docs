@@ -117,14 +117,6 @@ Log:
 | All    | Log/Location          | no        | Place to log: (stdout, stderr, `filename`)                                 | stdout             |
 | All    | Log/Type              | no        | Text / JSON output (text/json)                                             | text               |
 | All    | SavePath              | no        | Base folder for vaquero save files                                         | /var/vaquero       |
-| All    | Gitter/Endpoint       | no        | githook endpoint to receive webhooks                                       | /postreceive       |
-| All    | Gitter/Address        | no        | githook listening address                                                  | 127.0.0.1          |
-| All    | Gitter/Port           | no        | githook listening port                                                     | 24603              |
-| All    | Gitter/Timeout        | no        | githook timeout, in seconds                                                | 2                  |
-| All    | GitHook/ID            | yes, if git SOT        | githook ID                                                                 | none               |
-| All    | GitHook/Token         | yes, if git SOT        | hook token, generated on github/settings                                   | none               |
-| All    | GitHook/URL           | yes, if git SOT        | url for githook                                                            | none               |
-| All    | GitHook/Secret        | yes, if git SOT        | secret for githook                                                         | none               |
 | Agent  | AgentAPI/InsecureAddr | no        | IP Address on which to serve the agent REST API                            | 127.0.0.1          |
 | Agent  | AgentAPI/InsecurePort | no        | Port on which to serve the agent REST API                                  | 24602              |
 | Agent  | Assets/CdnScheme      | no        | Cdn scheme                                                                 | none               |
@@ -137,9 +129,17 @@ Log:
 | Agent  | DHCPMode              | no        | Agent DHCP Mode: server / proxy                                            | server             |
 | Server | ServerAPI/Address     | no        | The IP Address to serve the server REST API on                             | 127.0.0.1          |
 | Server | ServerAPI/Port        | no        | The port to serve the server REST API on                                   | 24601              |
-| Server | Etcd/Endpoints        | no        | s/etcd database endpoints/etcd initial cluster endpoints: format- e1,e2,e3 | 127.0.0.1:2379     |
+| Server | Etcd/Endpoints        | no        | etcd initial cluster endpoints: format- e1,e2,e3 | 127.0.0.1:2379     |
 | Server | Etcd/Retry            | no        | number of retries for etcd operations                                      | 3                  |
 | Server | Etcd/Timeout          | no        | etcd dial and request timeout, in seconds                                  | 5                  |
+| Server    | Gitter/Endpoint       | no        | githook endpoint to receive webhooks                                       | /postreceive       |
+| Server    | Gitter/Address        | no        | githook listening address                                                  | 127.0.0.1          |
+| Server    | Gitter/Port           | no        | githook listening port                                                     | 24603              |
+| Server    | Gitter/Timeout        | no        | githook timeout, in seconds                                                | 2                  |
+| Server    | GitHook/ID            | yes, if git SOT        | githook ID                                                                 | none               |
+| Server    | GitHook/Token         | yes, if git SOT        | hook token, generated on github/settings                                   | none               |
+| Server    | GitHook/URL           | yes, if git SOT        | url for githook                                                            | none               |
+| Server    | GitHook/Secret        | yes, if git SOT        | secret for githook                                                         | none               |
 | Server | SoT/Git/HookID        | yes, if git SOT        | git hookID                                                                 | none               |
 | Server | SoT/Git/ID            | yes, if git SOT      | ID (?)                                                                     | none               |
 | Server | SoT/Git/Branch        | yes, if git SOT      | SoT branch name                                                            | none               |
