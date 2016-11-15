@@ -35,13 +35,11 @@ Vaquero README
 <p>Data Models are used by Vaquero as the &quot;Source of Truth&quot; to describe your data center. Data Models define machine operating systems, subnets, and boot scripts. We provide some <a href="https://github.com/CiscoCloud/vaquero-examples">example data models</a> as a reference to build your own.</p>
 <p>Two notable branches in the example repo:</p>
 <ul>
-<li><p><a href="https://github.com/CiscoCloud/vaquero-examples"><code>master</code></a>: This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature, model type, and workflow is up.</p></li>
-<li><p><a href="https://github.com/CiscoCloud/vaquero-examples/tree/vagrant"><code>vagrant</code></a>: Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most.</p></li>
+<li><p><a href="https://github.com/CiscoCloud/vaquero-examples"><code>master</code></a>: This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature, model type, and workflow is up. The master branch will be configured to run on localhost.</p></li>
+<li><p><a href="https://github.com/CiscoCloud/vaquero-examples/tree/vagrant"><code>vagrant</code></a>: Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most. This branch will contain a data model that will include definitions for the demos. See the <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/getting-started.html">Getting Started</a> page for for more info about the demos.</p></li>
 </ul>
 <h2 id="configuring-and-running-vaquero">Configuring and Running Vaquero</h2>
-<div class="figure">
-<img src="https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/many-vaqueros.png" />
-</div>
+<p>The diagram below depicts what a production (multi-agent, multi-server) deployment of Vaquero might look like. <img src="https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/many-vaqueros.png" /></p>
 <p>Vaquero can run in multiple modes: <code>server</code>, <code>agent</code>, and <code>standalone</code>. &quot;Standalone&quot; refers to running server and agent in the same container. A standalone configuration file, combining information needed to run both agent and server, is shown below.</p>
 <p>See the <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/architecture.html">architecture page</a> for more details about server and agent.</p>
 <hr />
@@ -95,7 +93,7 @@ Log:
 <li><code>GitHook</code>: An array for all githooks to listen to.</li>
 <li><code>SoT:</code> An array for specific sources of truth. Git updater receives webhooks from github. Local: will use a local directory to update.</li>
 <li><code>Etcd</code>: (for a vaquero server cluster / HA) specifies the information used to connect a running CoreOS Etcd instance to vaquero's own Etcd client. Etcd is used to keep track of state, data models, and other information in a persistent, distributed KV store.</li>
-<li><code>DHCPMode</code>: Leaving the DHCPMode field empty will disable all DHCP Vaquero functionality. &quot;Proxy&quot; enables ProxyDHCP, which works with an existing DHCP Server to provide PXEBoot functionality. (Only enable proxy if you already have a DHCP server with entries for all the hosts in your Data Model.) Using &quot;server&quot; runs Vaquero as a DHCP server.</li>
+<li><code>DHCPMode</code>:Using &quot;server&quot; runs Vaquero as a DHCP server. Vaquero does not manage free address pools or leases; it simply assigns based of the static configuration defined in the data model. <strong>Note that DHCPMode defaults to server.</strong> Using &quot;proxy&quot; enables ProxyDHCP. ProxyDHCP works with an existing DHCP Server to provide PXEBoot functionality, while leaving the managing and assigning of IP addresses to the other DHCP Server. Only enable this if you already have a DHCP server with entries for all the hosts in your Data Model.</li>
 </ul>
 <h3 id="configuration-fields-in-detail">Configuration Fields In Detail</h3>
 <p>(Fields indicated as &quot;Agent&quot; and &quot;Server&quot; are by default included in Standalone mode. Forward-slashes in field names indicate YAML hierarchy)</p>
@@ -150,7 +148,7 @@ Log:
 <td align="left">Gitter/Address</td>
 <td align="left">no</td>
 <td align="left">githook listening address</td>
-<td align="left">127.0.0.1</td>
+<td align="left">0.0.0.0</td>
 </tr>
 <tr class="odd">
 <td align="left">All</td>
@@ -182,145 +180,138 @@ Log:
 </tr>
 <tr class="odd">
 <td align="left">All</td>
-<td align="left">GitHook/Token</td>
-<td align="left">no</td>
-<td align="left">hook token, generated on github/settings</td>
-<td align="left">none</td>
-</tr>
-<tr class="even">
-<td align="left">All</td>
 <td align="left">GitHook/URL</td>
 <td align="left">no</td>
 <td align="left">url for githook</td>
 <td align="left">none</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">All</td>
 <td align="left">GitHook/Secret</td>
 <td align="left">no</td>
 <td align="left">secret for githook</td>
 <td align="left">none</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Agent</td>
 <td align="left">AgentAPI/InsecureAddr</td>
 <td align="left">no</td>
 <td align="left">IP Address on which to serve the agent REST API</td>
-<td align="left">127.0.0.1</td>
+<td align="left">0.0.0.0</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Agent</td>
 <td align="left">AgentAPI/InsecurePort</td>
 <td align="left">no</td>
 <td align="left">Port on which to serve the agent REST API</td>
 <td align="left">24602</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Agent</td>
 <td align="left">Assets/CdnScheme</td>
 <td align="left">no</td>
 <td align="left">Cdn scheme</td>
-<td align="left">http</td>
+<td align="left">none</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Agent</td>
 <td align="left">Assets/CdnAddr</td>
 <td align="left">no</td>
 <td align="left">The address of the cdn endpoint to reverse proxy to</td>
 <td align="left">http</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Agent</td>
 <td align="left">Assets/CdnPort</td>
 <td align="left">no</td>
 <td align="left">The port of the cdn endpoint to reverse proxy to</td>
-<td align="left"><strong>?</strong></td>
+<td align="left">0</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Agent</td>
 <td align="left">AssetServer/Addr</td>
 <td align="left">no</td>
 <td align="left">The IP Address to serve the agent asset server</td>
-<td align="left">127.0.0.1</td>
+<td align="left">0.0.0.0</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Agent</td>
 <td align="left">AssetServer/Port</td>
 <td align="left">no</td>
 <td align="left">The port to serve the agent asset server</td>
 <td align="left">20468</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Agent</td>
 <td align="left">AssetServer/Scheme</td>
 <td align="left">no</td>
 <td align="left">Asset server scheme : http / https</td>
 <td align="left">http</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Agent</td>
 <td align="left">AssetServer/BaseDir</td>
 <td align="left">no</td>
 <td align="left">Agent directory to serve files from</td>
-<td align="left">/tmp/vaquero/files</td>
+<td align="left">/var/vaquero/files</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Agent</td>
 <td align="left">DHCPMode</td>
 <td align="left">no</td>
 <td align="left">Agent DHCP Mode: server / proxy</td>
 <td align="left">server</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Server</td>
 <td align="left">ServerAPI/Address</td>
 <td align="left">no</td>
 <td align="left">The IP Address to serve the server REST API on</td>
-<td align="left">127.0.0.1</td>
+<td align="left">0.0.0.0</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">ServerAPI/Port</td>
 <td align="left">no</td>
 <td align="left">The port to serve the server REST API on</td>
 <td align="left">24601</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Server</td>
 <td align="left">Etcd/Endpoints</td>
 <td align="left">no</td>
 <td align="left">s/etcd database endpoints/etcd initial cluster endpoints: format- e1,e2,e3</td>
 <td align="left">127.0.0.1:2379</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">Etcd/Retry</td>
 <td align="left">no</td>
 <td align="left">number of retries for etcd operations</td>
 <td align="left">3</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Server</td>
 <td align="left">Etcd/Timeout</td>
 <td align="left">no</td>
 <td align="left">etcd dial and request timeout, in seconds</td>
 <td align="left">5</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">SoT/Git/HookID</td>
 <td align="left">yes</td>
 <td align="left">git hookID</td>
 <td align="left">none</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Server</td>
 <td align="left">SoT/Git/ID</td>
 <td align="left">yes</td>
 <td align="left">ID (?)</td>
 <td align="left">none</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">SoT/Git/Branch</td>
 <td align="left">yes</td>
