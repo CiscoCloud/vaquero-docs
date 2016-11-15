@@ -68,7 +68,7 @@ Gitter:
   Addr: &quot;127.0.0.1&quot;
   Port: 24603
 GitHook:
-  - ID: &quot;vaquero-local&quot;
+  - ID: &quot;vaquero-master&quot;
     Token: &lt;GIT_TOKEN&gt;
     URL: &quot;https://github.com/CiscoCloud/vaquero-examples&quot;
     Secret: supersecretcode
@@ -92,7 +92,7 @@ Log:
 <li><code>Gitter</code>: Configuration for listening to git webhooks.</li>
 <li><code>GitHook</code>: An array for all githooks to listen to.</li>
 <li><code>SoT:</code> An array for specific sources of truth. Git updater receives webhooks from github. Local: will use a local directory to update.</li>
-<li><code>Etcd</code>: (for a vaquero server cluster / HA) specifies the information used to connect a running CoreOS Etcd instance to vaquero's own Etcd client. Etcd is used to keep track of state, data models, and other information in a persistent, distributed KV store.</li>
+<li><code>Etcd</code>: (for a vaquero server cluster / HA) specifies the information used to connect a running etcd cluster to vaquero's own Etcd client. Etcd is used to keep track of state, data models, and other information in a persistent, distributed KV store.</li>
 <li><code>DHCPMode</code>:Using &quot;server&quot; runs Vaquero as a DHCP server. Vaquero does not manage free address pools or leases; it simply assigns based of the static configuration defined in the data model. <strong>Note that DHCPMode defaults to server.</strong> Using &quot;proxy&quot; enables ProxyDHCP. ProxyDHCP works with an existing DHCP Server to provide PXEBoot functionality, while leaving the managing and assigning of IP addresses to the other DHCP Server. Only enable this if you already have a DHCP server with entries for all the hosts in your Data Model.</li>
 </ul>
 <h3 id="configuration-fields-in-detail">Configuration Fields In Detail</h3>
@@ -148,7 +148,7 @@ Log:
 <td align="left">Gitter/Address</td>
 <td align="left">no</td>
 <td align="left">githook listening address</td>
-<td align="left">0.0.0.0</td>
+<td align="left">127.0.0.1</td>
 </tr>
 <tr class="odd">
 <td align="left">All</td>
@@ -197,7 +197,7 @@ Log:
 <td align="left">AgentAPI/InsecureAddr</td>
 <td align="left">no</td>
 <td align="left">IP Address on which to serve the agent REST API</td>
-<td align="left">0.0.0.0</td>
+<td align="left">127.0.0.1</td>
 </tr>
 <tr class="even">
 <td align="left">Agent</td>
@@ -232,7 +232,7 @@ Log:
 <td align="left">AssetServer/Addr</td>
 <td align="left">no</td>
 <td align="left">The IP Address to serve the agent asset server</td>
-<td align="left">0.0.0.0</td>
+<td align="left">127.0.0.1</td>
 </tr>
 <tr class="odd">
 <td align="left">Agent</td>
@@ -267,7 +267,7 @@ Log:
 <td align="left">ServerAPI/Address</td>
 <td align="left">no</td>
 <td align="left">The IP Address to serve the server REST API on</td>
-<td align="left">0.0.0.0</td>
+<td align="left">127.0.0.1</td>
 </tr>
 <tr class="even">
 <td align="left">Server</td>
