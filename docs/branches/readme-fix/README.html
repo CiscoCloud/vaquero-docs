@@ -137,62 +137,6 @@ Log:
 <td align="left">/var/vaquero</td>
 </tr>
 <tr class="odd">
-<td align="left">All</td>
-<td align="left">Gitter/Endpoint</td>
-<td align="left">no</td>
-<td align="left">githook endpoint to receive webhooks</td>
-<td align="left">/postreceive</td>
-</tr>
-<tr class="even">
-<td align="left">All</td>
-<td align="left">Gitter/Address</td>
-<td align="left">no</td>
-<td align="left">githook listening address</td>
-<td align="left">127.0.0.1</td>
-</tr>
-<tr class="odd">
-<td align="left">All</td>
-<td align="left">Gitter/Port</td>
-<td align="left">no</td>
-<td align="left">githook listening port</td>
-<td align="left">24603</td>
-</tr>
-<tr class="even">
-<td align="left">All</td>
-<td align="left">Gitter/Timeout</td>
-<td align="left">no</td>
-<td align="left">githook timeout, in seconds</td>
-<td align="left">2</td>
-</tr>
-<tr class="odd">
-<td align="left">All</td>
-<td align="left">GitHook/ID</td>
-<td align="left">yes, if git SOT</td>
-<td align="left">githook ID</td>
-<td align="left">none</td>
-</tr>
-<tr class="even">
-<td align="left">All</td>
-<td align="left">GitHook/Token</td>
-<td align="left">yes, if git SOT</td>
-<td align="left">hook token, generated on github/settings</td>
-<td align="left">none</td>
-</tr>
-<tr class="odd">
-<td align="left">All</td>
-<td align="left">GitHook/URL</td>
-<td align="left">yes, if git SOT</td>
-<td align="left">url for githook</td>
-<td align="left">none</td>
-</tr>
-<tr class="even">
-<td align="left">All</td>
-<td align="left">GitHook/Secret</td>
-<td align="left">yes, if git SOT</td>
-<td align="left">secret for githook</td>
-<td align="left">none</td>
-</tr>
-<tr class="odd">
 <td align="left">Agent</td>
 <td align="left">AgentAPI/InsecureAddr</td>
 <td align="left">no</td>
@@ -280,7 +224,7 @@ Log:
 <td align="left">Server</td>
 <td align="left">Etcd/Endpoints</td>
 <td align="left">no</td>
-<td align="left">s/etcd database endpoints/etcd initial cluster endpoints: format- e1,e2,e3</td>
+<td align="left">etcd initial cluster endpoints: format- e1,e2,e3</td>
 <td align="left">127.0.0.1:2379</td>
 </tr>
 <tr class="even">
@@ -296,6 +240,62 @@ Log:
 <td align="left">no</td>
 <td align="left">etcd dial and request timeout, in seconds</td>
 <td align="left">5</td>
+</tr>
+<tr class="even">
+<td align="left">Server</td>
+<td align="left">Gitter/Endpoint</td>
+<td align="left">no</td>
+<td align="left">githook endpoint to receive webhooks</td>
+<td align="left">/postreceive</td>
+</tr>
+<tr class="odd">
+<td align="left">Server</td>
+<td align="left">Gitter/Address</td>
+<td align="left">no</td>
+<td align="left">githook listening address</td>
+<td align="left">127.0.0.1</td>
+</tr>
+<tr class="even">
+<td align="left">Server</td>
+<td align="left">Gitter/Port</td>
+<td align="left">no</td>
+<td align="left">githook listening port</td>
+<td align="left">24603</td>
+</tr>
+<tr class="odd">
+<td align="left">Server</td>
+<td align="left">Gitter/Timeout</td>
+<td align="left">no</td>
+<td align="left">githook timeout, in seconds</td>
+<td align="left">2</td>
+</tr>
+<tr class="even">
+<td align="left">Server</td>
+<td align="left">GitHook/ID</td>
+<td align="left">yes, if git SOT</td>
+<td align="left">githook ID</td>
+<td align="left">none</td>
+</tr>
+<tr class="odd">
+<td align="left">Server</td>
+<td align="left">GitHook/Token</td>
+<td align="left">yes, if git SOT</td>
+<td align="left">hook token, generated on github/settings</td>
+<td align="left">none</td>
+</tr>
+<tr class="even">
+<td align="left">Server</td>
+<td align="left">GitHook/URL</td>
+<td align="left">yes, if git SOT</td>
+<td align="left">url for githook</td>
+<td align="left">none</td>
+</tr>
+<tr class="odd">
+<td align="left">Server</td>
+<td align="left">GitHook/Secret</td>
+<td align="left">yes, if git SOT</td>
+<td align="left">secret for githook</td>
+<td align="left">none</td>
 </tr>
 <tr class="even">
 <td align="left">Server</td>
