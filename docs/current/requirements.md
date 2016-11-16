@@ -39,33 +39,33 @@ The Vaquero project is designed to simplify the provisioning and ongoing operati
 7. System should treat SoT as an immutable reference.
 8. Management of multiple datacenters via federated architecture.
 9. Relationship between SoT to cluster instances via static identifiers (MAC, UUID, others?).
-11. Workflow automation to provide managed installs of cluster.
-12. Workflow automation to provide managed updates of cluster.
-13. Automatically provision hardware according to the SoT.
-14. The ability to gate changes from SoT before applying to hardware.
-17. The ability to deploy separate instances of servers and agents and documentation on how to do it.
-18. Document HA scenarios for servers and new deployment requirements for persistent storage to back server cluster.
-19. HTTPS communication is a must for API's between servers and agents.
-20. DHCP options to be more robust in handling NTP & DNS assignment.
-22. Vaquero standalone mode to manage internal labs.
+10. Workflow automation to provide managed installs of cluster.
+11. Workflow automation to provide managed updates of cluster.
+12. Automatically provision hardware according to the SoT.
+13. The ability to gate changes from SoT before applying to hardware.
+14. The ability to deploy separate instances of servers and agents and documentation on how to do it.
+15. Document HA scenarios for servers and new deployment requirements for persistent storage to back server cluster.
+16. HTTPS communication is a must for API's between servers and agents.
+17. DHCP options to be more robust in handling NTP & DNS assignment.
+18. Vaquero standalone mode to manage internal labs.
 
 
 ### In Progress
-10. Manage power state of the hardware.
-15. Support incremental (multistep) cluster provisioning.
-16. Provide availability in the following network conditions:
+1. Manage power state of the hardware.
+2. Support incremental (multistep) cluster provisioning.
+3. Provide availability in the following network conditions:
     * network partition between agent and controller
     * upgradability of agent node
-21. Deploy a first build of all software clusters in lab.
-23. Separated Vaquero Server and Vaquero Agent to manage internal labs.
-24. Validate Vaquero with dual homed CleverSafe machines.
-25. Successfully guide multi-stage deployments managed by state machine on vaquero server(s).
-26. Provide state transition details and host status to provide operational insights.
-27. Upgrade workflow definitions to run pluggable pre-reboot and post-reboot jobs.
+4. Deploy a first build of all software clusters in lab.
+5. Separated Vaquero Server and Vaquero Agent to manage internal labs.
+6. Validate Vaquero with dual homed CleverSafe machines.
+7. Successfully guide multi-stage deployments managed by state machine on vaquero server(s).
+8. Provide state transition details and host status to provide operational insights.
+9. Upgrade workflow definitions to run pluggable pre-reboot and post-reboot jobs.
 
 
 ### Incomplete
-16. Provide availability in the following network conditions:
+1. Provide availability in the following network conditions:
     * ~~outage of agent node~~
 
 
