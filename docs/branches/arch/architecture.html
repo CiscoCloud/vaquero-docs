@@ -1,0 +1,55 @@
+<head>
+      
+<meta charset="UTF-8"> <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+Vaquero Architecture
+</title>
+      
+<link rel="stylesheet" type="text/css" href="../doc.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style>
+        .markdown-body {
+          box-sizing: border-box;
+          min-width: 200px;
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 45px;
+        }
+      </style>
+</head><article class="markdown-body">
+
+<h1 id="vaquero-architecture">Vaquero: Architecture</h1>
+<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> | <a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
+<p><strong>Last Updated</strong>: November 2016</p>
+<p>The Vaquero project is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure. A running Vaquero system will be composed of a centralized control plane that automates provisioning of software in one or more data centers, and remote agents that take actions on boot hosts.</p>
+<p>The goal is to provide the ability for teams to manage their infrastructure using the same tools they use for their applications (revision control, CI/CD pipeline, etc.), to and enable similar workflows including automated updates, gating, immutability, and A/B deployments. The final outcome will be a fully operational data center running heterogeneous deployments of clustered software on bare metal, with fully automated deployment and upgrades driven by a CI pipeline.</p>
+<h2 id="architecture">Architecture</h2>
+<p>Vaquero is delivered in one container for operational simplicity. Vaquero can run in multiple modes, including server, agent, and standalone (the combination of server and agent).</p>
+<div class="figure">
+<img src="nov16Arch.png" />
+</div>
+<h4 id="vaquero-server"><code>vaquero server</code></h4>
+<p>The <code>vaquero</code> container in <code>server</code> mode implements the logic to receive updates from sources of truth and process the data model and make it a reality by providing information to agents. The vaquero server cluster leverages etcd to persist state, data models and configurations.</p>
+<ol style="list-style-type: decimal">
+<li><strong>user API (in progress)</strong> - REST API for users to interact with the system and provide operational insights into booting hosts.</li>
+<li><strong>updater</strong> - The interface that SoT's will go through to update their data models, could be listening for github webhooks or watching a source of truth directory for modifications.</li>
+<li><strong>model API</strong> - REST API that responds to agents looking to update their model cache, it will also provide a state manifest that enables an agent to know what state its booting hosts are in.</li>
+<li><strong>event API</strong> - REST API that receives events from long running services on agents.</li>
+<li><strong>server controller</strong> - The process that manages the numerous go routines on vaquero servers and acts as an intermediary between all server services.</li>
+<li><strong>state engine</strong> - The brains behind vaquero, that will understand a data model, look at the events history and task history to understand what actions need to be taken to move booting hosts from one state to the next.</li>
+<li><strong>task manager</strong> - A generic container task manager that knows how to run jobs on distributed task executors. It will listen for input from the state engine to run LOM containers that will begin the process for updating / provisioning hosts.</li>
+</ol>
+<h4 id="vaquero-agent"><code>vaquero agent</code></h4>
+<p>The <code>vaquero</code> container running in <code>agent</code> mode registers itself with an upstream vaquero server and drives provisioning in a local datacenter. The agent is designed in such a way that it is stateless, agents can be created and destroyed at will. They will obtain state, configuration, actions from the vaquero server cluster.</p>
+<ol style="list-style-type: decimal">
+<li><strong>model cache</strong> - is the local cached representation of the infrastructure, the model cache handles updating with the vaquero server cluster just in time when the vaquero agent needs it. It can also be used during network outages, so agents can still serve their booting hosts without connection to the server cluster.</li>
+<li><strong>agent controller</strong> - The process that manages multiple go-routines and acts as an intermediary between agent services.</li>
+<li><strong>DHCP</strong> - a DHCP server implemented in go that can run as a DHCP proxy, serving network boot details only, or as a fully featured DHCP server providing IP addresses and network boot details. Validated to work with a DHCP relay as well.</li>
+<li><strong>TFTP</strong> - a TFTP server that only serves the <a href="http://ipxe.org/howto/chainloading"><code>undionly.kpxe</code> file</a>.</li>
+<li><strong>asset HTTP server</strong> - implements a file server or reverse proxy to forward requests to a CDN. This delivers unattend boot scripts, kernels, and initrds.</li>
+<li><strong>event client</strong> - an HTTP client that reports long running service events back (DHCP, TFTP, HTTP) to the vaquero server cluster. (the servers leverage this information to understand what state booting hosts are in)</li>
+<li><strong>task executor (in progress)</strong> - a pluggable task engine that enables operators to run containers that will be used for LOM via a IPMI container we provide. The task executor will also be used pre-reboot and post-reboot to clear machines before shutting down and validating the state after a reboot.</li>
+</ol>
+<h4 id="how-to-stage-updates">How to stage updates</h4>
+<p>Github will be used to stage models for updating, vaquero will receive webhooks from specified branches. Submitting PR's and merging other branches into the vaquero branch would be how teams manage updating their source of truth. Once a model lands in the branch vaquero is watching, it will push it out and begin provisioning against that source of truth.</p>
+<h2 id="deployment-and-availability-considerations">Deployment and Availability Considerations</h2>
+<p>Please see the <a href="README.html">README</a> for details on production deployments, considerations, and requirements. See the <a href="outage.html">outage doc</a> to see how vaquero handles certain failure scenarios.</p>
