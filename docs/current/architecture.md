@@ -65,7 +65,7 @@ The `vaquero` container running in `agent` mode registers itself with an upstrea
 5. state engine creates LOM tasks for related task executors to reboot hosts
 6. vaquero agent task executor obtains and runs LOM task to reboot hosts
 7. host boots and begins DHCP / TFTP / HTTP process in network boot
-8. model cache is updated just in time for the above 3 services
+8. model cache and state manifest is updated via model API for the above 3 services (just in time updating)
 9. events are reported to vaquero server
 10. state engine observes events status and tasks status and will act until desired state is reached
 
