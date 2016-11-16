@@ -32,7 +32,7 @@ Vaquero Data Model
 <li><p><a href="#key-concepts">Key Concepts</a></p></li>
 <li><p><a href="#vocabulary">Vocabulary</a></p></li>
 <li><p><a href="#where-things-go">Where things go</a></p></li>
-<li><p><a href="#rough-workflow">Rough Workflow</a></p></li>
+<li><p><a href="#provisioning-steps">Provisioning Steps</a></p></li>
 <li><p><a href="#serving-files">Serving files</a></p></li>
 <li><p><a href="#metadata-and-templating">Metadata and Templating</a></p></li>
 <li><p><a href="#translation-to-ipxe">Translation to iPXE</a></p></li>
@@ -49,20 +49,24 @@ Vaquero Data Model
 <p><em>Host</em>: A single managed machine. Definition includes identifying attributes (selectors), host-specific metadata, information for LOM (IPMI), and an association to a single host group.</p>
 <p><em>Operating System</em>: An &quot;installation&quot; template containing the details to perform a network boot into a particular OS, specifying kernel, initrd, boot command-line parameters, unattended config, etc.</p>
 <p><em>Unattended Assets</em>: An optionally templated unattended config/script (i.e. cloud-init, ignition, kickstart, etc) used for unattended boot and installation operations.</p>
-<p><em>Host Group</em>: A collection that ties together operating systems and unattended assets. Describes a target state for hosts to reach.</p>
+<p><em>Boot</em>: A collection that ties together operating systems and unattended assets. Describes a single network boot.</p>
+<p><em>Workflow</em>: A series of network boots that end with a host machine in a desired state.</p>
 <h2 id="where-things-go"><a name="where-things-go">Where Things Go</a></h2>
 <p>Configuration files are placed in a directory hierarchy. Vaquero parses site configurations by reading files placed in specially named subdirectories. The root of your configuration path has four directories:</p>
 <ol style="list-style-type: decimal">
 <li><strong>assets</strong>: grouped by type. These are generally unattended configs or scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).</li>
-<li><strong>os</strong>: Individual documents describing family, version, kernel/image location, and boot/installation options for any operating systems used by host groups.</li>
-<li><strong>boot</strong>: Individual documents combining operating system and unattended asset information to describe a target host state.</li>
+<li><strong>os</strong>: Individual documents, each representing an Operating System</li>
+<li><strong>boot</strong>: Individual documents, each representing a Boot</li>
 <li><strong>sites</strong>: One or more sites (each in it's own subdirectory) that share the same boot, os, and asset definitions. Each site includes environment-specific information (Vaquero Agent URLs/certs, subnets, other metadata), and an inventory of hosts that apply boot definitions to machines.</li>
+<li><strong>workflows</strong>: Individual documents, each representing a Workflow</li>
 </ol>
 <pre><code>.
 ├── assets
 ├── os
 ├── boot
-└── sites</code></pre>
+├── sites
+└── workflows
+</code></pre>
 <h3 id="assets">Assets</h3>
 <p>Assets are grouped into named subdirectories based on type. There are currently four types:</p>
 <ol style="list-style-type: decimal">
@@ -71,6 +75,7 @@ Vaquero Data Model
 <li>Kickstart: <a href="http://fedoraproject.org/wiki/Anaconda/Kickstart">Fedora Project Kickstart</a></li>
 <li>Untyped: Miscellaneous files. Can be used for &quot;unsupported&quot; configuration types.</li>
 </ol>
+<p>Each subdirectory may also have a <code>snippets</code> directory for holding partial templates (see below)</p>
 <p>Each asset is placed under a subdirectory according to it's type. Assets are referenced by file name from host groups:</p>
 <pre><code>.
 └── assets
@@ -80,20 +85,31 @@ Vaquero Data Model
     │   ├── etcd.yml
     │   └── raid-fmt.yml
     ├── kickstart
-    │   └── clevos.yml
+    │   ├── snippets
+    │   │   ├── snip1
+    │   │   └── snip2
+    │   └── centos.ks
     └── untyped
         ├── autoyast.xml
         └── preseed.cfg</code></pre>
-<p>Validation is performed on typed assets to verify that rendered templates produce valid configurations.</p>
-<p>Assets are retrieved dynamically from the Vaquero Agent through typed endpoints. Query parameters are included in the request to render the asset for a particular host:</p>
-<ul>
-<li><code>/cloud-config</code> -- Cloud-config assets</li>
-<li><code>/ignition</code> -- Ignition assets</li>
-<li><code>/kickstart</code> -- Kickstart assets</li>
-<li><code>/untyped</code> -- Untyped assets</li>
-</ul>
-<p>For instance, a host with mac address <code>00:00:00:00:00:01</code> could retrieve it's rendered ignition configuration by requesting</p>
-<pre><code>{{.agent.url}}/ignition?mac=00:00:00:00:00:01</code></pre>
+<p>Validation is performed on typed assets to verify that rendered templates produce valid configuration scripts.</p>
+<p>Assets are retrieved dynamically from the Vaquero Agent asset server through the <code>/config/&lt;mac-addr&gt;</code> endpoint. An optional <code>boot</code> query parameter can be used to specify the ID of the Boot to use.</p>
+<p>For instance, a host with mac address <code>00:00:00:00:00:01</code> could retrieve it's default configuration by requesting</p>
+<pre><code>{{.env.assetURL}}/config/00:00:00:00:00:01</code></pre>
+<p>Or the configuration from a particular boot by requesting</p>
+<pre><code>{{.env.assetURL}}/config/00:00:00:00:00:01?boot=specific-boot-id</code></pre>
+<h4 id="asset-snippets">Asset Snippets</h4>
+<p>Any snippets for a particular config type are <em>always included</em> when rendering configurations of that type. Most of the time, the preferred use will be to have the snippet file <code>define</code> a template, and use the <code>template</code> function to include it in the configuration:</p>
+<pre><code>/assets/kickstart/snippets/snip1
+
+{{ define &quot;snippet-id-1&quot; }}
+  # Template here
+{{ end }}</code></pre>
+<pre><code>/assets/kickstart/centos.ks
+
+# My kickstart template
+{{ template &quot;snippet-id-1&quot; . }}
+</code></pre>
 <h3 id="operating-systems">Operating Systems</h3>
 <p>Operating systems exist as individual documents under the <code>os</code> subdirectory. They are referenced by a self-assigned ID described in the document:</p>
 <pre><code>.
@@ -101,8 +117,8 @@ Vaquero Data Model
     ├── centos-7.yml
     ├── clevos-3.yml
     └── coreos-1053.12.0.yml</code></pre>
-<h3 id="host-groups">Host Groups</h3>
-<p>Host groups exist as individual documents under the <code>boot</code> subdirectory. They are referenced by a self-assigned ID described in the document:</p>
+<h3 id="boot">Boot</h3>
+<p>Boots exist as individual documents under the <code>boot</code> subdirectory. They are referenced by a self-assigned ID described in the document:</p>
 <pre><code>.
 └── boot
     ├── etcd-cluster.yml
@@ -119,7 +135,14 @@ Vaquero Data Model
         ├── env.yml
         ├── inventory.yml
         └── another-inv.yml</code></pre>
-<h2 id="rough-workflow"><a name="rough-workflow">Rough Workflow</a></h2>
+<h3 id="workflows">Workflows</h3>
+<p>Workflows exist as individual documents under the <code>workflows</code> subdirectory. They are referenced by a self-assigned ID described in the document:</p>
+<pre><code>.
+└── workflows
+    ├── clevos-accessor.yml
+    ├── k8s-master.yml
+    └── k8s-node.yml</code></pre>
+<h2 id="provisioning-steps"><a name="provisioning-steps">Provisioning Steps</a></h2>
 <p>Configurations are roughly executed in the following order:</p>
 <ol style="list-style-type: decimal">
 <li>Host makes DHCP request.</li>
@@ -250,7 +273,7 @@ cmdline:
     boot</code></pre>
 <p>Note how <code>lang</code> appears with a trailing <code>=</code>, because it's value was non-empty <code>' '</code></p>
 <h2 id="schemas"><a name="schemas">Schemas</a></h2>
-<h3 id="boot">boot</h3>
+<h3 id="boot-1">boot</h3>
 <p>Defines a configured state (combination of os with unattended configuration and metadata) that may be applied to a group of hosts.</p>
 <table>
 <thead>
