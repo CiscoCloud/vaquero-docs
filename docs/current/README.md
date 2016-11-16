@@ -4,6 +4,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Vaquero README</title>
             <link rel="stylesheet" type="text/css" href="../doc.css">
+            <link rel='shortcut icon' href='cow.png' type='image/x-icon'/ >
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
             <style>
                 .markdown-body {
@@ -18,12 +19,11 @@
 
 # Vaquero
 
-[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.html)
+[Home](https://ciscocloud.github.io/vaquero-docs/) | [Dev Repo](https://github.com/CiscoCloud/vaquero) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.html) | [Issue Tracking](https://waffle.io/CiscoCloud/vaquero)
 
-[![Build Status](https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg)](https://drone.projectshipped.io/CiscoCloud/vaquero)
+<img src="cow.png" alt="Drawing" style="width: 200px;"/>
 
-- [Private Dev Repo](https://github.com/CiscoCloud/vaquero) : Vaquero's development home
-- [Waffle.io Issue Tracking](https://waffle.io/CiscoCloud/vaquero): Progress tracking tool
+
 
 A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped unattend boot scripts.
 
