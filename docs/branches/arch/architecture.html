@@ -58,7 +58,7 @@ Vaquero Architecture
 <li>state engine creates LOM tasks for related task executors to reboot hosts</li>
 <li>vaquero agent task executor obtains and runs LOM task to reboot hosts</li>
 <li>host boots and begins DHCP / TFTP / HTTP process in network boot</li>
-<li>model cache is updated just in time for the above 3 services</li>
+<li>model cache and state manifest is updated via model API for the above 3 services (just in time updating)</li>
 <li>events are reported to vaquero server</li>
 <li>state engine observes events status and tasks status and will act until desired state is reached</li>
 </ol>
