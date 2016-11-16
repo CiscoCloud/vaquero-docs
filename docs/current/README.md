@@ -56,10 +56,8 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 5. Secure **self-registration** for vaquero agents
 
 ### On the Roadmap
-1. Improved **speed**, concurrency, and channel handling
-2. Transition to updated data model format, and improved **life cycle management** to handle future changes to the data model
-3. Foreman-to-Vaquero **template converter**
-4. Configuration file **generator**
+1. Configuration file **generator**
+2. Develop structure in data model for **lifecycle management** around requirement for rolling upgrades
 
 
 # [Architecture](architecture.html)
