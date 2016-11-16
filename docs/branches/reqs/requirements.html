@@ -41,6 +41,11 @@ Vaquero Requirements
 <li>Workflow automation to provide managed updates of cluster.</li>
 <li>Automatically provision hardware according to the SoT.</li>
 <li>The ability to gate changes from SoT before applying to hardware.</li>
+<li>The ability to deploy separate instances of servers and agents and documentation on how to do it.</li>
+<li>Document HA scenarios for servers and new deployment requirements for persistent storage to back server cluster.</li>
+<li>HTTPS communication is a must for API's between servers and agents.</li>
+<li>DHCP options to be more robust in handling NTP &amp; DNS assignment.</li>
+<li>Vaquero standalone mode to manage internal labs.</li>
 </ol>
 <h3 id="in-progress">In Progress</h3>
 <ol start="10" style="list-style-type: decimal">
@@ -51,8 +56,14 @@ Vaquero Requirements
 <li>network partition between agent and controller</li>
 <li>upgradability of agent node</li>
 </ul></li>
+<li>Deploy a first build of all software clusters in lab.</li>
+<li>Separated Vaquero Server and Vaquero Agent to manage internal labs.</li>
+<li>Validate Vaquero with dual homed CleverSafe machines.</li>
+<li>Successfully guide multi-stage deployments managed by state machine on vaquero server(s).</li>
+<li>Provide state transition details and host status to provide operational insights.</li>
+<li>Upgrade workflow definitions to run pluggable pre-reboot and post-reboot jobs.</li>
 </ol>
-<h3 id="incompplete">Incompplete</h3>
+<h3 id="incomplete">Incomplete</h3>
 <ol start="16" style="list-style-type: decimal">
 <li>Provide availability in the following network conditions:
 <ul>
