@@ -18,7 +18,7 @@ Vaquero README
 </head><article class="markdown-body">
 
 <h1 id="vaquero">Vaquero</h1>
-<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> | <a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a> | <a href="requirements.md">Project Requirements</a></p>
+<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> | <a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a> | <a href="requirements.html">Project Requirements</a></p>
 <p><a href="https://drone.projectshipped.io/CiscoCloud/vaquero"><img src="https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg" alt="Build Status" /></a></p>
 <ul>
 <li><a href="https://github.com/CiscoCloud/vaquero">Private Dev Repo</a> : Vaquero's development home</li>
@@ -26,22 +26,22 @@ Vaquero README
 </ul>
 <p>A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped unattend boot scripts.</p>
 <p>The only thing you need pre-installed to run Vaquero is <a href="https://www.docker.com/">Docker</a>.</p>
-<p>See the <a href="getting-started.md">Getting Started</a> page for details on deploying Vaquero in virtualbox.</p>
-<h1 id="architecture"><a href="architecture.md">Architecture</a></h1>
+<p>See the <a href="getting-started.html">Getting Started</a> page for details on deploying Vaquero in virtualbox.</p>
+<h1 id="architecture"><a href="architecture.html">Architecture</a></h1>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/arch-revision.png" />
 </div>
-<h2 id="data-model-templates"><a href="data-model-howto.md">Data Model Templates</a></h2>
+<h2 id="data-model-templates"><a href="data-model-howto.html">Data Model Templates</a></h2>
 <p>Data Models are used by Vaquero as the &quot;Source of Truth&quot; to describe your data center. Data Models define machine operating systems, subnets, and boot scripts. We provide some <a href="https://github.com/CiscoCloud/vaquero-examples">example data models</a> as a reference to build your own.</p>
 <p>Two notable branches in the example repo:</p>
 <ul>
 <li><p><a href="https://github.com/CiscoCloud/vaquero-examples"><code>master</code></a>: This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature, model type, and workflow is up. The master branch will be configured to run on localhost.</p></li>
-<li><p><a href="https://github.com/CiscoCloud/vaquero-examples/tree/vagrant"><code>vagrant</code></a>: Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most. This branch will contain a data model that will include definitions for the demos. See the <a href="getting-started.md">Getting Started</a> page for for more info about the demos.</p></li>
+<li><p><a href="https://github.com/CiscoCloud/vaquero-examples/tree/vagrant"><code>vagrant</code></a>: Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most. This branch will contain a data model that will include definitions for the demos. See the <a href="getting-started.html">Getting Started</a> page for for more info about the demos.</p></li>
 </ul>
 <h2 id="configuring-and-running-vaquero">Configuring and Running Vaquero</h2>
 <p>The diagram below depicts what a production (multi-agent, multi-server) deployment of Vaquero might look like. <img src="https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/many-vaqueros.png" /></p>
 <p>Vaquero can run in multiple modes: <code>server</code>, <code>agent</code>, and <code>standalone</code>. &quot;Standalone&quot; refers to running server and agent in the same container. A standalone configuration file, combining information needed to run both agent and server, is shown below.</p>
-<p>See the <a href="architecture.md">architecture page</a> for more details about server and agent.</p>
+<p>See the <a href="architecture.html">architecture page</a> for more details about server and agent.</p>
 <hr />
 <p><strong>sample-standalone-config.yaml:</strong></p>
 <pre><code>ServerApi:
@@ -386,7 +386,7 @@ WantedBy=default.target</code></pre>
 <li>Restart both the <code>docker</code> and the <code>vaquero</code> services <code>sudo systemctl restart docker</code></li>
 <li>Make sure that pathing is correct for config and files required</li>
 </ol>
-<h2 id="vaquero-validate"><a href="validator.md">Vaquero Validate</a></h2>
+<h2 id="vaquero-validate"><a href="validator.html">Vaquero Validate</a></h2>
 <p>CLI tool that is for validating your data model before you push it through Vaquero</p>
 <h2 id="sending-webhooks-to-vaquero-master">Sending Webhooks to Vaquero Master</h2>
 <ol style="list-style-type: decimal">
