@@ -20,7 +20,7 @@
 
 <div align="center">
 <img src="cow.png" alt="Drawing" style="width: 200px;"/>
-  <p><font size="70">vaquero</font></p>
+  <p style="font-size:60px">vaquero</p>
 [Home](https://ciscocloud.github.io/vaquero-docs/) | [Dev Repo](https://github.com/CiscoCloud/vaquero) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.html) | [Issue Tracking](https://waffle.io/CiscoCloud/vaquero)
 </div>
 
