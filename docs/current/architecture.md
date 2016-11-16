@@ -57,6 +57,23 @@ The `vaquero` container running in `agent` mode registers itself with an upstrea
 6. **event client** - an HTTP client that reports long running service events back (DHCP, TFTP, HTTP) to the vaquero server cluster. (the servers leverage this information to understand what state booting hosts are in)
 7. **task executor (in progress)** - a generic container execution runtime. It will receive "tasks" or containers to run from a centralized task manager, run it and return the exit code and logs. Vaquero will leverage this for LOM management and running pre-reboot and post-reboot containers to flush and validate state on a host.
 
+#### Walking through an update
+1. SoT updated
+2. updater fetches update
+3. server controller receives event and stores model in etcd
+4. state engine computes differences between current state and new desired state from the SoT.
+5. state engine creates LOM tasks for related task executors to reboot hosts
+6. vaquero agent task executor obtains and runs LOM task to reboot hosts
+7. host boots and begins DHCP / TFTP / HTTP process in network boot
+8. model cache is updated just in time for the above 3 services
+9. events are reported to vaquero server
+10. state engine observes events status and tasks status and will act until desired state is reached
+
+## HA Vaquero
+
+The diagram below depicts what a production deployment of Vaquero would look like. The Vaquero server cluster would be deployed and backed by an etcd cluster. Vaquero servers act like a distributed message queue for its agents, servers never instantiate outbound calls. Vaquero agents would be deployed to service one data model "site", technically two agents could run in the same broadcast domain as long as they each server different hosts in the broadcast domain. We would recommend deploying one Vaquero agent per broadcast domain. Requirements for a production deployment would include [Docker](https://www.docker.com/), [etcd](https://github.com/coreos/etcd), and a load balancer of your choice. See the [outage document](outage.html) to see how Vaquero handles failures.
+
+![](nov16HA.png)
 
 ## Deployment and Availability Considerations
 
