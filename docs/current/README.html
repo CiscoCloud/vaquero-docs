@@ -38,11 +38,6 @@ Vaquero README
 <li><p><a href="https://github.com/CiscoCloud/vaquero-examples"><code>master</code></a>: This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature, model type, and workflow is up. The master branch will be configured to run on localhost.</p></li>
 <li><p><a href="https://github.com/CiscoCloud/vaquero-examples/tree/vagrant"><code>vagrant</code></a>: Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most. This branch will contain a data model that will include definitions for the demos. See the <a href="getting-started.html">Getting Started</a> page for for more info about the demos.</p></li>
 </ul>
-<h2 id="production-deployment-of-vaquero">Production Deployment of Vaquero</h2>
-<p>The diagram below depicts what a production deployment of Vaquero would look like. The Vaquero server cluster would be deployed and backed by an etcd KV cluster. We keep server coordination to a minimum by simply responding to all HTTP requests coming in, servers never instantiate outbound calls. Requirements for a production deployment would include <a href="https://www.docker.com/">Docker</a>, <a href="https://github.com/coreos/etcd">etcd</a>, and a load balancer of your choice. See the <a href="outage.html">outage document</a> to see how Vaquero handles failures.</p>
-<div class="figure">
-<img src="nov16HA.png" />
-</div>
 <h2 id="configuring-and-running-vaquero">Configuring and Running Vaquero</h2>
 <p>Vaquero can run in multiple modes: <code>server</code>, <code>agent</code>, and <code>standalone</code>. &quot;Standalone&quot; refers to running server and agent in the same container. A standalone configuration file, combining information needed to run both agent and server, is shown below.</p>
 <p>See the <a href="architecture.html">architecture page</a> for more details about server and agent.</p>

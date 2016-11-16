@@ -37,6 +37,7 @@ Vaquero Data Model
 <li><p><a href="#metadata-and-templating">Metadata and Templating</a></p></li>
 <li><p><a href="#translation-to-ipxe">Translation to iPXE</a></p></li>
 <li><p><a href="#schemas">Schemas</a></p></li>
+<li><p><a href="#staging">Staging Updates</a></p></li>
 </ol>
 <h3 id="introduction">Introduction</h3>
 <p>The Vaquero data model is meant to be a declarative representation of the state of your data center. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.</p>
@@ -954,3 +955,5 @@ cmdline:
 </tr>
 </tbody>
 </table>
+<h2 id="staging-updates"><a name="staging">Staging Updates</a></h2>
+<p>Github will be used to stage models for updating, vaquero will receive webhooks from specified branches. Submitting PR's and merging other branches into the vaquero branch would be how teams manage updating their source of truth. Once a model lands in the branch vaquero is watching, it will push it out and begin provisioning against that source of truth.</p>
