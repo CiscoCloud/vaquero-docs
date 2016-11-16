@@ -29,7 +29,7 @@ The Vaquero project is designed to simplify the provisioning and ongoing operati
 
 ## Requirements:
 
-### Completed : 9/19/2016
+### Completed : 11/2016
 1. A textual and structured representation of the cluster in a VCS -- the source of truth (SoT).
 2. Validation of data within SoT -- proper structure, dump work to be performed in human-readable format. (some minimum validation of "known" asset formats?)
 3. Support for netboot (iPXE, TFTP, etc.) of cluster instances.
@@ -37,21 +37,35 @@ The Vaquero project is designed to simplify the provisioning and ongoing operati
 5. Management of multiple clusters of software.
 6. Integration with GitHub has provider of SoT.
 7. System should treat SoT as an immutable reference.
+8. Management of multiple datacenters via federated architecture.
+9. Relationship between SoT to cluster instances via static identifiers (MAC, UUID, others?).
+10. Workflow automation to provide managed installs of cluster.
+11. Workflow automation to provide managed updates of cluster.
+12. Automatically provision hardware according to the SoT.
+13. The ability to gate changes from SoT before applying to hardware.
+14. The ability to deploy separate instances of servers and agents and documentation on how to do it.
+15. Document HA scenarios for servers and new deployment requirements for persistent storage to back server cluster.
+16. HTTPS communication is a must for API's between servers and agents.
+17. DHCP options to be more robust in handling NTP & DNS assignment.
+18. Vaquero standalone mode to manage internal labs.
+19. Provide availability in the following network conditions:
+    * network partition between agent and controller
+
+
+### In Progress
+1. Manage power state of the hardware.
+2. Support incremental (multistep) cluster provisioning.
+3. Deploy a first build of all software clusters in lab.
+4. Separated Vaquero Server and Vaquero Agent to manage internal labs.
+5. Validate Vaquero with dual homed CleverSafe machines.
+6. Successfully guide multi-stage deployments managed by state machine on vaquero server(s).
+7. Provide state transition details and host status to provide operational insights.
+8. Upgrade workflow definitions to run pluggable pre-reboot and post-reboot jobs.
 
 
 ### Incomplete
-8. Management of multiple datacenters via federated architecture.
-9. Relationship between SoT to cluster instances via static identifiers (MAC, UUID, others?).
-10. Manage power state of the hardware.
-11. Workflow automation to provide managed installs of cluster.
-12. Workflow automation to provide managed updates of cluster.
-13. Automatically provision hardware according to the SoT.
-14. The ability to gate changes from SoT before applying to hardware.
-15. Support incremental (multistep) cluster provisioning.
-16. Provide availability in the following network conditions:
-    * network partition between agent and controller
+1. Provide availability in the following network conditions:
     * upgradability of agent node
-    * ~~outage of agent node~~
 
 
 ## Non-requirements:
@@ -72,4 +86,4 @@ The Vaquero project is designed to simplify the provisioning and ongoing operati
 
 * Security: integration w/role base systems
 * Security: management of user credentials
-* Security: management of assymetric encryption keys
+* Security: management of encryption keys
