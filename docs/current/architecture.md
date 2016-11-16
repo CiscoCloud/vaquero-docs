@@ -17,9 +17,7 @@
 </head><article class="markdown-body">
 
 # Vaquero: Architecture
-[Home](https://ciscocloud.github.io/vaquero-docs/)
-
-[Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
+[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 **Last Updated**: September 2016
 
@@ -53,7 +51,7 @@ The `vaquero` process in `agent` mode registers itself with an upstream master a
 
 The overall solution will be driven by a centralized control system node that manages the process of transforming updates for our Source of Truth (SoT) into configurations that can be applied by the datacenter nodes. To perform this transformation, the system will need to process updates from the SoT, compile the changes, and stage those changes for implementation.
 
-The structure of this data is defined [elsewhere](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html).
+The structure of this data is defined [elsewhere](data-model-howto.html).
 
 #### `vaquero server`
 

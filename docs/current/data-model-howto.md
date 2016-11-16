@@ -17,9 +17,7 @@
 </head><article class="markdown-body">
 
 # The Vaquero Data Model and YOU
-[Home](https://ciscocloud.github.io/vaquero-docs/)
-
-[Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
+[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 - [Example Data Models](https://github.com/CiscoCloud/vaquero-examples)
 
@@ -50,7 +48,7 @@ Each site contains an `environment file` and an `inventory file` that lists all 
 
 The Vaquero data model is meant to be a declarative representation of the state of your data center. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.
 
-We treat this data model as a "single source of truth" (SoT) that describes the operating state of your data center. The data model is [parsed and verified](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html), then deployed to an on-site Vaquero Agent for execution.
+We treat this data model as a "single source of truth" (SoT) that describes the operating state of your data center. The data model is [parsed and verified](validator.html), then deployed to an on-site Vaquero Agent for execution.
 
 ## <a name="key-concepts">Key Concepts</a>
 
@@ -335,7 +333,7 @@ Note how `lang` appears with a trailing `=`, because it's value was non-empty `'
 
 Defines a configured state (combination of os with unattended configuration and metadata) that may be applied to a group of hosts.
 
-|       name       |                        description                        | required |      schema     | default |
+| name             | description                                               | required | schema          | default |
 |:-----------------|:----------------------------------------------------------|:---------|:----------------|:--------|
 | id               | A self-assigned identifier (should be unique)             | yes      | string          |         |
 | name             | A human-readable name for this group                      | no       | string          | id      |
@@ -421,21 +419,21 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 
 \** Type `base64` is a base64 encoded value.
 
-[Examples](https://ciscocloud.github.io/vaquero-docs/docs/current/dhcp-options.html)
+[Examples](dhcp-options.html)
 
-|   name   |                     description                      | required |    schema    | default |
-|:---------|:-----------------------------------------------------|:---------|:-------------|:--------|
-| id       | A self-assigned identifier (should be unique in env) | yes      | string       |         |
-| cidr     | CIDR for this subnet                                 | yes      | string       |         |
-| dns      | List of DNS URLs                                     | yes      | string array |         |
-| ntp      | List of NTP URLs                                     | yes      | string array |         |
-| domain   | Client DNS domain                                    | no       | string       |         |
-| gateway  | Gateway for this subnet                              | no       | string       |         |
-| vlan     | VLAN for the subnet                                  | no       | integer      |       1 |
+| name    | description                                          | required | schema       | default |
+|:--------|:-----------------------------------------------------|:---------|:-------------|:--------|
+| id      | A self-assigned identifier (should be unique in env) | yes      | string       |         |
+| cidr    | CIDR for this subnet                                 | yes      | string       |         |
+| dns     | List of DNS URLs                                     | yes      | string array |         |
+| ntp     | List of NTP URLs                                     | yes      | string array |         |
+| domain  | Client DNS domain                                    | no       | string       |         |
+| gateway | Gateway for this subnet                              | no       | string       |         |
+| vlan    | VLAN for the subnet                                  | no       | integer      | 1       |
 
 #### host
 
-|    name    |                    description                     | required |   schema  | default |
+| name       | description                                        | required | schema    | default |
 |:-----------|:---------------------------------------------------|:---------|:----------|:--------|
 | name       | Name for the host machine.                         | yes      | string    |         |
 | interfaces | Network intefaces for this host                    | no       | interface |         |
@@ -445,7 +443,7 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 
 #### interface
 
-|     name    |                        description                         | required |     schema    | default |
+| name        | description                                                | required | schema        | default |
 |:------------|:-----------------------------------------------------------|:---------|:--------------|:--------|
 | type        | Interface type. Physical/bmc                               | yes      | string        |         |
 | mac         | MAC address identifying this interface                     | yes      | string        |         |
@@ -459,11 +457,11 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 
 #### interface.bmc
 
-|    name   |                     description                     |  required |  schema |  default |
-|:----------|:----------------------------------------------------|:----------|:--------|:---------|
-| type      | Specifies protocol type. IPMI/CIMC                  | yes       | string  |          |
-| username  | User for managing BMC                               | yes       | string  |          |
-| password  | Password for specified user                         | yes       | string  |          |
+| name     | description                        | required | schema | default |
+|:---------|:-----------------------------------|:---------|:-------|:--------|
+| type     | Specifies protocol type. IPMI/CIMC | yes      | string |         |
+| username | User for managing BMC              | yes      | string |         |
+| password | Password for specified user        | yes      | string |         |
 
 ### os
 
@@ -502,12 +500,12 @@ Kernel and initrd values may be templated. They will be rendered on-demand for i
 
 A workflow chains multiple boots together to provision a host. The workflow is also responsible for specifying basic policy for rebutting hosts that use it.
 
-|      name       |                       description                        | required  |        schema         | default  |
-|:----------------|:---------------------------------------------------------|:----------|:----------------------|:---------|
-| id              | self-assigned identifier                                 | yes       | string                |          |
-| workflow        | Series of boots to provision the host                    | yes       | workflow.stage array  |          |
-| max_concurrent  | Max simultaneous hosts actively provisioning             | no        | int                   |       0  |
-| safe_deps       | IDs of safe dependency workflows                         | no        | string array          |          |
-| block_deps      | IDs of blocking dependency workflows                     | no        | string array          |          |
-| validate_on     | IDs of workflows that cause this workflow to revalidate  | no        | string array          |          |
-| max_fail        | How many hosts can fail before halted                    | no        | int                   |       0  |
+| name           | description                                             | required | schema               | default |
+|:---------------|:--------------------------------------------------------|:---------|:---------------------|:--------|
+| id             | self-assigned identifier                                | yes      | string               |         |
+| workflow       | Series of boots to provision the host                   | yes      | workflow.stage array |         |
+| max_concurrent | Max simultaneous hosts actively provisioning            | no       | int                  | 0       |
+| safe_deps      | IDs of safe dependency workflows                        | no       | string array         |         |
+| block_deps     | IDs of blocking dependency workflows                    | no       | string array         |         |
+| validate_on    | IDs of workflows that cause this workflow to revalidate | no       | string array         |         |
+| max_fail       | How many hosts can fail before halted                   | no       | int                  | 0       |

@@ -17,9 +17,7 @@
 </head><article class="markdown-body">
 
 # DHCP Options
-[Home](https://ciscocloud.github.io/vaquero-docs/)
-
-[Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
+[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 Vaquero's DHCP server sends it's DHCP Options based on fields in `env.subnet`, defined
 in the Data Model's `env.yaml.`
@@ -42,7 +40,7 @@ The options set implicitly by Vaquero are shown below:
 
 ## Custom Options
 There may be a situation where additional options are required. Additional options
-can be configured in the format defined in the data model [subnet docs](https://github.com/CiscoCloud/vaquero-docs/blob/master/docs/current/data-model-howto.md#envsubnet).
+can be configured in the format defined in the data model [subnet docs](data-model-howto.html#envsubnet).
 
 Below we list a few use cases for custom DHCP Options and the corresponding ```env.subnet.dhcp_options``` to use.
 ### Example 1: Custom IP Time-To-Live:
