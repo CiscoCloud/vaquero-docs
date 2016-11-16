@@ -43,6 +43,12 @@ The Vaquero project is designed to simplify the provisioning and ongoing operati
 12. Workflow automation to provide managed updates of cluster.
 13. Automatically provision hardware according to the SoT.
 14. The ability to gate changes from SoT before applying to hardware.
+17. The ability to deploy separate instances of servers and agents and documentation on how to do it.
+18. Document HA scenarios for servers and new deployment requirements for persistent storage to back server cluster.
+19. HTTPS communication is a must for API's between servers and agents.
+20. DHCP options to be more robust in handling NTP & DNS assignment.
+22. Vaquero standalone mode to manage internal labs.
+
 
 ### In Progress
 10. Manage power state of the hardware.
@@ -50,8 +56,15 @@ The Vaquero project is designed to simplify the provisioning and ongoing operati
 16. Provide availability in the following network conditions:
     * network partition between agent and controller
     * upgradability of agent node
+21. Deploy a first build of all software clusters in lab.
+23. Separated Vaquero Server and Vaquero Agent to manage internal labs.
+24. Validate Vaquero with dual homed CleverSafe machines.
+25. Successfully guide multi-stage deployments managed by state machine on vaquero server(s).
+26. Provide state transition details and host status to provide operational insights.
+27. Upgrade workflow definitions to run pluggable pre-reboot and post-reboot jobs.
 
-### Incompplete
+
+### Incomplete
 16. Provide availability in the following network conditions:
     * ~~outage of agent node~~
 
