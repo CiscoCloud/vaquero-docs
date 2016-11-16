@@ -29,7 +29,7 @@ The Vaquero project is designed to simplify the provisioning and ongoing operati
 
 ## Requirements:
 
-### Completed : 9/19/2016
+### Completed : 11/2016
 1. A textual and structured representation of the cluster in a VCS -- the source of truth (SoT).
 2. Validation of data within SoT -- proper structure, dump work to be performed in human-readable format. (some minimum validation of "known" asset formats?)
 3. Support for netboot (iPXE, TFTP, etc.) of cluster instances.
