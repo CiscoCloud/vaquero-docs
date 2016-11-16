@@ -44,6 +44,8 @@ Each site contains an `environment file` and an `inventory file` that lists all 
 
 8. [Schemas](#schemas)
 
+9. [Staging Updates](#staging)
+
 ### Introduction
 
 The Vaquero data model is meant to be a declarative representation of the state of your data center. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.
@@ -509,3 +511,8 @@ A workflow chains multiple boots together to provision a host. The workflow is a
 | block_deps     | IDs of blocking dependency workflows                    | no       | string array         |         |
 | validate_on    | IDs of workflows that cause this workflow to revalidate | no       | string array         |         |
 | max_fail       | How many hosts can fail before halted                   | no       | int                  | 0       |
+
+
+## <a name="staging">Staging Updates</a>
+
+Github will be used to stage models for updating, vaquero will receive webhooks from specified branches. Submitting PR's and merging other branches into the vaquero branch would be how teams manage updating their source of truth. Once a model lands in the branch vaquero is watching, it will push it out and begin provisioning against that source of truth.
