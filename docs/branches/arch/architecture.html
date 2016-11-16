@@ -49,5 +49,23 @@ Vaquero Architecture
 <li><strong>event client</strong> - an HTTP client that reports long running service events back (DHCP, TFTP, HTTP) to the vaquero server cluster. (the servers leverage this information to understand what state booting hosts are in)</li>
 <li><strong>task executor (in progress)</strong> - a generic container execution runtime. It will receive &quot;tasks&quot; or containers to run from a centralized task manager, run it and return the exit code and logs. Vaquero will leverage this for LOM management and running pre-reboot and post-reboot containers to flush and validate state on a host.</li>
 </ol>
+<h4 id="walking-through-an-update">Walking through an update</h4>
+<ol style="list-style-type: decimal">
+<li>SoT updated</li>
+<li>updater fetches update</li>
+<li>server controller receives event and stores model in etcd</li>
+<li>state engine computes differences between current state and new desired state from the SoT.</li>
+<li>state engine creates LOM tasks for related task executors to reboot hosts</li>
+<li>vaquero agent task executor obtains and runs LOM task to reboot hosts</li>
+<li>host boots and begins DHCP / TFTP / HTTP process in network boot</li>
+<li>model cache is updated just in time for the above 3 services</li>
+<li>events are reported to vaquero server</li>
+<li>state engine observes events status and tasks status and will act until desired state is reached</li>
+</ol>
+<h2 id="ha-vaquero">HA Vaquero</h2>
+<p>The diagram below depicts what a production deployment of Vaquero would look like. The Vaquero server cluster would be deployed and backed by an etcd cluster. Vaquero servers act like a distributed message queue for its agents, servers never instantiate outbound calls. Vaquero agents would be deployed to service one data model &quot;site&quot;, technically two agents could run in the same broadcast domain as long as they each server different hosts in the broadcast domain. We would recommend deploying one Vaquero agent per broadcast domain. Requirements for a production deployment would include <a href="https://www.docker.com/">Docker</a>, <a href="https://github.com/coreos/etcd">etcd</a>, and a load balancer of your choice. See the <a href="outage.html">outage document</a> to see how Vaquero handles failures.</p>
+<div class="figure">
+<img src="nov16HA.png" />
+</div>
 <h2 id="deployment-and-availability-considerations">Deployment and Availability Considerations</h2>
 <p>Please see the <a href="README.html">README</a> for details on production deployments, considerations, and requirements. See the <a href="outage.html">outage doc</a> to see how vaquero handles certain failure scenarios.</p>
