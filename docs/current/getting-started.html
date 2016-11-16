@@ -18,8 +18,7 @@ Vaquero Getting Started
 </head><article class="markdown-body">
 
 <h1 id="getting-started">getting started</h1>
-<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a></p>
-<p><a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
+<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> | <a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
 <h2 id="virtual-environment"><a href="https://github.com/CiscoCloud/vaquero-vagrant">virtual environment</a></h2>
 <p>Repo for deploying vaquero via vagrant on VirtualBox VMs. Validated on OSX and Windows. Base VM image is Centos7 with docker, kernels and initrds pre-installed.</p>
 <p><a href="https://cisco.box.com/s/tmd818xyj1126kf7nxqmimtxtuy7fxfr">Video : Running the VM</a></p>
@@ -212,7 +211,7 @@ Vaquero Getting Started
 <li>Go through steps 1-4.</li>
 <li>You must add your personal git token into the <a href="https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config">config</a> for this to work.</li>
 <li>Create your own github repo to contain your own data model</li>
-<li>If your machine is not routable set up <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/README.html">ngrok and the githook as described in the README</a></li>
+<li>If your machine is not routable set up <a href="README.html">ngrok and the githook as described in the README</a></li>
 <li>Create your own vaquero configuration based off <code>config/git-sot.yaml</code> examples. Update the Gitter fields (URL) and SoT (branch) section to reflect your repo.</li>
 <li>Start vaquero and ensure the zipball API info log refers to your repo and is a success</li>
 <li>Update your github repo, see webhook</li>
@@ -226,7 +225,7 @@ Vaquero Getting Started
 <li>Run <code>./create-cluster/cluster -c &lt;count&gt;</code> to start <count> VM's starting at mac <code>:01</code> and counting up</li>
 </ol>
 <p><a href="https://cisco.box.com/s/cbvci60f1v6b3bcajq2ejtfizr3z0ss6">Video</a></p>
-<h3 id="running-the-validator-or-preview"><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html">running the validator OR preview</a></h3>
+<h3 id="running-the-validator-or-preview"><a href="validator.html">running the validator OR preview</a></h3>
 <p>After sshing into the vagrant VM, with the container on it. Preview will work in the same way.</p>
 <p>Validator using a git repo <code>docker run -v &lt;SRC_CFG&gt;:&lt;DEST_CFG&gt; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --config &lt;DEST_CFG&gt;</code></p>
 <p>Validator using a local dir <code>docker run -v &lt;SRC_DIR&gt;:&lt;DEST_DIR&gt; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --sot &lt;DEST_DIR&gt;</code></p>

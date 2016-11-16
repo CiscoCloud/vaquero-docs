@@ -18,8 +18,7 @@ Vaquero Getting Started
 </head><article class="markdown-body">
 
 <h1 id="dhcp-options">DHCP Options</h1>
-<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a></p>
-<p><a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
+<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> | <a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
 <p>Vaquero's DHCP server sends it's DHCP Options based on fields in <code>env.subnet</code>, defined in the Data Model's <code>env.yaml.</code></p>
 <p>The options set implicitly by Vaquero are shown below:</p>
 <table>
@@ -75,7 +74,7 @@ Vaquero Getting Started
 </table>
 <p>* vendor specific is set by vaquero during PXEBoot.</p>
 <h2 id="custom-options">Custom Options</h2>
-<p>There may be a situation where additional options are required. Additional options can be configured in the format defined in the data model <a href="https://github.com/CiscoCloud/vaquero-docs/blob/master/docs/current/data-model-howto.md#envsubnet">subnet docs</a>.</p>
+<p>There may be a situation where additional options are required. Additional options can be configured in the format defined in the data model <a href="data-model-howto.html#env.subnet">subnet docs</a>.</p>
 <p>Below we list a few use cases for custom DHCP Options and the corresponding <code>env.subnet.dhcp_options</code> to use. ### Example 1: Custom IP Time-To-Live:</p>
 <p>IP TTL is DHCP Option 23 and it's value is an unsigned 8 bit integer. The following <code>env.subnet.dhcp_option</code> will set the TTL to 128:</p>
 <pre><code>dhcp_options:
