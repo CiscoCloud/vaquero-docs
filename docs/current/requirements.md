@@ -48,25 +48,24 @@ The Vaquero project is designed to simplify the provisioning and ongoing operati
 16. HTTPS communication is a must for API's between servers and agents.
 17. DHCP options to be more robust in handling NTP & DNS assignment.
 18. Vaquero standalone mode to manage internal labs.
+19. Provide availability in the following network conditions:
+    * network partition between agent and controller
 
 
 ### In Progress
 1. Manage power state of the hardware.
 2. Support incremental (multistep) cluster provisioning.
-3. Provide availability in the following network conditions:
-    * network partition between agent and controller
-    * upgradability of agent node
-4. Deploy a first build of all software clusters in lab.
-5. Separated Vaquero Server and Vaquero Agent to manage internal labs.
-6. Validate Vaquero with dual homed CleverSafe machines.
-7. Successfully guide multi-stage deployments managed by state machine on vaquero server(s).
-8. Provide state transition details and host status to provide operational insights.
-9. Upgrade workflow definitions to run pluggable pre-reboot and post-reboot jobs.
+3. Deploy a first build of all software clusters in lab.
+4. Separated Vaquero Server and Vaquero Agent to manage internal labs.
+5. Validate Vaquero with dual homed CleverSafe machines.
+6. Successfully guide multi-stage deployments managed by state machine on vaquero server(s).
+7. Provide state transition details and host status to provide operational insights.
+8. Upgrade workflow definitions to run pluggable pre-reboot and post-reboot jobs.
 
 
 ### Incomplete
 1. Provide availability in the following network conditions:
-    * ~~outage of agent node~~
+    * upgradability of agent node
 
 
 ## Non-requirements:
