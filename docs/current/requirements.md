@@ -37,20 +37,22 @@ The Vaquero project is designed to simplify the provisioning and ongoing operati
 5. Management of multiple clusters of software.
 6. Integration with GitHub has provider of SoT.
 7. System should treat SoT as an immutable reference.
-
-
-### Incomplete
 8. Management of multiple datacenters via federated architecture.
 9. Relationship between SoT to cluster instances via static identifiers (MAC, UUID, others?).
-10. Manage power state of the hardware.
 11. Workflow automation to provide managed installs of cluster.
 12. Workflow automation to provide managed updates of cluster.
 13. Automatically provision hardware according to the SoT.
 14. The ability to gate changes from SoT before applying to hardware.
+
+### In Progress
+10. Manage power state of the hardware.
 15. Support incremental (multistep) cluster provisioning.
 16. Provide availability in the following network conditions:
     * network partition between agent and controller
     * upgradability of agent node
+
+### Incompplete
+16. Provide availability in the following network conditions:
     * ~~outage of agent node~~
 
 
@@ -72,4 +74,4 @@ The Vaquero project is designed to simplify the provisioning and ongoing operati
 
 * Security: integration w/role base systems
 * Security: management of user credentials
-* Security: management of assymetric encryption keys
+* Security: management of encryption keys
