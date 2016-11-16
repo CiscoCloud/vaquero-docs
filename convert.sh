@@ -18,3 +18,4 @@ for src in docs/current/*.md; do
     pandoc "${src}" -o "${dst}"
 done
 
+cp docs/current/*.png ${TARGET}

@@ -18,9 +18,7 @@
 
 # getting started
 
-[Home](https://ciscocloud.github.io/vaquero-docs/)
-
-[Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
+[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 
 ## [virtual environment](https://github.com/CiscoCloud/vaquero-vagrant)
@@ -59,6 +57,9 @@ By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
 
   For example: `VS_NUM=3 vagrant up` will stand up 3 vaquero server VMs. Running `vagrant destroy -f` will only destroy the first instance, you must run `VS_NUM=3 vagrant destroy -f` to clean up all of them. Include *every* ENV var for *every* vagrant command, even things like `vagrant ssh vs-3`.
 
+  **Etcd check:** Once the VM(s) are booted and before running vaquero, ssh into one of your server machines. Perform a cluster health check:
+  `ETCDCTL_API=2 etcdctl cluster-health`. If an error message appears, wait until all machines are live, then perform the cluster health check again.   
+
 ## 3. pull the latest docker image
 
 `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
@@ -69,6 +70,7 @@ By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
 We default DHCP to run in server mode. If you want to run vaquero in DHCP proxy mode, edit the configuration in `config/` and start the dnsmasq VM by running: `vagrant up dnsmasq`. This will stand up dnsmasq VM running a DHCP server that only serves IP addresses.
 
 See the different [configurations](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config).
+
 
 ### Standalone mode
 
@@ -98,6 +100,7 @@ See the different [configurations](https://github.com/CiscoCloud/vaquero-vagrant
 ##### separate agent dir SoT
 
 `docker run -v /vagrant/config/dir-sot-agent.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest agent --config /vaquero/config.yaml`
+
 
 ## demo lab
 
@@ -160,7 +163,7 @@ This assumes there is a running vaquero instance as described above with either 
 1. Go through steps 1-4.
 2. You must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config) for this to work.
 3. Create your own github repo to contain your own data model
-4. If your machine is not routable set up [ngrok and the githook as described in the README](https://ciscocloud.github.io/vaquero-docs/docs/current/README.html)
+4. If your machine is not routable set up [ngrok and the githook as described in the README](README.html)
 5. Create your own vaquero configuration based off `config/git-sot.yaml` examples. Update the Gitter fields (URL) and SoT (branch) section to reflect your repo.
 6. Start vaquero and ensure the zipball API info log refers to your repo and is a success
 7. Update your github repo, see webhook
@@ -176,7 +179,7 @@ This assumes there is a running vaquero instance as described above with either 
 
 [Video](https://cisco.box.com/s/cbvci60f1v6b3bcajq2ejtfizr3z0ss6)
 
-### [running the validator OR preview](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
+### [running the validator OR preview](validator.html)
 After sshing into the vagrant VM, with the container on it. Preview will work in the same way.
 
 Validator using a git repo
