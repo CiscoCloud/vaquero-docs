@@ -1,10 +1,10 @@
 <head>
-            
+
 <meta charset="UTF-8"> <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--> <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
 Vaquero Getting Started
 </title>
-            
+
 <link rel="stylesheet" type="text/css" href="../doc.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
                 .markdown-body {
@@ -75,7 +75,7 @@ Vaquero Getting Started
 </table>
 <p>* vendor specific is set by vaquero during PXEBoot.</p>
 <h2 id="custom-options">Custom Options</h2>
-<p>There may be a situation where additional options are required. Additional options can be configured in the format defined in the data model <a href="https://github.com/CiscoCloud/vaquero-docs/blob/master/docs/current/data-model-howto.md#envsubnet">subnet docs</a>.</p>
+<p>There may be a situation where additional options are required. Additional options can be configured in the format defined in the data model <a href="https://github.com/CiscoCloud/vaquero-docs/blob/master/docs/1.1/data-model-howto.md#env.subnet">subnet docs</a>.</p>
 <p>Below we list a few use cases for custom DHCP Options and the corresponding <code>env.subnet.dhcp_options</code> to use. ### Example 1: Custom IP Time-To-Live:</p>
 <p>IP TTL is DHCP Option 23 and it's value is an unsigned 8 bit integer. The following <code>env.subnet.dhcp_option</code> will set the TTL to 128:</p>
 <pre><code>dhcp_options:
