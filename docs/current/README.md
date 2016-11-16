@@ -18,7 +18,7 @@
 
 # Vaquero
 
-[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.md)
+[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.html)
 
 [![Build Status](https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg)](https://drone.projectshipped.io/CiscoCloud/vaquero)
 
@@ -29,19 +29,19 @@ A bare metal configuration utility that network boots machines based on user def
 
 The only thing you need pre-installed to run Vaquero is [Docker](https://www.docker.com/).
 
-See the [Getting Started](getting-started.md) page for details on deploying Vaquero in virtualbox.
+See the [Getting Started](getting-started.html) page for details on deploying Vaquero in virtualbox.
 
-# [Architecture](architecture.md)
+# [Architecture](architecture.html)
 ![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/arch-revision.png)
 
-## [Data Model Templates](data-model-howto.md)
+## [Data Model Templates](data-model-howto.html)
 Data Models are used by Vaquero as the "Source of Truth" to describe your data center. Data Models define machine operating systems, subnets, and boot scripts. We provide some [example data models](https://github.com/CiscoCloud/vaquero-examples) as a reference to build your own.
 
 Two notable branches in the example repo:
 
 - [`master`](https://github.com/CiscoCloud/vaquero-examples): This will be updated to reflect a complete data model for reference. We will keep this single branch updated when an example of every supported feature, model type, and workflow is up. The master branch will be configured to run on localhost.
 
-- [`vagrant`](https://github.com/CiscoCloud/vaquero-examples/tree/vagrant): Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most. This branch will contain a data model that will include definitions for the demos. See the [Getting Started](getting-started.md) page for for more info about the demos.
+- [`vagrant`](https://github.com/CiscoCloud/vaquero-examples/tree/vagrant): Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most. This branch will contain a data model that will include definitions for the demos. See the [Getting Started](getting-started.html) page for for more info about the demos.
 
 ## Configuring and Running Vaquero
 
@@ -50,7 +50,7 @@ The diagram below depicts what a production (multi-agent, multi-server) deployme
 
 Vaquero can run in multiple modes: `server`, `agent`, and `standalone`. "Standalone" refers to running server and agent in the same container. A standalone configuration file, combining information needed to run both agent and server, is shown below.
 
-See the [architecture page](architecture.md) for more details about server and agent.
+See the [architecture page](architecture.html) for more details about server and agent.
 
 ************************************************************
 **sample-standalone-config.yaml:**
@@ -197,7 +197,7 @@ Tips:
 5. Restart both the `docker` and the `vaquero` services `sudo systemctl restart docker`
 6. Make sure that pathing is correct for config and files required
 
-## [Vaquero Validate](validator.md)
+## [Vaquero Validate](validator.html)
 CLI tool that is for validating your data model before you push it through Vaquero
 
 ## Sending Webhooks to Vaquero Master
