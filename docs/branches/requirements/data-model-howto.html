@@ -1,0 +1,957 @@
+<head>
+            
+<meta charset="UTF-8"> <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+Vaquero Data Model
+</title>
+            
+<link rel="stylesheet" type="text/css" href="../doc.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style>
+                .markdown-body {
+                    box-sizing: border-box;
+                    min-width: 200px;
+                    max-width: 980px;
+                    margin: 0 auto;
+                    padding: 45px;
+                }
+            </style>
+</head><article class="markdown-body">
+
+<h1 id="the-vaquero-data-model-and-you">The Vaquero Data Model and YOU</h1>
+<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a></p>
+<p><a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
+<ul>
+<li><a href="https://github.com/CiscoCloud/vaquero-examples">Example Data Models</a></li>
+</ul>
+<h2 id="data-model-diagram-to-show-relationships">Data Model Diagram to show relationships</h2>
+<p>Each site contains an <code>environment file</code> and an <code>inventory file</code> that lists all related hosts. Hosts are members of a single <code>host group</code>. <code>Host groups</code> reference <code>os</code> and <code>assets</code>. Note re-use of <code>host groups</code>, <code>os</code> and <code>assets</code>.</p>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/dm-picture.png" />
+</div>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol style="list-style-type: decimal">
+<li><p><a href="#key-concepts">Key Concepts</a></p></li>
+<li><p><a href="#vocabulary">Vocabulary</a></p></li>
+<li><p><a href="#where-things-go">Where things go</a></p></li>
+<li><p><a href="#rough-workflow">Rough Workflow</a></p></li>
+<li><p><a href="#serving-files">Serving files</a></p></li>
+<li><p><a href="#metadata-and-templating">Metadata and Templating</a></p></li>
+<li><p><a href="#translation-to-ipxe">Translation to iPXE</a></p></li>
+<li><p><a href="#schemas">Schemas</a></p></li>
+</ol>
+<h3 id="introduction">Introduction</h3>
+<p>The Vaquero data model is meant to be a declarative representation of the state of your data center. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.</p>
+<p>We treat this data model as a &quot;single source of truth&quot; (SoT) that describes the operating state of your data center. The data model is <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html">parsed and verified</a>, then deployed to an on-site Vaquero Agent for execution.</p>
+<h2 id="key-concepts"><a name="key-concepts">Key Concepts</a></h2>
+<p>Your data center is expressed as an inventory of <em>hosts</em>. Each host belongs to a <em>host group</em>. Each host group uses a combination of <em>unattended assets</em> and <em>operating system</em> definitions to define a target configured state for a host.</p>
+<h2 id="vocabulary"><a name="vocabulary">Vocabulary</a></h2>
+<p><em>Site</em>: A managed data center, or group of machines managed by a single Vaquero Agent.</p>
+<p><em>Host</em>: A single managed machine. Definition includes identifying attributes (selectors), host-specific metadata, information for LOM (IPMI), and an association to a single host group.</p>
+<p><em>Operating System</em>: An &quot;installation&quot; template containing the details to perform a network boot into a particular OS, specifying kernel, initrd, boot command-line parameters, unattended config, etc.</p>
+<p><em>Unattended Assets</em>: An optionally templated unattended config/script (i.e. cloud-init, ignition, kickstart, etc) used for unattended boot and installation operations.</p>
+<p><em>Host Group</em>: A collection that ties together operating systems and unattended assets. Describes a target state for hosts to reach.</p>
+<h2 id="where-things-go"><a name="where-things-go">Where Things Go</a></h2>
+<p>Configuration files are placed in a directory hierarchy. Vaquero parses site configurations by reading files placed in specially named subdirectories. The root of your configuration path has four directories:</p>
+<ol style="list-style-type: decimal">
+<li><strong>assets</strong>: grouped by type. These are generally unattended configs or scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).</li>
+<li><strong>os</strong>: Individual documents describing family, version, kernel/image location, and boot/installation options for any operating systems used by host groups.</li>
+<li><strong>boot</strong>: Individual documents combining operating system and unattended asset information to describe a target host state.</li>
+<li><strong>sites</strong>: One or more sites (each in it's own subdirectory) that share the same boot, os, and asset definitions. Each site includes environment-specific information (Vaquero Agent URLs/certs, subnets, other metadata), and an inventory of hosts that apply boot definitions to machines.</li>
+</ol>
+<pre><code>.
+├── assets
+├── os
+├── boot
+└── sites</code></pre>
+<h3 id="assets">Assets</h3>
+<p>Assets are grouped into named subdirectories based on type. There are currently four types:</p>
+<ol style="list-style-type: decimal">
+<li>Cloud-Config: <a href="https://coreos.com/os/docs/latest/cloud-config.html">CoreOS Cloudinit System</a></li>
+<li>Ignition: <a href="https://coreos.com/ignition/docs/latest/">CoreOS Ignition</a></li>
+<li>Kickstart: <a href="http://fedoraproject.org/wiki/Anaconda/Kickstart">Fedora Project Kickstart</a></li>
+<li>Untyped: Miscellaneous files. Can be used for &quot;unsupported&quot; configuration types.</li>
+</ol>
+<p>Each asset is placed under a subdirectory according to it's type. Assets are referenced by file name from host groups:</p>
+<pre><code>.
+└── assets
+    ├── cloud-config
+    │   └── base.yml
+    ├── ignition
+    │   ├── etcd.yml
+    │   └── raid-fmt.yml
+    ├── kickstart
+    │   └── clevos.yml
+    └── untyped
+        ├── autoyast.xml
+        └── preseed.cfg</code></pre>
+<p>Validation is performed on typed assets to verify that rendered templates produce valid configurations.</p>
+<p>Assets are retrieved dynamically from the Vaquero Agent through typed endpoints. Query parameters are included in the request to render the asset for a particular host:</p>
+<ul>
+<li><code>/cloud-config</code> -- Cloud-config assets</li>
+<li><code>/ignition</code> -- Ignition assets</li>
+<li><code>/kickstart</code> -- Kickstart assets</li>
+<li><code>/untyped</code> -- Untyped assets</li>
+</ul>
+<p>For instance, a host with mac address <code>00:00:00:00:00:01</code> could retrieve it's rendered ignition configuration by requesting</p>
+<pre><code>{{.agent.url}}/ignition?mac=00:00:00:00:00:01</code></pre>
+<h3 id="operating-systems">Operating Systems</h3>
+<p>Operating systems exist as individual documents under the <code>os</code> subdirectory. They are referenced by a self-assigned ID described in the document:</p>
+<pre><code>.
+└── os
+    ├── centos-7.yml
+    ├── clevos-3.yml
+    └── coreos-1053.12.0.yml</code></pre>
+<h3 id="host-groups">Host Groups</h3>
+<p>Host groups exist as individual documents under the <code>boot</code> subdirectory. They are referenced by a self-assigned ID described in the document:</p>
+<pre><code>.
+└── boot
+    ├── etcd-cluster.yml
+    └── etcd-proxy.yml</code></pre>
+<h3 id="sites">Sites</h3>
+<p>Sites are represented by individual subdirectories. One directory == one site == one managed group of machines. Each SoT can contain multiple sites. Each of these sites shares the same assets/boot/os configuration files.</p>
+<p>Each site has <em>at least</em> two documents, the specially named <code>env.yml</code> and at least one document describing an inventory of hosts. You may use YAML's triple-dash <code>---</code> separator to combine multiple inventory documents into one file.</p>
+<pre><code>.
+└── sites
+    ├── site-a
+    │   ├── env.yml
+    │   └── inventory.yml
+    └── site-a
+        ├── env.yml
+        ├── inventory.yml
+        └── another-inv.yml</code></pre>
+<h2 id="rough-workflow"><a name="rough-workflow">Rough Workflow</a></h2>
+<p>Configurations are roughly executed in the following order:</p>
+<ol style="list-style-type: decimal">
+<li>Host makes DHCP request.</li>
+<li>DHCP causes host to chainload iPXE (<code>undionly.kpxe</code>) and indicates Vaquero Agent as next-server</li>
+<li>Vaquero Agent provides a default iPXE script to discover basic host information (mac, uuid, domain, hostname)</li>
+<li>Host requests dynamic iPXE script based on basic information</li>
+<li>Vaquero Agent renders iPXE script using os, boot, and host information</li>
+<li>Host executes iPXE script, requesting resources (kernel, intitrd, unattended configs/scripts) as required</li>
+</ol>
+<p>The default ipxe script chains back to Vaquero Agent, injecting basic information:</p>
+<pre><code>#!ipxe
+chain ipxe?uuid=${uuid}&amp;mac=${net0/mac:hexhyp}&amp;domain=${domain}&amp;hostname=${hostname}&amp;domain=${domain}</code></pre>
+<h2 id="serving-files"><a name="serving-files">Serving Files</a></h2>
+<p>Vaquero Agent will expose an endpoint <code>/files</code> for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to the configuration file.</p>
+<h2 id="identifying-a-host">Identifying a Host</h2>
+<p>A booting machine is identified as a particular host based on the selecting information used. Currently, a host will be identified by <code>mac</code> and <code>uuid</code>, as reported by iPXE.</p>
+<p>Additionally, a specific callback may be made to Vaquero Agent that includes a custom selection parameter</p>
+<pre><code>curl &quot;{{.agent.url}}/ignition?mac={{.host.mac}}&amp;os=installed&quot; -o ignition.json</code></pre>
+<p>When identifying a host, Vaquero Agent will:</p>
+<ol style="list-style-type: decimal">
+<li>Only select a host where all the selectors apply</li>
+<li>Select the host where the most selectors apply</li>
+</ol>
+<p>For example, given these two hosts:</p>
+<pre><code>---
+boot: group_one
+hosts:
+- name: host1
+  selectors:
+    mac: 00:00:00:00:00:01
+---
+boot: group_two
+hosts:
+- name: host1_plus_some
+  selectors:
+    mac: 00:00:00:00:00:01
+    os: installed</code></pre>
+<p>For a host requesting <code>/ignition?mac=00:00:00:00:00:01</code>, group_one will be matched (rule #1). For a host requesting <code>/ignition?mac=00:00:00:00:00:01&amp;os=installed</code>, group_two will be matched (rule #2).</p>
+<h2 id="metadata-and-templating"><a name="metadata-and-templating">Metadata and Templating</a></h2>
+<p>Templates are written using <a href="https://golang.org/pkg/text/template/">Go's standard templates</a>. Templated information occurs in the following areas:</p>
+<ol style="list-style-type: decimal">
+<li>In any files under <code>assets</code></li>
+<li>In os objects in <code>boot.kernel</code>, <code>boot.initrd</code>, and values in <code>cmdline</code></li>
+</ol>
+<p>Metadata is used primarily to render templated information. It is &quot;unstructured&quot; data, consisting of nested key-value maps, and lists. Metadata is included in three separate places in your configuration:</p>
+<ol style="list-style-type: decimal">
+<li>In the environment <code>env.yml</code> file</li>
+<li>In a boot file</li>
+<li>In an inventory document, under each host</li>
+</ol>
+<p>Metadata is made available during template execution as separate fields under the template's &quot;dot&quot;. With a few exceptions, each entry directly relates to the scheme. The cases where proxies or other values are included are noted:</p>
+<ol style="list-style-type: decimal">
+<li><code>.env</code>: the site's Environment information.</li>
+</ol>
+<ul>
+<li><code>.env.agentURL</code>: The scheme://host:port that the host can use to reach Vaquero Agent.</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li><code>.boot</code>: the current Boot</li>
+</ol>
+<ul>
+<li><code>.boot.configURL</code>: The scheme://host:port/path?query needed to retrieve the unattended configuration information for the boot. Used for manually inserting config retrieval, i.e. ClevOS answers.</li>
+<li><code>.boot.{operating_system,os}</code>: the OS ID is replaced with the Operating System object that it refers to</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li><code>.host</code>: the current Host</li>
+</ol>
+<ul>
+<li><code>.host.interfaces.subnet</code>: subnet ID is replaced with Subnet object that it refers to</li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li><code>.interface</code>: the Interface that the Host is using to connect with Vaquero Agent</li>
+</ol>
+<ul>
+<li><p><code>.interface.subnet</code>: subnet ID is replaced with Subnet object that it refers to</p></li>
+<li>Any object/scheme that includes <code>metadata</code> proxies the same information under <code>md</code></li>
+<li><p>ex: <code>env.metadata.initial_etcd_cluster</code> == <code>env.md.initial_etcd_cluster</code></p></li>
+</ul>
+<p>By way of example, this template snippet defines a networkd configuration:</p>
+<pre><code>networkd:
+  units:
+    - name: 10-static.network
+      contents: |
+        [Match]
+        MACAddress={{.interface.mac}}
+        [Network]
+        Gateway={{.interface.subnet.gateway}}
+        DNS={{index .interface.subnet.dns 0}}
+        Address={{.interface.ipv4}}</code></pre>
+<h2 id="translation-to-ipxe"><a name="translation-to-ipxe">Translation to iPXE</a></h2>
+<p>Currently, all network boots and installations are performed using iPXE scripts. Operating system boot parameters and command line options are translated into iPXE scripts to perform boot/installation tasks.</p>
+<p>Any unattended configs or scripts included in a boot are inserted during this process. Inconsistencies (i.e. using ignition for a CentOS operating system) should be detected during validation.</p>
+<h3 id="command-line-parameters">Command Line Parameters</h3>
+<p>Rules for translating command line parameters:</p>
+<ol style="list-style-type: decimal">
+<li>Keys with empty values (i.e. &quot;&quot; or '') are formatted as <code>key</code> in the boot options</li>
+<li>Keys with non-empty values are formatted as <code>key=value</code> in the boot options</li>
+<li>Keys that contain a list will be included once each time for every list element. If a list element cannot be parsed not a string (i.e. is a map, list, etc), it is ignored.</li>
+</ol>
+<p>For example, given this OS:</p>
+<pre><code>---
+id: centos-example
+major_version: &#39;7&#39;
+minor_version: &#39;2&#39;
+os_family: CentOS
+release_name: stable
+boot:
+  kernel: centos_kernel
+  initrd:
+  - centos_initrd
+cmdline:
+  console:
+    - ttyS0,115200
+    - ttyS1
+    - nested_map: is
+      ignored: true
+    - same:
+      - with
+      - nested
+      - lists
+  lang: &#39; &#39;
+  debug: &#39;&#39;
+  enforcing: &#39;&#39;</code></pre>
+<p>The iPXE script will be roughly generated as (not taking unattended info from boot):</p>
+<pre><code>    #!ipxe
+    kernel centos_kernel console=ttyS0,115200 console=ttyS1 lang=  debug enforcing
+    initrd centos_initrd
+    boot</code></pre>
+<p>Note how <code>lang</code> appears with a trailing <code>=</code>, because it's value was non-empty <code>' '</code></p>
+<h2 id="schemas"><a name="schemas">Schemas</a></h2>
+<h3 id="boot">boot</h3>
+<p>Defines a configured state (combination of os with unattended configuration and metadata) that may be applied to a group of hosts.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">id</td>
+<td align="left">A self-assigned identifier (should be unique)</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">name</td>
+<td align="left">A human-readable name for this group</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left">id</td>
+</tr>
+<tr class="odd">
+<td align="left">operating_system</td>
+<td align="left">The ID of the os associated with this group</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">unattended</td>
+<td align="left">Unattended config/script details</td>
+<td align="left">no</td>
+<td align="left">boot.unattended</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">metadata</td>
+<td align="left">unstructured, boot-specific information</td>
+<td align="left">no</td>
+<td align="left">object</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">validate</td>
+<td align="left">A series of containers run to ensure proper configuration</td>
+<td align="left">no</td>
+<td align="left">container</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">before_shutdown</td>
+<td align="left">Containers to run before a manual reboot/reprovision</td>
+<td align="left">no</td>
+<td align="left">container</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="boot.unattended">boot.unattended</h4>
+<p>Allow a network boot or installation to proceed automatically by providing canned answers.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">type</td>
+<td align="left">The type of unattended config/script to use</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">use</td>
+<td align="left">The file name used to find the unattended config/script</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="container">container</h4>
+<p>TBD</p>
+<h3 id="env">env</h3>
+<p>Provides information for a single deployment/data center/etc.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">id</td>
+<td align="left">A self-assigned identifier (should be unique)</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">name</td>
+<td align="left">A human-readable name for this group</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left">id</td>
+</tr>
+<tr class="odd">
+<td align="left">agent</td>
+<td align="left">Details for establishing a connection to the site's agent</td>
+<td align="left">yes</td>
+<td align="left">env.agent</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">subnets</td>
+<td align="left">List of subnets for this cluster</td>
+<td align="left">yes</td>
+<td align="left">env.subnet array</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">metadata</td>
+<td align="left">unstructured, site-specific information</td>
+<td align="left">no</td>
+<td align="left">object</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="env.agent">env.agent</h4>
+<p>Details for establishing a connection to a site's agent</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">url</td>
+<td align="left">Insecure/local url for reaching agent</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left">http://127.0.0.1</td>
+</tr>
+<tr class="even">
+<td align="left">port</td>
+<td align="left">Port for insecure URL</td>
+<td align="left">yes</td>
+<td align="left">integer</td>
+<td align="left">80</td>
+</tr>
+<tr class="odd">
+<td align="left">secure_url</td>
+<td align="left">Secure/remote url for reaching agent</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left">https://127.0.0.1</td>
+</tr>
+<tr class="even">
+<td align="left">secure_port</td>
+<td align="left">Port for secure URL</td>
+<td align="left">yes</td>
+<td align="left">integer</td>
+<td align="left">443</td>
+</tr>
+<tr class="odd">
+<td align="left">cert_path</td>
+<td align="left">A path to the TLS cert</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<p>The transport (http/s) should be included with the agent URL.</p>
+<h4 id="env.subnet">env.subnet</h4>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">id</td>
+<td align="left">A self-assigned identifier (should be unique in env)</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">cidr</td>
+<td align="left">CIDR for this subnet</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">dns</td>
+<td align="left">List of DNS URLs</td>
+<td align="left">yes</td>
+<td align="left">string array</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">ntp</td>
+<td align="left">List of NTP URLs</td>
+<td align="left">yes</td>
+<td align="left">string array</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">gateway</td>
+<td align="left">Gateway for this subnet</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">domain_name</td>
+<td align="left">Domain name for this subnet</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">vlan</td>
+<td align="left">VLAN for the subnet</td>
+<td align="left">no</td>
+<td align="left">integer</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">dhcp_options</td>
+<td align="left">Additional DHCP options</td>
+<td align="left">no</td>
+<td align="left">dhcp_options array</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">metadata</td>
+<td align="left">unstructured, host-specific information</td>
+<td align="left">no</td>
+<td align="left">object</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="env.subnet.dhcp_options">env.subnet.dhcp_options</h4>
+<p>Represents a single DHCP Option as defined in <a href="http://www.iana.org/go/rfc2132">RFC2132</a> or listed in <a href="http://www.iana.org/assignments/bootp-dhcp-parameters/bootp-dhcp-parameters.xhtml">this IANA table</a> of BOOTP Vendor Extensions and DHCP Options.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">option</td>
+<td align="left">DHCP option tag.</td>
+<td align="left">yes</td>
+<td align="left">uint8</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">value</td>
+<td align="left">List of DNS URLs</td>
+<td align="left">yes</td>
+<td align="left">variable</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">type</td>
+<td align="left">Denotes the type of <code>value</code>. Accepted values:</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">string, uint8, uint16, uint32, int8, int16, int32</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">addresses*, base64** | | | | | | | | | |</td>
+</tr>
+</tbody>
+</table>
+<p>* Type <code>addresses</code> is a comma seperated string of ip addresses.</p>
+<p>** Type <code>base64</code> is a base64 encoded value.</p>
+<p><a href="https://ciscocloud.github.io/vaquero-docs/docs/current/dhcp-options.html">Examples</a></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">id</td>
+<td align="left">A self-assigned identifier (should be unique in env)</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">cidr</td>
+<td align="left">CIDR for this subnet</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">dns</td>
+<td align="left">List of DNS URLs</td>
+<td align="left">yes</td>
+<td align="left">string array</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">ntp</td>
+<td align="left">List of NTP URLs</td>
+<td align="left">yes</td>
+<td align="left">string array</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">domain</td>
+<td align="left">Client DNS domain</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">gateway</td>
+<td align="left">Gateway for this subnet</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">vlan</td>
+<td align="left">VLAN for the subnet</td>
+<td align="left">no</td>
+<td align="left">integer</td>
+<td align="left">1</td>
+</tr>
+</tbody>
+</table>
+<h4 id="host">host</h4>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">name</td>
+<td align="left">Name for the host machine.</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">interfaces</td>
+<td align="left">Network intefaces for this host</td>
+<td align="left">no</td>
+<td align="left">interface</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">metadata</td>
+<td align="left">unstructured, host-specific information</td>
+<td align="left">no</td>
+<td align="left">object</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">workflow</td>
+<td align="left">The ID of the workflow used to provision this host</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="interface">interface</h4>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">type</td>
+<td align="left">Interface type. Physical/bmc</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">mac</td>
+<td align="left">MAC address identifying this interface</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">subnet</td>
+<td align="left">ID of subnet (specified in env)</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">bmc</td>
+<td align="left">Details for BMC interface</td>
+<td align="left">no</td>
+<td align="left">interface.bmc</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">identifier</td>
+<td align="left">Identifier for interface</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">ignore_dhcp</td>
+<td align="left">If true, stops Vaquero from provisioning on this interface</td>
+<td align="left">no</td>
+<td align="left">boolean</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">ipv4</td>
+<td align="left">IPv4 address</td>
+<td align="left">yes</td>
+<td align="left">dotted quad</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">ipv6</td>
+<td align="left">IPv6 address</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">hostname</td>
+<td align="left">Hostname for machine</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="interface.bmc">interface.bmc</h4>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">type</td>
+<td align="left">Specifies protocol type. IPMI/CIMC</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">username</td>
+<td align="left">User for managing BMC</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">password</td>
+<td align="left">Password for specified user</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="os">os</h3>
+<p>Represents a single operating system with boot/installation parameters.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">id</td>
+<td align="left">self-assigned identifier</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">name</td>
+<td align="left">human-readable name</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left">id</td>
+</tr>
+<tr class="odd">
+<td align="left">major_version</td>
+<td align="left">major version</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">minor_version</td>
+<td align="left">minor version</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">os_family</td>
+<td align="left">family (i.e. CoreOS, CentOS)</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">release_name</td>
+<td align="left">release name (i.e. stable, beta)</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">boot</td>
+<td align="left">kernal &amp; initrd img info</td>
+<td align="left">yes</td>
+<td align="left">os.boot</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">cmdline</td>
+<td align="left">boot/installation options</td>
+<td align="left">no</td>
+<td align="left">object</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<p>Cmdline values may be templated. They will be rendered on-demand for inidividual hosts.</p>
+<h4 id="os.boot">os.boot</h4>
+<p>Contains information about the kernal/initrds for an operating system.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">kernel</td>
+<td align="left">URL for retrieving kernel on boot</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">initrd</td>
+<td align="left">URL for retrieving initrds/imgs on boot</td>
+<td align="left">yes</td>
+<td align="left">string array</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<p>Kernel and initrd values may be templated. They will be rendered on-demand for inidividual hosts.</p>
+<h4 id="workflow">workflow</h4>
+<p>A workflow chains multiple boots together to provision a host. The workflow is also responsible for specifying basic policy for rebutting hosts that use it.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">id</td>
+<td align="left">self-assigned identifier</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">workflow</td>
+<td align="left">Series of boots to provision the host</td>
+<td align="left">yes</td>
+<td align="left">workflow.stage array</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">max_concurrent</td>
+<td align="left">Max simultaneous hosts actively provisioning</td>
+<td align="left">no</td>
+<td align="left">int</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">safe_deps</td>
+<td align="left">IDs of safe dependency workflows</td>
+<td align="left">no</td>
+<td align="left">string array</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">block_deps</td>
+<td align="left">IDs of blocking dependency workflows</td>
+<td align="left">no</td>
+<td align="left">string array</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">validate_on</td>
+<td align="left">IDs of workflows that cause this workflow to revalidate</td>
+<td align="left">no</td>
+<td align="left">string array</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">max_fail</td>
+<td align="left">How many hosts can fail before halted</td>
+<td align="left">no</td>
+<td align="left">int</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>

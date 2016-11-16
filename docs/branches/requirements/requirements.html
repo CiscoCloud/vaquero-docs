@@ -1,0 +1,89 @@
+<head>
+            
+<meta charset="UTF-8"> <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+Vaquero Requirements
+</title>
+            
+<link rel="stylesheet" type="text/css" href="../doc.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style>
+                .markdown-body {
+                    box-sizing: border-box;
+                    min-width: 200px;
+                    max-width: 980px;
+                    margin: 0 auto;
+                    padding: 45px;
+                }
+            </style>
+</head><article class="markdown-body">
+
+<h1 id="vaquero-requirements">Vaquero Requirements</h1>
+<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a></p>
+<p><a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
+<p>The Vaquero project is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure.</p>
+<h2 id="system-requirements">System Requirements</h2>
+<ul>
+<li>System will provide support for customized agent and server configurations, as well as support for standalone mode (both agent and server in one container)</li>
+<li>System will implement REST-based APIs for working w/external systems (i.e. GitHub webhook).</li>
+<li>System will use REST-based APIs for coordination between different nodes.</li>
+<li>System will provide APIs to allow inspection system state.</li>
+<li>System will provide detailed logs of operations.</li>
+<li>Internal APIs will be protected via an authentication mechanism (i.e. bearer token).</li>
+<li>System will provide demos and examples for new vaquero users</li>
+</ul>
+<h2 id="project-tasks-as-of-11162016">Project Tasks (as of 11/16/2016):</h2>
+<h3 id="completed">Completed:</h3>
+<ol style="list-style-type: decimal">
+<li>A textual and structured representation of the cluster in a VCS -- the source of truth (SoT).</li>
+<li>Validation of data within SoT -- proper structure, dump work to be performed in human-readable format. (some minimum validation of &quot;known&quot; asset formats?)</li>
+<li>Support for netboot (iPXE, TFTP, etc.) of cluster instances.</li>
+<li>Support for delivering O/S assets (kernel, ramdisk, images, cloud-config, etc.) via HTTP. (Assumes iPXE support.)</li>
+<li>Management of multiple clusters of software.</li>
+<li>Integration with GitHub has provider of SoT.</li>
+<li>System should treat SoT as an immutable reference.</li>
+<li>Management of multiple datacenters via federated architecture.</li>
+<li>Relationship between SoT to cluster instances via static identifiers (MAC, UUID, others?).</li>
+<li>Manage power state of the hardware.</li>
+<li>Workflow automation to provide managed installs of cluster.</li>
+<li>Workflow automation to provide managed updates of cluster.</li>
+<li>Automatically provision hardware according to the SoT.</li>
+<li>The ability to gate changes from SoT before applying to hardware.</li>
+<li>Support incremental (multistep) cluster provisioning.</li>
+<li>Set up initial integration between vaquero and coreOS etcd (key-value store)</li>
+<li>Bulked up the command line interface to support flag overrides and descriptions</li>
+<li>Enabled DHCP support for provisioning on multiple subnets</li>
+<li>Snippets support (go templating) to allow unattended configuration files to follow the same basic format</li>
+</ol>
+<h3 id="in-progress">In Progress:</h3>
+<ol style="list-style-type: decimal">
+<li>Develop a shared state engine between vaquero servers for persistent key-value storage via etcd</li>
+<li>Develop an internal API that allows for communication between server and agent</li>
+<li>Implement a task queue using the internal API, in which vaquero server sends an agent tasks to complete</li>
+<li>Develop a user-facing API</li>
+<li>Build a capability that allows agents to securely self-register with vaquero server</li>
+<li>Examples and documentation for snippets</li>
+<li>API documentation for user and internal APIs</li>
+</ol>
+<h3 id="not-started">Not Started:</h3>
+<ol style="list-style-type: decimal">
+<li>Improved concurrency and channel handling</li>
+<li>Full transition to updated data model format</li>
+<li>Implementation of workflows</li>
+<li>Foreman-to-vaquero template converter</li>
+<li>Lifecycle management to handle data model upgrades</li>
+<li>Config file generator</li>
+<li>Inventory state tracking for client nodes</li>
+</ol>
+<hr />
+<h3 id="non-requirements">Non-requirements:</h3>
+<ul>
+<li>Have semantic understanding of installed software.</li>
+<li>Dynamic system inventory.</li>
+<li>Pre-built user interface.</li>
+</ul>
+<h3 id="out-of-scope">Out-of-Scope:</h3>
+<ul>
+<li>Security: integration w/role base systems</li>
+<li>Security: management of user credentials</li>
+<li>Security: management of assymetric encryption keys</li>
+</ul>
