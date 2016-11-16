@@ -32,7 +32,7 @@ The only thing you need pre-installed to run Vaquero is [Docker](https://www.doc
 See the [Getting Started](getting-started.html) page for details on deploying Vaquero in virtualbox.
 
 # [Architecture](architecture.html)
-![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/arch-revision.png)
+![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/nov16Arch.png)
 
 ## [Data Model Templates](data-model-howto.html)
 Data Models are used by Vaquero as the "Source of Truth" to describe your data center. Data Models define machine operating systems, subnets, and boot scripts. We provide some [example data models](https://github.com/CiscoCloud/vaquero-examples) as a reference to build your own.
@@ -46,7 +46,7 @@ Two notable branches in the example repo:
 ## Configuring and Running Vaquero
 
 The diagram below depicts what a production (multi-agent, multi-server) deployment of Vaquero might look like.
-![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/many-vaqueros.png)
+![](https://raw.githubusercontent.com/CiscoCloud/vaquero-docs/gh-pages/docs/current/nov16HA.png)
 
 Vaquero can run in multiple modes: `server`, `agent`, and `standalone`. "Standalone" refers to running server and agent in the same container. A standalone configuration file, combining information needed to run both agent and server, is shown below.
 
