@@ -28,15 +28,15 @@ Vaquero Architecture
 <img src="nov16Arch.png" />
 </div>
 <h4 id="vaquero-server"><code>vaquero server</code></h4>
-<p>The <code>vaquero</code> container in <code>server</code> mode implements the logic to receive updates from sources of truth and process the data model and make it a reality by providing information to agents. The vaquero server cluster leverages etcd to persist state, data models and configurations.</p>
+<p>The <code>vaquero</code> container in <code>server</code> mode implements the logic to receive updates from sources of truth and process the data model and make it a reality by providing information to agents. The vaquero server cluster leverages etcd to persist state, data models and configurations. Servers never call down to agents, they simply act as a distributed message queue for agents to fetch updates from, enabling scalable distributed servers.</p>
 <ol style="list-style-type: decimal">
 <li><strong>user API (in progress)</strong> - REST API for users to interact with the system and provide operational insights into booting hosts.</li>
 <li><strong>updater</strong> - The interface that SoT's will go through to update their data models, could be listening for github webhooks or watching a source of truth directory for modifications.</li>
 <li><strong>model API</strong> - REST API that responds to agents looking to update their model cache, it will also provide a state manifest that enables an agent to know what state its booting hosts are in.</li>
 <li><strong>event API</strong> - REST API that receives events from long running services on agents.</li>
 <li><strong>server controller</strong> - The process that manages the numerous go routines on vaquero servers and acts as an intermediary between all server services.</li>
-<li><strong>state engine</strong> - The brains behind vaquero, that will understand a data model, look at the events history and task history to understand what actions need to be taken to move booting hosts from one state to the next.</li>
-<li><strong>task manager</strong> - A generic container task manager that knows how to run jobs on distributed task executors. It will listen for input from the state engine to run LOM containers that will begin the process for updating / provisioning hosts.</li>
+<li><strong>state engine (in progress)</strong> - The brains behind vaquero, that will understand a data model, look at the events history and task history to understand what actions need to be taken to move booting hosts from one state to the next.</li>
+<li><strong>task manager (in progress)</strong> - A generic container task manager that knows how to run jobs on distributed task executors. A use case will be to run LOM containers that will execute on an agent to reboot a host, kicking off the re-provision process.</li>
 </ol>
 <h4 id="vaquero-agent"><code>vaquero agent</code></h4>
 <p>The <code>vaquero</code> container running in <code>agent</code> mode registers itself with an upstream vaquero server and drives provisioning in a local datacenter. The agent is designed in such a way that it is stateless, agents can be created and destroyed at will. They will obtain state, configuration, actions from the vaquero server cluster.</p>
@@ -47,9 +47,7 @@ Vaquero Architecture
 <li><strong>TFTP</strong> - a TFTP server that only serves the <a href="http://ipxe.org/howto/chainloading"><code>undionly.kpxe</code> file</a>.</li>
 <li><strong>asset HTTP server</strong> - implements a file server or reverse proxy to forward requests to a CDN. This delivers unattend boot scripts, kernels, and initrds.</li>
 <li><strong>event client</strong> - an HTTP client that reports long running service events back (DHCP, TFTP, HTTP) to the vaquero server cluster. (the servers leverage this information to understand what state booting hosts are in)</li>
-<li><strong>task executor (in progress)</strong> - a pluggable task engine that enables operators to run containers that will be used for LOM via a IPMI container we provide. The task executor will also be used pre-reboot and post-reboot to clear machines before shutting down and validating the state after a reboot.</li>
+<li><strong>task executor (in progress)</strong> - a generic container execution runtime. It will receive &quot;tasks&quot; or containers to run from a centralized task manager, run it and return the exit code and logs. Vaquero will leverage this for LOM management and running pre-reboot and post-reboot containers to flush and validate state on a host.</li>
 </ol>
-<h4 id="how-to-stage-updates">How to stage updates</h4>
-<p>Github will be used to stage models for updating, vaquero will receive webhooks from specified branches. Submitting PR's and merging other branches into the vaquero branch would be how teams manage updating their source of truth. Once a model lands in the branch vaquero is watching, it will push it out and begin provisioning against that source of truth.</p>
 <h2 id="deployment-and-availability-considerations">Deployment and Availability Considerations</h2>
 <p>Please see the <a href="README.html">README</a> for details on production deployments, considerations, and requirements. See the <a href="outage.html">outage doc</a> to see how vaquero handles certain failure scenarios.</p>
