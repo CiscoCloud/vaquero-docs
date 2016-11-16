@@ -18,9 +18,7 @@
 
 # getting started
 
-[Home](https://ciscocloud.github.io/vaquero-docs/)
-
-[Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
+[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 
 ## [virtual environment](https://github.com/CiscoCloud/vaquero-vagrant)
@@ -165,7 +163,7 @@ This assumes there is a running vaquero instance as described above with either 
 1. Go through steps 1-4.
 2. You must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config) for this to work.
 3. Create your own github repo to contain your own data model
-4. If your machine is not routable set up [ngrok and the githook as described in the README](https://ciscocloud.github.io/vaquero-docs/docs/current/README.html)
+4. If your machine is not routable set up [ngrok and the githook as described in the README](README.html)
 5. Create your own vaquero configuration based off `config/git-sot.yaml` examples. Update the Gitter fields (URL) and SoT (branch) section to reflect your repo.
 6. Start vaquero and ensure the zipball API info log refers to your repo and is a success
 7. Update your github repo, see webhook
@@ -181,7 +179,7 @@ This assumes there is a running vaquero instance as described above with either 
 
 [Video](https://cisco.box.com/s/cbvci60f1v6b3bcajq2ejtfizr3z0ss6)
 
-### [running the validator OR preview](https://ciscocloud.github.io/vaquero-docs/docs/current/validator.html)
+### [running the validator OR preview](validator.html)
 After sshing into the vagrant VM, with the container on it. Preview will work in the same way.
 
 Validator using a git repo
