@@ -9,6 +9,7 @@
                 .markdown-body {
                     box-sizing: border-box;
                     min-width: 200px;
+                    max-width: 1200px;
                     margin: 0 auto;
                     padding: 45px;
                 }
