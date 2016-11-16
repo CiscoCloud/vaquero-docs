@@ -34,15 +34,15 @@ Vaquero is delivered in one container for operational simplicity. Vaquero can ru
 
 #### `vaquero server`
 
-The `vaquero` container in `server` mode implements the logic to receive updates from sources of truth and process the data model and make it a reality by providing information to agents. The vaquero server cluster leverages etcd to persist state, data models and configurations.
+The `vaquero` container in `server` mode implements the logic to receive updates from sources of truth and process the data model and make it a reality by providing information to agents. The vaquero server cluster leverages etcd to persist state, data models and configurations. Servers never call down to agents, they simply act as a distributed message queue for agents to fetch updates from, enabling scalable distributed servers.
 
 1. **user API (in progress)** - REST API for users to interact with the system and provide operational insights into booting hosts.
 2. **updater** - The interface that SoT's will go through to update their data models, could be listening for github webhooks or watching a source of truth directory for modifications.
 3. **model API** - REST API that responds to agents looking to update their model cache, it will also provide a state manifest that enables an agent to know what state its booting hosts are in.
 4. **event API** - REST API that receives events from long running services on agents.
 5. **server controller** - The process that manages the numerous go routines on vaquero servers and acts as an intermediary between all server services.
-6. **state engine** - The brains behind vaquero, that will understand a data model, look at the events history and task history to understand what actions need to be taken to move booting hosts from one state to the next.
-7. **task manager** - A generic container task manager that knows how to run jobs on distributed task executors. It will listen for input from the state engine to run LOM containers that will begin the process for updating / provisioning hosts.
+6. **state engine (in progress)** - The brains behind vaquero, that will understand a data model, look at the events history and task history to understand what actions need to be taken to move booting hosts from one state to the next.
+7. **task manager (in progress)** - A generic container task manager that knows how to run jobs on distributed task executors. A use case will be to run LOM containers that will execute on an agent to reboot a host, kicking off the re-provision process.
 
 
 #### `vaquero agent`
@@ -55,11 +55,8 @@ The `vaquero` container running in `agent` mode registers itself with an upstrea
 4. **TFTP** - a TFTP server that only serves the [`undionly.kpxe` file](http://ipxe.org/howto/chainloading).
 5. **asset HTTP server** - implements a file server or reverse proxy to forward requests to a CDN. This delivers unattend boot scripts, kernels, and initrds.
 6. **event client** - an HTTP client that reports long running service events back (DHCP, TFTP, HTTP) to the vaquero server cluster. (the servers leverage this information to understand what state booting hosts are in)
-7. **task executor (in progress)** - a pluggable task engine that enables operators to run containers that will be used for LOM via a IPMI container we provide. The task executor will also be used pre-reboot and post-reboot to clear machines before shutting down and validating the state after a reboot.
+7. **task executor (in progress)** - a generic container execution runtime. It will receive "tasks" or containers to run from a centralized task manager, run it and return the exit code and logs. Vaquero will leverage this for LOM management and running pre-reboot and post-reboot containers to flush and validate state on a host.
 
-
-#### How to stage updates
-Github will be used to stage models for updating, vaquero will receive webhooks from specified branches. Submitting PR's and merging other branches into the vaquero branch would be how teams manage updating their source of truth. Once a model lands in the branch vaquero is watching, it will push it out and begin provisioning against that source of truth.
 
 ## Deployment and Availability Considerations
 
