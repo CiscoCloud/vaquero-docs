@@ -40,7 +40,7 @@ The options set implicitly by Vaquero are shown below:
 
 ## Custom Options
 There may be a situation where additional options are required. Additional options
-can be configured in the format defined in the data model [subnet docs](data-model-howto.html#envsubnet).
+can be configured in the format defined in the data model [subnet docs](data-model-howto.html#env.subnet).
 
 Below we list a few use cases for custom DHCP Options and the corresponding ```env.subnet.dhcp_options``` to use.
 ### Example 1: Custom IP Time-To-Live:
