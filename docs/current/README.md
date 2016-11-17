@@ -37,6 +37,7 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 ### Complete:
 
 **Operations / Deployment**:
+
 - Operational simplicity: Vaquero is deployed from a single container that can run in server, agent, and standalone modes.
 - Centralized control plane: Vaquero server is designed for high availability and linear scalability
 - Site local vaquero agents are stateless and can be created and destroyed at will.
@@ -45,11 +46,13 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 - Built-in authoritative detector notifies operator if an "authoritative" DHCP server is in the same broadcast domain.
 
 **Booting**
+
 - Hardware-agnostic bare metal management with pxe and IPXE-based network booting.
 - Support and validation for kickstart, cloud-config, ignition, and custom unattended boot scripts
 - Vaquero agent support for serving local files over http, or for acting as a reverse proxy for a CDN
 
 **Tooling**
+
 - CLI tooling to validate data model, and preview iPXE/unattended boot scripts before sending to hosts
 - Robust Vagrant environment to test single-node deployments, or Vaquero server cluster and multiple agent deployments.
 
@@ -57,6 +60,7 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 ### In Progress:
 
 **Operations / Deployment**:
+
 - A pluggable framework to enable pre-shutdown actions to be taken on a single host to flush its workload before cutting the power
 - A pluggable framework to enable post-boot actions to validate a successful deployment of a single host.
 Vaquero servers act as a state machine that understands the current state physical hosts and desired state in the data model and able to migrate that site to the desired state.
@@ -64,6 +68,7 @@ Vaquero servers act as a state machine that understands the current state physic
 Vaquero servers able to handle failure states in boot process, will retry, halt, or revert based on user policy.
 
 **Tooling:**
+
 - User API that will grant operators insights into the state of their infrastructure
 
 
