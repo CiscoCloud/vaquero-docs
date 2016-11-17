@@ -31,18 +31,18 @@ vaquero
 <p>The only thing you need pre-installed to run Vaquero is <a href="https://www.docker.com/">Docker</a>.</p>
 <p>See the <a href="getting-started.html">Getting Started</a> page for details on deploying Vaquero in virtualbox.</p>
 <h2 id="features">Features</h2>
-<p>(last update: 11/16/16)</p>
+<p>(last update: November 2016)</p>
 <h3 id="completed">Completed</h3>
 <ol style="list-style-type: decimal">
-<li>A <strong>powerful, customizable</strong> configuration file for your bare metal deployment, with built-in validation tools and examples</li>
-<li>A streamlined <strong>command line interface</strong></li>
+<li>Deployment through a single, streamlined <strong>Docker container</strong></li>
+<li>A powerful <strong>command line interface</strong> with built-in flag overrides, validation, and detailed logging<br /></li>
 <li>The <strong>Source of Truth</strong> (SoT): A textual, structured, easily updatable representation of a VCS cluster, with Github integration</li>
-<li>Support for delivering assets (kernel, ramdisk, images, cloud-config) over <strong>http</strong></li>
+<li>Support for delivering assets (kernel, ramdisk, images, cloud-config) over <strong>http</strong> and <strong>CDN</strong></li>
 <li><strong>Federated architecture:</strong> the ability to manage multiple data centers with a single Vaquero instance</li>
-<li><strong>Lights-out management:</strong> the ability to remotely manage hardware power state</li>
 <li>Workflow <strong>automation</strong> to provide managed installs and updates of the cluster</li>
 <li>Support for incremental (multistep) cluster provisioning</li>
 <li><strong>DHCP</strong> support for provisioning on multiple subnets</li>
+<li>Support for <strong>DHCP relay</strong>, proxy vs. server mode</li>
 <li><strong>Snippets</strong> support (go templating) to allow unattended configuration files to follow the same basic format</li>
 </ol>
 <h3 id="in-progress">In Progress</h3>
@@ -52,6 +52,7 @@ vaquero
 <li>A <strong>task queue</strong> that will allow vaquero servers to provide multiple agents with jobs</li>
 <li>A powerful, well-documented <strong>user-facing API</strong> to allow vaquero operators to communicate quickly with servers</li>
 <li>Secure <strong>self-registration</strong> for vaquero agents</li>
+<li><strong>Lights-out management:</strong> the ability to remotely manage hardware power state</li>
 </ol>
 <h3 id="on-the-roadmap">On the Roadmap</h3>
 <ol style="list-style-type: decimal">
