@@ -10,7 +10,7 @@ Vaquero Requirements
                 .markdown-body {
                     box-sizing: border-box;
                     min-width: 200px;
-                    max-width: 980px;
+                    max-width: 1400px;
                     margin: 0 auto;
                     padding: 45px;
                 }
@@ -26,7 +26,7 @@ Vaquero Requirements
 <li>As a DevOps Engineer, I want to be able to manage my bare metal compute (hardware) as code.</li>
 </ol>
 <h2 id="requirements">Requirements:</h2>
-<h3 id="completed-9192016">Completed : 9/19/2016</h3>
+<h3 id="completed-112016">Completed : 11/2016</h3>
 <ol style="list-style-type: decimal">
 <li>A textual and structured representation of the cluster in a VCS -- the source of truth (SoT).</li>
 <li>Validation of data within SoT -- proper structure, dump work to be performed in human-readable format. (some minimum validation of &quot;known&quot; asset formats?)</li>
@@ -35,22 +35,38 @@ Vaquero Requirements
 <li>Management of multiple clusters of software.</li>
 <li>Integration with GitHub has provider of SoT.</li>
 <li>System should treat SoT as an immutable reference.</li>
-</ol>
-<h3 id="incomplete">Incomplete</h3>
-<ol start="8" style="list-style-type: decimal">
 <li>Management of multiple datacenters via federated architecture.</li>
 <li>Relationship between SoT to cluster instances via static identifiers (MAC, UUID, others?).</li>
-<li>Manage power state of the hardware.</li>
 <li>Workflow automation to provide managed installs of cluster.</li>
 <li>Workflow automation to provide managed updates of cluster.</li>
 <li>Automatically provision hardware according to the SoT.</li>
 <li>The ability to gate changes from SoT before applying to hardware.</li>
-<li>Support incremental (multistep) cluster provisioning.</li>
+<li>The ability to deploy separate instances of servers and agents and documentation on how to do it.</li>
+<li>Document HA scenarios for servers and new deployment requirements for persistent storage to back server cluster.</li>
+<li>HTTPS communication is a must for API's between servers and agents.</li>
+<li>DHCP options to be more robust in handling NTP &amp; DNS assignment.</li>
+<li>Vaquero standalone mode to manage internal labs.</li>
 <li>Provide availability in the following network conditions:
 <ul>
 <li>network partition between agent and controller</li>
+</ul></li>
+</ol>
+<h3 id="in-progress">In Progress</h3>
+<ol style="list-style-type: decimal">
+<li>Manage power state of the hardware.</li>
+<li>Support incremental (multistep) cluster provisioning.</li>
+<li>Deploy a first build of all software clusters in lab.</li>
+<li>Separated Vaquero Server and Vaquero Agent to manage internal labs.</li>
+<li>Validate Vaquero with dual homed CleverSafe machines.</li>
+<li>Successfully guide multi-stage deployments managed by state machine on vaquero server(s).</li>
+<li>Provide state transition details and host status to provide operational insights.</li>
+<li>Upgrade workflow definitions to run pluggable pre-reboot and post-reboot jobs.</li>
+</ol>
+<h3 id="incomplete">Incomplete</h3>
+<ol style="list-style-type: decimal">
+<li>Provide availability in the following network conditions:
+<ul>
 <li>upgradability of agent node</li>
-<li><del>outage of agent node</del></li>
 </ul></li>
 </ol>
 <h2 id="non-requirements">Non-requirements:</h2>
@@ -71,5 +87,5 @@ Vaquero Requirements
 <ul>
 <li>Security: integration w/role base systems</li>
 <li>Security: management of user credentials</li>
-<li>Security: management of assymetric encryption keys</li>
+<li>Security: management of encryption keys</li>
 </ul>
