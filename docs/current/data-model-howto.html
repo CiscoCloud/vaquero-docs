@@ -23,9 +23,9 @@ Vaquero Data Model
 <li><a href="https://github.com/CiscoCloud/vaquero-examples">Example Data Models</a></li>
 </ul>
 <h2 id="data-model-diagram-to-show-relationships">Data Model Diagram to show relationships</h2>
-<p>Each site contains an <code>environment file</code> and an <code>inventory file</code> that lists all related hosts. Hosts are members of a single <code>host group</code>. <code>Host groups</code> reference <code>os</code> and <code>assets</code>. Note re-use of <code>host groups</code>, <code>os</code> and <code>assets</code>.</p>
+<p>Each site contains an <code>environment file</code> and an <code>inventory file</code> that lists all related hosts. Hosts are members of a single <code>workflow</code>. <code>workflow</code> is a collection of 'boot' steps that take a new machine and bring it to its final state. A <code>boot</code> contains <code>os</code> and <code>assets</code>. Note re-use of <code>boot</code>, <code>os</code> and <code>assets</code>.</p>
 <div class="figure">
-<img src="sept16DM.png" />
+<img src="nov16DM.png" />
 </div>
 <h2 id="table-of-contents">Table of Contents</h2>
 <ol style="list-style-type: decimal">
@@ -43,10 +43,10 @@ Vaquero Data Model
 <p>The Vaquero data model is meant to be a declarative representation of the state of your data center. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.</p>
 <p>We treat this data model as a &quot;single source of truth&quot; (SoT) that describes the operating state of your data center. The data model is <a href="validator.html">parsed and verified</a>, then deployed to an on-site Vaquero Agent for execution.</p>
 <h2 id="key-concepts"><a name="key-concepts">Key Concepts</a></h2>
-<p>Your data center is expressed as an inventory of <em>hosts</em>. Each host belongs to a <em>host group</em>. Each host group uses a combination of <em>unattended assets</em> and <em>operating system</em> definitions to define a target configured state for a host.</p>
+<p>Your data center is expressed as an inventory of <em>hosts</em>. Each host belongs to a <em>workflow</em>. Each workflow is comprised of one or many <em>boot</em> steps that use a combination of <em>unattended assets</em> and <em>operating system</em> definitions to define a target configured state for a host.</p>
 <h2 id="vocabulary"><a name="vocabulary">Vocabulary</a></h2>
 <p><em>Site</em>: A managed data center, or group of machines managed by a single Vaquero Agent.</p>
-<p><em>Host</em>: A single managed machine. Definition includes identifying attributes (selectors), host-specific metadata, information for LOM (IPMI), and an association to a single host group.</p>
+<p><em>Host</em>: A single managed machine. Definition includes identifying attributes (selectors), host-specific metadata, information for LOM (IPMI), and an association to a single workflow.</p>
 <p><em>Operating System</em>: An &quot;installation&quot; template containing the details to perform a network boot into a particular OS, specifying kernel, initrd, boot command-line parameters, unattended config, etc.</p>
 <p><em>Unattended Assets</em>: An optionally templated unattended config/script (i.e. cloud-init, ignition, kickstart, etc) used for unattended boot and installation operations.</p>
 <p><em>Boot</em>: A collection that ties together operating systems and unattended assets. Describes a single network boot.</p>
@@ -76,7 +76,7 @@ Vaquero Data Model
 <li>Untyped: Miscellaneous files. Can be used for &quot;unsupported&quot; configuration types.</li>
 </ol>
 <p>Each subdirectory may also have a <code>snippets</code> directory for holding partial templates (see below)</p>
-<p>Each asset is placed under a subdirectory according to it's type. Assets are referenced by file name from host groups:</p>
+<p>Each asset is placed under a subdirectory according to it's type. Assets are referenced by file name from boots:</p>
 <pre><code>.
 └── assets
     ├── cloud-config
