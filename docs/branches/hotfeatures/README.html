@@ -31,33 +31,13 @@ vaquero
 <p>See the <a href="getting-started.html">Getting Started</a> page for details on deploying Vaquero in virtualbox.</p>
 <h2 id="features">Features</h2>
 <p>(last update: November 2016)</p>
-<h3 id="completed">Completed</h3>
-<ol style="list-style-type: decimal">
-<li>Deployment through a single, streamlined <strong>Docker container</strong></li>
-<li>A powerful <strong>command line interface</strong> with built-in flag overrides, validation, and detailed logging<br /></li>
-<li>The <strong>Source of Truth</strong> (SoT): A textual, structured, easily updatable representation of a VCS cluster, with Github integration</li>
-<li>Support for delivering assets (kernel, ramdisk, images, cloud-config) over <strong>http</strong> and <strong>CDN</strong></li>
-<li><strong>Federated architecture:</strong> the ability to manage multiple data centers with a single Vaquero instance</li>
-<li>Workflow <strong>automation</strong> to provide managed installs and updates of the cluster</li>
-<li>Support for incremental (multistep) cluster provisioning</li>
-<li><strong>DHCP</strong> support for provisioning on multiple subnets</li>
-<li>Support for <strong>DHCP relay</strong>, proxy vs. server mode</li>
-<li><strong>Snippets</strong> support (go templating) to allow unattended configuration files to follow the same basic format</li>
-</ol>
-<h3 id="in-progress">In Progress</h3>
-<ol style="list-style-type: decimal">
-<li>A distributed, secure <strong>state engine</strong> on the back-end, for quick storage and retrieval of information about machines and data models</li>
-<li>An efficient <strong>internal API</strong> between vaquero servers and agents</li>
-<li>A <strong>task queue</strong> that will allow vaquero servers to provide multiple agents with jobs</li>
-<li>A powerful, well-documented <strong>user-facing API</strong> to allow vaquero operators to communicate quickly with servers</li>
-<li>Secure <strong>self-registration</strong> for vaquero agents</li>
-<li><strong>Lights-out management:</strong> the ability to remotely manage hardware power state</li>
-</ol>
-<h3 id="on-the-roadmap">On the Roadmap</h3>
-<ol style="list-style-type: decimal">
-<li>Configuration file <strong>generator</strong></li>
-<li>Develop structure in data model for <strong>lifecycle management</strong> around requirement for rolling upgrades</li>
-</ol>
+<h3 id="complete">Complete:</h3>
+<p><strong>Operations / Deployment</strong>: - Operational simplicity: Vaquero is deployed from a single container that can run in server, agent, and standalone modes. - Centralized control plane: Vaquero server is designed for high availability and linear scalability - Site local vaquero agents are stateless and can be created and destroyed at will. - Safe to run in a multi-tenant environment: Vaquero DHCP will only respond to known hosts in its data model. - Vaquero agent implements a DHCP server that can run in proxy mode or full DHCP mode, with support for DHCP relay. - Built-in authoritative detector notifies operator if an &quot;authoritative&quot; DHCP server is in the same broadcast domain.</p>
+<p><strong>Booting</strong> - Hardware-agnostic bare metal management with pxe and IPXE-based network booting. - Support and validation for kickstart, cloud-config, ignition, and custom unattended boot scripts - Vaquero agent support for serving local files over http, or for acting as a reverse proxy for a CDN</p>
+<p><strong>Tooling</strong> - CLI tooling to validate data model, and preview iPXE/unattended boot scripts before sending to hosts - Robust Vagrant environment to test single-node deployments, or Vaquero server cluster and multiple agent deployments.</p>
+<h3 id="in-progress">In Progress:</h3>
+<p><strong>Operations / Deployment</strong>: - A pluggable framework to enable pre-shutdown actions to be taken on a single host to flush its workload before cutting the power - A pluggable framework to enable post-boot actions to validate a successful deployment of a single host. Vaquero servers act as a state machine that understands the current state physical hosts and desired state in the data model and able to migrate that site to the desired state. - A policy engine that will ensure operational safety when updating a site, such as valid reboot times, minimum machines to be operational, dependency tracking and validation. Vaquero servers able to handle failure states in boot process, will retry, halt, or revert based on user policy.</p>
+<p><strong>Tooling:</strong> - User API that will grant operators insights into the state of their infrastructure</p>
 <h1 id="architecture"><a href="architecture.html">Architecture</a></h1>
 <div class="figure">
 <img src="nov16Arch.png" />
@@ -384,7 +364,8 @@ Log:
 </ol>
 <h2 id="vaquero-with-systemd">Vaquero with Systemd</h2>
 <p>Vaquero can be started as a service using Systemd and Docker.</p>
-<p><strong>/etc/systemd/system/vaquero.service</strong> ************************************************************</p>
+<p><strong><code>/etc/systemd/system/vaquero.service</code></strong></p>
+<hr />
 <pre><code>[Unit]
 Description=Vaquero Container
 Requires=docker.service
@@ -399,7 +380,7 @@ ExecStopPost=/usr/bin/docker rm -f vaquero
 [Install]
 WantedBy=default.target</code></pre>
 <hr />
-<p>This example does:</p>
+<p>This example:</p>
 <ol style="list-style-type: decimal">
 <li>Starts a Docker container named <code>vaquero</code> after the Docker service has started.</li>
 <li>It starts using the parameters passed into <code>ExecStart</code></li>
@@ -417,7 +398,7 @@ WantedBy=default.target</code></pre>
 <li>Make sure that pathing is correct for config and files required</li>
 </ol>
 <h2 id="vaquero-validate"><a href="validator.html">Vaquero Validate</a></h2>
-<p>CLI tool that is for validating your data model before you push it through Vaquero</p>
+<p>A CLI tool for validating your data model before you push it through Vaquero</p>
 <h2 id="sending-webhooks-to-vaquero-master">Sending Webhooks to Vaquero Master</h2>
 <ol style="list-style-type: decimal">
 <li>Install <a href="https://ngrok.com/">ngrok</a> to your local machine, unzip the package, and move the executable to <code>/usr/local/bin</code>.</li>
