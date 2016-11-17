@@ -250,4 +250,4 @@ Build the documentation by running `godoc -http <port>` and open `localhost:<por
 To provide feedback to the team please email: [vaquero-feedback@external.cisco.com](mailto:vaquero-feedback@external.cisco.com)
 For Issues, open at [CiscoCloud/vaquero-docs](https://github.com/CiscoCloud/vaquero-docs/issues)
 
-<div><p style="font-size:12px">Logo created with: http://logomakr.com</p></div>
+/*<div><p style="font-size:12px">Logo created with: http://logomakr.com</p></div>*/
