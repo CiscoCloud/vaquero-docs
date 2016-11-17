@@ -32,32 +32,39 @@ The only thing you need pre-installed to run Vaquero is [Docker](https://www.doc
 See the [Getting Started](getting-started.html) page for details on deploying Vaquero in virtualbox.
 
 ## Features
-
 (last update: November 2016)
 
-### Completed
-1. Deployment through a single, streamlined **Docker container**
-2. A powerful **command line interface** with built-in flag overrides, validation, and detailed logging  
-3. The **Source of Truth** (SoT): A textual, structured, easily updatable representation of a VCS cluster, with Github integration
-4. Support for delivering assets (kernel, ramdisk, images, cloud-config) over **http** and **CDN**
-5. **Federated architecture:** the ability to manage multiple data centers with a single Vaquero instance
-6. Workflow **automation** to provide managed installs and updates of the cluster
-7. Support for incremental (multistep) cluster provisioning
-8. **DHCP** support for provisioning on multiple subnets
-9. Support for **DHCP relay**, proxy vs. server mode
-10. **Snippets** support (go templating) to allow unattended configuration files to follow the same basic format   
+### Complete:
 
-### In Progress
-1. A distributed, secure **state engine** on the back-end, for quick storage and retrieval of information about machines and data models
-2. An efficient **internal API** between vaquero servers and agents
-3. A **task queue** that will allow vaquero servers to provide multiple agents with jobs
-4. A powerful, well-documented **user-facing API** to allow vaquero operators to communicate quickly with servers
-5. Secure **self-registration** for vaquero agents
-6. **Lights-out management:** the ability to remotely manage hardware power state
+**Operations / Deployment**:
+- Operational simplicity: Vaquero is deployed from a single container that can run in server, agent, and standalone modes.
+- Centralized control plane: Vaquero server is designed for high availability and linear scalability
+- Site local vaquero agents are stateless and can be created and destroyed at will.
+- Safe to run in a multi-tenant environment: Vaquero DHCP will only respond to known hosts in its data model.
+- Vaquero agent implements a DHCP server that can run in proxy mode or full DHCP mode, with support for DHCP relay.
+- Built-in authoritative detector notifies operator if an "authoritative" DHCP server is in the same broadcast domain.
 
-### On the Roadmap
-1. Configuration file **generator**
-2. Develop structure in data model for **lifecycle management** around requirement for rolling upgrades
+**Booting**
+- Hardware-agnostic bare metal management with pxe and IPXE-based network booting.
+- Support and validation for kickstart, cloud-config, ignition, and custom unattended boot scripts
+- Vaquero agent support for serving local files over http, or for acting as a reverse proxy for a CDN
+
+**Tooling**
+- CLI tooling to validate data model, and preview iPXE/unattended boot scripts before sending to hosts
+- Robust Vagrant environment to test single-node deployments, or Vaquero server cluster and multiple agent deployments.
+
+
+### In Progress:
+
+**Operations / Deployment**:
+- A pluggable framework to enable pre-shutdown actions to be taken on a single host to flush its workload before cutting the power
+- A pluggable framework to enable post-boot actions to validate a successful deployment of a single host.
+Vaquero servers act as a state machine that understands the current state physical hosts and desired state in the data model and able to migrate that site to the desired state.
+- A policy engine that will ensure operational safety when updating a site, such as valid reboot times, minimum machines to be operational, dependency tracking and validation.
+Vaquero servers able to handle failure states in boot process, will retry, halt, or revert based on user policy.
+
+**Tooling:**
+- User API that will grant operators insights into the state of their infrastructure
 
 
 # [Architecture](architecture.html)
