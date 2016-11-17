@@ -22,9 +22,9 @@
 - [Example Data Models](https://github.com/CiscoCloud/vaquero-examples)
 
 ## Data Model Diagram to show relationships
-Each site contains an `environment file` and an `inventory file` that lists all related hosts. Hosts are members of a single `host group`. `Host groups` reference `os` and `assets`. Note re-use of `host groups`, `os` and `assets`.
+Each site contains an `environment file` and an `inventory file` that lists all related hosts. Hosts are members of a single `workflow`. `workflow` is a collection of 'boot' steps that take a new machine and bring it to its final state. A `boot` contains `os` and `assets`. Note re-use of `boot`, `os` and `assets`.
 
-![](sept16DM.png)
+![](nov16DM.png)
 
 ## Table of Contents
 
@@ -54,13 +54,13 @@ We treat this data model as a "single source of truth" (SoT) that describes the 
 
 ## <a name="key-concepts">Key Concepts</a>
 
-Your data center is expressed as an inventory of _hosts_. Each host belongs to a _host group_. Each host group uses a combination of _unattended assets_ and _operating system_ definitions to define a target configured state for a host.
+Your data center is expressed as an inventory of _hosts_. Each host belongs to a _workflow_. Each workflow is comprised of one or many _boot_ steps that use a combination of _unattended assets_ and _operating system_ definitions to define a target configured state for a host.
 
 ## <a name="vocabulary">Vocabulary</a>
 
 *Site*: A managed data center, or group of machines managed by a single Vaquero Agent.
 
-*Host*: A single managed machine. Definition includes identifying attributes (selectors), host-specific metadata, information for LOM (IPMI), and an association to a single host group.
+*Host*: A single managed machine. Definition includes identifying attributes (selectors), host-specific metadata, information for LOM (IPMI), and an association to a single workflow.
 
 *Operating System*: An "installation" template containing the details to perform a network boot into a particular OS, specifying kernel, initrd, boot command-line parameters, unattended config, etc.
 
