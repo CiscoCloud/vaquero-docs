@@ -5,28 +5,64 @@
 Vaquero README
 </title>
             
-<link rel="stylesheet" type="text/css" href="../doc.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<link rel="stylesheet" type="text/css" href="../doc.css"> <link rel='shortcut icon' href='cow.png' type='image/x-icon'/ > <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
                 .markdown-body {
                     box-sizing: border-box;
                     min-width: 200px;
-                    max-width: 1400px;
+                    max-width: 1100px;
                     margin: 0 auto;
                     padding: 45px;
                 }
             </style>
 </head><article class="markdown-body">
 
-<h1 id="vaquero">Vaquero</h1>
-<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> | <a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a> | <a href="requirements.html">Project Requirements</a></p>
-<p><a href="https://drone.projectshipped.io/CiscoCloud/vaquero"><img src="https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg" alt="Build Status" /></a></p>
-<ul>
-<li><a href="https://github.com/CiscoCloud/vaquero">Private Dev Repo</a> : Vaquero's development home</li>
-<li><a href="https://waffle.io/CiscoCloud/vaquero">Waffle.io Issue Tracking</a>: Progress tracking tool</li>
-</ul>
+<div align="center">
+<img src="cow.png" alt="Drawing" style="width: 200px;"/>
+<p style="font-size:60px">
+vaquero
+</p>
+<a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> | <a href="https://github.com/CiscoCloud/vaquero">Dev Repo</a> | <a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a> | <a href="requirements.html">Project Requirements</a> | <a href="https://waffle.io/CiscoCloud/vaquero">Issue Tracking</a>
+</div>
+<h1></h1>
+
 <p>A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped unattend boot scripts.</p>
 <p>The only thing you need pre-installed to run Vaquero is <a href="https://www.docker.com/">Docker</a>.</p>
 <p>See the <a href="getting-started.html">Getting Started</a> page for details on deploying Vaquero in virtualbox.</p>
+<h2 id="features">Features</h2>
+<p>(last update: November 2016)</p>
+<h3 id="complete">Complete:</h3>
+<p><strong>Operations / Deployment</strong>:</p>
+<ul>
+<li>Operational simplicity: Vaquero is deployed from a single container that can run in server, agent, and standalone modes.</li>
+<li>Centralized control plane: Vaquero server is designed for high availability and linear scalability</li>
+<li>Site local vaquero agents are stateless and can be created and destroyed at will.</li>
+<li>Safe to run in a multi-tenant environment: Vaquero DHCP will only respond to known hosts in its data model.</li>
+<li>Vaquero agent implements a DHCP server that can run in proxy mode or full DHCP mode, with support for DHCP relay.</li>
+<li>Built-in authoritative detector notifies operator if an &quot;authoritative&quot; DHCP server is in the same broadcast domain.</li>
+</ul>
+<p><strong>Booting</strong></p>
+<ul>
+<li>Hardware-agnostic bare metal management with pxe and IPXE-based network booting.</li>
+<li>Support and validation for kickstart, cloud-config, ignition, and custom unattended boot scripts</li>
+<li>Vaquero agent support for serving local files over http, or for acting as a reverse proxy for a CDN</li>
+</ul>
+<p><strong>Tooling</strong></p>
+<ul>
+<li>CLI tooling to validate data model, and preview iPXE/unattended boot scripts before sending to hosts</li>
+<li>Robust Vagrant environment to test single-node deployments, or Vaquero server cluster and multiple agent deployments.</li>
+</ul>
+<h3 id="in-progress">In Progress:</h3>
+<p><strong>Operations / Deployment</strong>:</p>
+<ul>
+<li>A pluggable framework to enable pre-shutdown actions to be taken on a single host to flush its workload before cutting the power</li>
+<li>A pluggable framework to enable post-boot actions to validate a successful deployment of a single host. Vaquero servers act as a state machine that understands the current state physical hosts and desired state in the data model and able to migrate that site to the desired state.</li>
+<li>A policy engine that will ensure operational safety when updating a site, such as valid reboot times, minimum machines to be operational, dependency tracking and validation. Vaquero servers able to handle failure states in boot process, will retry, halt, or revert based on user policy.</li>
+</ul>
+<p><strong>Tooling:</strong></p>
+<ul>
+<li>User API that will grant operators insights into the state of their infrastructure</li>
+</ul>
 <h1 id="architecture"><a href="architecture.html">Architecture</a></h1>
 <div class="figure">
 <img src="nov16Arch.png" />
@@ -353,7 +389,8 @@ Log:
 </ol>
 <h2 id="vaquero-with-systemd">Vaquero with Systemd</h2>
 <p>Vaquero can be started as a service using Systemd and Docker.</p>
-<p><strong>/etc/systemd/system/vaquero.service</strong> ************************************************************</p>
+<p><strong><code>/etc/systemd/system/vaquero.service</code></strong></p>
+<hr />
 <pre><code>[Unit]
 Description=Vaquero Container
 Requires=docker.service
@@ -368,7 +405,7 @@ ExecStopPost=/usr/bin/docker rm -f vaquero
 [Install]
 WantedBy=default.target</code></pre>
 <hr />
-<p>This example does:</p>
+<p>This example:</p>
 <ol style="list-style-type: decimal">
 <li>Starts a Docker container named <code>vaquero</code> after the Docker service has started.</li>
 <li>It starts using the parameters passed into <code>ExecStart</code></li>
@@ -386,7 +423,7 @@ WantedBy=default.target</code></pre>
 <li>Make sure that pathing is correct for config and files required</li>
 </ol>
 <h2 id="vaquero-validate"><a href="validator.html">Vaquero Validate</a></h2>
-<p>CLI tool that is for validating your data model before you push it through Vaquero</p>
+<p>A CLI tool for validating your data model before you push it through Vaquero</p>
 <h2 id="sending-webhooks-to-vaquero-master">Sending Webhooks to Vaquero Master</h2>
 <ol style="list-style-type: decimal">
 <li>Install <a href="https://ngrok.com/">ngrok</a> to your local machine, unzip the package, and move the executable to <code>/usr/local/bin</code>.</li>
@@ -417,3 +454,8 @@ h='&#x65;&#120;&#116;&#x65;&#114;&#110;&#x61;&#108;&#46;&#x63;&#x69;&#x73;&#x63;
 document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+e+'<\/'+'a'+'>');
 // -->
 </script><noscript>&#118;&#x61;&#x71;&#x75;&#x65;&#114;&#x6f;&#x2d;&#102;&#x65;&#x65;&#100;&#98;&#x61;&#x63;&#x6b;&#32;&#x61;&#116;&#32;&#x65;&#120;&#116;&#x65;&#114;&#110;&#x61;&#108;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x69;&#x73;&#x63;&#x6f;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;</noscript> For Issues, open at <a href="https://github.com/CiscoCloud/vaquero-docs/issues">CiscoCloud/vaquero-docs</a></p>
+<div>
+<p style="font-size:12px">
+Logo created with: http://logomakr.com
+</p>
+</div>
