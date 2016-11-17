@@ -10,7 +10,7 @@
                 .markdown-body {
                     box-sizing: border-box;
                     min-width: 200px;
-                    max-width: 980px;
+                    max-width: 1400px;
                     margin: 0 auto;
                     padding: 45px;
                 }
@@ -73,9 +73,6 @@ Two notable branches in the example repo:
 - [`vagrant`](https://github.com/CiscoCloud/vaquero-examples/tree/vagrant): Used for small deployments via vagrant in virtualbox. This branch may not show every feature, but it will be leveraged as a small scale example Data Model to deploy a few machines at most. This branch will contain a data model that will include definitions for the demos. See the [Getting Started](getting-started.html) page for for more info about the demos.
 
 ## Configuring and Running Vaquero
-
-The diagram below depicts what a production (multi-agent, multi-server) deployment of Vaquero might look like.
-![](nov16HA.png)
 
 Vaquero can run in multiple modes: `server`, `agent`, and `standalone`. "Standalone" refers to running server and agent in the same container. A standalone configuration file, combining information needed to run both agent and server, is shown below.
 

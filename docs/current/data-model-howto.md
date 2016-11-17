@@ -9,7 +9,7 @@
                 .markdown-body {
                     box-sizing: border-box;
                     min-width: 200px;
-                    max-width: 980px;
+                    max-width: 1400px;
                     margin: 0 auto;
                     padding: 45px;
                 }
@@ -34,7 +34,7 @@ Each site contains an `environment file` and an `inventory file` that lists all 
 
 3. [Where things go](#where-things-go)
 
-4. [Rough Workflow](#rough-workflow)
+4. [Provisioning Steps](#provisioning-steps)
 
 5. [Serving files](#serving-files)
 
@@ -43,6 +43,8 @@ Each site contains an `environment file` and an `inventory file` that lists all 
 7. [Translation to iPXE](#translation-to-ipxe)
 
 8. [Schemas](#schemas)
+
+9. [Staging Updates](#staging)
 
 ### Introduction
 
@@ -64,23 +66,28 @@ Your data center is expressed as an inventory of _hosts_. Each host belongs to a
 
 *Unattended Assets*: An optionally templated unattended config/script (i.e. cloud-init, ignition, kickstart, etc) used for unattended boot and installation operations.
 
-*Host Group*: A collection that ties together operating systems and unattended assets. Describes a target state for hosts to reach.
+*Boot*: A collection that ties together operating systems and unattended assets. Describes a single network boot.
+
+*Workflow*: A series of network boots that end with a host machine in a desired state.
 
 ## <a name="where-things-go">Where Things Go</a>
 
 Configuration files are placed in a directory hierarchy. Vaquero parses site configurations by reading files placed in specially named subdirectories. The root of your configuration path has four directories:
 
 1. **assets**: grouped by type. These are generally unattended configs or scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).
-2. **os**: Individual documents describing family, version, kernel/image location, and boot/installation options for any operating systems used by host groups.
-3. **boot**: Individual documents combining operating system and unattended asset information to describe a target host state.
+2. **os**: Individual documents, each representing an Operating System
+3. **boot**: Individual documents, each representing a Boot
 4. **sites**: One or more sites (each in it's own subdirectory) that share the same boot, os, and asset definitions. Each site includes environment-specific information (Vaquero Agent URLs/certs, subnets, other metadata), and an inventory of hosts that apply boot definitions to machines.
+5. **workflows**: Individual documents, each representing a Workflow
 
 ```
 .
 ├── assets
 ├── os
 ├── boot
-└── sites
+├── sites
+└── workflows
+
 ```
 
 ### Assets
@@ -91,6 +98,8 @@ Assets are grouped into named subdirectories based on type. There are currently 
 2. Ignition: [CoreOS Ignition](https://coreos.com/ignition/docs/latest/)
 3. Kickstart: [Fedora Project Kickstart](http://fedoraproject.org/wiki/Anaconda/Kickstart)
 4. Untyped: Miscellaneous files. Can be used for "unsupported" configuration types.
+
+Each subdirectory may also have a `snippets` directory for holding partial templates (see below)
 
 Each asset is placed under a subdirectory according to it's type. Assets are referenced by file name from host groups:
 
@@ -103,26 +112,50 @@ Each asset is placed under a subdirectory according to it's type. Assets are ref
     │   ├── etcd.yml
     │   └── raid-fmt.yml
     ├── kickstart
-    │   └── clevos.yml
+    │   ├── snippets
+    │   │   ├── snip1
+    │   │   └── snip2
+    │   └── centos.ks
     └── untyped
         ├── autoyast.xml
         └── preseed.cfg
 ```
 
 
-Validation is performed on typed assets to verify that rendered templates produce valid configurations.
+Validation is performed on typed assets to verify that rendered templates produce valid configuration scripts.
 
-Assets are retrieved dynamically from the Vaquero Agent through typed endpoints. Query parameters are included in the request to render the asset for a particular host:
+Assets are retrieved dynamically from the Vaquero Agent asset server through the `/config/<mac-addr>` endpoint. An optional `boot` query parameter can be used to specify the ID of the Boot to use.
 
-- `/cloud-config` -- Cloud-config assets
-- `/ignition` -- Ignition assets
-- `/kickstart` -- Kickstart assets
-- `/untyped` -- Untyped assets
-
-For instance, a host with mac address `00:00:00:00:00:01` could retrieve it's rendered ignition configuration by requesting
+For instance, a host with mac address `00:00:00:00:00:01` could retrieve it's default configuration by requesting
 
 ```
-{{.agent.url}}/ignition?mac=00:00:00:00:00:01
+{{.env.assetURL}}/config/00:00:00:00:00:01
+```
+
+Or the configuration from a particular boot by requesting
+
+```
+{{.env.assetURL}}/config/00:00:00:00:00:01?boot=specific-boot-id
+```
+
+#### Asset Snippets
+
+Any snippets for a particular config type are _always included_ when rendering configurations of that type. Most of the time, the preferred use will be to have the snippet file `define` a template, and use the `template` function to include it in the configuration:
+
+```
+/assets/kickstart/snippets/snip1
+
+{{ define "snippet-id-1" }}
+  # Template here
+{{ end }}
+```
+
+```
+/assets/kickstart/centos.ks
+
+# My kickstart template
+{{ template "snippet-id-1" . }}
+
 ```
 
 ### Operating Systems
@@ -137,9 +170,9 @@ Operating systems exist as individual documents under the `os` subdirectory. The
     └── coreos-1053.12.0.yml
 ```
 
-### Host Groups
+### Boot
 
-Host groups exist as individual documents under the `boot` subdirectory. They are referenced by a self-assigned ID described in the document:
+Boots exist as individual documents under the `boot` subdirectory. They are referenced by a self-assigned ID described in the document:
 
 ```
 .
@@ -166,7 +199,19 @@ Each site has _at least_ two documents, the specially named `env.yml` and at lea
         └── another-inv.yml
 ```
 
-## <a name="rough-workflow">Rough Workflow</a>
+### Workflows
+
+Workflows exist as individual documents under the `workflows` subdirectory. They are referenced by a self-assigned ID described in the document:
+
+```
+.
+└── workflows
+    ├── clevos-accessor.yml
+    ├── k8s-master.yml
+    └── k8s-node.yml
+```
+
+## <a name="provisioning-steps">Provisioning Steps</a>
 
 Configurations are roughly executed in the following order:
 
@@ -509,3 +554,8 @@ A workflow chains multiple boots together to provision a host. The workflow is a
 | block_deps     | IDs of blocking dependency workflows                    | no       | string array         |         |
 | validate_on    | IDs of workflows that cause this workflow to revalidate | no       | string array         |         |
 | max_fail       | How many hosts can fail before halted                   | no       | int                  | 0       |
+
+
+## <a name="staging">Staging Updates</a>
+
+Github will be used to stage models for updating, vaquero will receive webhooks from specified branches. Submitting PR's and merging other branches into the vaquero branch would be how teams manage updating their source of truth. Once a model lands in the branch vaquero is watching, it will push it out and begin provisioning against that source of truth.
