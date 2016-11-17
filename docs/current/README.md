@@ -34,18 +34,18 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 
 ## Features
 
-(last update: 11/16/16)
+(last update: November 2016)
 
 ### Completed
-1. A **powerful, customizable** configuration file for your bare metal deployment, with built-in validation tools and examples
-2. A streamlined **command line interface**
+1. Deployment through a single, streamlined **Docker container**
+2. A powerful **command line interface** with built-in flag overrides, validation, and detailed logging  
 3. The **Source of Truth** (SoT): A textual, structured, easily updatable representation of a VCS cluster, with Github integration
-4. Support for delivering assets (kernel, ramdisk, images, cloud-config) over **http**
+4. Support for delivering assets (kernel, ramdisk, images, cloud-config) over **http** and **CDN**
 5. **Federated architecture:** the ability to manage multiple data centers with a single Vaquero instance
-6. **Lights-out management:** the ability to remotely manage hardware power state
-7. Workflow **automation** to provide managed installs and updates of the cluster
-8. Support for incremental (multistep) cluster provisioning
-9. **DHCP** support for provisioning on multiple subnets
+6. Workflow **automation** to provide managed installs and updates of the cluster
+7. Support for incremental (multistep) cluster provisioning
+8. **DHCP** support for provisioning on multiple subnets
+9. Support for **DHCP relay**, proxy vs. server mode
 10. **Snippets** support (go templating) to allow unattended configuration files to follow the same basic format   
 
 ### In Progress
@@ -54,6 +54,7 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 3. A **task queue** that will allow vaquero servers to provide multiple agents with jobs
 4. A powerful, well-documented **user-facing API** to allow vaquero operators to communicate quickly with servers
 5. Secure **self-registration** for vaquero agents
+6. **Lights-out management:** the ability to remotely manage hardware power state
 
 ### On the Roadmap
 1. Configuration file **generator**
