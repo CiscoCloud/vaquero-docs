@@ -101,7 +101,7 @@ Assets are grouped into named subdirectories based on type. There are currently 
 
 Each subdirectory may also have a `snippets` directory for holding partial templates (see below)
 
-Each asset is placed under a subdirectory according to it's type. Assets are referenced by file name from host groups:
+Each asset is placed under a subdirectory according to it's type. Assets are referenced by file name from boots:
 
 ```
 .
