@@ -4,32 +4,73 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Vaquero README</title>
             <link rel="stylesheet" type="text/css" href="../doc.css">
+            <link rel='shortcut icon' href='cow.png' type='image/x-icon'/ >
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
             <style>
                 .markdown-body {
                     box-sizing: border-box;
                     min-width: 200px;
-                    max-width: 1400px;
+                    max-width: 1100px;
                     margin: 0 auto;
                     padding: 45px;
                 }
             </style>
 </head><article class="markdown-body">
 
-# Vaquero
+<div align="center">
+<img src="cow.png" alt="Drawing" style="width: 200px;"/>
+  <p style="font-size:60px">vaquero</p>
+[Home](https://ciscocloud.github.io/vaquero-docs/) | [Dev Repo](https://github.com/CiscoCloud/vaquero) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.html) | [Issue Tracking](https://waffle.io/CiscoCloud/vaquero)
+</div>
 
-[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.html)
-
-[![Build Status](https://drone.projectshipped.io/api/badges/CiscoCloud/vaquero/status.svg)](https://drone.projectshipped.io/CiscoCloud/vaquero)
-
-- [Private Dev Repo](https://github.com/CiscoCloud/vaquero) : Vaquero's development home
-- [Waffle.io Issue Tracking](https://waffle.io/CiscoCloud/vaquero): Progress tracking tool
+<h1></h1>
 
 A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped unattend boot scripts.
 
 The only thing you need pre-installed to run Vaquero is [Docker](https://www.docker.com/).
 
 See the [Getting Started](getting-started.html) page for details on deploying Vaquero in virtualbox.
+
+## Features
+(last update: November 2016)
+
+### Complete:
+
+**Operations / Deployment**:
+
+- Operational simplicity: Vaquero is deployed from a single container that can run in server, agent, and standalone modes.
+- Centralized control plane: Vaquero server is designed for high availability and linear scalability
+- Site local vaquero agents are stateless and can be created and destroyed at will.
+- Safe to run in a multi-tenant environment: Vaquero DHCP will only respond to known hosts in its data model.
+- Vaquero agent implements a DHCP server that can run in proxy mode or full DHCP mode, with support for DHCP relay.
+- Built-in authoritative detector notifies operator if an "authoritative" DHCP server is in the same broadcast domain.
+
+**Booting**
+
+- Hardware-agnostic bare metal management with pxe and IPXE-based network booting.
+- Support and validation for kickstart, cloud-config, ignition, and custom unattended boot scripts
+- Vaquero agent support for serving local files over http, or for acting as a reverse proxy for a CDN
+
+**Tooling**
+
+- CLI tooling to validate data model, and preview iPXE/unattended boot scripts before sending to hosts
+- Robust Vagrant environment to test single-node deployments, or Vaquero server cluster and multiple agent deployments.
+
+
+### In Progress:
+
+**Operations / Deployment**:
+
+- A pluggable framework to enable pre-shutdown actions to be taken on a single host to flush its workload before cutting the power
+- A pluggable framework to enable post-boot actions to validate a successful deployment of a single host.
+Vaquero servers act as a state machine that understands the current state physical hosts and desired state in the data model and able to migrate that site to the desired state.
+- A policy engine that will ensure operational safety when updating a site, such as valid reboot times, minimum machines to be operational, dependency tracking and validation.
+Vaquero servers able to handle failure states in boot process, will retry, halt, or revert based on user policy.
+
+**Tooling:**
+
+- User API that will grant operators insights into the state of their infrastructure
+
 
 # [Architecture](architecture.html)
 ![](nov16Arch.png)
@@ -158,8 +199,10 @@ Log:
 ## Vaquero with Systemd
 Vaquero can be started as a service using Systemd and Docker.
 
-**/etc/systemd/system/vaquero.service**
+**`/etc/systemd/system/vaquero.service`**
+
 ************************************************************
+
 ```
 [Unit]
 Description=Vaquero Container
@@ -175,9 +218,10 @@ ExecStopPost=/usr/bin/docker rm -f vaquero
 [Install]
 WantedBy=default.target
 ```
+
 ************************************************************
 
-This example does:
+This example:
 
 1. Starts a Docker container named `vaquero` after the Docker service has started.
 2. It starts using the parameters passed into `ExecStart`
@@ -195,7 +239,7 @@ Tips:
 6. Make sure that pathing is correct for config and files required
 
 ## [Vaquero Validate](validator.html)
-CLI tool that is for validating your data model before you push it through Vaquero
+A CLI tool for validating your data model before you push it through Vaquero
 
 ## Sending Webhooks to Vaquero Master
 
@@ -219,3 +263,5 @@ Build the documentation by running `godoc -http <port>` and open `localhost:<por
 ## Questions / Comments / Feedback
 To provide feedback to the team please email: [vaquero-feedback@external.cisco.com](mailto:vaquero-feedback@external.cisco.com)
 For Issues, open at [CiscoCloud/vaquero-docs](https://github.com/CiscoCloud/vaquero-docs/issues)
+
+<div><p style="font-size:12px">Logo created with: http://logomakr.com</p></div>
