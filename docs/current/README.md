@@ -187,8 +187,10 @@ Log:
 ## Vaquero with Systemd
 Vaquero can be started as a service using Systemd and Docker.
 
-**/etc/systemd/system/vaquero.service**
+**`/etc/systemd/system/vaquero.service`**
+
 ************************************************************
+
 ```
 [Unit]
 Description=Vaquero Container
@@ -204,9 +206,10 @@ ExecStopPost=/usr/bin/docker rm -f vaquero
 [Install]
 WantedBy=default.target
 ```
+
 ************************************************************
 
-This example does:
+This example:
 
 1. Starts a Docker container named `vaquero` after the Docker service has started.
 2. It starts using the parameters passed into `ExecStart`
@@ -224,7 +227,7 @@ Tips:
 6. Make sure that pathing is correct for config and files required
 
 ## [Vaquero Validate](validator.html)
-CLI tool that is for validating your data model before you push it through Vaquero
+A CLI tool for validating your data model before you push it through Vaquero
 
 ## Sending Webhooks to Vaquero Master
 
