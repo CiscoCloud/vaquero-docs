@@ -19,3 +19,4 @@ for src in docs/current/*.md; do
 done
 
 cp docs/current/*.png ${TARGET}
+cp * ${TMP}
