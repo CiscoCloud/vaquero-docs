@@ -19,4 +19,6 @@ for src in docs/current/*.md; do
 done
 
 cp docs/current/*.png ${TARGET}
-cp * ${TMP} | true
+if [[ $DRONE_BRANCH == master ]]; then
+    cp * ${TMP} | true
+fi
