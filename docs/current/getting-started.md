@@ -152,11 +152,11 @@ This assumes there is a running vaquero instance as described above with either 
 
 [Video](https://cisco.box.com/s/lsohd9v7ik1rx1af3fthng1w87o9ig36)
 
-- etcd cluster on Coreos via cloud-config: `./create-cluster/cluster.sh -d core-cloud`
+- etcd cluster on Coreos via cloud-config: `./create_cluster/cluster.sh -d core-cloud`
 
-- etcd cluster on Coreos via ignition: `./create-cluster/cluster.sh -d core-ignition`
+- etcd cluster on Coreos via ignition: `./create_cluster/cluster.sh -d core-ignition`
 
-- Centos7 base via kickstart: `./create-cluster/cluster.sh -d centos`
+- Centos7 base via kickstart: `./create_cluster/cluster.sh -d centos`
 
 
 ### using the sandbox mac space via github
