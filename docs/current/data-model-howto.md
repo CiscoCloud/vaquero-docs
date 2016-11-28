@@ -443,7 +443,7 @@ If `release_tag` is specified, Vaquero will attempt to use the data model stored
 This option is only supported when [staging via Github](#staging).
 
 ###### Example
-Branch `master` defines three sites, `site-a`, `site-b`, and `site-c`. `site-a` has `release_tag=v0.1.0`, `site-b` has `release_tag=v0.1.1` and `site-c` does not have `release_tag` set.
+Branch `master` defines three sites: `site-a` with `release_tag: v0.1.0`, `site-b` with `release_tag: v0.1.1`, and `site-c` with no tag.
 
 When Vaquero loads `master`, it will end up using three different data models for the three different sites. `site-a` will get the version of itself defined in release `v0.1.0`, `site-b` will get `v0.1.1` and `site-c` will get the version defined in `master`.
 
