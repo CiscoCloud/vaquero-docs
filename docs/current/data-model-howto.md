@@ -418,12 +418,12 @@ Provides information for a single deployment/data center/etc.
 | release_tag  | Github release tag                                        | no       | string           |         |
 
 
-### env.release_tag
+#### env.release_tag
 `release_tag` must be a valid [git tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging) corresponding to a specific [Github Release](https://help.github.com/articles/about-releases/) (e.g., v0.1.0).
 
 If `release_tag` is specified, Vaquero will attempt to use the data model stored in the specified release instead of _this_ model (i.e. where release_tag was specified). If the tag does not exist, Vaquero will fall back to using _this_ model.
 
-##### Example
+###### Example
 Branch `master` defines three sites, `site-a`, `site-b`, and `site-c`. `site-a` has `release_tag=v0.1.0`, `site-b` has `release_tag=v0.1.1` and `site-c` does not have `release_tag` set.
 
 When Vaquero loads `master`, it will end up using three different data models for the three different sites. `site-a` will get the version of itself defined in release `v0.1.0`, `site-b` will get `v0.1.1` and `site-c` will get the version defined in `master`.
