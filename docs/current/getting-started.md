@@ -72,58 +72,6 @@ We default DHCP to run in server mode. If you want to run vaquero in DHCP proxy 
 
 See the different [configurations](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config).
 
-## key generation
-The Vaquero Server and Vaquero Agents communicate over HTTPS/TLS. The Vaquero Server requires a public/private keypair to start up. You may either use the provided sample keys ([public]( https://raw.githubusercontent.com/CiscoCloud/vaquero-vagrant/master/provision_files/server.pem), [private](https://raw.githubusercontent.com/CiscoCloud/vaquero-vagrant/master/provision_files/server.key)), or generate your own using the following commands:
-
-```
-openssl genrsa -out server.key 2048
-openssl ecparam -genkey -name secp384r1 -out server.key
-openssl req -new -x509 -sha256 -key server.key -out server.pem -days 3650
-```
-
-The configuration file for the server would include the following:
-
-```
-ServerAPI:
-   PrivateKey: "path/to/server.key"
-   PublicKey: "path/to/server.pem"
-```
-Alternatively, the `--server-private-key` and `--server-public-key` flags can be passed on the command line.
-
-
-In a dev environment, a self signed key should sufficient, but in a production environment we highly suggest the keys be signed by a certificate authority. By default, Vaquero will not accept self-signed keys. To run insecurely, the agent config would need to include the following:
-
-```
-ServerClient:
-   InsecureSkipVerify: true
-```
-Alternatively, the `-k` flag can be passed on the command line.
-
-## secrets
-The Vaquero APIs authenticate via JWT tokens. These require a server-secret and a shared-secret to be exported on the server and shared-secret and site-id must be exported on the agents. This can be done via the environment or command line:
-
-### environment
-Server:
-```
-export VAQUERO_SHARED_SECRET="HighlySecureSharedSecret"
-export VAQUERO_SERVER_SECRET="SHHHHHHHDONTTELLANYONE"
-```
-
-Agent:
-```
-export VAQUERO_SHARED_SECRET="HighlySecureSharedSecret"
-export VAQUERO_SITE_ID="test-site"
-```
-
-If exported in the environment, make sure to run sudo with the `-E` flag when running vaquero.
-`sudo -E vaquero ...`
-
-### command line
-`vaquero server --shared-secret HighlySecureSharedSecret --server-secret SHHHHHHHDONTTELLANYONE`
-
-`vaquero agent --site-id test-site --shared-secret HighlySecureSharedSecret`
-
-
 ### Standalone mode
 
 ##### git SoT:
