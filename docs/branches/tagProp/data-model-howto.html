@@ -396,14 +396,14 @@ cmdline:
 <td align="left">id</td>
 </tr>
 <tr class="odd">
-<td align="left">agent</td>
+<td align="left"><a href="#envagent">agent</a></td>
 <td align="left">Details for establishing a connection to the site's agent</td>
 <td align="left">yes</td>
 <td align="left">env.agent</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
-<td align="left">subnets</td>
+<td align="left"><a href="#envsubnet">subnets</a></td>
 <td align="left">List of subnets for this cluster</td>
 <td align="left">yes</td>
 <td align="left">env.subnet array</td>
@@ -417,7 +417,7 @@ cmdline:
 <td align="left"></td>
 </tr>
 <tr class="even">
-<td align="left">release_tag</td>
+<td align="left"><a href="#envrelease_tag">release_tag</a></td>
 <td align="left">Github release tag</td>
 <td align="left">no</td>
 <td align="left">string</td>
@@ -425,13 +425,6 @@ cmdline:
 </tr>
 </tbody>
 </table>
-<h4 id="env.release_tag">env.release_tag</h4>
-<p><code>release_tag</code> must be a valid <a href="https://git-scm.com/book/en/v2/Git-Basics-Tagging">git tag</a> corresponding to a specific <a href="https://help.github.com/articles/about-releases/">Github Release</a> (e.g., v0.1.0).</p>
-<p>If <code>release_tag</code> is specified, Vaquero will attempt to use the data model stored in the specified release instead of <em>this</em> model (i.e. where release_tag was specified). If the tag does not exist, Vaquero will fall back to using <em>this</em> model.</p>
-<h6 id="example">Example</h6>
-<p>Branch <code>master</code> defines three sites, <code>site-a</code>, <code>site-b</code>, and <code>site-c</code>. <code>site-a</code> has <code>release_tag=v0.1.0</code>, <code>site-b</code> has <code>release_tag=v0.1.1</code> and <code>site-c</code> does not have <code>release_tag</code> set.</p>
-<p>When Vaquero loads <code>master</code>, it will end up using three different data models for the three different sites. <code>site-a</code> will get the version of itself defined in release <code>v0.1.0</code>, <code>site-b</code> will get <code>v0.1.1</code> and <code>site-c</code> will get the version defined in <code>master</code>.</p>
-<p>This option is only supported when <a href="#staging">staging via Github</a>.</p>
 <h4 id="env.agent">env.agent</h4>
 <p>Details for establishing a connection to a site's agent</p>
 <table>
@@ -483,6 +476,13 @@ cmdline:
 </tbody>
 </table>
 <p>The transport (http/s) should be included with the agent URL.</p>
+<h4 id="env.release_tag">env.release_tag</h4>
+<p><code>release_tag</code> must be a valid <a href="https://git-scm.com/book/en/v2/Git-Basics-Tagging">git tag</a> corresponding to a specific <a href="https://help.github.com/articles/about-releases/">Github Release</a> (e.g., v0.1.0).</p>
+<p>If <code>release_tag</code> is specified, Vaquero will attempt to use the data model stored in the specified release instead of <em>this</em> model (i.e. where release_tag was specified). If the tag does not exist, Vaquero will fall back to using <em>this</em> model.</p>
+<p>This option is only supported when <a href="#staging">staging via Github</a>.</p>
+<h6 id="example">Example</h6>
+<p>Branch <code>master</code> defines three sites, <code>site-a</code>, <code>site-b</code>, and <code>site-c</code>. <code>site-a</code> has <code>release_tag=v0.1.0</code>, <code>site-b</code> has <code>release_tag=v0.1.1</code> and <code>site-c</code> does not have <code>release_tag</code> set.</p>
+<p>When Vaquero loads <code>master</code>, it will end up using three different data models for the three different sites. <code>site-a</code> will get the version of itself defined in release <code>v0.1.0</code>, <code>site-b</code> will get <code>v0.1.1</code> and <code>site-c</code> will get the version defined in <code>master</code>.</p>
 <h4 id="env.subnet">env.subnet</h4>
 <table>
 <thead>
