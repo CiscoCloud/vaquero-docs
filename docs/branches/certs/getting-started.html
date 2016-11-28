@@ -198,17 +198,19 @@ Vaquero Getting Started
 </tr>
 </tbody>
 </table>
-<h2 id="key-generation">Key Generation</h2>
+<h2 id="key-generation">key generation</h2>
 <p>The Vaquero Server and Vaquero Agents communicate over HTTPS/TLS. The Vaquero Server requires a public/private keypair to start up. You may either use the provided sample keys (<a href="https://raw.githubusercontent.com/CiscoCloud/vaquero-vagrant/master/provision_files/server.pem">public</a>, <a href="https://raw.githubusercontent.com/CiscoCloud/vaquero-vagrant/master/provision_files/server.key">private</a>), or generate your own using the following commands:</p>
 <pre><code>openssl genrsa -out server.key 2048
 openssl ecparam -genkey -name secp384r1 -out server.key
 openssl req -new -x509 -sha256 -key server.key -out server.pem -days 3650</code></pre>
 <p>The configuration file for the server would include the following:</p>
-<pre class="ServerAPI:"><code>    PrivateKey: &quot;path/to/server.key&quot;
-    PublicKey: &quot;path/to/server.pem&quot;</code></pre>
+<pre><code>ServerAPI:
+   PrivateKey: &quot;path/to/server.key&quot;
+   PublicKey: &quot;path/to/server.pem&quot;</code></pre>
 <p>Alternatively, the <code>--server-private-key</code> and <code>--server-public-key</code> flags can be passed on the command line.</p>
 <p>In a dev environment, a self signed key should sufficient, but in a production environment we highly suggest the keys be signed by a certificate authority. By default, Vaquero will not accept self-signed keys. To run insecurely, the agent config would need to include the following:</p>
-<pre class="ServerClient:"><code>     InsecureSkipVerify: true</code></pre>
+<pre><code>ServerClient:
+   InsecureSkipVerify: true</code></pre>
 <p>Alternatively, the <code>-k</code> flag can be passed on the command line.</p>
 <h2 id="secrets">secrets</h2>
 <p>The Vaquero APIs authenticate via JWT tokens. These require a server-secret and a shared-secret to be exported on the server and shared-secret and site-id must be exported on the agents. This can be done via the environment or command line:</p>
@@ -219,8 +221,10 @@ export VAQUERO_SERVER_SECRET=&quot;SHHHHHHHDONTTELLANYONE&quot;</code></pre>
 <p>Agent:</p>
 <pre><code>export VAQUERO_SHARED_SECRET=&quot;HighlySecureSharedSecret&quot;
 export VAQUERO_SITE_ID=&quot;test-site&quot;</code></pre>
+<p>If exported in the environment, make sure to run sudo with the <code>-E</code> flag when running vaquero. <code>sudo -E vaquero ...</code></p>
 <h3 id="command-line">command line</h3>
-<p><code>vaquero server --shared-secret HighlySecureSharedSecret --server-secret SHHHHHHHDONTTELLANYONE</code> <code>vaquero agent --site-id test-site --shared-secret HighlySecureSharedSecret</code></p>
+<p><code>vaquero server --shared-secret HighlySecureSharedSecret --server-secret SHHHHHHHDONTTELLANYONE</code></p>
+<p><code>vaquero agent --site-id test-site --shared-secret HighlySecureSharedSecret</code></p>
 <h2 id="canned-demos">canned demos</h2>
 <p>This assumes there is a running vaquero instance as described above with either the provided github repo or local data model.</p>
 <p><a href="https://cisco.box.com/s/lsohd9v7ik1rx1af3fthng1w87o9ig36">Video</a></p>
