@@ -481,7 +481,7 @@ cmdline:
 <p>If <code>release_tag</code> is specified, Vaquero will attempt to use the data model stored in the specified release instead of <em>this</em> model (i.e. where release_tag was specified). If the tag does not exist, Vaquero will fall back to using <em>this</em> model.</p>
 <p>This option is only supported when <a href="#staging">staging via Github</a>.</p>
 <h6 id="example">Example</h6>
-<p>Branch <code>master</code> defines three sites, <code>site-a</code>, <code>site-b</code>, and <code>site-c</code>. <code>site-a</code> has <code>release_tag=v0.1.0</code>, <code>site-b</code> has <code>release_tag=v0.1.1</code> and <code>site-c</code> does not have <code>release_tag</code> set.</p>
+<p>Branch <code>master</code> defines three sites: <code>site-a</code> with <code>release_tag: v0.1.0</code>, <code>site-b</code> with <code>release_tag: v0.1.1</code>, and <code>site-c</code> with no tag.</p>
 <p>When Vaquero loads <code>master</code>, it will end up using three different data models for the three different sites. <code>site-a</code> will get the version of itself defined in release <code>v0.1.0</code>, <code>site-b</code> will get <code>v0.1.1</code> and <code>site-c</code> will get the version defined in <code>master</code>.</p>
 <h4 id="env.subnet">env.subnet</h4>
 <table>
