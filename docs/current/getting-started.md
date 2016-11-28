@@ -72,79 +72,6 @@ We default DHCP to run in server mode. If you want to run vaquero in DHCP proxy 
 
 See the different [configurations](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config).
 
-
-### Standalone mode
-
-##### git SoT:
-
-*You must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config) for this to work.*
-
-`docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
-
-##### dir SoT:
-
-`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
-
-
-### separate server and agent
-
-1. Update data model to reflect VM IPs. Look at the site's `env.yml` and ensure the agent IP is correct. See the `vagrant VM table` below to see IPs for `vs` and `va` VMs
-
-2. Ensure server configuration and agent configuration match the IPs of the VM's. We have provided two example configs for separate server and agent using the local dir SoT in the vagrant repo. `VS_NUM=1 VA_NUM=1`
-
-3. Run each container in their respective mode. `server` or `agent` instead of `standalone`
-
-##### separate server dir SoT
-
-`docker run -v /vagrant/config/dir-sot-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest server --config /vaquero/config.yaml`
-
-##### separate agent dir SoT
-
-`docker run -v /vagrant/config/dir-sot-agent.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest agent --config /vaquero/config.yaml`
-
-
-## demo lab
-
-Vaquero provides this vagrant environment as a sandbox to work with vaquero before deployment. We provide 9 mac -> IP mappings that are free for your use / testing, the machines labeled SANDBOX would be free. We also provide two example data models, one as a [github](https://github.com/CiscoCloud/vaquero-examples/tree/vagrant) SoT and a local dir SoT, [vaquero-vagrant](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/local). These define the demo machines and are a working data model to use as an example when you develop your own SoT.
-
-### virtual env layout
-
-#### vagrant VM table
-There are `*`'s in the third space because VMs can be on the 10.10.10.0/24 or the 10.10.11.0/24 network. If no http relay is in effect all machines will be on the 10.10.10.0/24 network, if relay is active, vaquero services will be moved to 10.10.11.0/24 while booting hosts will be on 10.10.10.10/24
-
-
-| Vagrant VM     | IP Address               |
-|:---------------|:-------------------------|
-| Relay gateway  | 10.10.10.3 & 10.10.11.3  |
-| Free           | 10.10.\*.4               |
-| Vaquero server | 10.10.\*.5 - 10.10.\*.7  |
-| Vaquero agent  | 10.10.\*.8 - 10.10.\*.10 |
-
-
-#### booting host table
-
-
-| Mac address       | IP Address  | Demo          |
-|:------------------|:------------|:--------------|
-| 00:00:00:00:00:01 | 10.10.10.11 | SANDBOX       |
-| 00:00:00:00:00:02 | 10.10.10.12 | SANDBOX       |
-| 00:00:00:00:00:03 | 10.10.10.13 | SANDBOX       |
-| 00:00:00:00:00:04 | 10.10.10.14 | SANDBOX       |
-| 00:00:00:00:00:05 | 10.10.10.15 | SANDBOX       |
-| 00:00:00:00:00:06 | 10.10.10.16 | SANDBOX       |
-| 00:00:00:00:00:07 | 10.10.10.17 | SANDBOX       |
-| 00:00:00:00:00:08 | 10.10.10.18 | SANDBOX       |
-| 00:00:00:00:00:09 | 10.10.10.19 | SANDBOX       |
-| 00:00:00:00:00:21 | 10.10.10.21 | core-cloud    |
-| 00:00:00:00:00:22 | 10.10.10.22 | core-cloud    |
-| 00:00:00:00:00:23 | 10.10.10.23 | core-cloud    |
-| 00:00:00:00:00:24 | 10.10.10.24 | core-cloud    |
-| 00:00:00:00:00:31 | 10.10.10.31 | core-ignition |
-| 00:00:00:00:00:32 | 10.10.10.32 | core-ignition |
-| 00:00:00:00:00:33 | 10.10.10.33 | core-ignition |
-| 00:00:00:00:00:34 | 10.10.10.34 | core-ignition |
-| 00:00:00:00:00:41 | 10.10.10.41 | centos        |
-
 ## key generation
 The Vaquero Server and Vaquero Agents communicate over HTTPS/TLS. The Vaquero Server requires a public/private keypair to start up. You may either use the provided sample keys ([public]( https://raw.githubusercontent.com/CiscoCloud/vaquero-vagrant/master/provision_files/server.pem), [private](https://raw.githubusercontent.com/CiscoCloud/vaquero-vagrant/master/provision_files/server.key)), or generate your own using the following commands:
 
@@ -195,6 +122,80 @@ If exported in the environment, make sure to run sudo with the `-E` flag when ru
 `vaquero server --shared-secret HighlySecureSharedSecret --server-secret SHHHHHHHDONTTELLANYONE`
 
 `vaquero agent --site-id test-site --shared-secret HighlySecureSharedSecret`
+
+
+### Standalone mode
+
+##### git SoT:
+
+*You must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config) for this to work.*
+
+`docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+
+##### dir SoT:
+
+`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+
+
+### separate server and agent
+
+1. Update data model to reflect VM IPs. Look at the site's `env.yml` and ensure the agent IP is correct. See the `vagrant VM table` below to see IPs for `vs` and `va` VMs
+
+2. Ensure server configuration and agent configuration match the IPs of the VM's. We have provided two example configs for separate server and agent using the local dir SoT in the vagrant repo. `VS_NUM=1 VA_NUM=1`
+
+3. Run each container in their respective mode. `server` or `agent` instead of `standalone`
+
+##### separate server dir SoT
+
+`docker run -v /vagrant/config/dir-sot-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>"   shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest server --config /vaquero/config.yaml`
+
+##### separate agent dir SoT
+
+`docker run -v /vagrant/config/dir-sot-agent.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site"  shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest agent --config /vaquero/config.yaml`
+
+
+## demo lab
+
+Vaquero provides this vagrant environment as a sandbox to work with vaquero before deployment. We provide 9 mac -> IP mappings that are free for your use / testing, the machines labeled SANDBOX would be free. We also provide two example data models, one as a [github](https://github.com/CiscoCloud/vaquero-examples/tree/vagrant) SoT and a local dir SoT, [vaquero-vagrant](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/local). These define the demo machines and are a working data model to use as an example when you develop your own SoT.
+
+### virtual env layout
+
+#### vagrant VM table
+There are `*`'s in the third space because VMs can be on the 10.10.10.0/24 or the 10.10.11.0/24 network. If no http relay is in effect all machines will be on the 10.10.10.0/24 network, if relay is active, vaquero services will be moved to 10.10.11.0/24 while booting hosts will be on 10.10.10.10/24
+
+
+| Vagrant VM     | IP Address               |
+|:---------------|:-------------------------|
+| Relay gateway  | 10.10.10.3 & 10.10.11.3  |
+| Free           | 10.10.\*.4               |
+| Vaquero server | 10.10.\*.5 - 10.10.\*.7  |
+| Vaquero agent  | 10.10.\*.8 - 10.10.\*.10 |
+
+
+#### booting host table
+
+
+| Mac address       | IP Address  | Demo          |
+|:------------------|:------------|:--------------|
+| 00:00:00:00:00:01 | 10.10.10.11 | SANDBOX       |
+| 00:00:00:00:00:02 | 10.10.10.12 | SANDBOX       |
+| 00:00:00:00:00:03 | 10.10.10.13 | SANDBOX       |
+| 00:00:00:00:00:04 | 10.10.10.14 | SANDBOX       |
+| 00:00:00:00:00:05 | 10.10.10.15 | SANDBOX       |
+| 00:00:00:00:00:06 | 10.10.10.16 | SANDBOX       |
+| 00:00:00:00:00:07 | 10.10.10.17 | SANDBOX       |
+| 00:00:00:00:00:08 | 10.10.10.18 | SANDBOX       |
+| 00:00:00:00:00:09 | 10.10.10.19 | SANDBOX       |
+| 00:00:00:00:00:21 | 10.10.10.21 | core-cloud    |
+| 00:00:00:00:00:22 | 10.10.10.22 | core-cloud    |
+| 00:00:00:00:00:23 | 10.10.10.23 | core-cloud    |
+| 00:00:00:00:00:24 | 10.10.10.24 | core-cloud    |
+| 00:00:00:00:00:31 | 10.10.10.31 | core-ignition |
+| 00:00:00:00:00:32 | 10.10.10.32 | core-ignition |
+| 00:00:00:00:00:33 | 10.10.10.33 | core-ignition |
+| 00:00:00:00:00:34 | 10.10.10.34 | core-ignition |
+| 00:00:00:00:00:41 | 10.10.10.41 | centos        |
+
 
 ## canned demos
 This assumes there is a running vaquero instance as described above with either the provided github repo or local data model.
