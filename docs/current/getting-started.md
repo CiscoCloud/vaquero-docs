@@ -145,7 +145,7 @@ There are `*`'s in the third space because VMs can be on the 10.10.10.0/24 or th
 | 00:00:00:00:00:34 | 10.10.10.34 | core-ignition |
 | 00:00:00:00:00:41 | 10.10.10.41 | centos        |
 
-## Key Generation
+## key generation
 The Vaquero Server and Vaquero Agents communicate over HTTPS/TLS. The Vaquero Server requires a public/private keypair to start up. You may either use the provided sample keys ([public]( https://raw.githubusercontent.com/CiscoCloud/vaquero-vagrant/master/provision_files/server.pem), [private](https://raw.githubusercontent.com/CiscoCloud/vaquero-vagrant/master/provision_files/server.key)), or generate your own using the following commands:
 
 ```
@@ -156,17 +156,19 @@ openssl req -new -x509 -sha256 -key server.key -out server.pem -days 3650
 
 The configuration file for the server would include the following:
 
-```ServerAPI:
-    PrivateKey: "path/to/server.key"
-    PublicKey: "path/to/server.pem"
+```
+ServerAPI:
+   PrivateKey: "path/to/server.key"
+   PublicKey: "path/to/server.pem"
 ```
 Alternatively, the `--server-private-key` and `--server-public-key` flags can be passed on the command line.
 
 
 In a dev environment, a self signed key should sufficient, but in a production environment we highly suggest the keys be signed by a certificate authority. By default, Vaquero will not accept self-signed keys. To run insecurely, the agent config would need to include the following:
 
-```ServerClient:
-     InsecureSkipVerify: true
+```
+ServerClient:
+   InsecureSkipVerify: true
 ```
 Alternatively, the `-k` flag can be passed on the command line.
 
@@ -186,8 +188,12 @@ export VAQUERO_SHARED_SECRET="HighlySecureSharedSecret"
 export VAQUERO_SITE_ID="test-site"
 ```
 
+If exported in the environment, make sure to run sudo with the `-E` flag when running vaquero.
+`sudo -E vaquero ...`
+
 ### command line
 `vaquero server --shared-secret HighlySecureSharedSecret --server-secret SHHHHHHHDONTTELLANYONE`
+
 `vaquero agent --site-id test-site --shared-secret HighlySecureSharedSecret`
 
 ## canned demos
