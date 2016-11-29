@@ -93,12 +93,15 @@ See the [architecture page](architecture.html) for more details about server and
 ************************************************************
 **sample-standalone-config.yaml:**
 ```
-ServerApi:
-  Address: "127.0.0.1"
+ServerClient:
+  Addr: "127.0.0.1"
   Port: 24601
-AgentApi:
-  InsecureAddr: "127.0.0.1"
-  InsecurePort: 24604
+  InsecureSkipVerify: true
+ServerAPI:
+  Addr: "127.0.0.1"
+  Port: 24601
+  PrivateKey: "functional/test/server.key"
+  PublicKey: "functional/test/server.pem"
 AssetServer:
   Addr: "127.0.0.1"
   Port: 24602
@@ -117,25 +120,29 @@ Gitter:
   Addr: "127.0.0.1"
   Port: 24603
 GitHook:
-  - ID: "vaquero-sot"
+  - ID: "vaquero-git"
     Token: <GIT_TOKEN>
     URL: "https://github.com/CiscoCloud/vaquero-examples"
     Secret: supersecretcode
+LocalDir:
+  PollInterval: 10
 SoT:
+- Local:
+    ID: "vaquero-local"
+    Root: examples/etcd-cluster
 - Git:
-    HookID: "vaquero-sot"
+    HookID: "vaquero-git"
     ID: "vaquero-test"
     Branch: master
 Log:
   Level: info
   Location: stdout
   LogType: text
-
 ```
 ************************************************************
 ### Configuration Fields Overview
-- `ServerApi`: The user api for the server. Currently in progress.
-- `AgentApi`: The vaquero-agent http server used to listen for Vaquero server commands.
+- `ServerClient`: Configuration for vaquero-agent's ServerAPI client.
+- `ServerAPI`: The vaquero-server api, used by vaquero agents.
 - `AssetServer`: The asset server for Vaquero agent used by each booting machine to get unattended scripts and kernels.
 - `SavePath`: The Vaquero server location to save local configurations on disk.
 - `Gitter`: Configuration for listening to git webhooks.
@@ -155,8 +162,10 @@ Log:
 | All    | Log/Location          | no                | Place to log: (stdout, stderr, `filename`)                        | stdout             |
 | All    | Log/Type              | no                | Text / JSON output (text/json)                                    | text               |
 | All    | SavePath              | no                | Base folder for vaquero save files                                | /var/vaquero       |
-| Agent  | AgentAPI/InsecureAddr | no                | IP Address on which to serve the agent REST API                   | 127.0.0.1          |
-| Agent  | AgentAPI/InsecurePort | no                | Port on which to serve the agent REST API                         | 24602              |
+| Agent  | ServerClient/Addr     | no                | IP Address of vaquero-server's API.                               | 127.0.0.1          |
+| Agent  | ServerClient/Port     | no                | Port of vaquero-server's API                                      | 24601              |
+| Agent  | ServerClient/         | no                | vaquero-agent should allow a self-signed server certificate.      | false
+|          InsecureSkipVerify    |                   |                                                                   |                    |
 | Agent  | Assets/CdnScheme      | no                | Cdn scheme                                                        | none               |
 | Agent  | Assets/CdnAddr        | no                | The address of the cdn endpoint to reverse proxy to               | http               |
 | Agent  | Assets/CdnPort        | no                | The port of the cdn endpoint to reverse proxy to                  | 0                  |
@@ -165,8 +174,10 @@ Log:
 | Agent  | AssetServer/Scheme    | no                | Asset server scheme : http / https                                | http               |
 | Agent  | AssetServer/BaseDir   | no                | Agent directory to serve files from                               | /var/vaquero/files |
 | Agent  | DHCPMode              | no                | Agent DHCP Mode: server / proxy                                   | server             |
-| Server | ServerAPI/Address     | no                | The IP Address to serve the server REST API on                    | 127.0.0.1          |
+| Server | ServerAPI/Addr        | no                | The IP Address to serve the server REST API on                    | 127.0.0.1          |
 | Server | ServerAPI/Port        | no                | The port to serve the server REST API on                          | 24601              |
+| Server | ServerAPI/PrivateKey  | yes               | vaquero-server HTTPS/TLS Private Key                              |                    |
+| Server | ServerAPI/PublicKey   | yes               | vaquero-server HTTPS/TLS Public Key                               |                    |
 | Server | Etcd/Endpoints        | no                | etcd initial cluster endpoints: format- e1,e2,e3                  | 127.0.0.1:2379     |
 | Server | Etcd/Retry            | no                | number of retries for etcd operations                             | 3                  |
 | Server | Etcd/Timeout          | no                | etcd dial and request timeout, in seconds                         | 5                  |
