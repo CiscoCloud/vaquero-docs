@@ -25,8 +25,7 @@ The Vaquero validator is a built in utility for checking the consistency of your
 
 ## Using vaquero validate
 
-- Validating a local SoT: `vaquero validate --sot-dir <base_directory>` The base directory structure should be consistent with the [data model](data-model-howto.html).
-- Validating a git SoT: `vaquero validate --config sa-config.yml` The config file should contain all the parameters required to start vaquero in server mode, specifically GitHook and SoT fields.
+- Validating a local SoT: `vaquero validate --sot <base_directory>` The base directory structure should be consistent with the [data model](data-model-howto.html).
 
 ## Validation Process
 
