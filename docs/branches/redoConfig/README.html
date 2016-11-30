@@ -194,214 +194,208 @@ Log:
 </tr>
 <tr class="odd">
 <td align="left">Agent</td>
-<td align="left">ServerClient/</td>
+<td align="left">ServerClient/<br>InsecureSkipVerify</td>
 <td align="left">no</td>
 <td align="left">vaquero-agent should allow a self-signed server certificate.</td>
 <td align="left">false</td>
 </tr>
 <tr class="even">
-<td align="left">InsecureSkipVerify</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
 <td align="left">Agent</td>
 <td align="left">Assets/CdnScheme</td>
 <td align="left">no</td>
 <td align="left">Cdn scheme</td>
 <td align="left">http</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Agent</td>
 <td align="left">Assets/CdnAddr</td>
 <td align="left">no</td>
 <td align="left">The address of the cdn endpoint to reverse proxy to</td>
 <td align="left">none</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Agent</td>
 <td align="left">Assets/CdnPort</td>
 <td align="left">no</td>
 <td align="left">The port of the cdn endpoint to reverse proxy to</td>
 <td align="left">none</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Agent</td>
 <td align="left">AssetServer/Addr</td>
 <td align="left">no</td>
 <td align="left">The IP Address to serve the agent asset server</td>
 <td align="left">127.0.0.1</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Agent</td>
 <td align="left">AssetServer/Port</td>
 <td align="left">no</td>
 <td align="left">The port to serve the agent asset server</td>
 <td align="left">24602</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Agent</td>
 <td align="left">AssetServer/Scheme</td>
 <td align="left">no</td>
 <td align="left">Asset server scheme : http / https</td>
 <td align="left">http</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Agent</td>
 <td align="left">AssetServer/BaseDir</td>
 <td align="left">no</td>
 <td align="left">Agent directory to serve files from</td>
 <td align="left">/var/vaquero/files</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Agent</td>
 <td align="left">DHCPMode</td>
 <td align="left">no</td>
 <td align="left">Agent DHCP Mode: server / proxy</td>
 <td align="left">server</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">ServerAPI/Addr</td>
 <td align="left">no</td>
 <td align="left">The IP Address to serve the server REST API on</td>
 <td align="left">127.0.0.1</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Server</td>
 <td align="left">ServerAPI/Port</td>
 <td align="left">no</td>
 <td align="left">The port to serve the server REST API on</td>
 <td align="left">24601</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">ServerAPI/PrivateKey</td>
 <td align="left">yes</td>
 <td align="left">vaquero-server HTTPS/TLS Private Key</td>
 <td align="left">none</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Server</td>
 <td align="left">ServerAPI/PublicKey</td>
 <td align="left">yes</td>
 <td align="left">vaquero-server HTTPS/TLS Public Key</td>
 <td align="left">none</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">Etcd/Endpoints</td>
 <td align="left">no</td>
 <td align="left">etcd initial cluster endpoints: format- e1,e2,e3</td>
 <td align="left">127.0.0.1:2379</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Server</td>
 <td align="left">Etcd/Retry</td>
 <td align="left">no</td>
 <td align="left">number of retries for etcd operations</td>
 <td align="left">3</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">Etcd/Timeout</td>
 <td align="left">no</td>
 <td align="left">etcd dial and request timeout, in seconds</td>
 <td align="left">2</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Server</td>
 <td align="left">Gitter/Endpoint</td>
 <td align="left">no</td>
 <td align="left">githook endpoint to receive webhooks</td>
 <td align="left">/postreceive</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">Gitter/Address</td>
 <td align="left">no</td>
 <td align="left">githook listening address</td>
 <td align="left">127.0.0.1</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Server</td>
 <td align="left">Gitter/Port</td>
 <td align="left">no</td>
 <td align="left">githook listening port</td>
 <td align="left">24603</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">Gitter/Timeout</td>
 <td align="left">no</td>
 <td align="left">githook timeout, in seconds</td>
 <td align="left">2</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Server</td>
 <td align="left">GitHook/ID</td>
 <td align="left">yes, if git SOT</td>
 <td align="left">githook ID</td>
 <td align="left">none</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">GitHook/Token</td>
 <td align="left">yes, if git SOT</td>
 <td align="left">hook token, generated on github/settings</td>
 <td align="left">none</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Server</td>
 <td align="left">GitHook/URL</td>
 <td align="left">yes, if git SOT</td>
 <td align="left">url for githook</td>
 <td align="left">none</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">GitHook/Secret</td>
 <td align="left">yes, if git SOT</td>
 <td align="left">secret for githook</td>
 <td align="left">none</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Server</td>
 <td align="left">SoT/Git/HookID</td>
 <td align="left">yes, if git SOT</td>
 <td align="left">git hookID</td>
 <td align="left">none</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">SoT/Git/ID</td>
 <td align="left">yes, if git SOT</td>
 <td align="left">ID (?)</td>
 <td align="left">none</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Server</td>
 <td align="left">SoT/Git/Branch</td>
 <td align="left">yes, if git SOT</td>
 <td align="left">SoT branch name</td>
 <td align="left">none</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">SoT/Local/ID</td>
 <td align="left">yes, if local dir</td>
 <td align="left">local dir ID</td>
 <td align="left">none</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Server</td>
 <td align="left">SoT/Local/Root</td>
 <td align="left">yes, if local dir</td>
 <td align="left">local root dir</td>
 <td align="left">none</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Server</td>
 <td align="left">LocalDir/PollInterval</td>
 <td align="left">no</td>
