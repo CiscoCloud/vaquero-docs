@@ -166,18 +166,18 @@ Log:
 | Agent  | ServerClient/Port     | no                | Port of vaquero-server's API                                      | 24601              |
 | Agent  | ServerClient/         | no                | vaquero-agent should allow a self-signed server certificate.      | false
 |          InsecureSkipVerify    |                   |                                                                   |                    |
-| Agent  | Assets/CdnScheme      | no                | Cdn scheme                                                        | none               |
-| Agent  | Assets/CdnAddr        | no                | The address of the cdn endpoint to reverse proxy to               | http               |
+| Agent  | Assets/CdnScheme      | no                | Cdn scheme                                                        | http               |
+| Agent  | Assets/CdnAddr        | no                | The address of the cdn endpoint to reverse proxy to               | none               |
 | Agent  | Assets/CdnPort        | no                | The port of the cdn endpoint to reverse proxy to                  | 0                  |
 | Agent  | AssetServer/Addr      | no                | The IP Address to serve the agent asset server                    | 127.0.0.1          |
-| Agent  | AssetServer/Port      | no                | The port to serve the agent asset server                          | 20468              |
+| Agent  | AssetServer/Port      | no                | The port to serve the agent asset server                          | 24602              |
 | Agent  | AssetServer/Scheme    | no                | Asset server scheme : http / https                                | http               |
 | Agent  | AssetServer/BaseDir   | no                | Agent directory to serve files from                               | /var/vaquero/files |
 | Agent  | DHCPMode              | no                | Agent DHCP Mode: server / proxy                                   | server             |
 | Server | ServerAPI/Addr        | no                | The IP Address to serve the server REST API on                    | 127.0.0.1          |
 | Server | ServerAPI/Port        | no                | The port to serve the server REST API on                          | 24601              |
-| Server | ServerAPI/PrivateKey  | yes               | vaquero-server HTTPS/TLS Private Key                              |                    |
-| Server | ServerAPI/PublicKey   | yes               | vaquero-server HTTPS/TLS Public Key                               |                    |
+| Server | ServerAPI/PrivateKey  | yes               | vaquero-server HTTPS/TLS Private Key                              | none               |
+| Server | ServerAPI/PublicKey   | yes               | vaquero-server HTTPS/TLS Public Key                               | none               |
 | Server | Etcd/Endpoints        | no                | etcd initial cluster endpoints: format- e1,e2,e3                  | 127.0.0.1:2379     |
 | Server | Etcd/Retry            | no                | number of retries for etcd operations                             | 3                  |
 | Server | Etcd/Timeout          | no                | etcd dial and request timeout, in seconds                         | 5                  |
