@@ -164,8 +164,7 @@ Log:
 | All    | SavePath              | no                | Base folder for vaquero save files                                | /var/vaquero       |
 | Agent  | ServerClient/Addr     | no                | IP Address of vaquero-server's API.                               | 127.0.0.1          |
 | Agent  | ServerClient/Port     | no                | Port of vaquero-server's API                                      | 24601              |
-| Agent  | ServerClient/         | no                | vaquero-agent should allow a self-signed server certificate.      | false
-|          InsecureSkipVerify    |                   |                                                                   |                    |
+| Agent  | ServerClient/<br>InsecureSkipVerify      | no                | vaquero-agent should allow a self-signed server certificate.      | false
 | Agent  | Assets/CdnScheme      | no                | Cdn scheme                                                        | http               |
 | Agent  | Assets/CdnAddr        | no                | The address of the cdn endpoint to reverse proxy to               | none               |
 | Agent  | Assets/CdnPort        | no                | The port of the cdn endpoint to reverse proxy to                  | none                  |
