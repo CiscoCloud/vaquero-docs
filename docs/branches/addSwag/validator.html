@@ -1,0 +1,39 @@
+<head>
+            
+<meta charset="UTF-8"> <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+Vaquero Validator
+</title>
+            
+<link rel="stylesheet" type="text/css" href="../doc.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400"> <link rel='shortcut icon' href='cow.png' type='image/x-icon'/ >
+<style>
+                .markdown-body {
+                    box-sizing: border-box;
+                    min-width: 200px;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 45px;
+                }
+            </style>
+</head><article class="markdown-body">
+
+<h1 id="vaquero-validator">Vaquero Validator</h1>
+<p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> | <a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
+<p>The Vaquero validator is a built in utility for checking the consistency of your configurations. Its purpose is to preemptively report any inconsistencies (mistyped IDs, missing metadata, etc) in your configuration before you attempt to deploy it.</p>
+<h2 id="using-vaquero-validate">Using vaquero validate</h2>
+<ul>
+<li>Validating a local SoT: <code>vaquero validate --sot &lt;base_directory&gt;</code> The base directory structure should be consistent with the <a href="data-model-howto.html">data model</a>.</li>
+</ul>
+<h2 id="validation-process">Validation Process</h2>
+<p>The validator first loads the directory tree passed in through a local directory, or through git. It then:</p>
+<ol style="list-style-type: decimal">
+<li>Checks if all links between objects exist. For example, an error would be generated if a <code>host_group</code> is looking for <code>operating_system: coreos-1053.2.0-stable</code> and the data model only has <code>coreos-1053.2.0-alpha</code>.</li>
+<li>Checks if all metadata needed to render templates is available.</li>
+<li>Checks unattended files are in a valid format</li>
+<li>Checks unattended files mentioned are supported by Vaquero</li>
+<li>Checks for name duplication amongst a class of data model objects</li>
+<li>Checks if inventory has hosts</li>
+<li>Checks if the ignition files provided are valid. Uses <a href="https://github.com/coreos/fuze/tree/master/config">coreos/fuze</a></li>
+<li>Checks if the cloud-config files provided are valid. Uses <a href="github.com/coreos/coreos-cloudinit/config">coreos/coreos-cloudinit</a></li>
+<li>Checks if the kickstart files provided are valid using a simple internally developed parser. Further validation can be done using the <a href="http://fedoraproject.org/wiki/Pykickstart">official validator</a>.</li>
+</ol>
