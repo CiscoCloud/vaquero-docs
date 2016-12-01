@@ -15,7 +15,7 @@ Updates to this repo automatically generate new documentation which will be publ
 
   https://github.com/CiscoCloud/vaquero-docs/tree/gh-pages/docs/current
 
-* When the documentation is tagged, a new version of the documents will be published using the version indicated in the tag. **Futrue Roadmap**
+* When the documentation is tagged, a new version of the documents will be published using the version indicated in the tag. **Future Roadmap**
 
   See: https://github.com/CiscoCloud/vaquero-docs/tree/gh-pages/docs
 
