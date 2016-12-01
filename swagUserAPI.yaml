@@ -1,0 +1,398 @@
+swagger: '2.0'
+
+# This is your document metadata
+info:
+  version: "0.0.1"
+  title: Vaquero User API
+  
+parameters:
+  agentID:
+    name: agentID
+    in: path
+    type: string
+    description: ID of the agent
+    required: true
+  hostID:
+    name: hostID
+    in: path
+    type: string
+    description: ID of the host
+    required: true
+  # sha:
+  #   name: sha
+  #   in: query
+  #   type: string
+  #   description: sha of the commit
+  #   required: false
+  siteID:
+    name: siteID
+    in: path
+    type: string
+    description: ID of the site
+    required: true
+  sourceID:
+    name: sourceID
+    in: path
+    description: ID of the source of truth
+    type: string
+    required: true   
+
+paths:
+  /sources:
+    get:
+      tags:
+        - Sources
+      description: Returns a list of all known sources of truth (SoTs)
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "#/definitions/SoT"
+        400:
+          description: Bad Request
+    post:
+      tags:
+        - Sources
+      description: Adds a new source of truth to the vaquero server. Payload matches what is required for an SoT. Similar to adding another gitter SoT or local directory SoT.
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
+          
+    
+  /sources/{sourceID}:  
+    get:
+      tags:
+        - Sources
+      description: Returns the details related to this specific source of truth (SoT)
+      parameters:
+        - $ref: "#/parameters/sourceID"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/SoT"
+        400:
+          description: Bad Request
+    put:
+      tags:
+        - Sources
+      description: Modifies an exiting source configuration.
+      parameters:
+        - $ref: "#/parameters/sourceID"
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
+          
+  /sources/{sourceID}/sites/{siteID}:
+    get:
+      tags:
+        - Sources
+        - Sites
+      description: Returns the data model history and current data model associated with the `Site` from siteID
+      parameters:
+        - $ref: "#/parameters/sourceID"
+        - $ref: "#/parameters/siteID"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Site"
+        400:
+          description: Bad Request
+  
+  /sources/{sourceID}/sites/{siteID}/hosts/{hostID}:
+    get:
+      tags:
+        - Sources
+        - Hosts
+      description: Returns the data model associated with that `Host`
+      parameters:
+        - $ref: "#/parameters/sourceID"
+        - $ref: "#/parameters/siteID"
+        - $ref: "#/parameters/hostID"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Host"
+        400:
+          description: Bad Request
+          
+  /agents:
+    get:
+      tags:
+        - Agents
+      description: Gets a list of all registered agents and their data model history and current model.
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "#/definitions/Agent"
+        400:
+          description: Bad Request
+  
+  /agents/{agentID}:
+    get:
+      tags:
+        - Agents
+      description: Returns binding history of this agent.
+      parameters:
+        - $ref: "#/parameters/agentID"
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "#/definitions/Binding"
+        400:
+          description: Bad Request
+          
+  /current/agents/{agentID}:
+    get:
+      tags:
+        - Agents
+      description: Returns the current binding of this agent.
+      parameters:
+        - $ref: "#/parameters/agentID"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Binding"
+        400:
+          description: Bad Request
+          
+  /configs:
+    get:
+      tags:
+        - Configs
+      description: Returns the vaquero server configuration and known agent configurations.
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "#/definitions/Config"
+        400:
+          description: Bad Request
+  
+  /configs/{agentID}:
+    get:
+      tags:
+        - Configs
+        - Agents
+      description: Returns a specific agent configuration
+      parameters:
+        - $ref: "#/parameters/agentID"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Config"
+        400:
+          description: Bad Request
+          
+  /status:
+    get:
+      tags:
+        - Status
+      description: Returns a list of all `Site`s specifying the known status around each host.
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "#/definitions/Status"
+        400:
+          description: Bad Request
+
+  /status/sources/{sourceID}:
+    get:
+      tags:
+        - Status
+        - Sources
+      description: Returns the known status of this given `SoT`
+      parameters:
+        - $ref: "#/parameters/sourceID"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Status"
+        400:
+          description: Bad Request
+          
+  /status/sources/{sourceID}/sites/{siteID}:
+    get:
+      tags:
+        - Status
+        - Sites
+      description: Returns the known status of this given `Site`
+      parameters:
+        - $ref: "#/parameters/sourceID"
+        - $ref: "#/parameters/siteID"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Status"
+        400:
+          description: Bad Request
+    
+  /status/sources/{sourceID}/sites/{siteID}/hosts/{hostID}:
+    get:
+      tags:
+        - Status
+        - Hosts
+      description: Returns the known status of this given `Host` in this `Site`
+      parameters:
+        - $ref: "#/parameters/sourceID"
+        - $ref: "#/parameters/siteID"
+        - $ref: "#/parameters/hostID"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Status"
+        400:
+          description: Bad Request
+    
+  /status/agents:
+    get:
+      tags:
+        - Agents
+        - Status
+      description: Returns a list of all registered `Agent`s last known status
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "#/definitions/Status"
+        400:
+          description: Bad Request
+    
+  /status/agents/{agentID}:
+    get: 
+      tags:
+        - Agents
+        - Status
+      description: Returns the last known status of this `Agent`
+      parameters:
+        - $ref: "#/parameters/agentID"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Status"
+        400:
+          description: Bad Request
+          
+  /bindings:
+    get:
+      tags:
+        - Bindings
+      description: Returns all known bindings of sources of truth (SoTs) to the agents.
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "#/definitions/Binding"
+        400:
+          description: Bad Request
+      
+  /bindings/sources/{sourceID}/agents/{agentID}:
+    get:
+      tags:
+        - Bindings
+        - Agents
+      description: Returns the status of a bind given the source and agent.
+      parameters:
+        - $ref: "#/parameters/sourceID"
+        - $ref: "#/parameters/agentID"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Binding"
+        400:
+          description: Bad Request
+        
+    delete:
+      tags:
+        - Bindings
+        - Agents
+      description: Removes the binding if one exists
+      parameters:
+        - $ref: "#/parameters/sourceID"
+        - $ref: "#/parameters/agentID"
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad Request
+    
+    post:
+      tags:
+        - Bindings
+        - Agents
+      description: Creates a new binding between the specified host and agent.
+      parameters:
+        - $ref: "#/parameters/sourceID"
+        - $ref: "#/parameters/agentID"
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
+    
+definitions:
+  Agent:
+    type: object
+  Binding:
+    type: object
+  Config:
+    type: object
+  Host:
+    type: object
+  Site:
+    type: object
+  SoT:
+    type: object
+  Status:
+    type: object
+    
