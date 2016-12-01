@@ -322,6 +322,8 @@ A CLI tool for validating your data model before you push it through Vaquero
 ## Docs
 Build the documentation by running `godoc -http <port>` and open `localhost:<port>` on your web browser
 
+## Swagger Docs
+The User API has a [Swagger](http://swagger.io/tools/) document for ease of use. It can be used to generate code, or explore the exposed endpoints.
 
 ## Questions / Comments / Feedback
 To provide feedback to the team please email: [vaquero-feedback@external.cisco.com](mailto:vaquero-feedback@external.cisco.com)
