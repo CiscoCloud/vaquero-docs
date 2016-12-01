@@ -325,6 +325,11 @@ Build the documentation by running `godoc -http <port>` and open `localhost:<por
 ## Swagger Docs
 The User API has a [Swagger](http://swagger.io/tools/) document for ease of use. It can be used to generate code, or explore the exposed endpoints.
 
+The interface can either be setup by following the instructions for the [Swagger UI](http://swagger.io/swagger-ui/) and serving the `swagUserAPI.yaml` file locally,
+ or by going to the [Swagger UI demo](http://petstore.swagger.io/) and inputting the [RawGit](rawgit.com) hosted CORS-supported `https://cdn.rawgit.com/CiscoCloud/vaquero-docs/master/swagUserAPI.yaml`.
+
+Additionally, the [Swagger Codegen](http://swagger.io/swagger-codegen/) can generate client side code for interacting with the provided endpoints.
+
 ## Questions / Comments / Feedback
 To provide feedback to the team please email: [vaquero-feedback@external.cisco.com](mailto:vaquero-feedback@external.cisco.com)
 For Issues, open at [CiscoCloud/vaquero-docs](https://github.com/CiscoCloud/vaquero-docs/issues)
