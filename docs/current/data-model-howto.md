@@ -408,13 +408,15 @@ TBD
 Provides information for a single deployment/data center/etc.
 
 
-| name     | description                                               | required | schema           | default |
-|:---------|:----------------------------------------------------------|:---------|:-----------------|:--------|
-| id       | A self-assigned identifier (should be unique)             | yes      | string           |         |
-| name     | A human-readable name for this group                      | no       | string           | id      |
-| agent    | Details for establishing a connection to the site's agent | yes      | env.agent        |         |
-| subnets  | List of subnets for this cluster                          | yes      | env.subnet array |         |
-| metadata | unstructured, site-specific information                   | no       | object           |         |
+| name         | description                                               | required | schema           | default |
+|:-------------|:----------------------------------------------------------|:---------|:-----------------|:--------|
+| id           | A self-assigned identifier (should be unique)             | yes      | string           |         |
+| name         | A human-readable name for this group                      | no       | string           | id      |
+| [agent](#envagent)        | Details for establishing a connection to the site's agent | yes      | env.agent        |         |
+| [subnets](#envsubnet)      | List of subnets for this cluster                          | yes      | env.subnet array |         |
+| metadata     | unstructured, site-specific information                   | no       | object           |         |
+| [release_tag](#envrelease_tag)  | Github release tag                                        | no       | string           |         |
+
 
 
 #### env.agent
@@ -432,6 +434,18 @@ Details for establishing a connection to a site's agent
 
 
 The transport (http/s) should be included with the agent URL.
+
+#### env.release_tag
+`release_tag` must be a valid [commit_ish](https://git-scm.com/docs/git#git-ltcommit-ishgt) string corresponding to a specific [Github Release](https://help.github.com/articles/about-releases/) (e.g., v0.1.0) or commit_id.
+
+If `release_tag` is specified, Vaquero will attempt to use the data model stored in the specified release instead of _this_ model (i.e. where release_tag was specified). If the tag does not exist, Vaquero will fall back to using _this_ model.
+
+This option is only supported when [staging via Github](#staging).
+
+###### Example
+Branch `master` defines three sites: `site-a` with `release_tag: v0.1.0`, `site-b` with `release_tag: v0.1.1`, and `site-c` with no tag.
+
+When Vaquero loads `master`, it will end up using three different data models for the three different sites. `site-a` will get the version of itself defined in release `v0.1.0`, `site-b` will get `v0.1.1` and `site-c` will get the version defined in `master`.
 
 #### env.subnet
 
