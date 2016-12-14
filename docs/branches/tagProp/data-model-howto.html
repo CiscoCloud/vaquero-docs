@@ -477,7 +477,7 @@ cmdline:
 </table>
 <p>The transport (http/s) should be included with the agent URL.</p>
 <h4 id="env.release_tag">env.release_tag</h4>
-<p><code>release_tag</code> must be a valid <a href="https://git-scm.com/book/en/v2/Git-Basics-Tagging">git tag</a> corresponding to a specific <a href="https://help.github.com/articles/about-releases/">Github Release</a> (e.g., v0.1.0).</p>
+<p><code>release_tag</code> must be a valid <a href="https://git-scm.com/docs/git#git-ltcommit-ishgt">commit_ish</a> string corresponding to a specific <a href="https://help.github.com/articles/about-releases/">Github Release</a> (e.g., v0.1.0) or commit_id.</p>
 <p>If <code>release_tag</code> is specified, Vaquero will attempt to use the data model stored in the specified release instead of <em>this</em> model (i.e. where release_tag was specified). If the tag does not exist, Vaquero will fall back to using <em>this</em> model.</p>
 <p>This option is only supported when <a href="#staging">staging via Github</a>.</p>
 <h6 id="example">Example</h6>
