@@ -436,7 +436,7 @@ Details for establishing a connection to a site's agent
 The transport (http/s) should be included with the agent URL.
 
 #### env.release_tag
-`release_tag` must be a valid [git tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging) corresponding to a specific [Github Release](https://help.github.com/articles/about-releases/) (e.g., v0.1.0).
+`release_tag` must be a valid [commit_ish](https://git-scm.com/docs/git#git-ltcommit-ishgt) string corresponding to a specific [Github Release](https://help.github.com/articles/about-releases/) (e.g., v0.1.0) or commit_id.
 
 If `release_tag` is specified, Vaquero will attempt to use the data model stored in the specified release instead of _this_ model (i.e. where release_tag was specified). If the tag does not exist, Vaquero will fall back to using _this_ model.
 
