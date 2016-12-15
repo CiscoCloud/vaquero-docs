@@ -58,8 +58,8 @@ By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
 
   For example: `VS_NUM=3 vagrant up` will stand up 3 vaquero server VMs. Running `vagrant destroy -f` will only destroy the first instance, you must run `VS_NUM=3 vagrant destroy -f` to clean up all of them. Include *every* ENV var for *every* vagrant command, even things like `vagrant ssh vs-3`.
 
-  **etcd check:** Once the VM(s) are booted and before running vaquero, ssh into one of your server machines. Perform a cluster health check:
-  `etcdCTL_API=2 etcdctl cluster-health`. If an error message appears, wait until all machines are live, then perform the cluster health check again.   
+  **Etcd check:** Once the VM(s) are booted and before running vaquero, ssh into one of your server machines. Perform a cluster health check:
+  `ETCDCTL_API=2 etcdctl cluster-health`. If an error message appears, wait until all machines are live, then perform the cluster health check again.   
 
 ## 3. pull the latest docker image
 
