@@ -144,11 +144,11 @@ Log:
 - `ServerClient`: Configuration for vaquero-agent's ServerAPI client.
 - `ServerAPI`: The vaquero-server api, used by vaquero agents.
 - `AssetServer`: The asset server for Vaquero agent used by each booting machine to get unattended scripts and kernels.
-- `SavePath`: The Vaquero server location to save local configurations on disk.
+- `SavePath`: The Vaquero server location to save local configurations (data models) on disk.
 - `Gitter`: Configuration for listening to git webhooks.
 - `GitHook`: An array for all githooks to listen to.
 - `SoT:` An array for specific sources of truth. Git updater receives webhooks from github. Local: will use a local directory to update.
-- `Etcd`: (for a vaquero server cluster / HA) specifies the information used to connect a running etcd cluster to vaquero's own Etcd client. Etcd is used to keep track of state, data models, and other information in a persistent, distributed KV store.
+- `Etcd`: The necessary information to connect a vaquero server cluster or High Availability (HA) cluster to a running [CoreOS Etcd](https://coreos.com/etcd/) cluster. If Etcd information is provided, Vaquero will use the provided cluster endpoints (vs. a local filestorage) to store and continuously update data model information, as well as internal, vaquero-specific information (eg. machine state). See the [Getting Started page](https://ciscocloud.github.io/vaquero-docs/docs/current/getting-started.html), under "Etcd and Vaquero," for more information, including a short demo using a virtual machine running Etcd.
 - `DHCPMode`:Using "server" runs Vaquero as a DHCP server.  Vaquero does not manage free address pools or leases; it simply assigns based of the static configuration defined in the data model. **Note that DHCPMode defaults to server.** Using "proxy" enables ProxyDHCP. ProxyDHCP works with an existing DHCP Server to provide PXEBoot functionality, while leaving the managing and assigning of IP addresses to the other DHCP Server. Only enable this if you already have a DHCP server with entries for all the hosts in your Data Model.
 
 
@@ -177,7 +177,7 @@ Log:
 | Server | ServerAPI/Port        | no                | The port to serve the server REST API on                          | 24601              |
 | Server | ServerAPI/PrivateKey  | yes               | vaquero-server HTTPS/TLS Private Key                              | none               |
 | Server | ServerAPI/PublicKey   | yes               | vaquero-server HTTPS/TLS Public Key                               | none               |
-| Server | Etcd/Endpoints        | no                | etcd initial cluster endpoints: format- e1,e2,e3                  | 127.0.0.1:2379     |
+| Server | Etcd/Endpoints        | no                | etcd initial cluster endpoints: format- e1,e2,e3                  | none               |
 | Server | Etcd/Retry            | no                | number of retries for etcd operations                             | 3                  |
 | Server | Etcd/Timeout          | no                | etcd dial and request timeout, in seconds                         | 2                  |
 | Server | Gitter/Endpoint       | no                | githook endpoint to receive webhooks                              | /postreceive       |
