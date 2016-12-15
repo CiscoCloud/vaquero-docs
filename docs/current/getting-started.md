@@ -106,11 +106,11 @@ See the different [configurations](https://github.com/CiscoCloud/vaquero-vagrant
 
 [CoreOS Etcd](https://coreos.com/etcd/) is a distributed, persistent key-value store. Vaquero users have the option to specify the use of an etcd cluster (vs. local filestorage) as Vaquero's internal storage. Vaquero will use that storage, in turn, to keep copies of SoTs, and to store internal information, such as tasks to be sent to Vaquero agents. Should the user elect to use their etcd cluster for Vaquero, it is up to them to maintain and secure the cluster; Vaquero simply reads and writes to the specified endpoints, and will not modify or add more nodes.
 
-The vaquero vagrant VM (described above) employs a single-node etcd cluster for demo and testing purposes. You can explore the `vaquero-vagrant` `provision-scripts` folder (`etcd-config.sh`, `etcd.sh`, and `etcd-start.sh`) to see how we install and boot the cluster on startup. The example below demonstrates how to configure vaquero to store information using Etcd.
+The vaquero vagrant VM (described above) has a running etcd cluster baked in. You can explore the `vaquero-vagrant` `provision-scripts` folder (`etcd-config.sh`, `etcd.sh`, and `etcd-start.sh`) to see how we install and start up etcd every time we boot a machine. The example below demonstrates how to configure vaquero to use etcd.
 
 ### how to run vaquero using etcd
 
-1. Inside your host machine, in the `vaquero-vagrant` repo, run: `V_DEV=1 VS_NUM=3 vagrant up`.
+1. Inside your host machine, in the `vaquero-vagrant` repo, run: `V_DEV=1 VS_NUM=3 vagrant up`. This will boot up a cluster of three vaquero servers, running on `10.10.10.5 - 10.10.10.7`.
 2. `ssh` into two of the VMs: `V_DEV=1 VS_NUM=3 vagrant ssh vs-1` in one tab, `V_DEV=1 VS_NUM=3 vagrant ssh vs-2` in another.
 3. To test to make sure the cluster is running, put a key-value pair into `vs-1`:
 
@@ -136,8 +136,7 @@ The vaquero vagrant VM (described above) employs a single-node etcd cluster for 
         Retry: 3
 
 6. Run vaquero using `dir-sot.yaml` from the container:
-
-      docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml
+`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
 7. You should see some etcd-related startup messages in the log output, including a successful Etcd PUT of the vagrant VM's local SOT. Success!
 
