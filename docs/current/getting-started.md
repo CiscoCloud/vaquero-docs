@@ -127,13 +127,13 @@ The vaquero vagrant VM (described above) has a running etcd cluster baked in. Yo
 
 5. Now that we've seen Etcd working on our vaquero server cluster, open up `/vagrant/config/dir-sot.yaml`. You'll see that Etcd information is already specified (replicated below). Note that the endpoints are the **only required** information to run etcd inside vaquero, but you can also optionally specify `timeout` (for each request, in seconds, default=2) and `retry` (number of retries per request, default=3). The `10.10.10.5 - 10.10.10.7` Endpoints are what the vagrant VM reserves for servers (see "Virtualenv Layout" on this page), and the `2379` port is what we specified as our Etcd client endpoints on boot.
 
-      Etcd:
-        Endpoints:
-        - "http://10.10.10.5:2379"
-        - "http://10.10.10.6:2379"
-        - "http://10.10.10.7:2379"
-        Timeout: 5
-        Retry: 3
+        Etcd:
+          Endpoints:
+          - "http://10.10.10.5:2379"
+          - "http://10.10.10.6:2379"
+          - "http://10.10.10.7:2379"
+          Timeout: 5
+          Retry: 3
 
 6. Run vaquero using `dir-sot.yaml` from the container:
 `docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
