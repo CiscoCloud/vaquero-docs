@@ -71,7 +71,7 @@ Vaquero Getting Started
 <h3 id="how-to-run-vaquero-using-etcd">how to run vaquero using etcd</h3>
 <ol style="list-style-type: decimal">
 <li>Inside your host machine, in the <code>vaquero-vagrant</code> repo, run: <code>V_DEV=1 VS_NUM=3 vagrant up</code>. This will boot up a cluster of three vaquero servers, running on <code>10.10.10.5 - 10.10.10.7</code>.</li>
-<li><code>ssh</code> into two of the VMs: <code>V_DEV=1 VS_NUM=3 vagrant ssh vs-1</code> in one tab, <code>V_DEV=1 VS_NUM=3 vagrant ssh vs-2</code> in another.</li>
+<li><strong>Test your cluster:</strong> <code>ssh</code> into two of the VMs: <code>V_DEV=1 VS_NUM=3 vagrant ssh vs-1</code> in one tab, <code>V_DEV=1 VS_NUM=3 vagrant ssh vs-2</code> in another. (<strong>Note:</strong> this example uses three Vaquero servers, but you can start any number of VS machines (even one!), as long as each machine is configured for Etcd.)</li>
 <li><p>To test to make sure the cluster is running, put a key-value pair into <code>vs-1</code>:</p>
 <pre><code>[vagrant@vs-1 ~]$ etcdctl put hello world
 OK</code></pre></li>
@@ -82,7 +82,7 @@ world</code></pre></li>
 </ol>
 <p><em>If you receive an empty output pair, or a grpc-related dialing issue on PUT, ensure that all three machines have booted before you continue. If you continue to have a problem, reboot each of the VMs, and then force-start Etcd: <code>sudo systemctl start etcd</code>. Check the cluster-health (<code>etcdCTL_API=2 etcdctl cluster-health</code>), then try to repeat steps 3-4.</em></p>
 <ol start="5" style="list-style-type: decimal">
-<li><p>Now that we've seen Etcd working on our vaquero server cluster, open up <code>/vagrant/config/dir-sot.yaml</code>. You'll see that Etcd information is already specified (replicated below). Note that the endpoints are the <strong>only required</strong> information to run etcd inside vaquero, but you can also optionally specify <code>timeout</code> (for each request, in seconds, default=2) and <code>retry</code> (number of retries per request, default=3). The <code>10.10.10.5 - 10.10.10.7</code> Endpoints are what the vagrant VM reserves for servers (see &quot;Virtualenv Layout&quot; on this page), and the <code>2379</code> port is what we specified as our Etcd client endpoints on boot.</p>
+<li><p>Now that we've seen Etcd working on our vaquero server cluster, open up any server config (I used <code>/vagrant/config/dir-sot.yaml</code>). If you use <code>dir-sot.yaml</code>, you'll see that Etcd information is already specified (replicated below). Note that the endpoints are the <strong>only required</strong> information to run etcd inside vaquero, but you can also optionally specify <code>timeout</code> (for each request, in seconds, default=2) and <code>retry</code> (number of retries per request, default=3). The <code>10.10.10.5 - 10.10.10.7</code> Endpoints are what the vagrant VM reserves for servers (see &quot;Virtualenv Layout&quot; on this page), and the <code>2379</code> port is what we specified as our Etcd client endpoints on boot. If there is no Etcd information in your config, add it to the YAML.</p>
 <pre><code>Etcd:
   Endpoints:
   - &quot;http://10.10.10.5:2379&quot;
@@ -90,8 +90,8 @@ world</code></pre></li>
   - &quot;http://10.10.10.7:2379&quot;
   Timeout: 5
   Retry: 3</code></pre></li>
-<li><p>Run vaquero using <code>dir-sot.yaml</code> from the container: <code>docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network=&quot;host&quot; -e VAQUERO_SHARED_SECRET=&quot;&lt;secret&gt;&quot; -e VAQUERO_SERVER_SECRET=&quot;&lt;secret&gt;&quot; -e VAQUERO_SITE_ID=&quot;test-site&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p></li>
-<li><p>You should see some etcd-related startup messages in the log output, including a successful Etcd PUT of the vagrant VM's local SOT. Success!</p>
+<li><p>Run vaquero from the container (this command uses <code>dir-sot.yaml</code>, replace with the config you used) <code>docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network=&quot;host&quot; -e VAQUERO_SHARED_SECRET=&quot;&lt;secret&gt;&quot; -e VAQUERO_SERVER_SECRET=&quot;&lt;secret&gt;&quot; -e VAQUERO_SITE_ID=&quot;test-site&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p></li>
+<li><p>You should now see some etcd-related startup messages in the log output, including a successful Etcd PUT of the vagrant VM's local SOT. Success!</p>
 <pre><code>time=&quot;2016-12-15T21:46:28Z&quot; level=debug msg=&quot;Etcd client initialized at endpoints: [http://10.10.10.5:2379 http://10.10.10.6:2379 http://10.10.10.7:2379]&quot; package=storage
 time=&quot;2016-12-15T21:46:28Z&quot; level=info msg=&quot;Initialized etcd store for vaquero-local/test-site&quot; package=&quot;server/controller&quot;
 time=&quot;2016-12-15T21:46:28Z&quot; level=debug msg=&quot;Successful Etcd Get (withPrefix=false) for key model/current&quot; package=storage
