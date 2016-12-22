@@ -156,6 +156,7 @@ Log:
 
 (Fields indicated as "Agent" and "Server" are by default included in Standalone mode. Forward-slashes in field names indicate YAML hierarchy)
 
+
 | Mode   | Name                  | Required?         | Description                                                       | Default            |
 |:-------|:----------------------|:------------------|:------------------------------------------------------------------|:-------------------|
 | All    | Log/Level             | no                | Minimum Logging Level (debug, info, warning, error, fatal, panic) | info               |
@@ -194,6 +195,7 @@ Log:
 | Server | SoT/Local/ID          | yes, if local dir | local dir ID                                                      | none               |
 | Server | SoT/Local/Root        | yes, if local dir | local root dir                                                    | none               |
 | Server | LocalDir/PollInterval | no                | number of seconds between checks to that directory for updates    | 10                 |
+
 
 ## key generation
 The Vaquero Server and Vaquero Agents communicate over HTTPS/TLS. The Vaquero Server requires a public/private keypair to start up. You may either use the provided sample keys ([public]( https://raw.githubusercontent.com/CiscoCloud/vaquero-vagrant/master/provision_files/server.pem), [private](https://raw.githubusercontent.com/CiscoCloud/vaquero-vagrant/master/provision_files/server.key)), or generate your own using the following commands:
@@ -274,9 +276,19 @@ After=docker.service
 
 [Service]
 Restart=always
-ExecStart=/usr/bin/docker run --net host -v /var/vaquero/config.yaml:/config.yaml -v /var/vaquero/files:/var --name Vaquero shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /config.yaml
+RestartSec=2
+ExecStartPre=-/usr/bin/docker kill vaquero
+ExecStartPre=-/usr/bin/docker rm -f vaquero
+ExecStartPre=/usr/bin/docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.11.0
+ExecStart=/usr/bin/docker run \
+--network=host \
+-v /home/bosco/vaquero:/vaquero \
+-e VAQUERO_SERVER_SECRET=bosco \
+-e VAQUERO_SHARED_SECRET=bigly \
+-e VAQUERO_SITE_ID=bxb-lab \
+--name vaquero shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.11.0 standalone \
+--config /vaquero/local.yml
 ExecStop=/usr/bin/docker stop vaquero
-ExecStopPost=/usr/bin/docker rm -f vaquero
 
 [Install]
 WantedBy=default.target
