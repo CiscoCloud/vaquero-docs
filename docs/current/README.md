@@ -50,6 +50,7 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 - Hardware-agnostic bare metal management with pxe and IPXE-based network booting.
 - Support and validation for kickstart, cloud-config, ignition, and custom unattended boot scripts
 - Vaquero agent support for serving local files over http, or for acting as a reverse proxy for a CDN
+- Supports BIOS and uEFI PXE booting
 
 **Tooling**
 

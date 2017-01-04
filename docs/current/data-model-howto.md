@@ -369,6 +369,13 @@ The iPXE script will be roughly generated as (not taking unattended info from bo
     boot
 ```
 
+**For UEFI you must add an initrd to the cmdline. Bug: https://github.com/coreos/bugs/issues/1239**
+```
+#!ipxe
+kernel http://127.0.0.1:24601/files/coreos_production_pxe.vmlinuz coreos.autologin initrd=coreos_production_pxe_image.cpio.gz coreos.first_boot coreos.config.url=http://127.0.0.1:24601/config/00:00:00:00:00:01?boot=etcd-master
+initrd http://127.0.0.1:24601/files/coreos_production_pxe_image.cpio.gz
+boot
+```
 
 Note how `lang` appears with a trailing `=`, because it's value was non-empty `' '`
 
@@ -408,14 +415,14 @@ TBD
 Provides information for a single deployment/data center/etc.
 
 
-| name         | description                                               | required | schema           | default |
-|:-------------|:----------------------------------------------------------|:---------|:-----------------|:--------|
-| id           | A self-assigned identifier (should be unique)             | yes      | string           |         |
-| name         | A human-readable name for this group                      | no       | string           | id      |
-| [agent](#envagent)        | Details for establishing a connection to the site's agent | yes      | env.agent        |         |
-| [subnets](#envsubnet)      | List of subnets for this cluster                          | yes      | env.subnet array |         |
-| metadata     | unstructured, site-specific information                   | no       | object           |         |
-| [release_tag](#envrelease_tag)  | Github release tag                                        | no       | string           |         |
+| name                           | description                                               | required | schema           | default |
+|:-------------------------------|:----------------------------------------------------------|:---------|:-----------------|:--------|
+| id                             | A self-assigned identifier (should be unique)             | yes      | string           |         |
+| name                           | A human-readable name for this group                      | no       | string           | id      |
+| [agent](#envagent)             | Details for establishing a connection to the site's agent | yes      | env.agent        |         |
+| [subnets](#envsubnet)          | List of subnets for this cluster                          | yes      | env.subnet array |         |
+| metadata                       | unstructured, site-specific information                   | no       | object           |         |
+| [release_tag](#envrelease_tag) | Github release tag                                        | no       | string           |         |
 
 
 
@@ -541,6 +548,25 @@ Represents a single operating system with boot/installation parameters.
 
 
 Cmdline values may be templated. They will be rendered on-demand for inidividual hosts.
+
+**Note initrd must be added in the cmdline to work with UEFI. Bug: https://github.com/coreos/bugs/issues/1239**
+```
+---
+id: coreos-1053.2.0-stable
+name: CoreOS Stable 1053.2.0
+major_version: '1053'
+minor_version: '2.0'
+os_family: CoreOS
+release_name: stable
+boot:
+  kernel: "{{.env.agentURL}}/files/{{.boot.os.release_name}}/{{.boot.os.major_version}}/{{.boot.os.minor_version}}/coreos_production_pxe.vmlinuz"
+  initrd:
+  - "{{.env.agentURL}}/files/coreos_production_pxe_image.cpio.gz"
+cmdline:
+  coreos.autologin: ''
+  #This line is needed for EFI PXE boots. https://github.com/coreos/bugs/issues/1239
+  initrd: "coreos_production_pxe_image.cpio.gz"
+```
 
 #### os.boot
 
