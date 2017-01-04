@@ -43,6 +43,7 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 - Site local vaquero agents are stateless and can be created and destroyed at will.
 - Safe to run in a multi-tenant environment: Vaquero DHCP will only respond to known hosts in its data model.
 - Vaquero agent implements a DHCP server that can run in proxy mode or full DHCP mode, with support for DHCP relay.
+- Support for Vaquero agent multihoming.
 - Built-in authoritative detector notifies operator if an "authoritative" DHCP server is in the same broadcast domain.
 
 **Booting**
@@ -144,7 +145,7 @@ Log:
 ### Configuration Fields Overview
 - `ServerClient`: Configuration for vaquero-agent's ServerAPI client.
 - `ServerAPI`: The vaquero-server api, used by vaquero agents.
-- `AssetServer`: The asset server for Vaquero agent used by each booting machine to get unattended scripts and kernels.
+- `AssetServer`: The asset server for Vaquero agent used by each booting machine to get unattended scripts and kernels. (*The Asset Server IP is used as a fallback routable IP, Vaquero will serve on `0.0.0.0:<port>` in case the agent is multihomed. Vaquero has the logic to properly create ipxe scripts for a multihomed agent*)
 - `SavePath`: The Vaquero server location to save local configurations on disk.
 - `Gitter`: Configuration for listening to git webhooks.
 - `GitHook`: An array for all githooks to listen to.
@@ -283,8 +284,8 @@ ExecStart=/usr/bin/docker run \
 --network=host \
 -v /home/bosco/vaquero:/vaquero \
 -e VAQUERO_SERVER_SECRET=bosco \
--e VAQUERO_SHARED_SECRET=bigly \
--e VAQUERO_SITE_ID=bxb-lab \
+-e VAQUERO_SHARED_SECRET=bosco \
+-e VAQUERO_SITE_ID=bosco \
 --name vaquero shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.11.0 standalone \
 --config /vaquero/local.yml
 ExecStop=/usr/bin/docker stop vaquero
