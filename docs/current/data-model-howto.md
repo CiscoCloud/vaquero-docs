@@ -345,7 +345,7 @@ boot:
   initrd:
   - centos_initrd
 cmdline:
-  console:
+  - console:
     - ttyS0,115200
     - ttyS1
     - nested_map: is
@@ -354,9 +354,9 @@ cmdline:
       - with
       - nested
       - lists
-  lang: ' '
-  debug: ''
-  enforcing: ''
+  - lang: ' '
+  - debug: ''
+  - enforcing: ''
 ```
 
 
@@ -535,19 +535,19 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 Represents a single operating system with boot/installation parameters.
 
 
-| name          | description                      | required | schema  | default |
-|:--------------|:---------------------------------|:---------|:--------|:--------|
-| id            | self-assigned identifier         | yes      | string  |         |
-| name          | human-readable name              | yes      | string  | id      |
-| major_version | major version                    | yes      | string  |         |
-| minor_version | minor version                    | no       | string  |         |
-| os_family     | family (i.e. CoreOS, CentOS)     | yes      | string  |         |
-| release_name  | release name (i.e. stable, beta) | no       | string  |         |
-| boot          | kernal & initrd img info         | yes      | os.boot |         |
-| cmdline       | boot/installation options        | no       | object  |         |
+| name          | description                      | required | schema       | default |
+|:--------------|:---------------------------------|:---------|:-------------|:--------|
+| id            | self-assigned identifier         | yes      | string       |         |
+| name          | human-readable name              | yes      | string       | id      |
+| major_version | major version                    | yes      | string       |         |
+| minor_version | minor version                    | no       | string       |         |
+| os_family     | family (i.e. CoreOS, CentOS)     | yes      | string       |         |
+| release_name  | release name (i.e. stable, beta) | no       | string       |         |
+| boot          | kernal & initrd img info         | yes      | os.boot      |         |
+| cmdline       | boot/installation options        | no       | string array |         |
 
 
-Cmdline values may be templated. They will be rendered on-demand for inidividual hosts.
+Cmdline values may be templated. They will be rendered on-demand for individual hosts.
 
 **Note initrd must be added in the cmdline to work with UEFI. Bug: https://github.com/coreos/bugs/issues/1239**
 ```
@@ -563,9 +563,9 @@ boot:
   initrd:
   - "{{.env.agentURL}}/files/coreos_production_pxe_image.cpio.gz"
 cmdline:
-  coreos.autologin: ''
+  - coreos.autologin: ''
   #This line is needed for EFI PXE boots. https://github.com/coreos/bugs/issues/1239
-  initrd: "coreos_production_pxe_image.cpio.gz"
+  - initrd: "coreos_production_pxe_image.cpio.gz"
 ```
 
 #### os.boot
