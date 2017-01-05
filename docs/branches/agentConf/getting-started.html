@@ -47,15 +47,16 @@ Vaquero Getting Started
 <h2 id="pull-the-latest-docker-image">3. pull the latest docker image</h2>
 <p><code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></p>
 <h2 id="run-vaquero-with-one-of-the-source-of-truth-types">4. run vaquero with one of the source of truth types</h2>
-<p>We default DHCP to run in server mode. If you want to run vaquero in DHCP proxy mode, edit the configuration in <code>config/</code> and start the dnsmasq VM by running: <code>vagrant up dnsmasq</code>. This will stand up dnsmasq VM running a DHCP server that only serves IP addresses.</p>
-<p>See the different <a href="https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config">configurations</a>.</p>
+<p>There are two types of SoTs with which you can run Vaquero. Both contain the same kinds of information and are broken down into subdirectories; the only difference is where the SoT is stored: 1. <strong>git SoT</strong>: a remote Git repository containing the required SoT files. <em>Note</em>: for this to work, you must add your personal git token into the <a href="https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config">config</a> 2. <strong>dir SoT</strong>: a local directory containing the required SoT files. No additional overhead is needed for a local dir SoT.</p>
+<p>Both types of SoTs require specific folders, formatting and information. <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html">See the Data Model How-To Page</a> for details.</p>
+<p>For working examples of both kinds of SoT, see <a href="https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config">configurations</a>.</p>
+<p><strong>Note</strong>: We default DHCP to run in server mode. If you want to run vaquero in DHCP proxy mode, edit the configuration in <code>config/</code> and start the dnsmasq VM by running: <code>vagrant up dnsmasq</code>. This will stand up dnsmasq VM running a DHCP server that only serves IP addresses.</p>
 <h3 id="standalone-mode">Standalone mode</h3>
 <h5 id="git-sot">git SoT:</h5>
-<p><em>You must add your personal git token into the <a href="https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config">config</a> for this to work.</em></p>
 <p><code>docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/provision_files/secret:/vaquero/secret --network=&quot;host&quot; -e VAQUERO_SHARED_SECRET=&quot;&lt;secret&gt;&quot; -e VAQUERO_SERVER_SECRET=&quot;&lt;secret&gt;&quot; -e VAQUERO_SITE_ID=&quot;test-site&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
 <h5 id="dir-sot">dir SoT:</h5>
 <p><code>docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network=&quot;host&quot; -e VAQUERO_SHARED_SECRET=&quot;&lt;secret&gt;&quot; -e VAQUERO_SERVER_SECRET=&quot;&lt;secret&gt;&quot; -e VAQUERO_SITE_ID=&quot;test-site&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
-<h3 id="separate-server-and-agent">separate server and agent</h3>
+<h3 id="separate-server-and-agent">Separate server and agent</h3>
 <ol style="list-style-type: decimal">
 <li><p>Update data model to reflect VM IPs. Look at the site's <code>env.yml</code> and ensure the agent IP is correct. See the <code>vagrant VM table</code> below to see IPs for <code>vs</code> and <code>va</code> VMs</p></li>
 <li><p>Ensure server configuration and agent configuration match the IPs of the VM's. We have provided two example configs for separate server and agent using the local dir SoT in the vagrant repo. <code>VS_NUM=1 VA_NUM=1</code></p></li>
