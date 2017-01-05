@@ -425,20 +425,34 @@ Provides information for a single deployment/data center/etc.
 | [release_tag](#envrelease_tag) | Github release tag                                        | no       | string           |         |
 
 
-
 #### env.agent
 
 Details for establishing a connection to a site's agent
 
 
-| name        | description                           | required | schema  | default           |
-|:------------|:--------------------------------------|:---------|:--------|:------------------|
-| url         | Insecure/local url for reaching agent | yes      | string  | http://127.0.0.1  |
-| port        | Port for insecure URL                 | yes      | integer | 80                |
-| secure_url  | Secure/remote url for reaching agent  | yes      | string  | https://127.0.0.1 |
-| secure_port | Port for secure URL                   | yes      | integer | 443               |
-| cert_path   | A path to the TLS cert                | yes      | string  |                   |
+| name                                 | description                              | required | schema                 | default |
+|:-------------------------------------|:-----------------------------------------|:---------|:-----------------------|:--------|
+| [asset_server](#envagentassetserver) | Asset Server configuration               | no       | env.agent.asset_server |         |
+| dhcp_mode                            | The mode to run DHCP in, server or proxy | no       | string                 | server  |
 
+
+#### env.agent.asset_server
+
+Configuration for the asset server
+
+
+| name       | description                                                   | required | schema  | default            |
+|:-----------|:--------------------------------------------------------------|:---------|:--------|:-------------------|
+| addr       | Asset Server configuration                                    | no       | string  | 127.0.0.1          |
+| port       | The mode to run DHCP in, server or proxy                      | no       | integer | server             |
+| base_dir   | The directory that vaquero agent will use to serve files from | no       | string  | /var/vaquero/files |
+| scheme     | The protocol scheme to use for the agent                      | no       | string  | http               |
+| cdn_addr   | The address of the CDN vaquero agent should reverse proxy to  | no       | string  |                    |
+| cdn_port   | The port of the CDN vaquero agent should reverse proxy to     | no       | integer |                    |
+| cdn_scheme | The scheme of the CDN vaquero agent should reverse proxy to   | no       | string  | http               |
+
+
+By declaring cdn_addr and a cdn_port we will use that as a source. The agent will serve the asset_server off `0.0.0.0:<port>` so an agent can be dual homed. Vaquero agent has logic to create ipxe scripts on the proper interface that is routable from the booting host. The `env.agent.asset_server.addr` is used as a fall back address in ipxe scripts.
 
 The transport (http/s) should be included with the agent URL.
 
