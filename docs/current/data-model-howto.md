@@ -345,7 +345,7 @@ boot:
   initrd:
   - centos_initrd
 cmdline:
-  console:
+  - console:
     - ttyS0,115200
     - ttyS1
     - nested_map: is
@@ -354,9 +354,9 @@ cmdline:
       - with
       - nested
       - lists
-  lang: ' '
-  debug: ''
-  enforcing: ''
+  - lang: ' '
+  - debug: ''
+  - enforcing: ''
 ```
 
 
@@ -369,6 +369,13 @@ The iPXE script will be roughly generated as (not taking unattended info from bo
     boot
 ```
 
+**For UEFI you must add an initrd to the cmdline. Bug: https://github.com/coreos/bugs/issues/1239**
+```
+#!ipxe
+kernel http://127.0.0.1:24601/files/coreos_production_pxe.vmlinuz coreos.autologin initrd=coreos_production_pxe_image.cpio.gz coreos.first_boot coreos.config.url=http://127.0.0.1:24601/config/00:00:00:00:00:01?boot=etcd-master
+initrd http://127.0.0.1:24601/files/coreos_production_pxe_image.cpio.gz
+boot
+```
 
 Note how `lang` appears with a trailing `=`, because it's value was non-empty `' '`
 
@@ -542,19 +549,38 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 Represents a single operating system with boot/installation parameters.
 
 
-| name          | description                      | required | schema  | default |
-|:--------------|:---------------------------------|:---------|:--------|:--------|
-| id            | self-assigned identifier         | yes      | string  |         |
-| name          | human-readable name              | yes      | string  | id      |
-| major_version | major version                    | yes      | string  |         |
-| minor_version | minor version                    | no       | string  |         |
-| os_family     | family (i.e. CoreOS, CentOS)     | yes      | string  |         |
-| release_name  | release name (i.e. stable, beta) | no       | string  |         |
-| boot          | kernal & initrd img info         | yes      | os.boot |         |
-| cmdline       | boot/installation options        | no       | object  |         |
+| name          | description                      | required | schema       | default |
+|:--------------|:---------------------------------|:---------|:-------------|:--------|
+| id            | self-assigned identifier         | yes      | string       |         |
+| name          | human-readable name              | yes      | string       | id      |
+| major_version | major version                    | yes      | string       |         |
+| minor_version | minor version                    | no       | string       |         |
+| os_family     | family (i.e. CoreOS, CentOS)     | yes      | string       |         |
+| release_name  | release name (i.e. stable, beta) | no       | string       |         |
+| boot          | kernal & initrd img info         | yes      | os.boot      |         |
+| cmdline       | boot/installation options        | no       | string array |         |
 
 
-Cmdline values may be templated. They will be rendered on-demand for inidividual hosts.
+Cmdline values may be templated. They will be rendered on-demand for individual hosts.
+
+**Note initrd must be added in the cmdline to work with UEFI. Bug: https://github.com/coreos/bugs/issues/1239**
+```
+---
+id: coreos-1053.2.0-stable
+name: CoreOS Stable 1053.2.0
+major_version: '1053'
+minor_version: '2.0'
+os_family: CoreOS
+release_name: stable
+boot:
+  kernel: "{{.env.agentURL}}/files/{{.boot.os.release_name}}/{{.boot.os.major_version}}/{{.boot.os.minor_version}}/coreos_production_pxe.vmlinuz"
+  initrd:
+  - "{{.env.agentURL}}/files/coreos_production_pxe_image.cpio.gz"
+cmdline:
+  - coreos.autologin: ''
+  #This line is needed for EFI PXE boots. https://github.com/coreos/bugs/issues/1239
+  - initrd: "coreos_production_pxe_image.cpio.gz"
+```
 
 #### os.boot
 

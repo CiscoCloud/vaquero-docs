@@ -43,6 +43,7 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 - Site local vaquero agents are stateless and can be created and destroyed at will.
 - Safe to run in a multi-tenant environment: Vaquero DHCP will only respond to known hosts in its data model.
 - Vaquero agent implements a DHCP server that can run in proxy mode or full DHCP mode, with support for DHCP relay.
+- Support for Vaquero agent multihoming.
 - Built-in authoritative detector notifies operator if an "authoritative" DHCP server is in the same broadcast domain.
 
 **Booting**
@@ -50,6 +51,7 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 - Hardware-agnostic bare metal management with pxe and IPXE-based network booting.
 - Support and validation for kickstart, cloud-config, ignition, and custom unattended boot scripts
 - Vaquero agent support for serving local files over http, or for acting as a reverse proxy for a CDN
+- Supports BIOS and uEFI PXE booting
 
 **Tooling**
 
@@ -267,8 +269,8 @@ ExecStart=/usr/bin/docker run \
 --network=host \
 -v /home/bosco/vaquero:/vaquero \
 -e VAQUERO_SERVER_SECRET=bosco \
--e VAQUERO_SHARED_SECRET=bigly \
--e VAQUERO_SITE_ID=bxb-lab \
+-e VAQUERO_SHARED_SECRET=bosco \
+-e VAQUERO_SITE_ID=bosco \
 --name vaquero shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.11.0 standalone \
 --config /vaquero/local.yml
 ExecStop=/usr/bin/docker stop vaquero
