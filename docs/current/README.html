@@ -90,12 +90,6 @@ ServerAPI:
   Port: 24601
   PrivateKey: &quot;functional/test/server.key&quot;
   PublicKey: &quot;functional/test/server.pem&quot;
-AssetServer:
-  Addr: &quot;127.0.0.1&quot;
-  Port: 24602
-  BaseDir: &quot;/var/vaquero/files&quot;
-  Scheme: http
-DHCPMode: server
 SavePath: &quot;/var/vaquero&quot;
 Etcd:
   Endpoints:
@@ -131,7 +125,6 @@ Log:
 <ul>
 <li><code>ServerClient</code>: Configuration for vaquero-agent's ServerAPI client.</li>
 <li><code>ServerAPI</code>: The vaquero-server api, used by vaquero agents.</li>
-<li><code>AssetServer</code>: The asset server for Vaquero agent used by each booting machine to get unattended scripts and kernels. (<em>The Asset Server IP is used as a fallback routable IP, Vaquero will serve on <code>0.0.0.0:&lt;port&gt;</code> in case the agent is multihomed. Vaquero has the logic to properly create ipxe scripts for a multihomed agent</em>)</li>
 <li><code>SavePath</code>: The Vaquero server location to save local configurations on disk.</li>
 <li><code>Gitter</code>: Configuration for listening to git webhooks.</li>
 <li><code>GitHook</code>: An array for all githooks to listen to.</li>
@@ -200,62 +193,6 @@ Log:
 <td align="left">no</td>
 <td align="left">vaquero-agent should allow a self-signed server certificate.</td>
 <td align="left">false</td>
-</tr>
-<tr class="even">
-<td align="left">Agent</td>
-<td align="left">Assets/CdnScheme</td>
-<td align="left">no</td>
-<td align="left">Cdn scheme</td>
-<td align="left">http</td>
-</tr>
-<tr class="odd">
-<td align="left">Agent</td>
-<td align="left">Assets/CdnAddr</td>
-<td align="left">no</td>
-<td align="left">The address of the cdn endpoint to reverse proxy to</td>
-<td align="left">none</td>
-</tr>
-<tr class="even">
-<td align="left">Agent</td>
-<td align="left">Assets/CdnPort</td>
-<td align="left">no</td>
-<td align="left">The port of the cdn endpoint to reverse proxy to</td>
-<td align="left">none</td>
-</tr>
-<tr class="odd">
-<td align="left">Agent</td>
-<td align="left">AssetServer/Addr</td>
-<td align="left">no</td>
-<td align="left">The IP Address to serve the agent asset server</td>
-<td align="left">127.0.0.1</td>
-</tr>
-<tr class="even">
-<td align="left">Agent</td>
-<td align="left">AssetServer/Port</td>
-<td align="left">no</td>
-<td align="left">The port to serve the agent asset server</td>
-<td align="left">24602</td>
-</tr>
-<tr class="odd">
-<td align="left">Agent</td>
-<td align="left">AssetServer/Scheme</td>
-<td align="left">no</td>
-<td align="left">Asset server scheme : http / https</td>
-<td align="left">http</td>
-</tr>
-<tr class="even">
-<td align="left">Agent</td>
-<td align="left">AssetServer/BaseDir</td>
-<td align="left">no</td>
-<td align="left">Agent directory to serve files from</td>
-<td align="left">/var/vaquero/files</td>
-</tr>
-<tr class="odd">
-<td align="left">Agent</td>
-<td align="left">DHCPMode</td>
-<td align="left">no</td>
-<td align="left">Agent DHCP Mode: server / proxy</td>
-<td align="left">server</td>
 </tr>
 <tr class="even">
 <td align="left">Server</td>
