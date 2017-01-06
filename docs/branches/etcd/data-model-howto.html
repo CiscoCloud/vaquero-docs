@@ -254,7 +254,7 @@ boot:
   initrd:
   - centos_initrd
 cmdline:
-  console:
+  - console:
     - ttyS0,115200
     - ttyS1
     - nested_map: is
@@ -263,14 +263,19 @@ cmdline:
       - with
       - nested
       - lists
-  lang: &#39; &#39;
-  debug: &#39;&#39;
-  enforcing: &#39;&#39;</code></pre>
+  - lang: &#39; &#39;
+  - debug: &#39;&#39;
+  - enforcing: &#39;&#39;</code></pre>
 <p>The iPXE script will be roughly generated as (not taking unattended info from boot):</p>
 <pre><code>    #!ipxe
     kernel centos_kernel console=ttyS0,115200 console=ttyS1 lang=  debug enforcing
     initrd centos_initrd
     boot</code></pre>
+<p><strong>For UEFI you must add an initrd to the cmdline. Bug: https://github.com/coreos/bugs/issues/1239</strong></p>
+<pre><code>#!ipxe
+kernel http://127.0.0.1:24601/files/coreos_production_pxe.vmlinuz coreos.autologin initrd=coreos_production_pxe_image.cpio.gz coreos.first_boot coreos.config.url=http://127.0.0.1:24601/config/00:00:00:00:00:01?boot=etcd-master
+initrd http://127.0.0.1:24601/files/coreos_production_pxe_image.cpio.gz
+boot</code></pre>
 <p>Note how <code>lang</code> appears with a trailing <code>=</code>, because it's value was non-empty <code>' '</code></p>
 <h2 id="schemas"><a name="schemas">Schemas</a></h2>
 <h3 id="boot-1">boot</h3>
@@ -439,42 +444,86 @@ cmdline:
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">url</td>
-<td align="left">Insecure/local url for reaching agent</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left">http://127.0.0.1</td>
-</tr>
-<tr class="even">
-<td align="left">port</td>
-<td align="left">Port for insecure URL</td>
-<td align="left">yes</td>
-<td align="left">integer</td>
-<td align="left">80</td>
-</tr>
-<tr class="odd">
-<td align="left">secure_url</td>
-<td align="left">Secure/remote url for reaching agent</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left">https://127.0.0.1</td>
-</tr>
-<tr class="even">
-<td align="left">secure_port</td>
-<td align="left">Port for secure URL</td>
-<td align="left">yes</td>
-<td align="left">integer</td>
-<td align="left">443</td>
-</tr>
-<tr class="odd">
-<td align="left">cert_path</td>
-<td align="left">A path to the TLS cert</td>
-<td align="left">yes</td>
-<td align="left">string</td>
+<td align="left"><a href="#envagentassetserver">asset_server</a></td>
+<td align="left">Asset Server configuration</td>
+<td align="left">no</td>
+<td align="left">env.agent.asset_server</td>
 <td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">dhcp_mode</td>
+<td align="left">The mode to run DHCP in, server or proxy</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left">server</td>
 </tr>
 </tbody>
 </table>
+<h4 id="env.agent.asset_server">env.agent.asset_server</h4>
+<p>Configuration for the asset server</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">addr</td>
+<td align="left">Asset Server configuration</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left">127.0.0.1</td>
+</tr>
+<tr class="even">
+<td align="left">port</td>
+<td align="left">The mode to run DHCP in, server or proxy</td>
+<td align="left">no</td>
+<td align="left">integer</td>
+<td align="left">server</td>
+</tr>
+<tr class="odd">
+<td align="left">base_dir</td>
+<td align="left">The directory that vaquero agent will use to serve files from</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left">/var/vaquero/files</td>
+</tr>
+<tr class="even">
+<td align="left">scheme</td>
+<td align="left">The protocol scheme to use for the agent</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left">http</td>
+</tr>
+<tr class="odd">
+<td align="left">cdn_addr</td>
+<td align="left">The address of the CDN vaquero agent should reverse proxy to</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">cdn_port</td>
+<td align="left">The port of the CDN vaquero agent should reverse proxy to</td>
+<td align="left">no</td>
+<td align="left">integer</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">cdn_scheme</td>
+<td align="left">The scheme of the CDN vaquero agent should reverse proxy to</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left">http</td>
+</tr>
+</tbody>
+</table>
+<p>By declaring cdn_addr and a cdn_port we will use that as a source. The agent will serve the asset_server off <code>0.0.0.0:&lt;port&gt;</code> so an agent can be dual homed. Vaquero agent has logic to create ipxe scripts on the proper interface that is routable from the booting host. The <code>env.agent.asset_server.addr</code> is used as a fall back address in ipxe scripts.</p>
 <p>The transport (http/s) should be included with the agent URL.</p>
 <h4 id="env.release_tag">env.release_tag</h4>
 <p><code>release_tag</code> must be a valid <a href="https://git-scm.com/docs/git#git-ltcommit-ishgt">commit_ish</a> string corresponding to a specific <a href="https://help.github.com/articles/about-releases/">Github Release</a> (e.g., v0.1.0) or commit_id.</p>
@@ -892,12 +941,28 @@ cmdline:
 <td align="left">cmdline</td>
 <td align="left">boot/installation options</td>
 <td align="left">no</td>
-<td align="left">object</td>
+<td align="left">string array</td>
 <td align="left"></td>
 </tr>
 </tbody>
 </table>
-<p>Cmdline values may be templated. They will be rendered on-demand for inidividual hosts.</p>
+<p>Cmdline values may be templated. They will be rendered on-demand for individual hosts.</p>
+<p><strong>Note initrd must be added in the cmdline to work with UEFI. Bug: https://github.com/coreos/bugs/issues/1239</strong></p>
+<pre><code>---
+id: coreos-1053.2.0-stable
+name: CoreOS Stable 1053.2.0
+major_version: &#39;1053&#39;
+minor_version: &#39;2.0&#39;
+os_family: CoreOS
+release_name: stable
+boot:
+  kernel: &quot;{{.env.agentURL}}/files/{{.boot.os.release_name}}/{{.boot.os.major_version}}/{{.boot.os.minor_version}}/coreos_production_pxe.vmlinuz&quot;
+  initrd:
+  - &quot;{{.env.agentURL}}/files/coreos_production_pxe_image.cpio.gz&quot;
+cmdline:
+  - coreos.autologin: &#39;&#39;
+  #This line is needed for EFI PXE boots. https://github.com/coreos/bugs/issues/1239
+  - initrd: &quot;coreos_production_pxe_image.cpio.gz&quot;</code></pre>
 <h4 id="os.boot">os.boot</h4>
 <p>Contains information about the kernal/initrds for an operating system.</p>
 <table>

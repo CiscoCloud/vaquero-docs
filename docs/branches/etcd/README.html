@@ -39,6 +39,7 @@ vaquero
 <li>Site local vaquero agents are stateless and can be created and destroyed at will.</li>
 <li>Safe to run in a multi-tenant environment: Vaquero DHCP will only respond to known hosts in its data model.</li>
 <li>Vaquero agent implements a DHCP server that can run in proxy mode or full DHCP mode, with support for DHCP relay.</li>
+<li>Support for Vaquero agent multihoming.</li>
 <li>Built-in authoritative detector notifies operator if an &quot;authoritative&quot; DHCP server is in the same broadcast domain.</li>
 </ul>
 <p><strong>Booting</strong></p>
@@ -46,6 +47,7 @@ vaquero
 <li>Hardware-agnostic bare metal management with pxe and IPXE-based network booting.</li>
 <li>Support and validation for kickstart, cloud-config, ignition, and custom unattended boot scripts</li>
 <li>Vaquero agent support for serving local files over http, or for acting as a reverse proxy for a CDN</li>
+<li>Supports BIOS and uEFI PXE booting</li>
 </ul>
 <p><strong>Tooling</strong></p>
 <ul>
@@ -88,12 +90,6 @@ ServerAPI:
   Port: 24601
   PrivateKey: &quot;functional/test/server.key&quot;
   PublicKey: &quot;functional/test/server.pem&quot;
-AssetServer:
-  Addr: &quot;127.0.0.1&quot;
-  Port: 24602
-  BaseDir: &quot;/var/vaquero/files&quot;
-  Scheme: http
-DHCPMode: server
 SavePath: &quot;/var/vaquero&quot;
 Etcd:
   Endpoints:
@@ -129,7 +125,7 @@ Log:
 <ul>
 <li><code>ServerClient</code>: Configuration for vaquero-agent's ServerAPI client.</li>
 <li><code>ServerAPI</code>: The vaquero-server api, used by vaquero agents.</li>
-<li><code>AssetServer</code>: The asset server for Vaquero agent used by each booting machine to get unattended scripts and kernels.</li>
+<li><code>SavePath</code>: The Vaquero server location to save local configurations on disk.</li>
 <li><code>Gitter</code>: Configuration for listening to git webhooks.</li>
 <li><code>GitHook</code>: An array for all githooks to listen to.</li>
 <li><code>SoT:</code> An array for specific sources of truth. Git updater receives webhooks from github. Local: will use a local directory to update.</li>
@@ -198,62 +194,6 @@ Log:
 <td align="left">no</td>
 <td align="left">vaquero-agent should allow a self-signed server certificate.</td>
 <td align="left">false</td>
-</tr>
-<tr class="even">
-<td align="left">Agent</td>
-<td align="left">Assets/CdnScheme</td>
-<td align="left">no</td>
-<td align="left">Cdn scheme</td>
-<td align="left">http</td>
-</tr>
-<tr class="odd">
-<td align="left">Agent</td>
-<td align="left">Assets/CdnAddr</td>
-<td align="left">no</td>
-<td align="left">The address of the cdn endpoint to reverse proxy to</td>
-<td align="left">none</td>
-</tr>
-<tr class="even">
-<td align="left">Agent</td>
-<td align="left">Assets/CdnPort</td>
-<td align="left">no</td>
-<td align="left">The port of the cdn endpoint to reverse proxy to</td>
-<td align="left">none</td>
-</tr>
-<tr class="odd">
-<td align="left">Agent</td>
-<td align="left">AssetServer/Addr</td>
-<td align="left">no</td>
-<td align="left">The IP Address to serve the agent asset server</td>
-<td align="left">127.0.0.1</td>
-</tr>
-<tr class="even">
-<td align="left">Agent</td>
-<td align="left">AssetServer/Port</td>
-<td align="left">no</td>
-<td align="left">The port to serve the agent asset server</td>
-<td align="left">24602</td>
-</tr>
-<tr class="odd">
-<td align="left">Agent</td>
-<td align="left">AssetServer/Scheme</td>
-<td align="left">no</td>
-<td align="left">Asset server scheme : http / https</td>
-<td align="left">http</td>
-</tr>
-<tr class="even">
-<td align="left">Agent</td>
-<td align="left">AssetServer/BaseDir</td>
-<td align="left">no</td>
-<td align="left">Agent directory to serve files from</td>
-<td align="left">/var/vaquero/files</td>
-</tr>
-<tr class="odd">
-<td align="left">Agent</td>
-<td align="left">DHCPMode</td>
-<td align="left">no</td>
-<td align="left">Agent DHCP Mode: server / proxy</td>
-<td align="left">server</td>
 </tr>
 <tr class="even">
 <td align="left">Server</td>
@@ -461,8 +401,8 @@ ExecStart=/usr/bin/docker run \
 --network=host \
 -v /home/bosco/vaquero:/vaquero \
 -e VAQUERO_SERVER_SECRET=bosco \
--e VAQUERO_SHARED_SECRET=bigly \
--e VAQUERO_SITE_ID=bxb-lab \
+-e VAQUERO_SHARED_SECRET=bosco \
+-e VAQUERO_SITE_ID=bosco \
 --name vaquero shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.11.0 standalone \
 --config /vaquero/local.yml
 ExecStop=/usr/bin/docker stop vaquero
