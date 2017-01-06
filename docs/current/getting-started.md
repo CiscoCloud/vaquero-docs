@@ -68,15 +68,19 @@ By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
 
 ## 4. run vaquero with one of the source of truth types
 
-We default DHCP to run in server mode. If you want to run vaquero in DHCP proxy mode, edit the configuration in `config/` and start the dnsmasq VM by running: `vagrant up dnsmasq`. This will stand up dnsmasq VM running a DHCP server that only serves IP addresses.
+There are two types of SoTs with which you can run Vaquero. Both contain the same kinds of information and are broken down into subdirectories; the only difference is where the SoT is stored:
+1. **git SoT**: a remote Git repository containing the required SoT files. *Note*: for this to work, you must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config)
+2. **dir SoT**: a local directory containing the required SoT files. No additional overhead is needed for a local dir SoT.
 
-See the different [configurations](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config).
+Both types of SoTs require specific folders, formatting and information. [See the Data Model How-To Page](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html) for details.
+ 
+For working examples of both kinds of SoT, see [configurations](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config).
+
+**Note**: We default DHCP to run in server mode. If you want to run vaquero in DHCP proxy mode, edit the configuration in `config/` and start the dnsmasq VM by running: `vagrant up dnsmasq`. This will stand up dnsmasq VM running a DHCP server that only serves IP addresses.
 
 ### Standalone mode
 
 ##### git SoT:
-
-*You must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config) for this to work.*
 
 `docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
@@ -85,7 +89,7 @@ See the different [configurations](https://github.com/CiscoCloud/vaquero-vagrant
 `docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
 
-### separate server and agent
+### Separate server and agent
 
 1. Update data model to reflect VM IPs. Look at the site's `env.yml` and ensure the agent IP is correct. See the `vagrant VM table` below to see IPs for `vs` and `va` VMs
 

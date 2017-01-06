@@ -43,6 +43,7 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 - Site local vaquero agents are stateless and can be created and destroyed at will.
 - Safe to run in a multi-tenant environment: Vaquero DHCP will only respond to known hosts in its data model.
 - Vaquero agent implements a DHCP server that can run in proxy mode or full DHCP mode, with support for DHCP relay.
+- Support for Vaquero agent multihoming.
 - Built-in authoritative detector notifies operator if an "authoritative" DHCP server is in the same broadcast domain.
 
 **Booting**
@@ -50,6 +51,7 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 - Hardware-agnostic bare metal management with pxe and IPXE-based network booting.
 - Support and validation for kickstart, cloud-config, ignition, and custom unattended boot scripts
 - Vaquero agent support for serving local files over http, or for acting as a reverse proxy for a CDN
+- Supports BIOS and uEFI PXE booting
 
 **Tooling**
 
@@ -102,12 +104,6 @@ ServerAPI:
   Port: 24601
   PrivateKey: "functional/test/server.key"
   PublicKey: "functional/test/server.pem"
-AssetServer:
-  Addr: "127.0.0.1"
-  Port: 24602
-  BaseDir: "/var/vaquero/files"
-  Scheme: http
-DHCPMode: server
 SavePath: "/var/vaquero"
 Etcd:
   Endpoints:
@@ -143,7 +139,7 @@ Log:
 ### Configuration Fields Overview
 - `ServerClient`: Configuration for vaquero-agent's ServerAPI client.
 - `ServerAPI`: The vaquero-server api, used by vaquero agents.
-- `AssetServer`: The asset server for Vaquero agent used by each booting machine to get unattended scripts and kernels.
+- `SavePath`: The Vaquero server location to save local configurations on disk.
 - `Gitter`: Configuration for listening to git webhooks.
 - `GitHook`: An array for all githooks to listen to.
 - `SoT:` An array for specific sources of truth. Git updater receives webhooks from github. Local: will use a local directory to update.
@@ -156,46 +152,36 @@ Log:
 
 (Fields indicated as "Agent" and "Server" are by default included in Standalone mode. Forward-slashes in field names indicate YAML hierarchy)
 
-
-| Mode   | Name                  | Required?         | Description                                                       | Default            |
-|:-------|:----------------------|:------------------|:------------------------------------------------------------------|:-------------------|
-| All    | Log/Level             | no                | Minimum Logging Level (debug, info, warning, error, fatal, panic) | info               |
-| All    | Log/Location          | no                | Place to log: (stdout, stderr, `filename`)                        | stdout             |
-| All    | Log/Type              | no                | Text / JSON output (text/json)                                    | text               |
-| All    | SavePath              | no                | Base folder for vaquero save files                                | /var/vaquero       |
-| Agent  | ServerClient/Addr     | no                | IP Address of vaquero-server's API.                               | 127.0.0.1          |
-| Agent  | ServerClient/Port     | no                | Port of vaquero-server's API                                      | 24601              |
-| Agent  | ServerClient/<br>InsecureSkipVerify      | no                | vaquero-agent should allow a self-signed server certificate.      | false
-| Agent  | Assets/CdnScheme      | no                | Cdn scheme                                                        | http               |
-| Agent  | Assets/CdnAddr        | no                | The address of the cdn endpoint to reverse proxy to               | none               |
-| Agent  | Assets/CdnPort        | no                | The port of the cdn endpoint to reverse proxy to                  | none                  |
-| Agent  | AssetServer/Addr      | no                | The IP Address to serve the agent asset server                    | 127.0.0.1          |
-| Agent  | AssetServer/Port      | no                | The port to serve the agent asset server                          | 24602              |
-| Agent  | AssetServer/Scheme    | no                | Asset server scheme : http / https                                | http               |
-| Agent  | AssetServer/BaseDir   | no                | Agent directory to serve files from                               |  /var/vaquero/files |
-| Agent  | DHCPMode              | no                | Agent DHCP Mode: server / proxy                                   | server             |
-| Server | ServerAPI/Addr        | no                | The IP Address to serve the server REST API on                    | 127.0.0.1          |
-| Server | ServerAPI/Port        | no                | The port to serve the server REST API on                          | 24601              |
-| Server | ServerAPI/PrivateKey  | yes               | vaquero-server HTTPS/TLS Private Key                              | none               |
-| Server | ServerAPI/PublicKey   | yes               | vaquero-server HTTPS/TLS Public Key                               | none               |
-| Server | Etcd/Endpoints        | no                | etcd initial cluster endpoints: format- e1,e2,e3                  | none               |
-| Server | Etcd/Retry            | no                | number of retries for etcd operations                             | 3                  |
-| Server | Etcd/Timeout          | no                | etcd dial and request timeout, in seconds                         | 2                  |
-| Server | Gitter/Endpoint       | no                | githook endpoint to receive webhooks                              | /postreceive       |
-| Server | Gitter/Address        | no                | githook listening address                                         | 127.0.0.1          |
-| Server | Gitter/Port           | no                | githook listening port                                            | 24603              |
-| Server | Gitter/Timeout        | no                | githook timeout, in seconds                                       | 2                  |
-| Server | GitHook/ID            | yes, if git SOT   | githook ID                                                        | none               |
-| Server | GitHook/Token         | yes, if git SOT   | hook token, generated on github/settings                          | none               |
-| Server | GitHook/URL           | yes, if git SOT   | url for githook                                                   | none               |
-| Server | GitHook/Secret        | yes, if git SOT   | secret for githook                                                | none               |
-| Server | SoT/Git/HookID        | yes, if git SOT   | git hookID                                                        | none               |
-| Server | SoT/Git/ID            | yes, if git SOT   | ID (?)                                                            | none               |
-| Server | SoT/Git/Branch        | yes, if git SOT   | SoT branch name                                                   | none               |
-| Server | SoT/Local/ID          | yes, if local dir | local dir ID                                                      | none               |
-| Server | SoT/Local/Root        | yes, if local dir | local root dir                                                    | none               |
-| Server | LocalDir/PollInterval | no                | number of seconds between checks to that directory for updates    | 10                 |
-
+| Mode   | Name                                | Required?         | Description                                                       | Default      |
+|:-------|:------------------------------------|:------------------|:------------------------------------------------------------------|:-------------|
+| All    | Log/Level                           | no                | Minimum Logging Level (debug, info, warning, error, fatal, panic) | info         |
+| All    | Log/Location                        | no                | Place to log: (stdout, stderr, `filename`)                        | stdout       |
+| All    | Log/Type                            | no                | Text / JSON output (text/json)                                    | text         |
+| All    | SavePath                            | no                | Base folder for vaquero save files                                | /var/vaquero |
+| Agent  | ServerClient/Addr                   | no                | IP Address of vaquero-server's API.                               | 127.0.0.1    |
+| Agent  | ServerClient/Port                   | no                | Port of vaquero-server's API                                      | 24601        |
+| Agent  | ServerClient/<br>InsecureSkipVerify | no                | vaquero-agent should allow a self-signed server certificate.      | false        |
+| Server | ServerAPI/Addr                      | no                | The IP Address to serve the server REST API on                    | 127.0.0.1    |
+| Server | ServerAPI/Port                      | no                | The port to serve the server REST API on                          | 24601        |
+| Server | ServerAPI/PrivateKey                | yes               | vaquero-server HTTPS/TLS Private Key                              | none         |
+| Server | ServerAPI/PublicKey                 | yes               | vaquero-server HTTPS/TLS Public Key                               | none         |
+| Server | Etcd/Endpoints                      | no                | etcd initial cluster endpoints: format- e1,e2,e3                  | none         |
+| Server | Etcd/Retry                          | no                | number of retries for etcd operations                             | 3            |
+| Server | Etcd/Timeout                        | no                | etcd dial and request timeout, in seconds                         | 2            |
+| Server | Gitter/Endpoint                     | no                | githook endpoint to receive webhooks                              | /postreceive |
+| Server | Gitter/Address                      | no                | githook listening address                                         | 127.0.0.1    |
+| Server | Gitter/Port                         | no                | githook listening port                                            | 24603        |
+| Server | Gitter/Timeout                      | no                | githook timeout, in seconds                                       | 2            |
+| Server | GitHook/ID                          | yes, if git SOT   | githook ID                                                        | none         |
+| Server | GitHook/Token                       | yes, if git SOT   | hook token, generated on github/settings                          | none         |
+| Server | GitHook/URL                         | yes, if git SOT   | url for githook                                                   | none         |
+| Server | GitHook/Secret                      | yes, if git SOT   | secret for githook                                                | none         |
+| Server | SoT/Git/HookID                      | yes, if git SOT   | git hookID                                                        | none         |
+| Server | SoT/Git/ID                          | yes, if git SOT   | ID (?)                                                            | none         |
+| Server | SoT/Git/Branch                      | yes, if git SOT   | SoT branch name                                                   | none         |
+| Server | SoT/Local/ID                        | yes, if local dir | local dir ID                                                      | none         |
+| Server | SoT/Local/Root                      | yes, if local dir | local root dir                                                    | none         |
+| Server | LocalDir/PollInterval               | no                | number of seconds between checks to that directory for updates    | 10           |
 
 ## key generation
 The Vaquero Server and Vaquero Agents communicate over HTTPS/TLS. The Vaquero Server requires a public/private keypair to start up. You may either use the provided sample keys ([public]( https://raw.githubusercontent.com/CiscoCloud/vaquero-vagrant/master/provision_files/server.pem), [private](https://raw.githubusercontent.com/CiscoCloud/vaquero-vagrant/master/provision_files/server.key)), or generate your own using the following commands:
@@ -284,8 +270,8 @@ ExecStart=/usr/bin/docker run \
 --network=host \
 -v /home/bosco/vaquero:/vaquero \
 -e VAQUERO_SERVER_SECRET=bosco \
--e VAQUERO_SHARED_SECRET=bigly \
--e VAQUERO_SITE_ID=bxb-lab \
+-e VAQUERO_SHARED_SECRET=bosco \
+-e VAQUERO_SITE_ID=bosco \
 --name vaquero shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.11.0 standalone \
 --config /vaquero/local.yml
 ExecStop=/usr/bin/docker stop vaquero
