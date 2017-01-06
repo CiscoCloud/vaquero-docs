@@ -129,7 +129,8 @@ Log:
 <li><code>Gitter</code>: Configuration for listening to git webhooks.</li>
 <li><code>GitHook</code>: An array for all githooks to listen to.</li>
 <li><code>SoT:</code> An array for specific sources of truth. Git updater receives webhooks from github. Local: will use a local directory to update.</li>
-<li><code>Etcd</code>: (for a vaquero server cluster / HA) specifies the information used to connect a running etcd cluster to vaquero's own Etcd client. Etcd is used to keep track of state, data models, and other information in a persistent, distributed KV store.</li>
+<li><code>Etcd</code>: The necessary information to connect a vaquero server cluster or High Availability (HA) cluster to a running <a href="https://coreos.com/etcd/">CoreOS Etcd</a> cluster. If Etcd information is provided, Vaquero will use the provided cluster endpoints (vs. a local filestorage) to store and continuously update data model information, as well as internal, vaquero-specific information (eg. machine state). See the <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/getting-started.html">Getting Started page</a>, under &quot;Etcd and Vaquero,&quot; for more information, including a short demo using a virtual machine running Etcd.</li>
+<li><code>SavePath</code>: If no Etcd details provided, the local dir where Vaquero servers and agents will save local configurations, as well as internal information (eg. machine state) needed for Vaquero to run.</li>
 <li><code>DHCPMode</code>:Using &quot;server&quot; runs Vaquero as a DHCP server. Vaquero does not manage free address pools or leases; it simply assigns based of the static configuration defined in the data model. <strong>Note that DHCPMode defaults to server.</strong> Using &quot;proxy&quot; enables ProxyDHCP. ProxyDHCP works with an existing DHCP Server to provide PXEBoot functionality, while leaving the managing and assigning of IP addresses to the other DHCP Server. Only enable this if you already have a DHCP server with entries for all the hosts in your Data Model.</li>
 </ul>
 <h3 id="configuration-fields-in-detail">Configuration Fields In Detail</h3>
@@ -227,7 +228,7 @@ Log:
 <td align="left">Etcd/Endpoints</td>
 <td align="left">no</td>
 <td align="left">etcd initial cluster endpoints: format- e1,e2,e3</td>
-<td align="left">127.0.0.1:2379</td>
+<td align="left">none</td>
 </tr>
 <tr class="odd">
 <td align="left">Server</td>
