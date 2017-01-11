@@ -419,7 +419,7 @@ Provides information for a single deployment/data center/etc.
 |:-------------------------------|:----------------------------------------------------------|:---------|:-----------------|:--------|
 | id                             | A self-assigned identifier (should be unique)             | yes      | string           |         |
 | name                           | A human-readable name for this group                      | no       | string           | id      |
-| [agent](#envagent)             | Details for establishing a connection to the site's agent | yes      | env.agent        |         |
+| [agents](#envagent)            | Details for establishing a connection to the site's agent | yes      | env.agent  array |         |
 | [subnets](#envsubnet)          | List of subnets for this cluster                          | yes      | env.subnet array |         |
 | metadata                       | unstructured, site-specific information                   | no       | object           |         |
 | [release_tag](#envrelease_tag) | Github release tag                                        | no       | string           |         |
@@ -430,11 +430,11 @@ Provides information for a single deployment/data center/etc.
 Details for establishing a connection to a site's agent
 
 
-| name                                 | description                              | required | schema                 | default |
-|:-------------------------------------|:-----------------------------------------|:---------|:-----------------------|:--------|
-| [asset_server](#envagentassetserver) | Asset Server configuration               | no       | env.agent.asset_server |         |
-| dhcp_mode                            | The mode to run DHCP in, server or proxy | no       | string                 | server  |
-
+| name                                 | description                              | required | schema                 | default      |
+|:-------------------------------------|:-----------------------------------------|:---------|:-----------------------|:-------------|
+| [asset_server](#envagentassetserver) | Asset Server configuration               | no       | env.agent.asset_server |              |
+| dhcp_mode                            | The mode to run DHCP in, server or proxy | no       | string                 | server       |
+| save_path                            | The dir path to save local files         | no       | string                 | /var/vaquero |
 
 #### env.agent.asset_server
 
