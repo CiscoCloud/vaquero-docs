@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-set -x
 set -ue
 
-git branch -D gh-pages
+git branch -D gh-pages || true      # ignore errors
 git fetch origin gh-pages:gh-pages
 
 DIR="/drone/$(ls /drone | grep -v src)"
