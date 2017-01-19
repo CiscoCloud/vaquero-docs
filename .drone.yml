@@ -17,7 +17,7 @@ pipeline:
       - DIR="/drone/$(ls /drone | grep -v src)"
       - expr $(git status --porcelain | egrep '^(M| M|\?\?)' | wc -l) = 0 || DRY_RUN="--dry-run "
       - git checkout -q gh-pages
-      - rsync -av \${DRY_RUN:-} --delete-delay --exclude ".git" "${DIR}/" .
+      - rsync -av ${DRY_RUN:- } --delete-delay --exclude ".git" "${DIR}/" .
 
   publish:
     image: plugins/git-push
