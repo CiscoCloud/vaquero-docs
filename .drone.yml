@@ -7,17 +7,12 @@ pipeline:
   build:
     image: gemtest/vaquero-docs:0.1
     commands:
-      - ./convert.sh
+      - ./tools/convert.sh
 
   merge:
     image: gemtest/vaquero-docs:0.1
     commands:
-      - set -ue
-      - git fetch origin gh-pages:gh-pages
-      - DIR="/drone/$(ls /drone | grep -v src)"
-      - expr $(git status --porcelain | egrep '^(M| M|\?\?)' | wc -l) = 0 || DRY_RUN="--dry-run "
-      - git checkout -q gh-pages
-      - rsync -av ${DRY_RUN:-} --delete-delay --exclude ".git" "${DIR}/" .
+      - ./tools/merge.sh
 
   publish:
     image: plugins/git-push
