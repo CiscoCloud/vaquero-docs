@@ -75,7 +75,7 @@ Vaquero servers able to handle failure states in boot process, will retry, halt,
 
 
 # [Architecture](architecture.html)
-![](nov16Arch.png)
+![](jan17Arch.png)
 
 ## [Data Model Templates](data-model-howto.html)
 Data Models are used by Vaquero as the "Source of Truth" to describe your data center. Data Models define machine operating systems, subnets, and boot scripts. We provide some [example data models](https://github.com/CiscoCloud/vaquero-examples) as a reference to build your own.

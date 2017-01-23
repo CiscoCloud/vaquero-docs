@@ -23,7 +23,7 @@
 
 
 This document outlines vaquero's functionality in outage scenarios. In this analysis we are looking at a deployment of 3 vaquero servers.
-![](nov16HA.png)
+![](jan17HA.png)
 
 
 - SoT : Source of Truth: the home for the data model

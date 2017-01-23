@@ -30,7 +30,7 @@ The goal is to provide the ability for teams to manage their infrastructure usin
 
 Vaquero is delivered in one container for operational simplicity. Vaquero can run in multiple modes, including server, agent, and standalone (the combination of server and agent).
 
-![](nov16Arch.png)
+![](jan17Arch.png)
 
 
 #### `vaquero server`
@@ -74,7 +74,7 @@ The `vaquero` container running in `agent` mode registers itself with an upstrea
 
 The diagram below depicts what a production deployment of Vaquero would look like. The Vaquero server cluster would be deployed and backed by an etcd cluster. Vaquero servers act like a distributed message queue for its agents, servers never instantiate outbound calls. Vaquero agents would be deployed to service one data model "site", technically two agents could run in the same broadcast domain as long as they each server different hosts in the broadcast domain. We would recommend deploying one Vaquero agent per broadcast domain. Requirements for a production deployment would include [Docker](https://www.docker.com/), [etcd](https://github.com/coreos/etcd), and a load balancer of your choice. See the [outage document](outage.html) to see how Vaquero handles failures.
 
-![](nov16HA.png)
+![](jan17HA.png)
 
 ## Deployment and Availability Considerations
 
