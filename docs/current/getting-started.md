@@ -82,11 +82,11 @@ For working examples of both kinds of SoT, see [configurations](https://github.c
 
 ##### git SoT:
 
-`docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 standalone --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 standalone --config /vaquero/config.yaml`
 
 ##### dir SoT:
 
-`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 standalone --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 standalone --config /vaquero/config.yaml`
 
 
 ### Separate server and agent
@@ -99,11 +99,11 @@ For working examples of both kinds of SoT, see [configurations](https://github.c
 
 ##### separate server dir SoT
 
-`docker run -v /vagrant/config/dir-sot-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>"   shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 server --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/dir-sot-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>"   shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 server --config /vaquero/config.yaml`
 
 ##### separate agent dir SoT
 
-`docker run -v /vagrant/config/dir-sot-agent.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent"  shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 agent --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/dir-sot-agent.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent"  shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 agent --config /vaquero/config.yaml`
 
 
 ## etcd and vaquero
@@ -140,7 +140,7 @@ The vaquero vagrant VM (described above) has a running etcd cluster baked in. Yo
           Retry: 3
 
 6. Run vaquero from the container (this command uses `dir-sot.yaml`, replace with the config you used)
-`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 standalone --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 standalone --config /vaquero/config.yaml`
 
 7. You should now see some etcd-related startup messages in the log output, including a successful Etcd PUT of the vagrant VM's local SOT. Success!
 
