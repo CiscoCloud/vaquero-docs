@@ -234,3 +234,6 @@ Validator using a git repo
 
 Validator using a local dir
 `docker run -v <SRC_DIR>:<DEST_DIR> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --sot <DEST_DIR>`
+
+### Kubernetes in the Virtualenv
+To start up the Kubernetes cluster please log into each VS machine and run `sudo ./kube_start.sh`. This will start the Kubernetes cluster across the VS nodes. Regardless of how many VS machines you deploy, `vs-1` will always be the Kube master and `vs-1`, `vs-2` and `vs-3` will be listed as Kubernetes nodes. You must run `sudo ./kube_start.sh` on every vs machine to successfully standup the Kubernetes cluster.
