@@ -375,11 +375,12 @@ export VAQUERO_SITE_ID=&quot;test-site&quot;</code></pre>
 <p><a href="https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero">Bintray Docker Images</a></p>
 <ol style="list-style-type: decimal">
 <li>Fetch the image: <code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></li>
-<li><p>Run the example: <code>docker run -v /vagrant/vagrant-config.yaml:/vaquero/config.yaml -v /files:/tmp/vaquero/files --network=&quot;host&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
+<li><p>Run the example: <code>docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/provision_files/secret:/vaquero/secret --net=&quot;host&quot; -e VAQUERO_SHARED_SECRET=&quot;&lt;secret&gt;&quot; -e VAQUERO_SERVER_SECRET=&quot;&lt;secret&gt;&quot; -e VAQUERO_SITE_ID=&quot;test-site&quot; -e VAQUERO_AGENT_ID=&quot;test-agent&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
 <ol style="list-style-type: decimal">
 <li><code>docker volume</code> to pass the configuration into the container.</li>
 <li><code>docker volume</code> to pass in the assetServer assets (kernel images, <code>undionly.kpxe</code>, etc)</li>
 <li>set networking to <code>host</code></li>
+<li>ENV vars needed by vaquero</li>
 </ol></li>
 </ol>
 <h2 id="vaquero-with-systemd">Vaquero with Systemd</h2>
@@ -403,6 +404,7 @@ ExecStart=/usr/bin/docker run \
 -e VAQUERO_SERVER_SECRET=bosco \
 -e VAQUERO_SHARED_SECRET=bosco \
 -e VAQUERO_SITE_ID=bosco \
+-e VAQUERO_AGENT_ID=bosco \
 --name vaquero shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.11.0 standalone \
 --config /vaquero/local.yml
 ExecStop=/usr/bin/docker stop vaquero
