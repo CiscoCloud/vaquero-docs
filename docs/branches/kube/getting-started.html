@@ -46,7 +46,9 @@ Vaquero Getting Started
 <p><strong>Etcd check:</strong> Once the VM(s) are booted and before running vaquero, ssh into one of your server machines. Perform a cluster health check: <code>ETCDCTL_API=2 etcdctl cluster-health</code>. If an error message appears, wait until all machines are live, then perform the cluster health check again.</p>
 <h2 id="pull-the-latest-docker-image">3. pull the latest docker image</h2>
 <p><code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0</code></p>
-<h2 id="run-vaquero-with-one-of-the-source-of-truth-types">4. run vaquero with one of the source of truth types</h2>
+<h2 id="start-docker-and-kubernetes">4. start docker and Kubernetes</h2>
+<p><code>sudo ./kube_start.sh</code></p>
+<h2 id="run-vaquero-with-one-of-the-source-of-truth-types">5. run vaquero with one of the source of truth types</h2>
 <p>There are two types of SoTs with which you can run Vaquero. Both contain the same kinds of information and are broken down into subdirectories; the only difference is where the SoT is stored: 1. <strong>git SoT</strong>: a remote Git repository containing the required SoT files. <em>Note</em>: for this to work, you must add your personal git token into the <a href="https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config">config</a> 2. <strong>dir SoT</strong>: a local directory containing the required SoT files. No additional overhead is needed for a local dir SoT.</p>
 <p>Both types of SoTs require specific folders, formatting and information. <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html">See the Data Model How-To Page</a> for details.</p>
 <p>For working examples of both kinds of SoT, see <a href="https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config">configurations</a>.</p>
