@@ -241,11 +241,12 @@ If exported in the environment, make sure to run sudo with the `-E` flag when ru
 [Bintray Docker Images](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero)
 
 1. Fetch the image: `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
-2. Run the example: `docker run -v /vagrant/vagrant-config.yaml:/vaquero/config.yaml -v /files:/tmp/vaquero/files --network="host" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+2. Run the example: `docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
     1. `docker volume` to pass the configuration into the container.
     2. `docker volume` to pass in the assetServer assets (kernel images, `undionly.kpxe`, etc)
     3. set networking to `host`
+    4. ENV vars needed by vaquero
 
 ## Vaquero with Systemd
 Vaquero can be started as a service using Systemd and Docker.
@@ -272,6 +273,7 @@ ExecStart=/usr/bin/docker run \
 -e VAQUERO_SERVER_SECRET=bosco \
 -e VAQUERO_SHARED_SECRET=bosco \
 -e VAQUERO_SITE_ID=bosco \
+-e VAQUERO_AGENT_ID=bosco \
 --name vaquero shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.11.0 standalone \
 --config /vaquero/local.yml
 ExecStop=/usr/bin/docker stop vaquero

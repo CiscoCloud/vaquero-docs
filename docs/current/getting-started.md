@@ -61,7 +61,7 @@ By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
   **Etcd check:** Once the VM(s) are booted and before running vaquero, ssh into one of your server machines. Perform a cluster health check:
   `ETCDCTL_API=2 etcdctl cluster-health`. If an error message appears, wait until all machines are live, then perform the cluster health check again.   
 
-## 3. start docker and Kubernetes
+## 3. start docker and kubernetes
 
 `sudo ./kube_start.sh`
 
@@ -96,7 +96,7 @@ For working examples of both kinds of SoT, see [configurations](https://github.c
 
 ### Separate server and agent
 
-1. Update data model to reflect VM IPs. Look at the site's `env.yml` and ensure the agent IP is correct. See the `vagrant VM table` below to see IPs for `vs` and `va` VMs
+1. Update data model to reflect VM IPs. Look at the site's `env.yml` and ensure the agent IP is correct. See the *vagrant VM table* below to see IPs for `vs` and `va` VMs
 
 2. Ensure server configuration and agent configuration match the IPs of the VM's. We have provided two example configs for separate server and agent using the local dir SoT in the vagrant repo. `VS_NUM=1 VA_NUM=1`
 
@@ -108,7 +108,7 @@ For working examples of both kinds of SoT, see [configurations](https://github.c
 
 ##### separate agent dir SoT
 
-`docker run -v /vagrant/config/dir-sot-agent.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent"  shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest agent --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/dir-sot-agent.yaml:/vaquero/config.yaml --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent"  shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest agent --config /vaquero/config.yaml`
 
 
 ## etcd and vaquero
@@ -162,7 +162,7 @@ Vaquero provides this vagrant environment as a sandbox to work with vaquero befo
 ### virtual env layout
 
 #### vagrant VM table
-There are `*`'s in the third space because VMs can be on the 10.10.10.0/24 or the 10.10.11.0/24 network. If no http relay is in effect all machines will be on the 10.10.10.0/24 network, if relay is active, vaquero services will be moved to 10.10.11.0/24 while booting hosts will be on 10.10.10.10/24
+There are `*`'s in the third space because VMs can be on the 10.10.10.0/24 or the 10.10.11.0/24 network. If no dhcp relay is in effect all machines will be on the 10.10.10.0/24 network, if dhcp relay is active, vaquero services will be moved to 10.10.11.0/24 while booting hosts will be on 10.10.10.10/24
 
 
 | Vagrant VM     | IP Address               |
@@ -227,18 +227,16 @@ This assumes there is a running vaquero instance as described above with either 
 
 1. Go through steps 1-5
 2. Update the `local/` data model.
-3. Run `./create-cluster/cluster -c <count>` to start <count> VM's starting at mac `:01` and counting up
+3. Run `./create-cluster/cluster -c <count>` to start <count> VM's starting at mac `00:00:00:00:00:01` and counting up
 
 [Video](https://cisco.box.com/s/cbvci60f1v6b3bcajq2ejtfizr3z0ss6)
 
 ### [running the validator OR preview](validator.html)
 After sshing into the vagrant VM, with the container on it. Preview will work in the same way.
 
-Validator using a git repo
-`docker run -v <SRC_CFG>:<DEST_CFG> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --config <DEST_CFG>`
 
-Validator using a local dir
+Validate on a local Data Model
 `docker run -v <SRC_DIR>:<DEST_DIR> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --sot <DEST_DIR>`
 
-### Kubernetes in the Virtualenv
-To start up the Kubernetes cluster please log into each VS machine and run `sudo ./kube_start.sh`. This will start the Kubernetes cluster across the VS nodes. Regardless of how many VS machines you deploy, `vs-1` will always be the Kube master and `vs-1`, `vs-2` and `vs-3` will be listed as Kubernetes nodes. You must run `sudo ./kube_start.sh` on every vs machine to successfully standup the Kubernetes cluster.
+### kubernetes in the Virtualenv
+To start up the kubernetes cluster please log into each VS machine and run `sudo ./kube_start.sh`. This will start the kubernetes cluster across the VS nodes. Regardless of how many VS machines you deploy, `vs-1` will always be the Kube master and `vs-1`, `vs-2` and `vs-3` will be listed as kubernetes nodes. You must run `sudo ./kube_start.sh` on every vs machine to successfully standup the kubernetes cluster.
