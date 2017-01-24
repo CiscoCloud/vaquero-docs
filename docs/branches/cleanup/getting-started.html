@@ -60,7 +60,7 @@ Vaquero Getting Started
 <p><code>docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net=&quot;host&quot; -e VAQUERO_SHARED_SECRET=&quot;&lt;secret&gt;&quot; -e VAQUERO_SERVER_SECRET=&quot;&lt;secret&gt;&quot; -e VAQUERO_SITE_ID=&quot;test-site&quot; -e VAQUERO_AGENT_ID=&quot;test-agent&quot; shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml</code></p>
 <h3 id="separate-server-and-agent">Separate server and agent</h3>
 <ol style="list-style-type: decimal">
-<li><p>Update data model to reflect VM IPs. Look at the site's <code>env.yml</code> and ensure the agent IP is correct. See the <code>vagrant VM table</code> below to see IPs for <code>vs</code> and <code>va</code> VMs</p></li>
+<li><p>Update data model to reflect VM IPs. Look at the site's <code>env.yml</code> and ensure the agent IP is correct. See the <em>vagrant VM table</em> below to see IPs for <code>vs</code> and <code>va</code> VMs</p></li>
 <li><p>Ensure server configuration and agent configuration match the IPs of the VM's. We have provided two example configs for separate server and agent using the local dir SoT in the vagrant repo. <code>VS_NUM=1 VA_NUM=1</code></p></li>
 <li><p>Run each container in their respective mode. <code>server</code> or <code>agent</code> instead of <code>standalone</code></p></li>
 </ol>
@@ -104,7 +104,7 @@ time=&quot;2016-12-15T21:46:28Z&quot; level=debug msg=&quot;Successful Etcd Put 
 <p>Vaquero provides this vagrant environment as a sandbox to work with vaquero before deployment. We provide 9 mac -&gt; IP mappings that are free for your use / testing, the machines labeled SANDBOX would be free. We also provide two example data models, one as a <a href="https://github.com/CiscoCloud/vaquero-examples/tree/vagrant">github</a> SoT and a local dir SoT, <a href="https://github.com/CiscoCloud/vaquero-vagrant/tree/master/local">vaquero-vagrant</a>. These define the demo machines and are a working data model to use as an example when you develop your own SoT.</p>
 <h3 id="virtual-env-layout">virtual env layout</h3>
 <h4 id="vagrant-vm-table">vagrant VM table</h4>
-<p>There are <code>*</code>'s in the third space because VMs can be on the 10.10.10.0/24 or the 10.10.11.0/24 network. If no http relay is in effect all machines will be on the 10.10.10.0/24 network, if relay is active, vaquero services will be moved to 10.10.11.0/24 while booting hosts will be on 10.10.10.10/24</p>
+<p>There are <code>*</code>'s in the third space because VMs can be on the 10.10.10.0/24 or the 10.10.11.0/24 network. If no dhcp relay is in effect all machines will be on the 10.10.10.0/24 network, if dhcp relay is active, vaquero services will be moved to 10.10.11.0/24 while booting hosts will be on 10.10.10.10/24</p>
 <table>
 <thead>
 <tr class="header">
