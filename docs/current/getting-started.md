@@ -68,7 +68,7 @@ By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
 
 ## 4. pull the latest docker image
 
-`docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0`
+`docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
 
 
 ## 5. run vaquero with one of the source of truth types
@@ -87,11 +87,11 @@ For working examples of both kinds of SoT, see [configurations](https://github.c
 
 ##### git SoT:
 
-`docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 standalone --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
 ##### dir SoT:
 
-`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 standalone --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
 
 ### Separate server and agent
@@ -104,11 +104,11 @@ For working examples of both kinds of SoT, see [configurations](https://github.c
 
 ##### separate server dir SoT
 
-`docker run -v /vagrant/config/dir-sot-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>"   shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 server --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/dir-sot-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>"   shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest server --config /vaquero/config.yaml`
 
 ##### separate agent dir SoT
 
-`docker run -v /vagrant/config/dir-sot-agent.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent"  shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 agent --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/dir-sot-agent.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent"  shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest agent --config /vaquero/config.yaml`
 
 
 ## etcd and vaquero
@@ -145,7 +145,7 @@ The vaquero vagrant VM (described above) has a running etcd cluster baked in. Yo
           Retry: 3
 
 6. Run vaquero from the container (this command uses `dir-sot.yaml`, replace with the config you used)
-`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 standalone --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
 7. You should now see some etcd-related startup messages in the log output, including a successful Etcd PUT of the vagrant VM's local SOT. Success!
 
@@ -235,10 +235,10 @@ This assumes there is a running vaquero instance as described above with either 
 After sshing into the vagrant VM, with the container on it. Preview will work in the same way.
 
 Validator using a git repo
-`docker run -v <SRC_CFG>:<DEST_CFG> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 validate --config <DEST_CFG>`
+`docker run -v <SRC_CFG>:<DEST_CFG> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --config <DEST_CFG>`
 
 Validator using a local dir
-`docker run -v <SRC_DIR>:<DEST_DIR> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0 validate --sot <DEST_DIR>`
+`docker run -v <SRC_DIR>:<DEST_DIR> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --sot <DEST_DIR>`
 
 ### Kubernetes in the Virtualenv
 To start up the Kubernetes cluster please log into each VS machine and run `sudo ./kube_start.sh`. This will start the Kubernetes cluster across the VS nodes. Regardless of how many VS machines you deploy, `vs-1` will always be the Kube master and `vs-1`, `vs-2` and `vs-3` will be listed as Kubernetes nodes. You must run `sudo ./kube_start.sh` on every vs machine to successfully standup the Kubernetes cluster.
