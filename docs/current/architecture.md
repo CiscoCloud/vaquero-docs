@@ -30,7 +30,7 @@ The goal is to provide the ability for teams to manage their infrastructure usin
 
 Vaquero is delivered in one container for operational simplicity. Vaquero can run in multiple modes, including server, agent, and standalone (the combination of server and agent).
 
-![](nov16Arch.png)
+![](jan17Arch.png)
 
 
 #### `vaquero server`
@@ -72,9 +72,9 @@ The `vaquero` container running in `agent` mode registers itself with an upstrea
 
 ## HA Vaquero
 
-The diagram below depicts what a production deployment of Vaquero would look like. The Vaquero server cluster would be deployed and backed by an etcd cluster. Vaquero servers act like a distributed message queue for its agents, servers never instantiate outbound calls. Vaquero agents would be deployed to service one data model "site", technically two agents could run in the same broadcast domain as long as they each server different hosts in the broadcast domain. We would recommend deploying one Vaquero agent per broadcast domain. Requirements for a production deployment would include [Docker](https://www.docker.com/), [etcd](https://github.com/coreos/etcd), and a load balancer of your choice. See the [outage document](outage.html) to see how Vaquero handles failures.
+The diagram below depicts a production deployment of Vaquero. Vaquero does not implement its own leader election and will be dependent on an outside service to manage an active-passive HA. Today we are looking for kubernetes deployments to manage the vaquero server cluster and have one running at a time. The vaquero server is backed by an etcd cluster for persistent storage of models and state. Vaquero server is essentially a message queue for its agents, the vaquero server wll never instantiate outbound calls. Vaquero agents would be deployed to service one data model "site", technically two agents could run in the same broadcast domain. We would recommend deploying two Vaquero agents per broadcast domain just for operational safety. Requirements for a production deployment would include [Docker](https://www.docker.com/), [etcd](https://github.com/coreos/etcd), and a kubernetes service to load balance between containers. See the [outage document](outage.html) to see how Vaquero handles failures.
 
-![](nov16HA.png)
+![](jan17HA.png)
 
 ## Deployment and Availability Considerations
 

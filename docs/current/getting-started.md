@@ -61,12 +61,17 @@ By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
   **Etcd check:** Once the VM(s) are booted and before running vaquero, ssh into one of your server machines. Perform a cluster health check:
   `ETCDCTL_API=2 etcdctl cluster-health`. If an error message appears, wait until all machines are live, then perform the cluster health check again.   
 
-## 3. pull the latest docker image
+## 3. start docker and Kubernetes
+
+`sudo ./kube_start.sh`
+
+
+## 4. pull the latest docker image
 
 `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
 
 
-## 4. run vaquero with one of the source of truth types
+## 5. run vaquero with one of the source of truth types
 
 There are two types of SoTs with which you can run Vaquero. Both contain the same kinds of information and are broken down into subdirectories; the only difference is where the SoT is stored:
 1. **git SoT**: a remote Git repository containing the required SoT files. *Note*: for this to work, you must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config)
@@ -82,11 +87,11 @@ For working examples of both kinds of SoT, see [configurations](https://github.c
 
 ##### git SoT:
 
-`docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
 ##### dir SoT:
 
-`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
 
 ### Separate server and agent
@@ -99,11 +104,11 @@ For working examples of both kinds of SoT, see [configurations](https://github.c
 
 ##### separate server dir SoT
 
-`docker run -v /vagrant/config/dir-sot-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>"   shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest server --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/dir-sot-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>"   shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest server --config /vaquero/config.yaml`
 
 ##### separate agent dir SoT
 
-`docker run -v /vagrant/config/dir-sot-agent.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent"  shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest agent --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/dir-sot-agent.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent"  shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest agent --config /vaquero/config.yaml`
 
 
 ## etcd and vaquero
@@ -140,7 +145,7 @@ The vaquero vagrant VM (described above) has a running etcd cluster baked in. Yo
           Retry: 3
 
 6. Run vaquero from the container (this command uses `dir-sot.yaml`, replace with the config you used)
-`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --network="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
 
 7. You should now see some etcd-related startup messages in the log output, including a successful Etcd PUT of the vagrant VM's local SOT. Success!
 
@@ -207,7 +212,7 @@ This assumes there is a running vaquero instance as described above with either 
 
 ### using the sandbox mac space via github
 
-1. Go through steps 1-4.
+1. Go through steps 1-5.
 2. You must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config) for this to work.
 3. Create your own github repo to contain your own data model
 4. If your machine is not routable set up [ngrok and the githook as described in the README](README.html)
@@ -220,7 +225,7 @@ This assumes there is a running vaquero instance as described above with either 
 
 ### using the sandbox mac space via local dir
 
-1. Go through steps 1-4
+1. Go through steps 1-5
 2. Update the `local/` data model.
 3. Run `./create-cluster/cluster -c <count>` to start <count> VM's starting at mac `:01` and counting up
 
@@ -234,3 +239,6 @@ Validator using a git repo
 
 Validator using a local dir
 `docker run -v <SRC_DIR>:<DEST_DIR> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --sot <DEST_DIR>`
+
+### Kubernetes in the Virtualenv
+To start up the Kubernetes cluster please log into each VS machine and run `sudo ./kube_start.sh`. This will start the Kubernetes cluster across the VS nodes. Regardless of how many VS machines you deploy, `vs-1` will always be the Kube master and `vs-1`, `vs-2` and `vs-3` will be listed as Kubernetes nodes. You must run `sudo ./kube_start.sh` on every vs machine to successfully standup the Kubernetes cluster.
