@@ -61,12 +61,17 @@ By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
   **Etcd check:** Once the VM(s) are booted and before running vaquero, ssh into one of your server machines. Perform a cluster health check:
   `ETCDCTL_API=2 etcdctl cluster-health`. If an error message appears, wait until all machines are live, then perform the cluster health check again.   
 
-## 3. pull the latest docker image
+## 3. start docker and Kubernetes
+
+`sudo ./kube_start.sh`
+
+
+## 4. pull the latest docker image
 
 `docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:v0.12.0`
 
 
-## 4. run vaquero with one of the source of truth types
+## 5. run vaquero with one of the source of truth types
 
 There are two types of SoTs with which you can run Vaquero. Both contain the same kinds of information and are broken down into subdirectories; the only difference is where the SoT is stored:
 1. **git SoT**: a remote Git repository containing the required SoT files. *Note*: for this to work, you must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config)
@@ -207,7 +212,7 @@ This assumes there is a running vaquero instance as described above with either 
 
 ### using the sandbox mac space via github
 
-1. Go through steps 1-4.
+1. Go through steps 1-5.
 2. You must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config) for this to work.
 3. Create your own github repo to contain your own data model
 4. If your machine is not routable set up [ngrok and the githook as described in the README](README.html)
@@ -220,7 +225,7 @@ This assumes there is a running vaquero instance as described above with either 
 
 ### using the sandbox mac space via local dir
 
-1. Go through steps 1-4
+1. Go through steps 1-5
 2. Update the `local/` data model.
 3. Run `./create-cluster/cluster -c <count>` to start <count> VM's starting at mac `:01` and counting up
 
