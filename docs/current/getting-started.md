@@ -96,7 +96,7 @@ For working examples of both kinds of SoT, see [configurations](https://github.c
 
 ### Separate server and agent
 
-1. Update data model to reflect VM IPs. Look at the site's `env.yml` and ensure the agent IP is correct. See the `vagrant VM table` below to see IPs for `vs` and `va` VMs
+1. Update data model to reflect VM IPs. Look at the site's `env.yml` and ensure the agent IP is correct. See the *vagrant VM table* below to see IPs for `vs` and `va` VMs
 
 2. Ensure server configuration and agent configuration match the IPs of the VM's. We have provided two example configs for separate server and agent using the local dir SoT in the vagrant repo. `VS_NUM=1 VA_NUM=1`
 
@@ -162,7 +162,7 @@ Vaquero provides this vagrant environment as a sandbox to work with vaquero befo
 ### virtual env layout
 
 #### vagrant VM table
-There are `*`'s in the third space because VMs can be on the 10.10.10.0/24 or the 10.10.11.0/24 network. If no http relay is in effect all machines will be on the 10.10.10.0/24 network, if relay is active, vaquero services will be moved to 10.10.11.0/24 while booting hosts will be on 10.10.10.10/24
+There are `*`'s in the third space because VMs can be on the 10.10.10.0/24 or the 10.10.11.0/24 network. If no dhcp relay is in effect all machines will be on the 10.10.10.0/24 network, if dhcp relay is active, vaquero services will be moved to 10.10.11.0/24 while booting hosts will be on 10.10.10.10/24
 
 
 | Vagrant VM     | IP Address               |
