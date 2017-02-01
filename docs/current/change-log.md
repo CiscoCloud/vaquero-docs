@@ -25,7 +25,8 @@
 
 # Change log
 
-Vaquero container release history and change logs. All containers are served from [bintray](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero), `latest` will be the head of development. We do not recommend using `latest` since it will be released once or day or more.
+Vaquero container release history and change logs. All containers are served from [bintray](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero). We do not recommend using `latest` since it will be released once or day or more. Vaquero upgrades should be done from major version to major version, we do not provide backwards compatibility across more then 1 major version. Alpha(Pre 1.0) releases should be upgraded from minor release to minor release. 
+
 
 | Version                                                                       | Change log                                                                                                                                                                                         | Release Date | Size  |
 |:------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------|:------|
