@@ -25,10 +25,10 @@
 
 # Change log
 
-Vaquero container release history and change logs. All containers are served from [bintray](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero). We do not recommend using `latest` since it will be released once or day or more. Vaquero upgrades should be done from major version to major version, we do not provide backwards compatibility across more then 1 major version. Alpha(Pre 1.0) releases should be upgraded from minor release to minor release. 
+Vaquero container release history and change logs. All containers are served from [bintray](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero). We do not recommend using `latest` since it will be released once or day or more. Vaquero upgrades should be done from major version to major version, we do not provide backwards compatibility across more than 1 major release. Alpha(Pre 1.0) releases should be upgraded from minor release to minor release.
 
 
-| Version                                                                       | Change log                                                                                                                                                                                         | Release Date | Size  |
+| Release                                                                       | Change log                                                                                                                                                                                         | Release Date | Size  |
 |:------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------|:------|
 | [latest](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero/latest)   | - HEAD of the master development branch                                                                                                                                                            | daily        | NA    |
 | [v0.12.1](https://bintray.com/shippedrepos/vaquero/vaquero%3Avaquero/v0.12.1) | - DM helpers to better specify interfaces. `Host.interfaces`, `bmcInterfaces`, `netInterfaces`                                                                                                     | 1/18/2017    | 8.6MB |
