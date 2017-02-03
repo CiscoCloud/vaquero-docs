@@ -847,9 +847,7 @@ boot</code></pre>
 </tr>
 </tbody>
 </table>
-<ul>
-<li>An interface of type <code>bmc</code> is a dedicated <code>ipmi</code> interface, in which case the <code>interface.bmc.type</code> must equal <code>ipmi</code>. This interface will not be used for booting the machine (but may acquire an IP from vaquero's DHCP Server).</li>
-</ul>
+<p>* An interface of type <code>bmc</code> is a dedicated <code>ipmi</code> interface. <code>interface.bmc.type</code> must equal <code>ipmi</code>. This interface will not be used for PXE booting the machine (but it may acquire an IP from vaquero's DHCP Server).</p>
 <p>An interface of type <code>physical</code> can define an <code>interface.bmc</code> for ssh power management <em>only</em> -- i.e. a physical interface may not include an <code>interface.bmc.type</code> set to <code>ipmi</code>.</p>
 <h4 id="interface.bmc">interface.bmc</h4>
 <table>
@@ -893,9 +891,8 @@ boot</code></pre>
 </tr>
 </tbody>
 </table>
-<ul>
-<li><code>interface.bmc.password</code> is required when <code>type = ipmi</code>. ** <code>interface.bmc.keypath</code> is required when <code>type = ssh</code>.</li>
-</ul>
+<p>* <code>interface.bmc.password</code> is required when <code>type = ipmi</code>.</p>
+<p>** <code>interface.bmc.keypath</code> is required when <code>type = ssh</code>.</p>
 <p>Please ensure the file referred to in <code>keypath</code> has file permissions set to 700 (owner access only).</p>
 <h3 id="os">os</h3>
 <p>Represents a single operating system with boot/installation parameters.</p>
