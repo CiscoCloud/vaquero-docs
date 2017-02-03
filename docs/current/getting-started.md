@@ -166,9 +166,10 @@ Since most VMs do not include an IPMI interface, we include the option of reboot
 3. Add a `bmc` entry to corresponding inventory entry. Set its type (ssh), the VM's username, and the location of the private key from `2.` See the [data model how-to](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html) or the sample data model for more information.
 
 By default vaquero will not forcefully reprovision newly added machines. To make vaquero automatically reboot added hosts with `bmc` defined, set:
-```policy:
-  force_provision: true
-```
+`policy:
+
+  force_provision: true`
+  
 in `env.yaml`
 
 ## vaquero demo lab
