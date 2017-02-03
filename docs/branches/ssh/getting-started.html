@@ -107,9 +107,7 @@ time=&quot;2016-12-15T21:46:28Z&quot; level=debug msg=&quot;Successful Etcd Put 
 <li><p>Place the private key in a location accessible from vaquero agent with proper permissions (700).</p></li>
 <li><p>Add a <code>bmc</code> entry to corresponding inventory entry. Set its type (ssh), the VM's username, and the location of the private key from <code>2.</code> See the <a href="https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html">data model how-to</a> or the sample data model for more information.</p></li>
 </ol>
-<p>By default vaquero will not forcefully reprovision newly added machines. To make vaquero automatically reboot added hosts with <code>bmc</code> defined, set: `policy:</p>
-<p>force_provision: true`</p>
-<p>in <code>env.yaml</code></p>
+<p>By default vaquero will not forcefully reprovision newly added machines. To make vaquero automatically reboot added hosts with <code>bmc</code> defined, set <code>force_provision: true</code> under <code>policy</code> in <code>env.yaml</code></p>
 <h2 id="vaquero-demo-lab">vaquero demo lab</h2>
 <p>Vaquero provides this vagrant environment as a sandbox to work with vaquero before deployment. We provide 9 mac -&gt; IP mappings that are free for your use / testing, the machines labeled SANDBOX would be free. We also provide two example data models, one as a <a href="https://github.com/CiscoCloud/vaquero-examples/tree/vagrant">github</a> SoT and a local dir SoT, <a href="https://github.com/CiscoCloud/vaquero-vagrant/tree/master/local">vaquero-vagrant</a>. These define the demo machines and are a working data model to use as an example when you develop your own SoT.</p>
 <h3 id="virtual-env-layout">virtual env layout</h3>
