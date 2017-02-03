@@ -155,6 +155,21 @@ The vaquero vagrant VM (described above) has a running etcd cluster baked in. Yo
         time="2016-12-15T21:46:28Z" level=debug msg="Successful Etcd Put for key model/current" package=storage
 
 
+## Simulating IPMI Reboots
+In a typical deployment, reprovisioning machines or multistage boots will kick off an IPMI container to force a restart.
+Since most VMs do not include an IPMI interface, we include the option of rebooting via SSH (note `guest` refers to the machine provisioned by vaquero.)
+
+1. Ensure the booted guest VM contains a public key for authorizing SSH login (see our example cloud-config scripts for an example).
+
+2. Place the private key in a location accessible from vaquero agent with proper permissions (700).
+
+3. Add a `bmc` entry to corresponding inventory entry. Set its type (ssh), the guest's username and the location of the private key from `2.` See the [data model how-to](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html) or sample data model for more information.
+
+By default vaquero will not forcefully reprovision newly added machines. To make vaquero automatically reboot added hosts with `bmc` defined set:
+ `policy:
+  force_provision: true
+` in `env.yaml`
+
 ## vaquero demo lab
 
 Vaquero provides this vagrant environment as a sandbox to work with vaquero before deployment. We provide 9 mac -> IP mappings that are free for your use / testing, the machines labeled SANDBOX would be free. We also provide two example data models, one as a [github](https://github.com/CiscoCloud/vaquero-examples/tree/vagrant) SoT and a local dir SoT, [vaquero-vagrant](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/local). These define the demo machines and are a working data model to use as an example when you develop your own SoT.
