@@ -155,20 +155,21 @@ The vaquero vagrant VM (described above) has a running etcd cluster baked in. Yo
         time="2016-12-15T21:46:28Z" level=debug msg="Successful Etcd Put for key model/current" package=storage
 
 
-## Simulating IPMI Reboots
-In a typical deployment, reprovisioning machines or multistage boots will kick off an IPMI container to force a restart.
-Since most VMs do not include an IPMI interface, we include the option of rebooting via SSH (note `guest` refers to the machine provisioned by vaquero.)
+## simulating IPMI reboots in the virtual environment
+In a typical deployment, reprovisioning machines and multistage boots will kick off an IPMI container to force a restart.
+Since most VMs do not include an IPMI interface, we include the option of rebooting via SSH.
 
-1. Ensure the booted guest VM contains a public key for authorizing SSH login (see our example cloud-config scripts for an example).
+1. Ensure the provisioned guest VM contains a public key for authorizing SSH login (see our example cloud-config scripts for an example).
 
 2. Place the private key in a location accessible from vaquero agent with proper permissions (700).
 
-3. Add a `bmc` entry to corresponding inventory entry. Set its type (ssh), the guest's username and the location of the private key from `2.` See the [data model how-to](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html) or sample data model for more information.
+3. Add a `bmc` entry to corresponding inventory entry. Set its type (ssh), the VM's username, and the location of the private key from `2.` See the [data model how-to](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html) or the sample data model for more information.
 
-By default vaquero will not forcefully reprovision newly added machines. To make vaquero automatically reboot added hosts with `bmc` defined set:
- `policy:
+By default vaquero will not forcefully reprovision newly added machines. To make vaquero automatically reboot added hosts with `bmc` defined, set:
+```policy:
   force_provision: true
-` in `env.yaml`
+```
+in `env.yaml`
 
 ## vaquero demo lab
 
