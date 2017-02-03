@@ -536,7 +536,7 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 | ipv6        | IPv6 address                                               | no       | string        |         |
 | hostname    | Hostname for machine                                       | no       | string        |         |
 
-* An interface of type `bmc` is a dedicated `ipmi` interface, in which case the `interface.bmc.type` must equal `ipmi`. This interface will not be used for booting the machine (but may acquire an IP from vaquero's DHCP Server).
+\* An interface of type `bmc` is a dedicated `ipmi` interface. `interface.bmc.type` must equal `ipmi`. This interface will not be used for PXE booting the machine (but it may acquire an IP from vaquero's DHCP Server).
 
 An interface of type `physical` can define an `interface.bmc` for ssh power management _only_ -- i.e. a physical interface may not include an `interface.bmc.type` set to `ipmi`.
 
@@ -549,7 +549,8 @@ An interface of type `physical` can define an `interface.bmc` for ssh power mana
 | password | Password for specified user        | no*       | string |         |
 | keypath  | File path to ssh private key       | no**      | string |         |
 
-* `interface.bmc.password` is required when `type = ipmi`.
+\* `interface.bmc.password` is required when `type = ipmi`.
+
 ** `interface.bmc.keypath` is required when `type = ssh`.
 
 Please ensure the file referred to in `keypath` has file permissions set to 700 (owner access only).
