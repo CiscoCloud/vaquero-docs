@@ -218,7 +218,7 @@ Configurations are roughly executed in the following order:
 
 1. Host makes DHCP request.
 2. DHCP causes host to chainload iPXE (`undionly.kpxe`) and indicates Vaquero Agent as next-server
-3. Vaquero Agent provides a default iPXE script to discover basic host information (mac, uuid, domain, hostname)
+3. Vaquero Agent provides a default iPXE script to discover host interface information (mac)
 4. Host requests dynamic iPXE script based on basic information
 5. Vaquero Agent renders iPXE script using os, boot, and host information
 6. Host executes iPXE script, requesting resources (kernel, intitrd, unattended configs/scripts) as required
@@ -237,42 +237,9 @@ Vaquero Agent will expose an endpoint `/files` for hosting static content. This 
 
 ## Identifying a Host
 
-A booting machine is identified as a particular host based on the selecting information used. Currently, a host will be identified by `mac` and `uuid`, as reported by iPXE.
+A booting machine is identified as a particular host based on the selecting information used. Currently, a host will be identified by `mac`, as reported by iPXE. According to validation rules, every host has an exclusive collection of interfaces (all unique by mac address).
 
-Additionally, a specific callback may be made to Vaquero Agent that includes a custom selection parameter
-
-```
-curl "{{.agent.url}}/ignition?mac={{.host.mac}}&os=installed" -o ignition.json
-```
-
-
-When identifying a host, Vaquero Agent will:
-
-1. Only select a host where all the selectors apply
-2. Select the host where the most selectors apply
-
-For example, given these two hosts:
-
-```
----
-boot: group_one
-hosts:
-- name: host1
-  selectors:
-    mac: 00:00:00:00:00:01
----
-boot: group_two
-hosts:
-- name: host1_plus_some
-  selectors:
-    mac: 00:00:00:00:00:01
-    os: installed
-```
-
-
-For a host requesting `/ignition?mac=00:00:00:00:00:01`, group_one will be matched (rule #1).
-For a host requesting `/ignition?mac=00:00:00:00:00:01&os=installed`, group_two will be matched (rule #2).
-
+Additionally, the first non-BMC type (excluding SSH) interface listed for the host is the `Primary Interface` for that host. The Primary Interface is the preferred interface to use when provisioning hosts.
 
 ## <a name="metadata-and-templating">Metadata and Templating</a>
 
@@ -514,12 +481,12 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 
 #### host
 
-| name       | description                                        | required | schema    | default |
-|:-----------|:---------------------------------------------------|:---------|:----------|:--------|
-| name       | Name for the host machine.                         | yes      | string    |         |
-| interfaces | Network intefaces for this host                    | no       | interface |         |
-| metadata   | unstructured, host-specific information            | no       | object    |         |
-| workflow   | The ID of the workflow used to provision this host | yes      | string    |         |
+| name       | description                                         | required | schema    | default |
+|:-----------|:----------------------------------------------------|:---------|:----------|:--------|
+| name       | Name for the host machine.                          | yes      | string    |         |
+| interfaces | Network intesfaces for this host                    | no       | interface |         |
+| metadata   | unstructured, host-specific information             | no       | object    |         |
+| workflow   | The ID of the workflow used to provision this host  | yes      | string    |         |
 
 
 #### interface
