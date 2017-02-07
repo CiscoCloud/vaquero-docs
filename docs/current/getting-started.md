@@ -74,6 +74,8 @@ By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
 ## 5. run vaquero with one of the source of truth types
 
 There are two types of SoTs with which you can run Vaquero. Both contain the same kinds of information and are broken down into subdirectories; the only difference is where the SoT is stored:
+
+
 1. **git SoT**: a remote Git repository containing the required SoT files. *Note*: for this to work, you must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config)
 2. **dir SoT**: a local directory containing the required SoT files. No additional overhead is needed for a local dir SoT.
 
