@@ -147,7 +147,7 @@ Vaquero Data Model
 <ol style="list-style-type: decimal">
 <li>Host makes DHCP request.</li>
 <li>DHCP causes host to chainload iPXE (<code>undionly.kpxe</code>) and indicates Vaquero Agent as next-server</li>
-<li>Vaquero Agent provides a default iPXE script to discover basic host information (mac, uuid, domain, hostname)</li>
+<li>Vaquero Agent provides a default iPXE script to discover host interface information (mac)</li>
 <li>Host requests dynamic iPXE script based on basic information</li>
 <li>Vaquero Agent renders iPXE script using os, boot, and host information</li>
 <li>Host executes iPXE script, requesting resources (kernel, intitrd, unattended configs/scripts) as required</li>
@@ -158,29 +158,8 @@ chain ipxe?uuid=${uuid}&amp;mac=${net0/mac:hexhyp}&amp;domain=${domain}&amp;host
 <h2 id="serving-files"><a name="serving-files">Serving Files</a></h2>
 <p>Vaquero Agent will expose an endpoint <code>/files</code> for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to the configuration file.</p>
 <h2 id="identifying-a-host">Identifying a Host</h2>
-<p>A booting machine is identified as a particular host based on the selecting information used. Currently, a host will be identified by <code>mac</code> and <code>uuid</code>, as reported by iPXE.</p>
-<p>Additionally, a specific callback may be made to Vaquero Agent that includes a custom selection parameter</p>
-<pre><code>curl &quot;{{.agent.url}}/ignition?mac={{.host.mac}}&amp;os=installed&quot; -o ignition.json</code></pre>
-<p>When identifying a host, Vaquero Agent will:</p>
-<ol style="list-style-type: decimal">
-<li>Only select a host where all the selectors apply</li>
-<li>Select the host where the most selectors apply</li>
-</ol>
-<p>For example, given these two hosts:</p>
-<pre><code>---
-boot: group_one
-hosts:
-- name: host1
-  selectors:
-    mac: 00:00:00:00:00:01
----
-boot: group_two
-hosts:
-- name: host1_plus_some
-  selectors:
-    mac: 00:00:00:00:00:01
-    os: installed</code></pre>
-<p>For a host requesting <code>/ignition?mac=00:00:00:00:00:01</code>, group_one will be matched (rule #1). For a host requesting <code>/ignition?mac=00:00:00:00:00:01&amp;os=installed</code>, group_two will be matched (rule #2).</p>
+<p>A booting machine is identified as a particular host based on the selecting information used. Currently, a host will be identified by <code>mac</code>, as reported by iPXE. According to validation rules, every host has an exclusive collection of interfaces (all unique by mac address).</p>
+<p>Additionally, the first non-BMC type (excluding SSH) interface listed for the host is the <code>Primary Interface</code> for that host. The Primary Interface is the preferred interface to use when provisioning hosts.</p>
 <h2 id="metadata-and-templating"><a name="metadata-and-templating">Metadata and Templating</a></h2>
 <p>Templates are written using <a href="https://golang.org/pkg/text/template/">Go's standard templates</a>. Templated information occurs in the following areas:</p>
 <ol style="list-style-type: decimal">
@@ -749,7 +728,7 @@ boot</code></pre>
 </tr>
 <tr class="even">
 <td align="left">interfaces</td>
-<td align="left">Network intefaces for this host</td>
+<td align="left">Network interfaces for this host</td>
 <td align="left">no</td>
 <td align="left">interface</td>
 <td align="left"></td>
