@@ -101,7 +101,7 @@ time=&quot;2016-12-15T21:46:28Z&quot; level=debug msg=&quot;Successful Etcd Get 
 time=&quot;2016-12-15T21:46:28Z&quot; level=debug msg=&quot;Successful Etcd Put for key model/current&quot; package=storage</code></pre></li>
 </ol>
 <h2 id="simulating-ipmi-reboots-in-the-virtual-environment">simulating IPMI reboots in the virtual environment</h2>
-<p>In a typical deployment, reprovisioning machines and multistage boots will kick off an IPMI container to force a restart. Since most VMs do not include an IPMI interface, we include the option of rebooting via SSH.</p>
+<p>In a typical deployment, reprovisioning machines and multistage boots will kick off an IPMI container to force a restart. Since most VMs do not include an IPMI interface, we include the option of rebooting via SSH. <em>Note that vaquero injects public ssh keys into all booting hosts in the demos. Vaquero also bakes in the private ssh key into the vaquero agent. Vaquero leaves it to the operator to place ssh private keys onto agents, Vaquero does not provide ssh key management services and recommends to avoid placing ssh private keys in the data model.</em></p>
 <ol style="list-style-type: decimal">
 <li><p>Ensure the provisioned guest VM contains a public key for authorizing SSH login (see our example cloud-config scripts for an example).</p></li>
 <li><p>Place the private key in a location accessible from vaquero agent with proper permissions (700).</p></li>
