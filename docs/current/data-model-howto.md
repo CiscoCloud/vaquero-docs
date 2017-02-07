@@ -542,12 +542,12 @@ An interface of type `physical` can define an `interface.bmc` for ssh power mana
 
 #### interface.bmc
 
-| name     | description                        | required  | schema | default |
-|:---------|:-----------------------------------|:----------|:-------|:--------|
-| type     | Specifies protocol type. IPMI/SSH  | yes       | string |         |
-| username | User for managing BMC              | yes       | string |         |
-| password | Password for specified user        | no*       | string |         |
-| keypath  | File path to ssh private key       | no**      | string |         |
+| name     | description                       | required | schema | default |
+|:---------|:----------------------------------|:---------|:-------|:--------|
+| type     | Specifies protocol type. IPMI/SSH | yes      | string |         |
+| username | User for managing BMC             | yes      | string |         |
+| password | Password for specified user       | ipmi*    | string |         |
+| keypath  | File path to ssh private key      | ssh**    | string |         |
 
 \* `interface.bmc.password` is required when `type = ipmi`.
 

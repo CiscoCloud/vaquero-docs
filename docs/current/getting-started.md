@@ -157,7 +157,7 @@ The vaquero vagrant VM (described above) has a running etcd cluster baked in. Yo
 
 ## simulating IPMI reboots in the virtual environment
 In a typical deployment, reprovisioning machines and multistage boots will kick off an IPMI container to force a restart.
-Since most VMs do not include an IPMI interface, we include the option of rebooting via SSH.
+Since most VMs do not include an IPMI interface, we include the option of rebooting via SSH. *Note that vaquero injects public ssh keys into all booting hosts in the demos. Vaquero also bakes in the private ssh key into the vaquero agent. Vaquero leaves it to the operator to place ssh private keys onto agents, Vaquero does not provide ssh key management services and recommends to avoid placing ssh private keys in the data model.*
 
 1. Ensure the provisioned guest VM contains a public key for authorizing SSH login (see our example cloud-config scripts for an example).
 
