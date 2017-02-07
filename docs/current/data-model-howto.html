@@ -805,7 +805,7 @@ boot</code></pre>
 </tr>
 <tr class="even">
 <td align="left">bmc</td>
-<td align="left">Details for BMC interface</td>
+<td align="left">Details for BMC interface*</td>
 <td align="left">no</td>
 <td align="left">interface.bmc</td>
 <td align="left"></td>
@@ -847,6 +847,8 @@ boot</code></pre>
 </tr>
 </tbody>
 </table>
+<p>* An interface of type <code>bmc</code> is a dedicated <code>ipmi</code> interface. <code>interface.bmc.type</code> must equal <code>ipmi</code>. This interface will not be used for PXE booting the machine (but it may acquire an IP from vaquero's DHCP Server).</p>
+<p>An interface of type <code>physical</code> can define an <code>interface.bmc</code> for ssh power management <em>only</em> -- i.e. a physical interface may not include an <code>interface.bmc.type</code> set to <code>ipmi</code>.</p>
 <h4 id="interface.bmc">interface.bmc</h4>
 <table>
 <thead>
@@ -861,7 +863,7 @@ boot</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">type</td>
-<td align="left">Specifies protocol type. IPMI/CIMC</td>
+<td align="left">Specifies protocol type. IPMI/SSH</td>
 <td align="left">yes</td>
 <td align="left">string</td>
 <td align="left"></td>
@@ -876,12 +878,22 @@ boot</code></pre>
 <tr class="odd">
 <td align="left">password</td>
 <td align="left">Password for specified user</td>
-<td align="left">yes</td>
+<td align="left">ipmi*</td>
+<td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">keypath</td>
+<td align="left">File path to ssh private key</td>
+<td align="left">ssh**</td>
 <td align="left">string</td>
 <td align="left"></td>
 </tr>
 </tbody>
 </table>
+<p>* <code>interface.bmc.password</code> is required when <code>type = ipmi</code>.</p>
+<p>** <code>interface.bmc.keypath</code> is required when <code>type = ssh</code>.</p>
+<p>Please ensure the file referred to in <code>keypath</code> has file permissions set to 700 (owner access only).</p>
 <h3 id="os">os</h3>
 <p>Represents a single operating system with boot/installation parameters.</p>
 <table>
