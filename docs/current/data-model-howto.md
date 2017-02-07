@@ -481,12 +481,12 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 
 #### host
 
-| name       | description                                         | required | schema    | default |
-|:-----------|:----------------------------------------------------|:---------|:----------|:--------|
-| name       | Name for the host machine.                          | yes      | string    |         |
-| interfaces | Network intesfaces for this host                    | no       | interface |         |
-| metadata   | unstructured, host-specific information             | no       | object    |         |
-| workflow   | The ID of the workflow used to provision this host  | yes      | string    |         |
+| name       | description                                        | required | schema    | default |
+|:-----------|:---------------------------------------------------|:---------|:----------|:--------|
+| name       | Name for the host machine.                         | yes      | string    |         |
+| interfaces | Network interfaces for this host                   | no       | interface |         |
+| metadata   | unstructured, host-specific information            | no       | object    |         |
+| workflow   | The ID of the workflow used to provision this host | yes      | string    |         |
 
 
 #### interface
