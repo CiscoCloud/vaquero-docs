@@ -588,7 +588,7 @@ A workflow chains multiple boots together to provision a host. The workflow is a
 | validate_on    | IDs of workflows that cause this workflow to revalidate        | no       | string array         |         |
 | max_fail       | How many hosts can fail before halted                          | no       | int                  | 0       |
 
-*Be aware that min_standing could become a blocking condition, if min_standing is set to 3 and there are only 3 hosts in that workflow, this would block*
+*Be aware that `min_standing` could become a blocking condition, if `min_standing` is set to 3 and there are only 3 hosts in that workflow.*
 
 ## <a name="staging">Staging Updates</a>
 
