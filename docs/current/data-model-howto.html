@@ -1026,11 +1026,11 @@ cmdline:
 <td align="left">0</td>
 </tr>
 <tr class="even">
-<td align="left">safe_deps</td>
-<td align="left">IDs of safe dependency workflows</td>
+<td align="left">min_standing</td>
+<td align="left">Minimum number of hosts that must be active during a provision</td>
 <td align="left">no</td>
-<td align="left">string array</td>
-<td align="left"></td>
+<td align="left">int</td>
+<td align="left">0</td>
 </tr>
 <tr class="odd">
 <td align="left">block_deps</td>
@@ -1055,5 +1055,6 @@ cmdline:
 </tr>
 </tbody>
 </table>
+<p><em>Be aware that <code>min_standing</code> could become a blocking condition, if <code>min_standing</code> is set to 3 and there are only 3 hosts in that workflow.</em></p>
 <h2 id="staging-updates"><a name="staging">Staging Updates</a></h2>
 <p>Github will be used to stage models for updating, vaquero will receive webhooks from specified branches. Submitting PR's and merging other branches into the vaquero branch would be how teams manage updating their source of truth. Once a model lands in the branch vaquero is watching, it will push it out and begin provisioning against that source of truth.</p>
