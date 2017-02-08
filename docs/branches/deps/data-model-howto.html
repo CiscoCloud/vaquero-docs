@@ -1055,6 +1055,6 @@ cmdline:
 </tr>
 </tbody>
 </table>
-<p><em>Be aware that min_standing could become a blocking condition, if min_standing is set to 3 and there are only 3 hosts in that workflow, this would block</em></p>
+<p><em>Be aware that <code>min_standing</code> could become a blocking condition, if <code>min_standing</code> is set to 3 and there are only 3 hosts in that workflow.</em></p>
 <h2 id="staging-updates"><a name="staging">Staging Updates</a></h2>
 <p>Github will be used to stage models for updating, vaquero will receive webhooks from specified branches. Submitting PR's and merging other branches into the vaquero branch would be how teams manage updating their source of truth. Once a model lands in the branch vaquero is watching, it will push it out and begin provisioning against that source of truth.</p>
