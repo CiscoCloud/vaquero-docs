@@ -381,12 +381,12 @@ Allow a network boot or installation to proceed automatically by providing canne
 | env           | Map of environment variables.            | no       | map           |
 | registry_auth | Registry Credentials                     | no       | registry_auth |
 
-##### container.registry_auth
+#### container.registry_auth
 | name       | description                | required | schema  |
 |:-----------|:---------------------------|:---------|:--------|
 | url        | api versioned registry url | yes      | string  |         
 | username   | registry username          | yes      | string  |
-| password   | registry password          | yes       | string  | 
+| password   | registry password          | yes       | string  |
 
 ### env
 
@@ -518,7 +518,7 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 
 An interface of type `physical` can define an `interface.bmc` for ssh power management _only_ -- i.e. a physical interface may *not* include an `interface.bmc.type` set to `ipmi`.
 
-#### interface.bmc
+##### interface.bmc
 
 | name      | description                       | required | schema    | default |
 |:----------|:----------------------------------|:---------|:-------   |:--------|
@@ -530,21 +530,21 @@ An interface of type `physical` can define an `interface.bmc` for ssh power mana
 
 This bmc struct defines the method used to reboot the host. There are three possible configurations:
 
-1. Use IPMI with the provided credentials to reboot the machine:
+-  Use IPMI with the provided credentials to reboot the machine:
 ```
 type: ipmi
 username: ipmiusername
 password: ipmipassword
 ```
 
-2. SSH into the machine and do a sudo reboot. This requires key management, which is left as an exercise to the reader.
+-  SSH into the machine and do a sudo reboot. This requires key management, which is left as an exercise to the reader.
 ```
 type: ssh
 username: core
 keypath: /home/core/.ssh/id_rsa
 ```
 
-3. Use a custom container to reboot the machine.
+-  Use a custom container to reboot the machine.
 ```
 type: custom
 container:
