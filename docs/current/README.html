@@ -29,9 +29,7 @@ vaquero
 <p>A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped unattend boot scripts.</p>
 <p>The only thing you need pre-installed to run Vaquero is <a href="https://www.docker.com/">Docker</a>.</p>
 <p>See the <a href="getting-started.html">Getting Started</a> page for details on deploying Vaquero in virtualbox.</p>
-<h2 id="features">Features</h2>
-<p>(last update: November 2016)</p>
-<h3 id="complete">Complete:</h3>
+<h2 id="features-updated-feb.-2017">Features (updated Feb. 2017)</h2>
 <p><strong>Operations / Deployment</strong>:</p>
 <ul>
 <li>Operational simplicity: Vaquero is deployed from a single container that can run in server, agent, and standalone modes.</li>
@@ -41,6 +39,10 @@ vaquero
 <li>Vaquero agent implements a DHCP server that can run in proxy mode or full DHCP mode, with support for DHCP relay.</li>
 <li>Support for Vaquero agent multihoming.</li>
 <li>Built-in authoritative detector notifies operator if an &quot;authoritative&quot; DHCP server is in the same broadcast domain.</li>
+<li>Vaquero servers act as state machines, and are able to migrate the desired host state within the data model over to the physical host</li>
+<li>Vaquero servers able to handle failure states in boot process, will retry, halt, or revert based on user policy.</li>
+<li>High availability for Vaquero servers - seamless leader election via CoreOS Etcd</li>
+<li>Kubernetes integration for HA via readiness probe</li>
 </ul>
 <p><strong>Booting</strong></p>
 <ul>
@@ -51,19 +53,9 @@ vaquero
 </ul>
 <p><strong>Tooling</strong></p>
 <ul>
-<li>CLI tooling to validate data model, and preview iPXE/unattended boot scripts before sending to hosts</li>
+<li>Command-line <a href="validator.html">validator</a> for checking your data model before you push it through Vaquero</li>
+<li>Command-line preview tool for iPXE/unattended boot scripts, before sending to hosts</li>
 <li>Robust Vagrant environment to test single-node deployments, or Vaquero server cluster and multiple agent deployments.</li>
-</ul>
-<h3 id="in-progress">In Progress:</h3>
-<p><strong>Operations / Deployment</strong>:</p>
-<ul>
-<li>A pluggable framework to enable pre-shutdown actions to be taken on a single host to flush its workload before cutting the power</li>
-<li>A pluggable framework to enable post-boot actions to validate a successful deployment of a single host. Vaquero servers act as a state machine that understands the current state physical hosts and desired state in the data model and able to migrate that site to the desired state.</li>
-<li>A policy engine that will ensure operational safety when updating a site, such as valid reboot times, minimum machines to be operational, dependency tracking and validation. Vaquero servers able to handle failure states in boot process, will retry, halt, or revert based on user policy.</li>
-</ul>
-<p><strong>Tooling:</strong></p>
-<ul>
-<li>User API that will grant operators insights into the state of their infrastructure</li>
 </ul>
 <h1 id="architecture"><a href="architecture.html">Architecture</a></h1>
 <div class="figure">
@@ -81,7 +73,10 @@ vaquero
 <p>See the <a href="architecture.html">architecture page</a> for more details about server and agent.</p>
 <hr />
 <p><strong>sample-standalone-config.yaml:</strong></p>
-<pre><code>ServerClient:
+<pre><code>UserApi:
+  Addr: &quot;127.0.0.1&quot;
+  Port: 24604
+ServerClient:
   Addr: &quot;127.0.0.1&quot;
   Port: 24601
   InsecureSkipVerify: true
@@ -91,11 +86,6 @@ ServerAPI:
   PrivateKey: &quot;functional/test/server.key&quot;
   PublicKey: &quot;functional/test/server.pem&quot;
 SavePath: &quot;/var/vaquero&quot;
-Etcd:
-  Endpoints:
-  - &quot;http://127.0.0.1:2379&quot;
-  Timeout: 5
-  Retry: 3
 Gitter:
   Endpoint: &quot;/postreceive&quot;
   Timeout: 2
@@ -103,11 +93,11 @@ Gitter:
   Port: 24603
 GitHook:
   - ID: &quot;vaquero-git&quot;
-    Token: &lt;GIT_TOKEN&gt;
+    Token: &lt;token&gt;
     URL: &quot;https://github.com/CiscoCloud/vaquero-examples&quot;
     Secret: supersecretcode
 LocalDir:
-  PollInterval: 10
+  PollInterval: 2
 SoT:
 - Local:
     ID: &quot;vaquero-local&quot;
@@ -119,7 +109,14 @@ SoT:
 Log:
   Level: info
   Location: stdout
-  LogType: text</code></pre>
+  LogType: text
+Etcd:
+  Root: &quot;vaquero1&quot;
+  Endpoints:
+  - &quot;http://127.0.0.1:2379&quot;
+  Timeout: 5
+  Retry: 3
+  HA: true</code></pre>
 <hr />
 <h3 id="configuration-fields-overview">Configuration Fields Overview</h3>
 <ul>
@@ -243,6 +240,20 @@ Log:
 <td align="left">no</td>
 <td align="left">etcd dial and request timeout, in seconds</td>
 <td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Server</td>
+<td align="left">Etcd/Root</td>
+<td align="left">no</td>
+<td align="left">unique etcd root prefix for this VS runtime</td>
+<td align="left">vaqueroServer</td>
+</tr>
+<tr class="even">
+<td align="left">Server</td>
+<td align="left">Etcd/HA</td>
+<td align="left">no</td>
+<td align="left">high availability - whether to engage vaquero server in etcd leader election</td>
+<td align="left">false</td>
 </tr>
 <tr class="odd">
 <td align="left">Server</td>
@@ -429,8 +440,6 @@ WantedBy=default.target</code></pre>
 <li>Restart both the <code>docker</code> and the <code>vaquero</code> services <code>sudo systemctl restart docker</code></li>
 <li>Make sure that pathing is correct for config and files required</li>
 </ol>
-<h2 id="vaquero-validate"><a href="validator.html">Vaquero Validate</a></h2>
-<p>A CLI tool for validating your data model before you push it through Vaquero</p>
 <h2 id="sending-webhooks-to-vaquero-master">Sending Webhooks to Vaquero Master</h2>
 <ol style="list-style-type: decimal">
 <li>Install <a href="https://ngrok.com/">ngrok</a> to your local machine, unzip the package, and move the executable to <code>/usr/local/bin</code>.</li>
@@ -452,9 +461,9 @@ WantedBy=default.target</code></pre>
 <li>Pushing to the repo, or <code>Redeliver Payload</code> on GitHub will launch a webhook.</li>
 </ol></li>
 </ol>
-<h2 id="docs">Docs</h2>
-<p>Build the documentation by running <code>godoc -http &lt;port&gt;</code> and open <code>localhost:&lt;port&gt;</code> on your web browser</p>
-<h2 id="swagger-docs">Swagger Docs</h2>
+<h2 id="build-the-docs">Build the Docs</h2>
+<p>By running <code>godoc -http &lt;port&gt;</code> and open <code>localhost:&lt;port&gt;</code> on your web browser</p>
+<h2 id="swagger">Swagger</h2>
 <p>The User API has a <a href="http://swagger.io/tools/">Swagger</a> document for ease of use. It can be used to generate code, or explore the exposed endpoints.</p>
 <p>The interface can either be setup by following the instructions for the <a href="http://swagger.io/swagger-ui/">Swagger UI</a> and serving the <code>swagUserAPI.yaml</code> file locally, or by going to the <a href="http://petstore.swagger.io/">Swagger UI demo</a> and inputting the <a href="http://rawgit.com">RawGit</a> hosted CORS-supported <code>https://cdn.rawgit.com/CiscoCloud/vaquero-docs/master/swagUserAPI.yaml</code>.</p>
 <p>Additionally, the <a href="http://swagger.io/swagger-codegen/">Swagger Codegen</a> can generate client side code for interacting with the provided endpoints.</p>

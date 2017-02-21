@@ -19,8 +19,8 @@ Vaquero Architecture
 
 <h1 id="vaquero-architecture">Vaquero: Architecture</h1>
 <p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> | <a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
-<p><strong>Last Updated</strong>: November 2016</p>
-<p>The Vaquero project is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure. A running Vaquero system will be composed of a centralized control plane that automates provisioning of software in one or more data centers, and remote agents that take actions on boot hosts.</p>
+<p><strong>Last Updated</strong>: February 2017</p>
+<p>Vaquero is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure. A running Vaquero system is composed of a centralized control plane that automates provisioning of software in one or more data centers, and remote agents that take actions on boot hosts.</p>
 <p>The goal is to provide the ability for teams to manage their infrastructure using the same tools they use for their applications (revision control, CI/CD pipeline, etc.), to and enable similar workflows including automated updates, gating, immutability, and A/B deployments. The final outcome will be a fully operational data center running heterogeneous deployments of clustered software on bare metal, with fully automated deployment and upgrades driven by a CI pipeline.</p>
 <h2 id="architecture">Architecture</h2>
 <p>Vaquero is delivered in one container for operational simplicity. Vaquero can run in multiple modes, including server, agent, and standalone (the combination of server and agent).</p>
@@ -35,8 +35,8 @@ Vaquero Architecture
 <li><strong>model API</strong> - REST API that responds to agents looking to update their model cache, it will also provide a state manifest that enables an agent to know what state its booting hosts are in.</li>
 <li><strong>event API</strong> - REST API that receives events from long running services on agents.</li>
 <li><strong>server controller</strong> - The process that manages the numerous go routines on vaquero servers and acts as an intermediary between all server services.</li>
-<li><strong>state engine (in progress)</strong> - The brains behind vaquero, that will understand a data model, look at the events history and task history to understand what actions need to be taken to move booting hosts from one state to the next.</li>
-<li><strong>task manager (in progress)</strong> - A generic container task manager that knows how to run jobs on distributed task executors. A use case will be to run LOM containers that will execute on an agent to reboot a host, kicking off the re-provision process.</li>
+<li><strong>state engine</strong> - The brains behind vaquero; will understand a data model, look at the events history and task history to understand what actions need to be taken to move booting hosts from one state to the next.</li>
+<li><strong>task manager</strong> - A generic container task manager that knows how to run jobs on distributed task executors. A use case will be to run LOM containers that will execute on an agent to reboot a host, kicking off the re-provision process.</li>
 </ol>
 <h4 id="vaquero-agent"><code>vaquero agent</code></h4>
 <p>The <code>vaquero</code> container running in <code>agent</code> mode registers itself with an upstream vaquero server and drives provisioning in a local datacenter. The agent is designed in such a way that it is stateless, agents can be created and destroyed at will. They will obtain state, configuration, actions from the vaquero server cluster.</p>
@@ -47,9 +47,9 @@ Vaquero Architecture
 <li><strong>TFTP</strong> - a TFTP server that only serves the <a href="http://ipxe.org/howto/chainloading"><code>undionly.kpxe</code> file</a>.</li>
 <li><strong>asset HTTP server</strong> - implements a file server or reverse proxy to forward requests to a CDN. This delivers unattend boot scripts, kernels, and initrds.</li>
 <li><strong>event client</strong> - an HTTP client that reports long running service events back (DHCP, TFTP, HTTP) to the vaquero server cluster. (the servers leverage this information to understand what state booting hosts are in)</li>
-<li><strong>task executor (in progress)</strong> - a generic container execution runtime. It will receive &quot;tasks&quot; or containers to run from a centralized task manager, run it and return the exit code and logs. Vaquero will leverage this for LOM management and running pre-reboot and post-reboot containers to flush and validate state on a host.</li>
+<li><strong>task executor</strong> - a generic container execution runtime. It will receive &quot;tasks&quot; or containers to run from a centralized task manager, run it and return the exit code and logs. Vaquero will leverage this for LOM management and running pre-reboot and post-reboot containers to flush and validate state on a host.</li>
 </ol>
-<h4 id="walking-through-an-update">Walking through an update</h4>
+<h4 id="walking-through-a-data-model-update">Walking through a data model update</h4>
 <ol style="list-style-type: decimal">
 <li>SoT updated</li>
 <li>updater fetches update</li>
@@ -63,9 +63,14 @@ Vaquero Architecture
 <li>state engine observes events status and tasks status and will act until desired state is reached</li>
 </ol>
 <h2 id="ha-vaquero">HA Vaquero</h2>
-<p>The diagram below depicts a production deployment of Vaquero. Vaquero does not implement its own leader election and will be dependent on an outside service to manage an active-passive HA. Today we are looking for kubernetes deployments to manage the vaquero server cluster and have one running at a time. The vaquero server is backed by an etcd cluster for persistent storage of models and state. Vaquero server is essentially a message queue for its agents, the vaquero server wll never instantiate outbound calls. Vaquero agents would be deployed to service one data model &quot;site&quot;, technically two agents could run in the same broadcast domain. We would recommend deploying two Vaquero agents per broadcast domain just for operational safety. Requirements for a production deployment would include <a href="https://www.docker.com/">Docker</a>, <a href="https://github.com/coreos/etcd">etcd</a>, and a kubernetes service to load balance between containers. See the <a href="outage.html">outage document</a> to see how Vaquero handles failures.</p>
 <div class="figure">
 <img src="jan17HA.png" />
 </div>
-<h2 id="deployment-and-availability-considerations">Deployment and Availability Considerations</h2>
-<p>Please see the <a href="README.html">README</a> for details on production deployments, considerations, and requirements. See the <a href="outage.html">outage doc</a> to see how vaquero handles certain failure scenarios.</p>
+<p>The diagram above depicts a production deployment of Vaquero. Vaquero implements its own leader election, and also contains a readiness probe to integrate with kubernetes deployments.</p>
+<h4 id="running-vaquero-with-internal-ha">Running vaquero with internal HA</h4>
+<p>Vaquero implements leader election using Etcd's <a href="https://godoc.org/github.com/coreos/etcd/clientv3/concurrency">built in leader election</a>. Our procedure works by giving every vaquero server a unique ID. All running servers campaign on the same Etcd &quot;leader&quot; key, and attempt to put their own unique IDs as the &quot;leader&quot; value. One server will successfully become leader and serve as a fully-functional vaquero server, and the rest will continue to passively campaign. Should one of the vaquero servers exit, error out, or power off, another campaigning server will take on the role of leader within the etcd TTL of 1 second.</p>
+<p><em>Note</em>: Once a vaquero server errors out or temporarily loses contact with etcd, it is no longer permitted to continue campaigning. We expect a vaquero server to be deployed by a container orchestration system (eg. Kubernetes, Docker Swarm, Systemd) that would restart a server if it shut down. See the <a href="outage.html">outage document</a> to see how Vaquero handles failures.</p>
+<p>Ensure you have toggled the <code>HA</code> configuration flag to <code>true</code> and that your etcd cluster is properly configured and healthy before deploying HA vaquero servers.</p>
+<h4 id="ha-and-kubernetes">HA and Kubernetes</h4>
+<p>Vaquero's readiness probe is baked into its leader election procedure. We expose a <code>/ready</code> endpoint via the vaquero UserAPI (default= <code>500</code>, not ready), and when a server becomes the elected leader, we write a <code>200</code> (ready) to the UserAPI server. This tells kubernetes that this server is the leader, and to direct traffic towards that server only. <em>Note</em>: Currently our <code>/live</code> (liveliness probe) endpoint is hardcoded to <code>200</code> as long as the vaquero server is up-- whether it is the active leader or passively campaigning. This may change in the future when the liveliness probe is developed further.</p>
+<p>Further, with Kubernetes we recommend deploying two vaquero agents per broadcast domain, for operational safety. See the <a href="README.html">README</a> for details on production deployments, considerations, and requirements.</p>

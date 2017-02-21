@@ -26,7 +26,7 @@ Vaquero Requirements
 <li>As a DevOps Engineer, I want to be able to manage my bare metal compute (hardware) as code.</li>
 </ol>
 <h2 id="requirements">Requirements:</h2>
-<h3 id="completed-112016">Completed : 11/2016</h3>
+<h3 id="completed-as-of-feb.-2017">Completed (as of Feb. 2017)</h3>
 <ol style="list-style-type: decimal">
 <li>A textual and structured representation of the cluster in a VCS -- the source of truth (SoT).</li>
 <li>Validation of data within SoT -- proper structure, dump work to be performed in human-readable format. (some minimum validation of &quot;known&quot; asset formats?)</li>
@@ -54,14 +54,18 @@ Vaquero Requirements
 <li>Support incremental (multistep) cluster provisioning.</li>
 <li>Deploy a first build of all software clusters in lab.</li>
 <li>Separated Vaquero Server and Vaquero Agent to manage internal labs.</li>
-</ol>
-<h3 id="in-progress">In Progress</h3>
-<ol style="list-style-type: decimal">
-<li>Manage power state of the hardware.</li>
-<li>Validate Vaquero with dual homed CleverSafe machines.</li>
 <li>Successfully guide multi-stage deployments managed by state machine on vaquero server(s).</li>
-<li>Provide state transition details and host status to provide operational insights.</li>
+<li>High availability Vaquero servers via Etcd</li>
+<li>Readiness probe for Kubernetes deployments and high availability</li>
+<li>Manage power state of the hardware</li>
 <li>Upgrade workflow definitions to run pluggable pre-reboot and post-reboot jobs.</li>
+<li>A policy engine that will ensure operational safety when updating a site, such as valid reboot times, minimum machines to be operational, dependency tracking and validation.</li>
+<li>A pluggable framework to enable pre-shutdown actions to be taken on a single host to flush its workload before cutting the power</li>
+<li>A pluggable framework to enable post-boot actions to validate a successful deployment of a single host.</li>
+</ol>
+<h3 id="on-the-roadmap">On the Roadmap</h3>
+<ol style="list-style-type: decimal">
+<li>Provide state transition details and host status to provide operational insights (via userAPI)</li>
 </ol>
 <h2 id="non-requirements">Non-requirements:</h2>
 <ul>

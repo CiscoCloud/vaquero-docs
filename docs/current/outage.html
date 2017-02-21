@@ -42,13 +42,23 @@ Vaquero Getting Started
 </tr>
 <tr class="even">
 <td align="left">VS -&gt; VA</td>
-<td align="left">The Vaqeuro Agents will not be able to update state or fetch new data models. Agents will continue to act as if they have the most recent model.</td>
+<td align="left">Vaquero Agents will take no new actions, but can restore booting hosts to their last known state. Will not run validation or shutdown any new hosts</td>
 <td align="left">Y (potential for stale DM)</td>
 </tr>
 <tr class="odd">
-<td align="left">VS Outage</td>
-<td align="left">If the entire cluster of VS machines are down this is catastrophic, but given at least one VS is running it is acceptable.</td>
-<td align="left">Y if entire VS cluster out</td>
+<td align="left">Active VS leader down</td>
+<td align="left">If the active VS goes down, a passively campaigning VS will take on the role of active</td>
+<td align="left">Y</td>
+</tr>
+<tr class="even">
+<td align="left">Passive VS down</td>
+<td align="left">If a campaigning VS goes down, the cluster will be unaffected</td>
+<td align="left">Y (but fewer HA servers is not HA)</td>
+</tr>
+<tr class="odd">
+<td align="left">All VS down</td>
+<td align="left">If the entire cluster of VS machines goes down (including the leader VS), this is catastrophic because nothing is serving to the VAs</td>
+<td align="left">N</td>
 </tr>
 <tr class="even">
 <td align="left">VA Outage</td>
@@ -67,7 +77,7 @@ Vaquero Getting Started
 </tr>
 <tr class="odd">
 <td align="left">VS -&gt; KV</td>
-<td align="left">VS is dead since the servers lost the ability to obtain models, status and stay synchronized</td>
+<td align="left">VS must shut down, because servers have lost the ability to participate in leader election, obtain models/status, and stay synchronized</td>
 <td align="left">N</td>
 </tr>
 </tbody>
