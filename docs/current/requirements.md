@@ -58,17 +58,16 @@ The Vaquero project is designed to simplify the provisioning and ongoing operati
 23. Successfully guide multi-stage deployments managed by state machine on vaquero server(s).
 24. High availability Vaquero servers via Etcd
 25. Readiness probe for Kubernetes deployments and high availability
-
+26. Manage power state of the hardware
+27. Upgrade workflow definitions to run pluggable pre-reboot and post-reboot jobs.
+28. A policy engine that will ensure operational safety when updating a site, such as valid reboot times, minimum machines to be operational, dependency tracking and validation.
+29. A pluggable framework to enable pre-shutdown actions to be taken on a single host to flush its workload before cutting the power
+30. A pluggable framework to enable post-boot actions to validate a successful deployment of a single host.
 
 ### On the Roadmap
-1. Validate Vaquero with dual homed CleverSafe machines.
-2. Manage power state of the hardware
-3. Provide state transition details and host status to provide operational insights (via userAPI)
-4. Upgrade workflow definitions to run pluggable pre-reboot and post-reboot jobs.
-5. Liveness probe for Kubernetes
-6. A policy engine that will ensure operational safety when updating a site, such as valid reboot times, minimum machines to be operational, dependency tracking and validation.
-7. A pluggable framework to enable pre-shutdown actions to be taken on a single host to flush its workload before cutting the power
-8. A pluggable framework to enable post-boot actions to validate a successful deployment of a single host.
+
+1. Provide state transition details and host status to provide operational insights (via userAPI)
+2. Liveness probe for Kubernetes
 
 ## Non-requirements:
 

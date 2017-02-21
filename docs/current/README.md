@@ -82,6 +82,9 @@ See the [architecture page](architecture.html) for more details about server and
 ************************************************************
 **sample-standalone-config.yaml:**
 ```
+UserApi:
+  Addr: "127.0.0.1"
+  Port: 24604
 ServerClient:
   Addr: "127.0.0.1"
   Port: 24601
@@ -92,11 +95,6 @@ ServerAPI:
   PrivateKey: "functional/test/server.key"
   PublicKey: "functional/test/server.pem"
 SavePath: "/var/vaquero"
-Etcd:
-  Endpoints:
-  - "http://127.0.0.1:2379"
-  Timeout: 5
-  Retry: 3
 Gitter:
   Endpoint: "/postreceive"
   Timeout: 2
@@ -104,11 +102,11 @@ Gitter:
   Port: 24603
 GitHook:
   - ID: "vaquero-git"
-    Token: <GIT_TOKEN>
+    Token: <token>
     URL: "https://github.com/CiscoCloud/vaquero-examples"
     Secret: supersecretcode
 LocalDir:
-  PollInterval: 10
+  PollInterval: 2
 SoT:
 - Local:
     ID: "vaquero-local"
@@ -121,6 +119,13 @@ Log:
   Level: info
   Location: stdout
   LogType: text
+Etcd:
+  Root: "vaquero1"
+  Endpoints:
+  - "http://10.10.10.7:2379"
+  Timeout: 5
+  Retry: 3
+  HA: true
 ```
 ************************************************************
 ### Configuration Fields Overview
@@ -155,7 +160,7 @@ Log:
 | Server | Etcd/Endpoints                      | no                | etcd initial cluster endpoints: format- e1,e2,e3                  | none         |
 | Server | Etcd/Retry                          | no                | number of retries for etcd operations                             | 3            |
 | Server | Etcd/Timeout                        | no                | etcd dial and request timeout, in seconds                         | 2            |
-| Server | Etcd/Namespace                        | no                | unique etcd key prefix for this VS runtime                        | none            |
+| Server | Etcd/Root                        | no                | unique etcd root prefix for this VS runtime                        | none            |
 | Server | Etcd/HA                       | no                | high availability - whether to engage vaquero server in etcd leader election                         | false            |
 | Server | Gitter/Endpoint                     | no                | githook endpoint to receive webhooks                              | /postreceive |
 | Server | Gitter/Address                      | no                | githook listening address                                         | 127.0.0.1    |
