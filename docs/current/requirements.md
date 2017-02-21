@@ -30,7 +30,7 @@ The Vaquero project is designed to simplify the provisioning and ongoing operati
 
 ## Requirements:
 
-### Completed : 11/2016
+### Completed (as of Feb. 2017)
 1. A textual and structured representation of the cluster in a VCS -- the source of truth (SoT).
 2. Validation of data within SoT -- proper structure, dump work to be performed in human-readable format. (some minimum validation of "known" asset formats?)
 3. Support for netboot (iPXE, TFTP, etc.) of cluster instances.
@@ -55,15 +55,17 @@ The Vaquero project is designed to simplify the provisioning and ongoing operati
 20. Support incremental (multistep) cluster provisioning.
 21. Deploy a first build of all software clusters in lab.
 22. Separated Vaquero Server and Vaquero Agent to manage internal labs.
+23. Successfully guide multi-stage deployments managed by state machine on vaquero server(s).
+24. High availability Vaquero servers via Etcd
+25. Readiness probe for Kubernetes deployments and high availability
+26. Manage power state of the hardware
+27. Upgrade workflow definitions to run pluggable pre-reboot and post-reboot jobs.
+28. A policy engine that will ensure operational safety when updating a site, such as valid reboot times, minimum machines to be operational, dependency tracking and validation.
+29. A pluggable framework to enable pre-shutdown actions to be taken on a single host to flush its workload before cutting the power
+30. A pluggable framework to enable post-boot actions to validate a successful deployment of a single host.
 
-
-### In Progress
-1. Manage power state of the hardware.
-2. Validate Vaquero with dual homed CleverSafe machines.
-3. Successfully guide multi-stage deployments managed by state machine on vaquero server(s).
-4. Provide state transition details and host status to provide operational insights.
-5. Upgrade workflow definitions to run pluggable pre-reboot and post-reboot jobs.
-
+### On the Roadmap
+1. Provide state transition details and host status to provide operational insights (via userAPI)
 
 ## Non-requirements:
 

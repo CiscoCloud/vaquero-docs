@@ -31,10 +31,7 @@ The only thing you need pre-installed to run Vaquero is [Docker](https://www.doc
 
 See the [Getting Started](getting-started.html) page for details on deploying Vaquero in virtualbox.
 
-## Features
-(last update: November 2016)
-
-### Complete:
+## Features (updated Feb. 2017)
 
 **Operations / Deployment**:
 
@@ -45,6 +42,10 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 - Vaquero agent implements a DHCP server that can run in proxy mode or full DHCP mode, with support for DHCP relay.
 - Support for Vaquero agent multihoming.
 - Built-in authoritative detector notifies operator if an "authoritative" DHCP server is in the same broadcast domain.
+- Vaquero servers act as state machines, and are able to migrate the desired host state within the data model over to the physical host
+- Vaquero servers able to handle failure states in boot process, will retry, halt, or revert based on user policy.
+- High availability for Vaquero servers - seamless leader election via CoreOS Etcd
+- Kubernetes integration for HA via readiness probe
 
 **Booting**
 
@@ -55,23 +56,9 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 
 **Tooling**
 
-- CLI tooling to validate data model, and preview iPXE/unattended boot scripts before sending to hosts
+- Command-line [validator](validator.html) for checking your data model before you push it through Vaquero
+- Command-line preview tool for iPXE/unattended boot scripts, before sending to hosts
 - Robust Vagrant environment to test single-node deployments, or Vaquero server cluster and multiple agent deployments.
-
-
-### In Progress:
-
-**Operations / Deployment**:
-
-- A pluggable framework to enable pre-shutdown actions to be taken on a single host to flush its workload before cutting the power
-- A pluggable framework to enable post-boot actions to validate a successful deployment of a single host.
-Vaquero servers act as a state machine that understands the current state physical hosts and desired state in the data model and able to migrate that site to the desired state.
-- A policy engine that will ensure operational safety when updating a site, such as valid reboot times, minimum machines to be operational, dependency tracking and validation.
-Vaquero servers able to handle failure states in boot process, will retry, halt, or revert based on user policy.
-
-**Tooling:**
-
-- User API that will grant operators insights into the state of their infrastructure
 
 
 # [Architecture](architecture.html)
@@ -95,6 +82,9 @@ See the [architecture page](architecture.html) for more details about server and
 ************************************************************
 **sample-standalone-config.yaml:**
 ```
+UserApi:
+  Addr: "127.0.0.1"
+  Port: 24604
 ServerClient:
   Addr: "127.0.0.1"
   Port: 24601
@@ -105,11 +95,6 @@ ServerAPI:
   PrivateKey: "functional/test/server.key"
   PublicKey: "functional/test/server.pem"
 SavePath: "/var/vaquero"
-Etcd:
-  Endpoints:
-  - "http://127.0.0.1:2379"
-  Timeout: 5
-  Retry: 3
 Gitter:
   Endpoint: "/postreceive"
   Timeout: 2
@@ -117,11 +102,11 @@ Gitter:
   Port: 24603
 GitHook:
   - ID: "vaquero-git"
-    Token: <GIT_TOKEN>
+    Token: <token>
     URL: "https://github.com/CiscoCloud/vaquero-examples"
     Secret: supersecretcode
 LocalDir:
-  PollInterval: 10
+  PollInterval: 2
 SoT:
 - Local:
     ID: "vaquero-local"
@@ -134,6 +119,13 @@ Log:
   Level: info
   Location: stdout
   LogType: text
+Etcd:
+  Root: "vaquero1"
+  Endpoints:
+  - "http://127.0.0.1:2379"
+  Timeout: 5
+  Retry: 3
+  HA: true
 ```
 ************************************************************
 ### Configuration Fields Overview
@@ -168,6 +160,8 @@ Log:
 | Server | Etcd/Endpoints                      | no                | etcd initial cluster endpoints: format- e1,e2,e3                  | none         |
 | Server | Etcd/Retry                          | no                | number of retries for etcd operations                             | 3            |
 | Server | Etcd/Timeout                        | no                | etcd dial and request timeout, in seconds                         | 2            |
+| Server | Etcd/Root                        | no                | unique etcd root prefix for this VS runtime                        | vaqueroServer            |
+| Server | Etcd/HA                       | no                | high availability - whether to engage vaquero server in etcd leader election                         | false            |
 | Server | Gitter/Endpoint                     | no                | githook endpoint to receive webhooks                              | /postreceive |
 | Server | Gitter/Address                      | no                | githook listening address                                         | 127.0.0.1    |
 | Server | Gitter/Port                         | no                | githook listening port                                            | 24603        |
@@ -301,9 +295,6 @@ Tips:
 5. Restart both the `docker` and the `vaquero` services `sudo systemctl restart docker`
 6. Make sure that pathing is correct for config and files required
 
-## [Vaquero Validate](validator.html)
-A CLI tool for validating your data model before you push it through Vaquero
-
 ## Sending Webhooks to Vaquero Master
 
 1. Install [ngrok](https://ngrok.com/) to your local machine, unzip the package, and move the executable to `/usr/local/bin`.
@@ -319,10 +310,10 @@ A CLI tool for validating your data model before you push it through Vaquero
     2. Note that the `GitHook.Secret` can be left blank and should correspond to the Secret created when setting up the webhook on GitHub.
     3. Pushing to the repo, or `Redeliver Payload` on GitHub will launch a webhook.
 
-## Docs
-Build the documentation by running `godoc -http <port>` and open `localhost:<port>` on your web browser
+## Build the Docs
+By running `godoc -http <port>` and open `localhost:<port>` on your web browser
 
-## Swagger Docs
+## Swagger
 The User API has a [Swagger](http://swagger.io/tools/) document for ease of use. It can be used to generate code, or explore the exposed endpoints.
 
 The interface can either be setup by following the instructions for the [Swagger UI](http://swagger.io/swagger-ui/) and serving the `swagUserAPI.yaml` file locally,
