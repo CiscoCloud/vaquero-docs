@@ -73,7 +73,10 @@ vaquero
 <p>See the <a href="architecture.html">architecture page</a> for more details about server and agent.</p>
 <hr />
 <p><strong>sample-standalone-config.yaml:</strong></p>
-<pre><code>ServerClient:
+<pre><code>UserApi:
+  Addr: &quot;127.0.0.1&quot;
+  Port: 24604
+ServerClient:
   Addr: &quot;127.0.0.1&quot;
   Port: 24601
   InsecureSkipVerify: true
@@ -83,11 +86,6 @@ ServerAPI:
   PrivateKey: &quot;functional/test/server.key&quot;
   PublicKey: &quot;functional/test/server.pem&quot;
 SavePath: &quot;/var/vaquero&quot;
-Etcd:
-  Endpoints:
-  - &quot;http://127.0.0.1:2379&quot;
-  Timeout: 5
-  Retry: 3
 Gitter:
   Endpoint: &quot;/postreceive&quot;
   Timeout: 2
@@ -95,11 +93,11 @@ Gitter:
   Port: 24603
 GitHook:
   - ID: &quot;vaquero-git&quot;
-    Token: &lt;GIT_TOKEN&gt;
+    Token: &lt;token&gt;
     URL: &quot;https://github.com/CiscoCloud/vaquero-examples&quot;
     Secret: supersecretcode
 LocalDir:
-  PollInterval: 10
+  PollInterval: 2
 SoT:
 - Local:
     ID: &quot;vaquero-local&quot;
@@ -111,7 +109,14 @@ SoT:
 Log:
   Level: info
   Location: stdout
-  LogType: text</code></pre>
+  LogType: text
+Etcd:
+  Root: &quot;vaquero1&quot;
+  Endpoints:
+  - &quot;http://127.0.0.1:2379&quot;
+  Timeout: 5
+  Retry: 3
+  HA: true</code></pre>
 <hr />
 <h3 id="configuration-fields-overview">Configuration Fields Overview</h3>
 <ul>
@@ -238,10 +243,10 @@ Log:
 </tr>
 <tr class="odd">
 <td align="left">Server</td>
-<td align="left">Etcd/Namespace</td>
+<td align="left">Etcd/Root</td>
 <td align="left">no</td>
-<td align="left">unique etcd key prefix for this VS runtime</td>
-<td align="left">none</td>
+<td align="left">unique etcd root prefix for this VS runtime</td>
+<td align="left">vaqueroServer</td>
 </tr>
 <tr class="even">
 <td align="left">Server</td>

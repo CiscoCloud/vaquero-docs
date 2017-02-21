@@ -42,7 +42,7 @@ Vaquero Getting Started
 </tr>
 <tr class="even">
 <td align="left">VS -&gt; VA</td>
-<td align="left">The Vaquero Agents will not be able to update state or fetch new data models. Agents will continue to act as if they have the most recent model.</td>
+<td align="left">Vaquero Agents will take no new actions, but can restore booting hosts to their last known state. Will not run validation or shutdown any new hosts</td>
 <td align="left">Y (potential for stale DM)</td>
 </tr>
 <tr class="odd">
@@ -53,11 +53,11 @@ Vaquero Getting Started
 <tr class="even">
 <td align="left">Passive VS down</td>
 <td align="left">If a campaigning VS goes down, the cluster will be unaffected</td>
-<td align="left">Y (but fewer HA servers in case of additional server outages)</td>
+<td align="left">Y (but fewer HA servers is not HA)</td>
 </tr>
 <tr class="odd">
 <td align="left">All VS down</td>
-<td align="left">If the entire cluster of VS machines goes down (including a sole running VS), this is catastrophic because nothing is serving to the VAs</td>
+<td align="left">If the entire cluster of VS machines goes down (including the leader VS), this is catastrophic because nothing is serving to the VAs</td>
 <td align="left">N</td>
 </tr>
 <tr class="even">
