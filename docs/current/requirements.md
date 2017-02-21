@@ -65,9 +65,7 @@ The Vaquero project is designed to simplify the provisioning and ongoing operati
 30. A pluggable framework to enable post-boot actions to validate a successful deployment of a single host.
 
 ### On the Roadmap
-
 1. Provide state transition details and host status to provide operational insights (via userAPI)
-2. Liveness probe for Kubernetes
 
 ## Non-requirements:
 
