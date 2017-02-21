@@ -367,15 +367,26 @@ Defines a configured state (combination of os with unattended configuration and 
 
 Allow a network boot or installation to proceed automatically by providing canned answers.
 
-
 | name | description                                             | required | schema | default |
 |:-----|:--------------------------------------------------------|:---------|:-------|:--------|
 | type | The type of unattended config/script to use             | yes      | string |         |
 | use  | The file name used to find the unattended config/script | yes      | string |         |
 
-#### container
+### container
 
-TBD
+| name          | description                              | required | schema        |
+|:--------------|:-----------------------------------------|:---------|:--------------|
+| image         | Docker image name (e.g. alpine:latest)   | yes      | string        |         
+| commands      | List of commands to run (via /bin/sh -c) | yes      | list          |
+| env           | Map of environment variables.            | no       | map           |
+| registry_auth | Registry Credentials                     | no       | registry_auth |
+
+#### container.registry_auth
+| name       | description                | required | schema  |
+|:-----------|:---------------------------|:---------|:--------|
+| url        | api versioned registry url | yes      | string  |         
+| username   | registry username          | yes      | string  |
+| password   | registry password          | yes       | string  |
 
 ### env
 
@@ -493,7 +504,7 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 
 | name        | description                                                | required | schema        | default |
 |:------------|:-----------------------------------------------------------|:---------|:--------------|:--------|
-| type        | Interface type. Physical/bmc                               | yes      | string        |         |
+| type        | Interface type. physical or bmc                            | yes      | string        |         |
 | mac         | MAC address identifying this interface                     | yes      | string        |         |
 | subnet      | ID of subnet (specified in env)                            | yes      | string        |         |
 | bmc         | Details for BMC interface*                                 | no       | interface.bmc |         |
@@ -503,24 +514,46 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 | ipv6        | IPv6 address                                               | no       | string        |         |
 | hostname    | Hostname for machine                                       | no       | string        |         |
 
-\* An interface of type `bmc` is a dedicated `ipmi` interface. `interface.bmc.type` must equal `ipmi`. This interface will not be used for PXE booting the machine (but it may acquire an IP from vaquero's DHCP Server).
+\* An interface of type `bmc` describes a power management interface. This interface will not be used for PXE booting the machine (but it may acquire an IP from vaquero's DHCP Server).
 
-An interface of type `physical` can define an `interface.bmc` for ssh power management _only_ -- i.e. a physical interface may not include an `interface.bmc.type` set to `ipmi`.
+An interface of type `physical` can define an `interface.bmc` for ssh power management _only_ -- i.e. a physical interface may *not* include an `interface.bmc.type` set to `ipmi`.
 
-#### interface.bmc
+##### interface.bmc
 
-| name     | description                       | required | schema | default |
-|:---------|:----------------------------------|:---------|:-------|:--------|
-| type     | Specifies protocol type. IPMI/SSH | yes      | string |         |
-| username | User for managing BMC             | yes      | string |         |
-| password | Password for specified user       | ipmi*    | string |         |
-| keypath  | File path to ssh private key      | ssh**    | string |         |
+| name      | description                       | required | schema    | default |
+|:----------|:----------------------------------|:---------|:-------   |:--------|
+| type      | Specifies protocol type. IPMI/SSH | yes      | string    |         |
+| username  | User for managing BMC             | ipmi/ssh | string    |         |
+| password  | Password for specified user       | ipmi     | string    |         |
+| keypath   | File path to ssh private key      | ssh      | string    |         |
+| container | Custom bmc reboot container       | custom   | container |         |
 
-\* `interface.bmc.password` is required when `type = ipmi`.
+This bmc struct defines the method used to reboot the host. There are three possible configurations:
 
-** `interface.bmc.keypath` is required when `type = ssh`.
+-  Use IPMI with the provided credentials to reboot the machine:
+```
+type: ipmi
+username: ipmiusername
+password: ipmipassword
+```
 
-Please ensure the file referred to in `keypath` has file permissions set to 700 (owner access only).
+-  SSH into the machine and do a sudo reboot. This requires key management, which is left as an exercise to the reader.
+```
+type: ssh
+username: core
+keypath: /home/core/.ssh/id_rsa
+```
+
+-  Use a custom container to reboot the machine.
+```
+type: custom
+container:
+  image: vaquero.registry.com/ipmi:latest
+  pull: yes
+  commands:
+    - ipmitool -H 10.10.10.103 -I imb -U root -P secret power cycle
+  timeout: 60
+```
 
 ### os
 
