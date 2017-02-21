@@ -350,8 +350,74 @@ boot</code></pre>
 </tr>
 </tbody>
 </table>
-<h4 id="container">container</h4>
-<p>TBD</p>
+<h3 id="container">container</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">image</td>
+<td align="left">Docker image name (e.g. alpine:latest)</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+</tr>
+<tr class="even">
+<td align="left">commands</td>
+<td align="left">List of commands to run (via /bin/sh -c)</td>
+<td align="left">yes</td>
+<td align="left">list</td>
+</tr>
+<tr class="odd">
+<td align="left">env</td>
+<td align="left">Map of environment variables.</td>
+<td align="left">no</td>
+<td align="left">map</td>
+</tr>
+<tr class="even">
+<td align="left">registry_auth</td>
+<td align="left">Registry Credentials</td>
+<td align="left">no</td>
+<td align="left">registry_auth</td>
+</tr>
+</tbody>
+</table>
+<h4 id="container.registry_auth">container.registry_auth</h4>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">url</td>
+<td align="left">api versioned registry url</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+</tr>
+<tr class="even">
+<td align="left">username</td>
+<td align="left">registry username</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+</tr>
+<tr class="odd">
+<td align="left">password</td>
+<td align="left">registry password</td>
+<td align="left">yes</td>
+<td align="left">string</td>
+</tr>
+</tbody>
+</table>
 <h3 id="env">env</h3>
 <p>Provides information for a single deployment/data center/etc.</p>
 <table>
@@ -763,7 +829,7 @@ boot</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">type</td>
-<td align="left">Interface type. Physical/bmc</td>
+<td align="left">Interface type. physical or bmc</td>
 <td align="left">yes</td>
 <td align="left">string</td>
 <td align="left"></td>
@@ -826,9 +892,9 @@ boot</code></pre>
 </tr>
 </tbody>
 </table>
-<p>* An interface of type <code>bmc</code> is a dedicated <code>ipmi</code> interface. <code>interface.bmc.type</code> must equal <code>ipmi</code>. This interface will not be used for PXE booting the machine (but it may acquire an IP from vaquero's DHCP Server).</p>
-<p>An interface of type <code>physical</code> can define an <code>interface.bmc</code> for ssh power management <em>only</em> -- i.e. a physical interface may not include an <code>interface.bmc.type</code> set to <code>ipmi</code>.</p>
-<h4 id="interface.bmc">interface.bmc</h4>
+<p>* An interface of type <code>bmc</code> describes a power management interface. This interface will not be used for PXE booting the machine (but it may acquire an IP from vaquero's DHCP Server).</p>
+<p>An interface of type <code>physical</code> can define an <code>interface.bmc</code> for ssh power management <em>only</em> -- i.e. a physical interface may <em>not</em> include an <code>interface.bmc.type</code> set to <code>ipmi</code>.</p>
+<h5 id="interface.bmc">interface.bmc</h5>
 <table>
 <thead>
 <tr class="header">
@@ -850,29 +916,52 @@ boot</code></pre>
 <tr class="even">
 <td align="left">username</td>
 <td align="left">User for managing BMC</td>
-<td align="left">yes</td>
+<td align="left">ipmi/ssh</td>
 <td align="left">string</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="left">password</td>
 <td align="left">Password for specified user</td>
-<td align="left">ipmi*</td>
+<td align="left">ipmi</td>
 <td align="left">string</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
 <td align="left">keypath</td>
 <td align="left">File path to ssh private key</td>
-<td align="left">ssh**</td>
+<td align="left">ssh</td>
 <td align="left">string</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">container</td>
+<td align="left">Custom bmc reboot container</td>
+<td align="left">custom</td>
+<td align="left">container</td>
 <td align="left"></td>
 </tr>
 </tbody>
 </table>
-<p>* <code>interface.bmc.password</code> is required when <code>type = ipmi</code>.</p>
-<p>** <code>interface.bmc.keypath</code> is required when <code>type = ssh</code>.</p>
-<p>Please ensure the file referred to in <code>keypath</code> has file permissions set to 700 (owner access only).</p>
+<p>This bmc struct defines the method used to reboot the host. There are three possible configurations:</p>
+<ul>
+<li><p>Use IPMI with the provided credentials to reboot the machine:</p>
+<pre><code>type: ipmi
+username: ipmiusername
+password: ipmipassword</code></pre></li>
+<li><p>SSH into the machine and do a sudo reboot. This requires key management, which is left as an exercise to the reader.</p>
+<pre><code>type: ssh
+username: core
+keypath: /home/core/.ssh/id_rsa</code></pre></li>
+<li><p>Use a custom container to reboot the machine.</p>
+<pre><code>type: custom
+container:
+  image: vaquero.registry.com/ipmi:latest
+  pull: yes
+  commands:
+- ipmitool -H 10.10.10.103 -I imb -U root -P secret power cycle
+  timeout: 60</code></pre></li>
+</ul>
 <h3 id="os">os</h3>
 <p>Represents a single operating system with boot/installation parameters.</p>
 <table>
