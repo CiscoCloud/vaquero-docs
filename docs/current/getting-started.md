@@ -245,7 +245,7 @@ This assumes there is a running vaquero instance as described above with either 
 
 [Video](https://cisco.box.com/s/cbvci60f1v6b3bcajq2ejtfizr3z0ss6)
 
-### [running the validator OR preview](validator.html)
+### [running the validator OR preview](tools.html)
 After sshing into the vagrant VM, with the container on it. Preview will work in the same way.
 
 

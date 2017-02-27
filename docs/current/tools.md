@@ -17,17 +17,25 @@
             </style>
 </head><article class="markdown-body">
 
-# Vaquero Validator
+# Vaquero Tools
 
-[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
+[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | 
+[Migrate](#vaquero-migrate) | [Preview](#vaquero-preview) | [Validator](#vaquero-validator)
 
+## Vaquero Migrate
+The Vaquero migrate tool is built for moving and renaming stored information about SoTs and Sites.
+
+## Vaquero Preview
+The Vaquero preview tool is built to prview iPXE and unattended boot scripts.
+
+## Vaquero Validator
 The Vaquero validator is a built in utility for checking the consistency of your configurations. Its purpose is to preemptively report any inconsistencies (mistyped IDs, missing metadata, etc) in your configuration before you attempt to deploy it.
 
-## Using vaquero validate
+### Using vaquero validate
 
 - Validating a local SoT: `vaquero validate --sot <base_directory>` The base directory structure should be consistent with the [data model](data-model-howto.html).
 
-## Validation Process
+### Validation Process
 
 The validator first loads the directory tree passed in through a local directory, or through git. It then:
 

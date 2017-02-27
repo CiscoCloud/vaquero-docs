@@ -54,9 +54,9 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 - Vaquero agent support for serving local files over http, or for acting as a reverse proxy for a CDN
 - Supports BIOS and uEFI PXE booting
 
-**Tooling**
+**[Tooling](tools.html)**
 
-- Command-line [validator](validator.html) for checking your data model before you push it through Vaquero
+- Command-line validator for checking your data model before you push it through Vaquero
 - Command-line preview tool for iPXE/unattended boot scripts, before sending to hosts
 - Robust Vagrant environment to test single-node deployments, or Vaquero server cluster and multiple agent deployments.
 
