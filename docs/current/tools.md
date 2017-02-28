@@ -23,7 +23,60 @@
 [Migrate](#vaquero-migrate) | [Preview](#vaquero-preview) | [Validator](#vaquero-validator)
 
 ## Vaquero Migrate
-The Vaquero migrate tool is built for moving and renaming stored information about SoTs and Sites.
+The Vaquero migrate tool is built for moving and renaming stored information about SoTs and Sites. 
+By default the tool will check for collisions in the destination storage. If it finds any, it will 
+ask for the user to confirm to continue and overwrite any information.
+
+### Using vaquero migrate
+
+- Migrating files from one local storage to the destination etcd: 
+`vaquero migrate --src <config_with_local>.yaml --dst <config_with_etcd>.yaml`
+- Migrating and renaming an SoT:
+`vaquero migrate --src <config>.yaml --dst <config>.yaml --src-sot <src_sot_id> --dst-sot <new_id> --del`
+
+Options:
+- `--src` __required__ 
+    - The source config file containing either the etcd or savepath configurations.
+- `--dst` __required__
+    - The destination config file containing either the etcd or savepath configurations.
+- `--src-sot` _optional_
+    - The SoT id if moving a specific SoT from the source.
+- `--src-site` _optional_
+    - The site id if moving a specific site from the source. This requires having specified 
+    the containing SoT with `--src-sot`.
+- `--dst-sot` _optional_
+    - The name for the destination SoT id. This requires having a source SoT specified.
+- `--dst-site` _optional_
+    - The name for the destination site id. This requires having the source and destiation
+    SoTs specified.
+- `--ovwrt` _optional_
+    - This will disable checking for migration conflicts causing it to overwrite any saved
+    information in the destination.
+- `--del` _optional_
+    - This will delete the source files targeted for migration.
+
+### Example configs
+Below are some configs showing valid configurations to provide to the migrate tool.
+
+************************************************************
+**sample-file-store.yaml:**
+```
+SavePath: "/var/vaquero"
+```
+**minimal-etcd-store.yaml:**
+```
+Etcd:
+  Endpoints:
+  - "http://127.0.0.1:2379"
+```
+**sample-etcd-store.yaml:**
+```
+Etcd:
+  Root: "vaquero1"
+  Endpoints:
+  - "http://127.0.0.1:2379"
+```
+************************************************************
 
 ## Vaquero Preview
 The Vaquero preview tool is built to prview iPXE and unattended boot scripts.
