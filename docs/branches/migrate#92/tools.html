@@ -28,7 +28,9 @@ Vaquero Validator
 </ul>
 <p>Options: - <code>--src</code> <strong>required</strong> - The source config file containing either the etcd or savepath configurations. - <code>--dst</code> <strong>required</strong> - The destination config file containing either the etcd or savepath configurations. - <code>--src-sot</code> <em>optional</em> - The SoT id if moving a specific SoT from the source. - <code>--src-site</code> <em>optional</em> - The site id if moving a specific site from the source. This requires having specified the containing SoT with <code>--src-sot</code>. - <code>--dst-sot</code> <em>optional</em> - The name for the destination SoT id. This requires having a source SoT specified. - <code>--dst-site</code> <em>optional</em> - The name for the destination site id. This requires having the source and destiation SoTs specified. - <code>--ovwrt</code> <em>optional</em> - This will disable checking for migration conflicts causing it to overwrite any saved information in the destination. - <code>--del</code> <em>optional</em> - This will delete the source files targeted for migration.</p>
 <h3 id="example-configs">Example configs</h3>
-<p>Below are some configs showing valid configurations to provide to the migrate tool. ************************************************************ <strong>sample-file-store.yaml:</strong></p>
+<p>Below are some configs showing valid configurations to provide to the migrate tool.</p>
+<hr />
+<p><strong>sample-file-store.yaml:</strong></p>
 <pre><code>SavePath: &quot;/var/vaquero&quot;</code></pre>
 <p><strong>minimal-etcd-store.yaml:</strong></p>
 <pre><code>Etcd:
