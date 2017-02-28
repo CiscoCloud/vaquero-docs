@@ -20,7 +20,26 @@ Vaquero Validator
 <h1 id="vaquero-tools">Vaquero Tools</h1>
 <p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> | <a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a> | <a href="#vaquero-migrate">Migrate</a> | <a href="#vaquero-preview">Preview</a> | <a href="#vaquero-validator">Validator</a></p>
 <h2 id="vaquero-migrate">Vaquero Migrate</h2>
-<p>The Vaquero migrate tool is built for moving and renaming stored information about SoTs and Sites.</p>
+<p>The Vaquero migrate tool is built for moving and renaming stored information about SoTs and Sites. By default the tool will check for collisions in the destination storage. If it finds any, it will ask for the user to confirm to continue and overwrite any information.</p>
+<h3 id="using-vaquero-migrate">Using vaquero migrate</h3>
+<ul>
+<li>Migrating files from one local storage to the destination etcd: <code>vaquero migrate --src &lt;config_with_local&gt;.yaml --dst &lt;config_with_etcd&gt;.yaml</code></li>
+<li>Migrating and renaming an SoT: <code>vaquero migrate --src &lt;config&gt;.yaml --dst &lt;config&gt;.yaml --src-sot &lt;src_sot_id&gt; --dst-sot &lt;new_id&gt; --del</code></li>
+</ul>
+<p>Options: - <code>--src</code> <strong>required</strong> - The source config file containing either the etcd or savepath configurations. - <code>--dst</code> <strong>required</strong> - The destination config file containing either the etcd or savepath configurations. - <code>--src-sot</code> <em>optional</em> - The SoT id if moving a specific SoT from the source. - <code>--src-site</code> <em>optional</em> - The site id if moving a specific site from the source. This requires having specified the containing SoT with <code>--src-sot</code>. - <code>--dst-sot</code> <em>optional</em> - The name for the destination SoT id. This requires having a source SoT specified. - <code>--dst-site</code> <em>optional</em> - The name for the destination site id. This requires having the source and destiation SoTs specified. - <code>--ovwrt</code> <em>optional</em> - This will disable checking for migration conflicts causing it to overwrite any saved information in the destination. - <code>--del</code> <em>optional</em> - This will delete the source files targeted for migration.</p>
+<h3 id="example-configs">Example configs</h3>
+<p>Below are some configs showing valid configurations to provide to the migrate tool. ************************************************************ <strong>sample-file-store.yaml:</strong></p>
+<pre><code>SavePath: &quot;/var/vaquero&quot;</code></pre>
+<p><strong>minimal-etcd-store.yaml:</strong></p>
+<pre><code>Etcd:
+  Endpoints:
+  - &quot;http://127.0.0.1:2379&quot;</code></pre>
+<p><strong>sample-etcd-store.yaml:</strong></p>
+<pre><code>Etcd:
+  Root: &quot;vaquero1&quot;
+  Endpoints:
+  - &quot;http://127.0.0.1:2379&quot;</code></pre>
+<hr />
 <h2 id="vaquero-preview">Vaquero Preview</h2>
 <p>The Vaquero preview tool is built to prview iPXE and unattended boot scripts.</p>
 <h2 id="vaquero-validator">Vaquero Validator</h2>
