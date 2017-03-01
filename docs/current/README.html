@@ -51,10 +51,11 @@ vaquero
 <li>Vaquero agent support for serving local files over http, or for acting as a reverse proxy for a CDN</li>
 <li>Supports BIOS and uEFI PXE booting</li>
 </ul>
-<p><strong>Tooling</strong></p>
+<p><strong><a href="tools.html">Tooling</a></strong></p>
 <ul>
-<li>Command-line <a href="validator.html">validator</a> for checking your data model before you push it through Vaquero</li>
+<li>Command-line migrate tool for transferring stored information of SoTs and sites</li>
 <li>Command-line preview tool for iPXE/unattended boot scripts, before sending to hosts</li>
+<li>Command-line validator for checking your data model before you push it through Vaquero</li>
 <li>Robust Vagrant environment to test single-node deployments, or Vaquero server cluster and multiple agent deployments.</li>
 </ul>
 <h1 id="architecture"><a href="architecture.html">Architecture</a></h1>
@@ -245,7 +246,7 @@ Etcd:
 <td align="left">Server</td>
 <td align="left">Etcd/Root</td>
 <td align="left">no</td>
-<td align="left">unique etcd root prefix for this VS runtime</td>
+<td align="left">unique etcd storage key prefix for this VS runtime</td>
 <td align="left">vaqueroServer</td>
 </tr>
 <tr class="even">
