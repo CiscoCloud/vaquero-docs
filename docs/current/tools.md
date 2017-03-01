@@ -28,6 +28,7 @@ By default, the tool will check for collisions in the destination storage. If it
 ask for the user to confirm to continue and overwrite any information.
 
 Potential use cases include:
+
 - Moving storage between any combination of `FileStorage` and `EtcdStorage`
 - Checking if a storage migration would overwrite pre-existing information
 - Renaming sites and SoTs
@@ -90,7 +91,18 @@ Etcd:
 ************************************************************
 
 ## Vaquero Preview
-The Vaquero preview tool is built to prview iPXE and unattended boot scripts.
+The Vaquero preview tool is built to prview iPXE and unattended boot scripts for specific host machines.
+
+### Using vaquero preview
+
+- Preview the cloud config for the host with given MAC:
+`vaquero preview --mac 00:00:00:00:00:01 --sot examples/etcd-cluster`
+
+- Preview the iPXE for a given MAC: 
+`vaquero preview --mac 00:00:00:00:00:01 --sot examples/etcd-cluster --ipxe`
+
+- Preview a specific boot stage for the machine with the given MAC: 
+`vaquero preview --mac 00:00:00:00:00:01 --sot examples/etcd-cluster --boot coreos-partition`
 
 ## Vaquero Validator
 The Vaquero validator is a built in utility for checking the consistency of your configurations. Its purpose is to preemptively report any inconsistencies (mistyped IDs, missing metadata, etc) in your configuration before you attempt to deploy it.
