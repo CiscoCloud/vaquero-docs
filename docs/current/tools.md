@@ -24,7 +24,7 @@
 
 ## Vaquero Migrate
 The Vaquero migrate tool is built for moving and renaming stored information about SoTs and Sites. 
-By default the tool will check for collisions in the destination storage. If it finds any, it will 
+By default, the tool will check for collisions in the destination storage. If it finds any, it will 
 ask for the user to confirm to continue and overwrite any information.
 
 ### Using vaquero migrate
