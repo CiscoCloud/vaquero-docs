@@ -27,6 +27,16 @@ The Vaquero migrate tool is built for moving and renaming stored information abo
 By default, the tool will check for collisions in the destination storage. If it finds any, it will 
 ask for the user to confirm to continue and overwrite any information.
 
+Potential use cases include:
+- Moving storage between any combination of `FileStorage` and `EtcdStorage`
+- Checking if a storage migration would overwrite pre-existing information
+- Renaming sites and SoTs
+- Migrating specific sites or SoTs
+- Disaster recovery via creating backups
+- Debugging from a specific saved state
+- Splitting up a vaquero server into multiple servers
+- Migrating to a new storage system
+
 ### Using vaquero migrate
 
 - Migrating files from one local storage to the destination etcd: 
@@ -35,6 +45,7 @@ ask for the user to confirm to continue and overwrite any information.
 `vaquero migrate --src <config>.yaml --dst <config>.yaml --src-sot <src_sot_id> --dst-sot <new_id> --del`
 
 Options:
+
 - `--src` __required__ 
     - The source config file containing either the etcd or savepath configurations.
 - `--dst` __required__
