@@ -75,12 +75,18 @@ Below are some configs showing valid configurations to provide to the migrate to
 ```
 SavePath: "/var/vaquero"
 ```
+
+************************************************************
+
 **minimal-etcd-store.yaml:**
 ```
 Etcd:
   Endpoints:
   - "http://127.0.0.1:2379"
 ```
+
+************************************************************
+
 **sample-etcd-store.yaml:**
 ```
 Etcd:
