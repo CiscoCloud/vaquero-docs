@@ -54,10 +54,11 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 - Vaquero agent support for serving local files over http, or for acting as a reverse proxy for a CDN
 - Supports BIOS and uEFI PXE booting
 
-**Tooling**
+**[Tooling](tools.html)**
 
-- Command-line [validator](validator.html) for checking your data model before you push it through Vaquero
+- Command-line migrate tool for transferring stored information of SoTs and sites
 - Command-line preview tool for iPXE/unattended boot scripts, before sending to hosts
+- Command-line validator for checking your data model before you push it through Vaquero
 - Robust Vagrant environment to test single-node deployments, or Vaquero server cluster and multiple agent deployments.
 
 
@@ -160,8 +161,8 @@ Etcd:
 | Server | Etcd/Endpoints                      | no                | etcd initial cluster endpoints: format- e1,e2,e3                  | none         |
 | Server | Etcd/Retry                          | no                | number of retries for etcd operations                             | 3            |
 | Server | Etcd/Timeout                        | no                | etcd dial and request timeout, in seconds                         | 2            |
-| Server | Etcd/Root                        | no                | unique etcd root prefix for this VS runtime                        | vaqueroServer            |
-| Server | Etcd/HA                       | no                | high availability - whether to engage vaquero server in etcd leader election                         | false            |
+| Server | Etcd/Root                           | no                | unique etcd storage key prefix for this VS runtime                | vaqueroServer            |
+| Server | Etcd/HA                             | no                | high availability - whether to engage vaquero server in etcd leader election                         | false            |
 | Server | Gitter/Endpoint                     | no                | githook endpoint to receive webhooks                              | /postreceive |
 | Server | Gitter/Address                      | no                | githook listening address                                         | 127.0.0.1    |
 | Server | Gitter/Port                         | no                | githook listening port                                            | 24603        |
