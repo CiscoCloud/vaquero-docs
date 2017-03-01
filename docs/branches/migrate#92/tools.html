@@ -21,7 +21,17 @@ Vaquero Tools
 <p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> | <a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a> | <a href="#vaquero-migrate">Migrate</a> | <a href="#vaquero-preview">Preview</a> | <a href="#vaquero-validator">Validator</a></p>
 <h2 id="vaquero-migrate">Vaquero Migrate</h2>
 <p>The Vaquero migrate tool is built for moving and renaming stored information about SoTs and Sites. By default, the tool will check for collisions in the destination storage. If it finds any, it will ask for the user to confirm to continue and overwrite any information.</p>
-<p>Potential use cases include: - Moving storage between any combination of <code>FileStorage</code> and <code>EtcdStorage</code> - Checking if a storage migration would overwrite pre-existing information - Renaming sites and SoTs - Migrating specific sites or SoTs - Disaster recovery via creating backups - Debugging from a specific saved state - Splitting up a vaquero server into multiple servers - Migrating to a new storage system</p>
+<p>Potential use cases include:</p>
+<ul>
+<li>Moving storage between any combination of <code>FileStorage</code> and <code>EtcdStorage</code></li>
+<li>Checking if a storage migration would overwrite pre-existing information</li>
+<li>Renaming sites and SoTs</li>
+<li>Migrating specific sites or SoTs</li>
+<li>Disaster recovery via creating backups</li>
+<li>Debugging from a specific saved state</li>
+<li>Splitting up a vaquero server into multiple servers</li>
+<li>Migrating to a new storage system</li>
+</ul>
 <h3 id="using-vaquero-migrate">Using vaquero migrate</h3>
 <ul>
 <li>Migrating files from one local storage to the destination etcd: <code>vaquero migrate --src &lt;config_with_local&gt;.yaml --dst &lt;config_with_etcd&gt;.yaml</code></li>
@@ -78,7 +88,13 @@ Vaquero Tools
   - &quot;http://127.0.0.1:2379&quot;</code></pre>
 <hr />
 <h2 id="vaquero-preview">Vaquero Preview</h2>
-<p>The Vaquero preview tool is built to prview iPXE and unattended boot scripts.</p>
+<p>The Vaquero preview tool is built to prview iPXE and unattended boot scripts for specific host machines.</p>
+<h3 id="using-vaquero-preview">Using vaquero preview</h3>
+<ul>
+<li><p>Preview the cloud config for the host with given MAC: <code>vaquero preview --mac 00:00:00:00:00:01 --sot examples/etcd-cluster</code></p></li>
+<li><p>Preview the iPXE for a given MAC: <code>vaquero preview --mac 00:00:00:00:00:01 --sot examples/etcd-cluster --ipxe</code></p></li>
+<li><p>Preview a specific boot stage for the machine with the given MAC: <code>vaquero preview --mac 00:00:00:00:00:01 --sot examples/etcd-cluster --boot coreos-partition</code></p></li>
+</ul>
 <h2 id="vaquero-validator">Vaquero Validator</h2>
 <p>The Vaquero validator is a built in utility for checking the consistency of your configurations. Its purpose is to preemptively report any inconsistencies (mistyped IDs, missing metadata, etc) in your configuration before you attempt to deploy it.</p>
 <h3 id="using-vaquero-validate">Using vaquero validate</h3>
