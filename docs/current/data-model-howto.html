@@ -1080,7 +1080,7 @@ cmdline:
 </tbody>
 </table>
 <p>Kernel and initrd values may be templated. They will be rendered on-demand for inidividual hosts.</p>
-<h4 id="workflow">workflow</h4>
+<h3 id="workflow">workflow</h3>
 <p>A workflow chains multiple boots together to provision a host. The workflow is also responsible for specifying basic policy for rebutting hosts that use it.</p>
 <table>
 <thead>
@@ -1108,6 +1108,29 @@ cmdline:
 <td align="left"></td>
 </tr>
 <tr class="odd">
+<td align="left">deps</td>
+<td align="left">Host provisioning rollout policy</td>
+<td align="left">no</td>
+<td align="left">workflow.deps</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<p><em>Be aware that <code>min_standing</code> could become a blocking condition, if <code>min_standing</code> is set to 3 and there are only 3 hosts in that workflow.</em></p>
+<h4 id="workflow.deps">workflow.deps</h4>
+<p>Workflow deps defines interworkflow dependencies and specifies policy for provisioning all hosts in this workflow.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+<th align="left">required</th>
+<th align="left">schema</th>
+<th align="left">default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
 <td align="left">max_concurrent</td>
 <td align="left">Max simultaneous hosts actively provisioning</td>
 <td align="left">no</td>
@@ -1116,7 +1139,7 @@ cmdline:
 </tr>
 <tr class="even">
 <td align="left">min_standing</td>
-<td align="left">Minimum number of hosts that must be active during a provision</td>
+<td align="left">Minimum number of hosts that must be active to unblock dependant workflows</td>
 <td align="left">no</td>
 <td align="left">int</td>
 <td align="left">0</td>
@@ -1130,7 +1153,7 @@ cmdline:
 </tr>
 <tr class="even">
 <td align="left">validate_on</td>
-<td align="left">IDs of workflows that cause this workflow to revalidate</td>
+<td align="left">IDs of workflows that cause this workflow to rerun validation</td>
 <td align="left">no</td>
 <td align="left">string array</td>
 <td align="left"></td>
@@ -1144,6 +1167,5 @@ cmdline:
 </tr>
 </tbody>
 </table>
-<p><em>Be aware that <code>min_standing</code> could become a blocking condition, if <code>min_standing</code> is set to 3 and there are only 3 hosts in that workflow.</em></p>
 <h2 id="staging-updates"><a name="staging">Staging Updates</a></h2>
 <p>Github will be used to stage models for updating, vaquero will receive webhooks from specified branches. Submitting PR's and merging other branches into the vaquero branch would be how teams manage updating their source of truth. Once a model lands in the branch vaquero is watching, it will push it out and begin provisioning against that source of truth.</p>
