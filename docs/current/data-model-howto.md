@@ -607,21 +607,30 @@ Contains information about the kernal/initrds for an operating system.
 
 Kernel and initrd values may be templated. They will be rendered on-demand for inidividual hosts.
 
-#### workflow
+### workflow
 
 A workflow chains multiple boots together to provision a host. The workflow is also responsible for specifying basic policy for rebutting hosts that use it.
 
-| name           | description                                                    | required | schema               | default |
-|:---------------|:---------------------------------------------------------------|:---------|:---------------------|:--------|
-| id             | self-assigned identifier                                       | yes      | string               |         |
-| workflow       | Series of boots to provision the host                          | yes      | workflow.stage array |         |
-| max_concurrent | Max simultaneous hosts actively provisioning                   | no       | int                  | 0       |
-| min_standing   | Minimum number of hosts that must be active during a provision | no       | int                  | 0       |
-| block_deps     | IDs of blocking dependency workflows                           | no       | string array         |         |
-| validate_on    | IDs of workflows that cause this workflow to revalidate        | no       | string array         |         |
-| max_fail       | How many hosts can fail before halted                          | no       | int                  | 0       |
+| name             | description                                                      | required   | schema                 | default   |
+| :--------------- | :--------------------------------------------------------------- | :--------- | :--------------------- | :-------- |
+| id               | self-assigned identifier                                         | yes        | string                 |           |
+| workflow         | Series of boots to provision the host                            | yes        | workflow.stage array   |           |
+| deps             | Host provisioning rollout policy                                              | no         | workflow.deps          |           |
 
 *Be aware that `min_standing` could become a blocking condition, if `min_standing` is set to 3 and there are only 3 hosts in that workflow.*
+
+#### workflow.deps
+
+Workflow deps defines interworkflow dependencies and specifies policy for provisioning all hosts in this workflow.
+
+| name             | description                                                                | required   | schema                 | default   |
+| :--------------- | :---------------------------------------------------------------           | :--------- | :--------------------- | :-------- |
+| max_concurrent   | Max simultaneous hosts actively provisioning                               | no         | int                    | 0         |
+| min_standing     | Minimum number of hosts that must be active to unblock dependant workflows | no         | int                    | 0         |
+| block_deps       | IDs of blocking dependency workflows                                       | no         | string array           |           |
+| validate_on      | IDs of workflows that cause this workflow to rerun validation              | no         | string array           |           |
+| max_fail         | How many hosts can fail before halted                                      | no         | int                    | 0         |
+
 
 ## <a name="staging">Staging Updates</a>
 
