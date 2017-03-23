@@ -914,7 +914,7 @@ boot</code></pre>
 </tbody>
 </table>
 <p>* An interface of type <code>bmc</code> describes a power management interface. This interface will not be used for PXE booting the machine (but it may acquire an IP from vaquero's DHCP Server).</p>
-<p>An interface of type <code>physical</code> can define an <code>interface.bmc</code> for ssh power management <em>only</em> -- i.e. a physical interface may <em>not</em> include an <code>interface.bmc.type</code> set to <code>g</code>.</p>
+<p>An interface of type <code>physical</code> can define an <code>interface.bmc</code> for ssh power management <em>only</em> -- i.e. a physical interface may <em>not</em> include an <code>interface.bmc.type</code> set to <code>ipmi</code>.</p>
 <h5 id="interface.bmc">interface.bmc</h5>
 <table>
 <thead>
@@ -986,7 +986,7 @@ username: ipmiusername
 password: ipmipassword
 soft_reboot: true
 soft_timeout: 30</code></pre>
-<p><sup>1.</sup> By default, IPMI will do a power cycle. <code>soft_reboot</code> may be specified to do a soft (graceful) restart instead. <sup>2.</sup> <code>soft_timeout</code> specifies the amount of time to try a soft reboot. If the machine is not able to restart in this time, a power cycle is issued. <code>soft_timeout=0</code> means never do a power cycle.</p></li>
+<p><sup>1.</sup> By default, IPMI will do a power cycle. <code>soft_reboot</code> may be specified to do a soft (graceful) restart instead. <sup>2.</sup> <code>soft_timeout</code> specifies the amount of time to try a soft reboot. If the machine is not able to restart in this time, a power cycle is issued. <code>soft_timeout=0</code> means the host will never be forcefully restarted.</p></li>
 <li><p>SSH into the machine and do a sudo reboot. This requires key management, which is left as an exercise to the reader.</p>
 <pre><code>type: ssh
 username: core
