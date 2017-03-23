@@ -522,7 +522,7 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 
 \* An interface of type `bmc` describes a power management interface. This interface will not be used for PXE booting the machine (but it may acquire an IP from vaquero's DHCP Server).
 
-An interface of type `physical` can define an `interface.bmc` for ssh power management _only_ -- i.e. a physical interface may *not* include an `interface.bmc.type` set to `g`.
+An interface of type `physical` can define an `interface.bmc` for ssh power management _only_ -- i.e. a physical interface may *not* include an `interface.bmc.type` set to `ipmi`.
 
 ##### interface.bmc
 
@@ -547,7 +547,7 @@ soft_reboot: true
 soft_timeout: 30
 ```
 <sup>1.</sup> By default, IPMI will do a power cycle. `soft_reboot` may be specified to do a soft (graceful) restart instead.
-<sup>2.</sup> `soft_timeout` specifies the amount of time to try a soft reboot. If the machine is not able to restart in this time, a power cycle is issued. `soft_timeout=0` means never do a power cycle.
+<sup>2.</sup> `soft_timeout` specifies the amount of time to try a soft reboot. If the machine is not able to restart in this time, a power cycle is issued. `soft_timeout=0` means the host will never be forcefully restarted.
 
 -  SSH into the machine and do a sudo reboot. This requires key management, which is left as an exercise to the reader.
 ```
