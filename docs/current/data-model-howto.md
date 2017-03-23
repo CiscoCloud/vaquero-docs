@@ -408,12 +408,17 @@ Provides information for a single deployment/data center/etc.
 Details for establishing a connection to a site's agent
 
 
-| name                                 | description                              | required | schema                 | default      |
-|:-------------------------------------|:-----------------------------------------|:---------|:-----------------------|:-------------|
-| [asset_server](#envagentassetserver) | Asset Server configuration               | no       | env.agent.asset_server |              |
-| dhcp_mode                            | The mode to run DHCP in, server or proxy | no       | string                 | server       |
-| save_path                            | The dir path to save local files         | no       | string                 | /var/vaquero |
+| name                                 | description                              | required | schema                 | default            |
+|:-------------------------------------|:-----------------------------------------|:---------|:-----------------------|:-------------------|
+| [asset_server](#envagentassetserver) | Asset Server configuration               | no       | env.agent.asset_server |                    |
+| dhcp_mode                            | The mode to run DHCP in, server or proxy | no       | string                 | server             |
+| save_path                            | The dir path to save local files         | no       | string                 | /var/vaquero       |
+| ssh_container                        | Docker registry URL for ssh container.   | no       | string                 | gemtest/openssh<sup>1</sup>  |
+| ipmi_container                       | Docker registry URL for IPMI container.  | no       | string                 | gemtest/ipmitool<sup>2</sup> |
 
+<sup>1. docker.io/gemtest/openssh</sup><br />
+<sup>2. docker.io/gemtest/ipmitool</sup>
+</sup>
 #### env.agent.asset_server
 
 Configuration for the asset server
@@ -498,6 +503,7 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 | interfaces | Network interfaces for this host                   | no       | interface |         |
 | metadata   | unstructured, host-specific information            | no       | object    |         |
 | workflow   | The ID of the workflow used to provision this host | yes      | string    |         |
+| never_provision   | Prevent Vaquero from rebooting/provisioning hosts. | no      | string    |     false    |
 
 
 #### interface
@@ -516,17 +522,19 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 
 \* An interface of type `bmc` describes a power management interface. This interface will not be used for PXE booting the machine (but it may acquire an IP from vaquero's DHCP Server).
 
-An interface of type `physical` can define an `interface.bmc` for ssh power management _only_ -- i.e. a physical interface may *not* include an `interface.bmc.type` set to `ipmi`.
+An interface of type `physical` can define an `interface.bmc` for ssh power management _only_ -- i.e. a physical interface may *not* include an `interface.bmc.type` set to `g`.
 
 ##### interface.bmc
 
-| name      | description                       | required | schema    | default |
-|:----------|:----------------------------------|:---------|:-------   |:--------|
-| type      | Specifies protocol type. IPMI/SSH | yes      | string    |         |
-| username  | User for managing BMC             | ipmi/ssh | string    |         |
-| password  | Password for specified user       | ipmi     | string    |         |
-| keypath   | File path to ssh private key      | ssh      | string    |         |
-| container | Custom bmc reboot container       | custom   | container |         |
+| name         | description                       | required | schema    | default |
+|:-------------|:----------------------------------|:---------|:-------   |:--------|
+| type         | Specifies protocol type. IPMI/SSH | yes      | string    |         |
+| username     | User for managing BMC             | ipmi/ssh | string    |         |
+| password     | Password for specified user       | ipmi     | string    |         |
+| keypath      | File path to ssh private key      | ssh      | string    |         |
+| container    | Custom bmc reboot container       | custom   | container |         |
+| soft_reboot  | Attempt Graceful Shutdown.<sup>1</sup>        | no       | bool      | false   |
+| soft_timeout | Soft Reboot Timeout (seconds)<sup>2</sup>    | no       | integer   | 0    |
 
 This bmc struct defines the method used to reboot the host. There are three possible configurations:
 
@@ -535,7 +543,11 @@ This bmc struct defines the method used to reboot the host. There are three poss
 type: ipmi
 username: ipmiusername
 password: ipmipassword
+soft_reboot: true
+soft_timeout: 30
 ```
+<sup>1.</sup> By default, IPMI will do a power cycle. `soft_reboot` may be specified to do a soft (graceful) restart instead.
+<sup>2.</sup> `soft_timeout` specifies the amount of time to try a soft reboot. If the machine is not able to restart in this time, a power cycle is issued. `soft_timeout=0` means never do a power cycle.
 
 -  SSH into the machine and do a sudo reboot. This requires key management, which is left as an exercise to the reader.
 ```
