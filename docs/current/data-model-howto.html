@@ -509,9 +509,23 @@ boot</code></pre>
 <td align="left">string</td>
 <td align="left">/var/vaquero</td>
 </tr>
+<tr class="even">
+<td align="left">ssh_container</td>
+<td align="left">Docker registry URL for ssh container.</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left">gemtest/openssh<sup>1</sup></td>
+</tr>
+<tr class="odd">
+<td align="left">ipmi_container</td>
+<td align="left">Docker registry URL for IPMI container.</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left">gemtest/ipmitool<sup>2</sup></td>
+</tr>
 </tbody>
 </table>
-<h4 id="env.agent.asset_server">env.agent.asset_server</h4>
+<p><sup>1. docker.io/gemtest/openssh</sup><br /> <sup>2. docker.io/gemtest/ipmitool</sup> </sup> #### env.agent.asset_server</p>
 <p>Configuration for the asset server</p>
 <table>
 <thead>
@@ -813,6 +827,13 @@ boot</code></pre>
 <td align="left">string</td>
 <td align="left"></td>
 </tr>
+<tr class="odd">
+<td align="left">never_provision</td>
+<td align="left">Prevent Vaquero from rebooting/provisioning hosts.</td>
+<td align="left">no</td>
+<td align="left">string</td>
+<td align="left">false</td>
+</tr>
 </tbody>
 </table>
 <h4 id="interface">interface</h4>
@@ -941,6 +962,20 @@ boot</code></pre>
 <td align="left">container</td>
 <td align="left"></td>
 </tr>
+<tr class="even">
+<td align="left">soft_reboot</td>
+<td align="left">Attempt Graceful Shutdown.<sup>1</sup></td>
+<td align="left">no</td>
+<td align="left">bool</td>
+<td align="left">false</td>
+</tr>
+<tr class="odd">
+<td align="left">soft_timeout</td>
+<td align="left">Soft Reboot Timeout (seconds)<sup>2</sup></td>
+<td align="left">no</td>
+<td align="left">integer</td>
+<td align="left">0</td>
+</tr>
 </tbody>
 </table>
 <p>This bmc struct defines the method used to reboot the host. There are three possible configurations:</p>
@@ -948,7 +983,10 @@ boot</code></pre>
 <li><p>Use IPMI with the provided credentials to reboot the machine:</p>
 <pre><code>type: ipmi
 username: ipmiusername
-password: ipmipassword</code></pre></li>
+password: ipmipassword
+soft_reboot: true
+soft_timeout: 30</code></pre>
+<p><sup>1.</sup> By default, IPMI will do a power cycle. <code>soft_reboot</code> may be specified to do a soft (graceful) restart instead. <sup>2.</sup> <code>soft_timeout</code> specifies the amount of time to try a soft reboot. If the machine is not able to restart in this time, a power cycle is issued. <code>soft_timeout=0</code> means the host will never be forcefully restarted.</p></li>
 <li><p>SSH into the machine and do a sudo reboot. This requires key management, which is left as an exercise to the reader.</p>
 <pre><code>type: ssh
 username: core
