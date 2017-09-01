@@ -63,6 +63,8 @@ Your data center is expressed as an inventory of _hosts_. Each host belongs to a
 
 *Host*: A single managed machine. Definition includes identifying attributes (selectors), host-specific metadata, information for LOM (IPMI), and an association to a single workflow.
 
+*Cluster*: A grouping of hosts under a specific site.
+
 *Operating System*: An "installation" template containing the details to perform a network boot into a particular OS, specifying kernel, initrd, boot command-line parameters, unattended config, etc.
 
 *Unattended Assets*: An optionally templated unattended config/script (i.e. cloud-init, ignition, kickstart, etc) used for unattended boot and installation operations.
@@ -182,23 +184,60 @@ Boots exist as individual documents under the `boot` subdirectory. They are refe
     └── etcd-proxy.yml
 ```
 
+
 ### Sites
 
 Sites are represented by individual subdirectories. One directory == one site == one managed group of machines. Each SoT can contain multiple sites. Each of these sites shares the same assets/boot/os configuration files.
 
 Each site has _at least_ two documents, the specially named `env.yml` and at least one document describing an inventory of hosts. You may use YAML's triple-dash `---` separator to combine multiple inventory documents into one file.
 
+#### Clusters
+
+Clusters are represented by individual yaml files under a site (conventional they are prefixed with `cluster-` in the file name (example: `cluster-a.yml`).
+
+One file is a grouping of hosts under that site directory. Each SoT can contain multiple sites. Each of these sites shares the same assets/boot/os configuration files.
+
 ```
 .
 └── sites
     ├── site-a
     │   ├── env.yml
-    │   └── inventory.yml
-    └── site-a
-        ├── env.yml
-        ├── inventory.yml
-        └── another-inv.yml
+    │   └── cluster-aa.yml
+    │   └── cluster-ab.yml
+    │   └── cluster-ac.yml
+    └── site-b
+    |   ├── env.yml
+    |   └── cluster-ba.yml
+    |   └── cluster-bb.yml
+    |   └── cluster-bc.yml
 ```
+
+#### Configuration
+
+At the top of every cluster file is a `config` section.
+
+This section describes how to obtain the SOT configuration for this cluster of hosts.
+
+type: git
+
+```
+---
+config:
+  type: git
+  url: "https://github.com/mattdietz/vaquero-sot"
+  ref: "master"
+  token: "github_api_token_here"
+```
+
+type: local
+
+```
+---
+config:
+  type: local
+  url: "/var/vaquero/local-config"
+```
+
 
 ### Workflows
 
@@ -376,7 +415,7 @@ Allow a network boot or installation to proceed automatically by providing canne
 
 | name          | description                              | required | schema        |
 |:--------------|:-----------------------------------------|:---------|:--------------|
-| image         | Docker image name (e.g. alpine:latest)   | yes      | string        |         
+| image         | Docker image name (e.g. alpine:latest)   | yes      | string        |
 | commands      | List of commands to run (via /bin/sh -c) | yes      | list          |
 | env           | Map of environment variables.            | no       | map           |
 | registry_auth | Registry Credentials                     | no       | registry_auth |
@@ -384,7 +423,7 @@ Allow a network boot or installation to proceed automatically by providing canne
 #### container.registry_auth
 | name       | description                | required | schema  |
 |:-----------|:---------------------------|:---------|:--------|
-| url        | api versioned registry url | yes      | string  |         
+| url        | api versioned registry url | yes      | string  |
 | username   | registry username          | yes      | string  |
 | password   | registry password          | yes       | string  |
 
@@ -494,6 +533,15 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 | domain  | Client DNS domain                                    | no       | string       |         |
 | gateway | Gateway for this subnet                              | no       | string       |         |
 | vlan    | VLAN for the subnet                                  | no       | integer      | 1       |
+
+#### config
+
+| name  | description                                        | required          | schema | default |
+|:------|:---------------------------------------------------|:------------------|:-------|:--------|
+| type  | The type of config (local, git)                    | yes               | object |         |
+| url   | The url for git repository or local path of sot    | yes               | string |         |
+| ref   | The Git reference (branch, SHA, tag, HEAD)         | yes (if type git) | string |         |
+| token | The token to use to call Github API                | yes               | string |         |
 
 #### host
 
