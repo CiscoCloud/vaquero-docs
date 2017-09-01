@@ -1,0 +1,12 @@
+# Dependencies
+markdown: kramdown
+highlighter: rouge
+
+include: ['docs/']
+
+# Setup
+url: https://ciscocloud.github.io/vaquero-docs
+baseurl: ''
+
+sass:
+  style: compressed

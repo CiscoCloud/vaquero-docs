@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ue
 
-TMP=$(mktemp -d -p "/drone")
+TMP=$(mkdir -p "~/drone")
 git clone -b gh-pages $(git config remote.origin.url) "${TMP}"
 
 TARGET="${TMP}/docs/current"

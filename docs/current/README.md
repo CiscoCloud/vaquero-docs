@@ -1,29 +1,13 @@
-<head>
-            <meta charset="UTF-8">
-            <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Vaquero README</title>
-            <link rel="stylesheet" type="text/css" href="../doc.css">
-            <link rel='shortcut icon' href='cow.png' type='image/x-icon'/ >
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
-            <style>
-                .markdown-body {
-                    box-sizing: border-box;
-                    min-width: 200px;
-                    max-width: 1100px;
-                    margin: 0 auto;
-                    padding: 45px;
-                }
-            </style>
-</head><article class="markdown-body">
+---
+layout: page
 
+---
 <div align="center">
-<img src="cow.png" alt="Drawing" style="width: 200px;"/>
-  <p style="font-size:60px">vaquero</p>
-[Home](https://ciscocloud.github.io/vaquero-docs/) | [Dev Repo](https://github.com/CiscoCloud/vaquero) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.html) | [Issue Tracking](https://waffle.io/CiscoCloud/vaquero)
-</div>
 
-<h1></h1>
+  <img src="{{ site.url }}/img/cow.png" alt="Drawing" style="width: 200px;"/>
+  [Home]({{ site.url }}) | [Dev Repo](https://github.com/CiscoCloud/vaquero) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.html) | [Issue Tracking](https://waffle.io/CiscoCloud/vaquero)
+
+</div>
 
 A bare metal configuration utility that network boots machines based on user defined templates. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped unattend boot scripts.
 
@@ -63,7 +47,7 @@ See the [Getting Started](getting-started.html) page for details on deploying Va
 
 
 # [Architecture](architecture.html)
-![](jan17Arch.png)
+![]({{ site.url }}/img/jan17Arch.png)
 
 ## [Data Model Templates](data-model-howto.html)
 Data Models are used by Vaquero as the "Source of Truth" to describe your data center. Data Models define machine operating systems, subnets, and boot scripts. We provide some [example data models](https://github.com/CiscoCloud/vaquero-examples) as a reference to build your own.
@@ -136,7 +120,7 @@ Etcd:
 - `Gitter`: Configuration for listening to git webhooks.
 - `GitHook`: An array for all githooks to listen to.
 - `SoT:` An array for specific sources of truth. Git updater receives webhooks from github. Local: will use a local directory to update.
-- `Etcd`: The necessary information to connect a vaquero server cluster or High Availability (HA) cluster to a running [CoreOS Etcd](https://coreos.com/etcd/) cluster. If Etcd information is provided, Vaquero will use the provided cluster endpoints (vs. a local filestorage) to store and continuously update data model information, as well as internal, vaquero-specific information (eg. machine state). See the [Getting Started page](https://ciscocloud.github.io/vaquero-docs/docs/current/getting-started.html), under "Etcd and Vaquero," for more information, including a short demo using a virtual machine running Etcd.
+- `Etcd`: The necessary information to connect a vaquero server cluster or High Availability (HA) cluster to a running [CoreOS Etcd](https://coreos.com/etcd/) cluster. If Etcd information is provided, Vaquero will use the provided cluster endpoints (vs. a local filestorage) to store and continuously update data model information, as well as internal, vaquero-specific information (eg. machine state). See the [Getting Started page]({{ site.url }}/docs/current/getting-started.html), under "Etcd and Vaquero," for more information, including a short demo using a virtual machine running Etcd.
 - `SavePath`: If no Etcd details provided, the local dir where Vaquero servers and agents will save local configurations, as well as internal information (eg. machine state) needed for Vaquero to run.
 - `DHCPMode`:Using "server" runs Vaquero as a DHCP server.  Vaquero does not manage free address pools or leases; it simply assigns based of the static configuration defined in the data model. **Note that DHCPMode defaults to server.** Using "proxy" enables ProxyDHCP. ProxyDHCP works with an existing DHCP Server to provide PXEBoot functionality, while leaving the managing and assigning of IP addresses to the other DHCP Server. Only enable this if you already have a DHCP server with entries for all the hosts in your Data Model.
 
@@ -327,3 +311,4 @@ To provide feedback to the team please email: [vaquero-feedback@external.cisco.c
 For Issues, open at [CiscoCloud/vaquero-docs](https://github.com/CiscoCloud/vaquero-docs/issues)
 
 <div><p style="font-size:12px">Logo created with: http://logomakr.com</p></div>
+</article>
