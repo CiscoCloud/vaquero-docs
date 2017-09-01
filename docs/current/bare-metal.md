@@ -1,8 +1,10 @@
-<article class="markdown-body">
-
+---
+layout: page
+page.title: Baremetal
+---
 # Getting Started on Bare Metal
 
-[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
+[Home]({{ site.url }}) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 ## Prerequisites
 
@@ -275,4 +277,4 @@ When you're done with the Vaquero and boot servers, you may power them off or co
 
 At this point, you've successfully run Vaquero and provisioned a bare metal machine with CentOS. In "standalone mode", the Vaquero server and agent run together in a docker container running a single machine. In a production setting, it is more suitable to run the vaquero server on a centralized machine with multiple vaquero agents running in different locations/networks to manage multiple groups of hosts as desired.
 
-Look at the page on [configuring Vaquero](https://ciscocloud.github.io/vaquero-docs/current/configuration.html) for additional parameters and information on running multiple sites/agents.
+Look at the page on [configuring Vaquero]({{ site.url }}/current/configuration.html) for additional parameters and information on running multiple sites/agents.
