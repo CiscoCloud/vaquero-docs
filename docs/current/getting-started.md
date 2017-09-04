@@ -308,4 +308,4 @@ Validate on a local Data Model
 `docker run -v <SRC_DIR>:<DEST_DIR> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --sot <DEST_DIR>`
 
 ## E. kubernetes in the Virtualenv
-To start up the kubernetes cluster please log into each VS machine and run `sudo ./kube_start.sh`. This will start the kubernetes cluster across the VS nodes. Regardless of how many VS machines you deploy, `vs-1` will always be the Kube master and `vs-1`, `vs-2` and `vs-3` will be listed as kubernetes nodes. You must run `sudo ./kube-start.sh` on every vs machine to successfully standup the kubernetes cluster.
+To start up the kubernetes cluster please log into each VS machine and run `sudo ./kube-start.sh`. This will start the kubernetes cluster across the VS nodes. Regardless of how many VS machines you deploy, `vs-1` will always be the Kube master and `vs-1`, `vs-2` and `vs-3` will be listed as kubernetes nodes. You must run `sudo ./kube-start.sh` on every vs machine to successfully standup the kubernetes cluster.
