@@ -63,7 +63,7 @@ By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
 
 ## 3. start docker and kubernetes
 
-`sudo ./kube_start.sh`
+`sudo ./kube-start.sh`
 
 
 ## 4. pull the latest docker image
