@@ -45,7 +45,7 @@ Vaquero Getting Started
 <p>For example: <code>VS_NUM=3 vagrant up</code> will stand up 3 vaquero server VMs. Running <code>vagrant destroy -f</code> will only destroy the first instance, you must run <code>VS_NUM=3 vagrant destroy -f</code> to clean up all of them. Include <em>every</em> ENV var for <em>every</em> vagrant command, even things like <code>vagrant ssh vs-3</code>.</p>
 <p><strong>Etcd check:</strong> Once the VM(s) are booted and before running vaquero, ssh into one of your server machines. Perform a cluster health check: <code>ETCDCTL_API=2 etcdctl cluster-health</code>. If an error message appears, wait until all machines are live, then perform the cluster health check again.</p>
 <h2 id="start-docker-and-kubernetes">3. start docker and kubernetes</h2>
-<p><code>sudo ./kube_start.sh</code></p>
+<p><code>sudo ./kube-start.sh</code></p>
 <h2 id="pull-the-latest-docker-image">4. pull the latest docker image</h2>
 <p><code>docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest</code></p>
 <h2 id="run-vaquero-with-one-of-the-source-of-truth-types">5. run vaquero with one of the source of truth types</h2>
