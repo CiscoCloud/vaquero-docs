@@ -23,17 +23,20 @@
 
 ## Table of Contents
 
-### 1. [basic vaquero deployment](#basic-vaquero-deployment)
-  #### A. [Virtual environment - standalone model (Single node)](#single-node)
-  #### B. [Virtual environment - server/agent model (Multiple nodes)](#multiple-nodes)
-### 2. [etcd and vaquero](#etcd-and-vaquero)
-### 3. [simulating IPMI reboots in the virtual environment](#ipmi-reboots)
-### 4. [vaquero demo lab](#vaquero-demo-lab)
-  #### A. [virtual env layout](#virtual-env-layout)
-  #### B. [canned demos](#canned-demos)
-  #### C. [using the sandbox mac space](#sandbox-mac-space)
-  #### D. [running the validator OR preview](tools.html)
-  #### E. [kubernetes in the Virtualenv](#kubernetes-in-the-virtualenv)
+1. [basic vaquero deployment](#basic-vaquero-deployment)
+  A. [Virtual environment - standalone model (Single node)](#single-node)
+  B. [Virtual environment - server/agent model (Multiple nodes)](#multiple-nodes)
+
+2. [etcd and vaquero](#etcd-and-vaquero)
+
+3. [simulating IPMI reboots in the virtual environment](#ipmi-reboots)
+
+4. [vaquero demo lab](#vaquero-demo-lab)
+  A. [virtual env layout](#virtual-env-layout)
+  B. [canned demos](#canned-demos)
+  C. [using the sandbox mac space](#sandbox-mac-space)
+  D. [running the validator OR preview](tools.html)
+  E. [kubernetes in the Virtualenv](#kubernetes-in-the-virtualenv)
 
 
 # 1. <a name="basic-vaquero-deployment">basic vaquero deployment</a>
