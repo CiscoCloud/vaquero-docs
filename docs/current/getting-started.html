@@ -20,9 +20,13 @@ Vaquero Getting Started
 <h1 id="getting-started">getting started</h1>
 <p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> | <a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
 <h2 id="table-of-contents">Table of Contents</h2>
-<h3 id="basic-vaquero-deployment">1. <a href="#basic-vaquero-deployment">basic vaquero deployment</a></h3>
-<p>#### A. <a href="#single-node">Virtual environment - standalone model (Single node)</a> #### B. <a href="#multiple-nodes">Virtual environment - server/agent model (Multiple nodes)</a> ### 2. <a href="#etcd-and-vaquero">etcd and vaquero</a> ### 3. <a href="#ipmi-reboots">simulating IPMI reboots in the virtual environment</a> ### 4. <a href="#vaquero-demo-lab">vaquero demo lab</a> #### A. <a href="#virtual-env-layout">virtual env layout</a> #### B. <a href="#canned-demos">canned demos</a> #### C. <a href="#sandbox-mac-space">using the sandbox mac space</a> #### D. <a href="tools.html">running the validator OR preview</a> #### E. <a href="#kubernetes-in-the-virtualenv">kubernetes in the Virtualenv</a></p>
-<h1 id="basic-vaquero-deployment-1">1. <a name="basic-vaquero-deployment">basic vaquero deployment</a></h1>
+<ol style="list-style-type: decimal">
+<li><p><a href="#basic-vaquero-deployment">basic vaquero deployment</a> A. <a href="#single-node">Virtual environment - standalone model (Single node)</a> B. <a href="#multiple-nodes">Virtual environment - server/agent model (Multiple nodes)</a></p></li>
+<li><p><a href="#etcd-and-vaquero">etcd and vaquero</a></p></li>
+<li><p><a href="#ipmi-reboots">simulating IPMI reboots in the virtual environment</a></p></li>
+<li><p><a href="#vaquero-demo-lab">vaquero demo lab</a> A. <a href="#virtual-env-layout">virtual env layout</a> B. <a href="#canned-demos">canned demos</a> C. <a href="#sandbox-mac-space">using the sandbox mac space</a> D. <a href="tools.html">running the validator OR preview</a> E. <a href="#kubernetes-in-the-virtualenv">kubernetes in the Virtualenv</a></p></li>
+</ol>
+<h1 id="basic-vaquero-deployment">1. <a name="basic-vaquero-deployment">basic vaquero deployment</a></h1>
 <h2 id="virtual-environment"><a href="https://github.com/CiscoCloud/vaquero-vagrant">virtual environment</a></h2>
 <p>Repo for deploying vaquero via vagrant on VirtualBox VMs. Validated on OSX and Windows. Base VM image is Centos7 with docker, kernels and initrds pre-installed.</p>
 <p>Vaquero can run in standalone or in separate server/agent modes. &quot;Standalone&quot; refers to both the agent and server running out of the same container, and is intended for use in testing and in POCs. Production deployments should have multiple (separate) servers and agents. [As of early November 2016, HA servers are in progress.]</p>
