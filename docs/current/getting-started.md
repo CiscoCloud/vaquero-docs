@@ -104,7 +104,7 @@ You now have both a Vaquero server and agent (standalone mode) running in your v
 
 Now we can use Vaquero to provision an additional VM running CentOS. Before executing the command below, you'll want to open the VirtualBox manager so you'll be able to see the new VM (named boot-0). When it does come into view, you can then double click on the boot-0 VM to open its console window to watch the pxe boot happen. You can also follow along with the Vaquero agent log in your vs-1 VM.
 
-**NOTE: This step simulates the automatic power management features of Vaquero by using a shell script to manually issue VBoxManage commands to configure and "power on" additional VMs for Vaquero to provision. In a baremetal environment, Vaquero would automatically power on servers and provision them accordingly.**
+**NOTE: This step simulates the automatic power management features of Vaquero by using a shell script to manually issue VBoxManage commands to configure and "power on" additional VMs for Vaquero to provision. In a bare metal environment, Vaquero would automatically power on servers and provision them accordingly.**
 
 ```
 # NOTE: run this in a new shell outside of the vs-1 VM

@@ -49,7 +49,7 @@ Each site contains an `environment file` and an `inventory file` that lists all 
 
 ### Introduction
 
-The Vaquero data model is meant to be a declarative representation of the state of your data center. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.
+The Vaquero data model is meant to be a declarative representation of the state of your data center. You specify the state you want your bare metal to be in, and Vaquero takes the steps to get there.
 
 We treat this data model as a "single source of truth" (SoT) that describes the operating state of your data center. The data model is [parsed and verified](tools.html), then deployed to an on-site Vaquero Agent for execution.
 
