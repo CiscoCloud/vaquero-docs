@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 set -ue
 
+git remote add upstream git@github.com:CiscoCloud/vaquero-docs.git || true
+git fetch upstream
 git branch -D gh-pages || true      # ignore errors
-git fetch origin gh-pages:gh-pages
 
-DIR="/drone/$(ls /drone | grep -v src)"
+DIR="generate"
 if ! expr $(git status --porcelain | egrep '^(M| M|\?\?)' | wc -l) = 0; then
     DRY_RUN="--dry-run"
 fi
 
-git checkout -q gh-pages
+git checkout -b gh-pages upstream/gh-pages
 
-rsync -av ${DRY_RUN:-} --delete-delay --exclude ".git" "${DIR}/" .
-
+rsync -av ${DRY_RUN:-} --delete-after --exclude ".git" "${DIR}/" .
