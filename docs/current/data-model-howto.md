@@ -193,7 +193,7 @@ Each site has _at least_ two documents, the specially named `env.yml` and at lea
 
 #### Clusters
 
-Clusters are represented by individual yaml files under a site (conventional they are prefixed with `cluster-` in the file name (example: `cluster-a.yml`).
+Clusters are defined by individual files in a site directory, prefixed with `cluster-` by convention (example: `cluster-dev.yml`).
 
 One file is a grouping of hosts under that site directory. Each SoT can contain multiple sites. Each of these sites shares the same assets/boot/os configuration files.
 
@@ -216,7 +216,7 @@ One file is a grouping of hosts under that site directory. Each SoT can contain 
 
 At the top of every cluster file is a `config` section.
 
-This section describes how to obtain the SOT configuration for this cluster of hosts.
+This section describes how to obtain the SoT configuration for this cluster of hosts.
 
 type: git
 
