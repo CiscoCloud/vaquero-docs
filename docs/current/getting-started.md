@@ -12,305 +12,137 @@
                     min-width: 200px;
                     max-width: 1200px;
                     margin: 0 auto;
-                    padding: 45px;
+                    padding: 25px;
                 }
             </style>
 </head><article class="markdown-body">
 
-# getting started
+# Getting started
 
 [Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
-## Table of Contents
+## Prerequisites
+
+This getting started guide provides a simple Vagrant-based environment to run Vaquero in "standalone mode" and requires the following prerequisites before moving forward:
 
-1. [basic vaquero deployment](#basic-vaquero-deployment)
-  A. [Virtual environment - standalone model (Single node)](#single-node)
-  B. [Virtual environment - server/agent model (Multiple nodes)](#multiple-nodes)
+1. [Latest Vagrant](https://www.vagrantup.com/)
+2. [VirtualBox 5.1.x (v5.2.x is not supported by Vagrant at this time)](https://www.virtualbox.org/wiki/Download_Old_Builds_5_1)
+3. [Install VirtualBox Extension Pack to match your version of VirtualBox](https://www.virtualbox.org/wiki/Download_Old_Builds_5_1) Adds functionality to PXE boot for Intel cards
+4. Access to [vaquero docker repository](
+https://hub.docker.com/r/thecsikos/vaquero/); this is currently a private docker repository
 
-2. [etcd and vaquero](#etcd-and-vaquero)
+## Try it out locally
 
-3. [simulating IPMI reboots in the virtual environment](#ipmi-reboots)
+### Clone the vaquero-vagrant repository
 
-4. [vaquero demo lab](#vaquero-demo-lab)
-  A. [virtual env layout](#virtual-env-layout)
-  B. [canned demos](#canned-demos)
-  C. [using the sandbox mac space](#sandbox-mac-space)
-  D. [running the validator OR preview](tools.html)
-  E. [kubernetes in the Virtualenv](#kubernetes-in-the-virtualenv)
+The vaquero-vagrant repository contains all the bits necessary to get a small Vaquero environment running on your local machine using VMs:
 
+```
+git clone https://github.com/CiscoCloud/vaquero-vagrant.git
+cd vaquero-vagrant
+```
 
-# 1. <a name="basic-vaquero-deployment">basic vaquero deployment</a>
-## [virtual environment](https://github.com/CiscoCloud/vaquero-vagrant)
-Repo for deploying vaquero via vagrant on VirtualBox VMs. Validated on OSX and Windows. Base VM image is Centos7 with docker, kernels and initrds pre-installed.
+### Start it up and jump into the VM
 
-Vaquero can run in standalone or in separate server/agent modes. "Standalone" refers to both the agent and server running out of the same container, and is intended for use in testing and in POCs. Production deployments should have multiple (separate) servers and agents. [As of early November 2016, HA servers are in progress.]
+The provided Vagrantfile allows for various options to override the default configuration, but we'll use the defaults for now. For more information on the additional options, please take a look at the Vagrantfile.
 
-## A. <a name="single-node">standalone model (Single node)
+```
+vagrant up
+```
 
-### 1. clone the vagrant repo
+now that you have the VM running, SSH into the VM:
 
-`git clone https://github.com/CiscoCloud/vaquero-vagrant.git && cd vaquero-vagrant`
+```
+vagrant ssh vs-1
+```
 
-### 2. boot vaquero VM
+currently, the Vaquero docker image is protected and you'll need access to the docker hub repository. Use docker to login with your credentials:
 
-`vagrant up`: deploys one vaquero VM in standalone mode
+```
+# NOTE: this command will prompt you for your credentials
+docker login docker.io
+```
 
-   **etcd check**
-   Once the VM is booted and before running vaquero, ssh into your server machine.
-   `vagrant ssh vs-1`
+next, pull the latest Vaquero docker image:
 
-  **Note:** from this point on the following commands are being run on your server machine.
+```
+docker pull thecsikos/vaquero:latest
+```
 
-   Perform a cluster health check:
-  `ETCDCTL_API=2 etcdctl cluster-health`.
+and finally, start Vaquero in standalone mode:
 
-### 3. start docker and kubernetes
+```
+docker run \
+  -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml \
+  -v /var/vaquero/files:/var/vaquero/files \
+  -v /vagrant/local:/vagrant/local \
+  -v /vagrant/provision_files/secret:/vaquero/secret \
+  --net="host" \
+  -e VAQUERO_SHARED_SECRET="<secret>" \
+  -e VAQUERO_SERVER_SECRET="<secret>" \
+  -e VAQUERO_SITE_ID="test-site" \
+  -e VAQUERO_AGENT_ID="test-agent" \
+  thecsikos/vaquero:latest \
+  standalone --config /vaquero/config.yaml
+```
 
-`sudo ./kube-start.sh`
+You now have both a Vaquero server and agent (standalone mode) running in your vs-1 VM.
 
-### 4. pull the latest docker image
+```
++----------------------------------+
+| vs-1                             |
+|  +------------+    +----------+  |
+|  | vq server  |    |vq agent  |  |
+|  |            |    |          |  |
+|  |            |<---|          |  |
+|  |            |    |          |  |
+|  +------------+    +----------+  |
++----------------------------------+
+```
 
-`docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
+### Start additional VMs that Vaquero will provision
 
-### 5. run vaquero with one of the source of truth (SoT) types
+Now we can use Vaquero to provision an additional VM running CentOS. Before executing the command below, you'll want to open the VirtualBox manager so you'll be able to see the new VM (named boot-0). When it does come into view, you can then double click on the boot-0 VM to open its console window to watch the pxe boot happen. You can also follow along with the Vaquero agent log in your vs-1 VM.
 
-There are two types of SoTs with which you can run Vaquero, either a git repository or local directory. Both contain the same kinds of information and are broken down into subdirectories; the only difference is where the SoT is stored:
+**NOTE: This step simulates the automatic power management features of Vaquero by using a shell script to manually issue VBoxManage commands to configure and "power on" additional VMs for Vaquero to provision. In a baremetal environment, Vaquero would automatically power on servers and provision them accordingly.**
 
+```
+# NOTE: run this in a new shell outside of the vs-1 VM
+./create_cluster/cluster.sh -d centos
+```
 
-1. **git SoT**: a remote Git repository containing the required SoT files. *Note*: for this to work, you must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config)
-2. **dir SoT**: a local directory containing the required SoT files. No additional overhead is needed for a local dir SoT.
+```
++--------------------------------+              +----------+
+| vs-1                           |              | boot-0   |
+|  +------------+  +----------+  |     PXE      |          |
+|  | vq server  |  |vq agent  |<----------------|          |
+|  |            |  |          |  |              |          |
+|  +------------+  +----------+  |              |          |
++--------------------------------+              +----------+
+```
 
-Both types of SoTs require specific folders, formatting and information. [See the Data Model How-To Page](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html) for details.
+**NOTE: If you get an error on the console of boot-0, "No bootable medium" it's a good indication that the VirtualBox Extension Pack was not installed (in the prerequisites above). You will need to install that, completely remove that VM (boot-0), and then run the cluster.sh command again.**
 
-For working examples of both kinds of SoT, see [configurations](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config).
+### Finish up
 
-**Note**: We default DHCP to run in server mode. If you want to run vaquero in DHCP proxy mode, edit the configuration in `config/` and start the dnsmasq VM by running: `vagrant up dnsmasq`. This will stand up dnsmasq VM running a DHCP server that only serves IP addresses.
+When you're done with the Vaquero and boot VMs that have been started with the steps above, do the following the clean up your environment:
 
-##### git SoT:
+In the vs-1 VM:
+```
+# Kill the running Vaquero server/agent
+ctrl+c
 
-`docker run -v /vagrant/config/git-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+# Exit the VM
+ctrl+d
 
-##### dir SoT:
+# Destroy the VM
+vagrant destroy vs-1
+```
 
-`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
+To cleanup the boot-0 VM, right-click its entry in the VirtualBox manager and find the Power Off action under the Close menu; you can then right-click and remove the VM.
 
-## B. <a name="multiple-nodes">server/agent model (Multiple nodes)</a>
+## Next steps
 
-### 1. clone the vagrant repo
+At this point, you've successfully run Vaquero and provisioned a CentOS machine using VMs in your local environment. In "standalone mode", the Vaquero server and agent run together in a single VM (vs-1). In a production setting, it is more suitable to have these services split out. Although it is possible to demonstrate that with separate VMs it is out of the scope for this getting started guide.
 
-`git clone https://github.com/CiscoCloud/vaquero-vagrant.git && cd vaquero-vagrant`
-
-### 2. boot vaquero VMs
-
-#### Run Commands with Environment Vars
-  Previously, in standalone mode, `vagrant up`: deployed one vaquero VM in standalone mode. This is equivalent to runing `VS_NUM=1 vagrant up`.  By default, the only ENVIRONMENT variable set is `VS_NUM=1`.
-
-  To now move beyond that basic configuration, the types of servers must be specified:
-
-  - `VA_NUM=1 vagrant up`: deploys one vaquero server and one vaquero agent.
-
-  - `VS_NUM=3 VA_NUM=3 V_RELAY=1 vagrant up`: deploys 3 vaquero servers and 3 vaquero agents with the relay.
-
-##### *WARNING*: You must set these environment variables in your session or prepend the ENV vars to every `vagrant` command.
-
-  For example: `VS_NUM=3 vagrant up` will stand up 3 vaquero server VMs. Running `vagrant destroy -f` will only destroy the first instance, you must run `VS_NUM=3 vagrant destroy -f` to clean up all of them. Include *every* ENV var for *every* vagrant command, even things like `vagrant ssh vs-3`.
-
-Lets look at the ENVIRONMENT variables that can be configured for the VM infrastructure:
-
-  - `VS_NUM`: An integer number of how many vaquero server VMs to start. Default: 1 (this can be used for standalone mode)
-  - `VA_NUM`: An integer number of how many vaquero agent VMs to start
-  - `V_DEV`: A 0 or non-zero integer that will allocate more resources to the VM. By default we allocate 1 vCPU and 512MBs of RAM, enabling `V_DEV` allocates 2 vCPUs and 2048MBs of RAM. Vagrant will also attempt to sync the host `GOPATH` to `/home/vagrant/go`
-  - `V_RELAY`: A 0 or non-zero integer that will set up vaquero to be deployed on a separate subnet from its booting hosts. It will also set up a dual homed `gateway` machine that will forward packets between the subnets. *The data model must be updated to reflect the new IPs / subnet. The fastest way to run with relay is using the local_dir and run the `provision_scripts/relay-setup.sh` script, run `/provision_scripts/relay-reset.sh` to bring the data model back to the start state. If you want to do it via github, you must make your own repo and update the server and agent IPs.*
-
-  **Etcd check:** Once the VM(s) are booted and before running vaquero, ssh into one of your server machines. Perform a cluster health check:
-  `ETCDCTL_API=2 etcdctl cluster-health`. If an error message appears, wait until all machines are live, then perform the cluster health check again.
-
-### 3. start docker and kubernetes
-
-`sudo ./kube-start.sh`
-
-
-### 4. pull the latest docker image
-
-`docker pull shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest`
-
-
-### 5. run vaquero with one of the source of truth types
-
-There are two types of SoTs with which you can run Vaquero. Both contain the same kinds of information and are broken down into subdirectories; the only difference is where the SoT is stored:
-
-
-1. **git SoT**: a remote Git repository containing the required SoT files. *Note*: for this to work, you must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config)
-2. **dir SoT**: a local directory containing the required SoT files. No additional overhead is needed for a local dir SoT.
-
-Both types of SoTs require specific folders, formatting and information. [See the Data Model How-To Page](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html) for details.
-
-For working examples of both kinds of SoT, see [configurations](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/config).
-
-**Note**: We default DHCP to run in server mode. If you want to run vaquero in DHCP proxy mode, edit the configuration in `config/` and start the dnsmasq VM by running: `vagrant up dnsmasq`. This will stand up dnsmasq VM running a DHCP server that only serves IP addresses.
-
-### SoT for separate server and agent
-
-1. Update data model to reflect VM IPs. Look at the site's `env.yml` and ensure the agent IP is correct. See the *vagrant VM table* below to see IPs for `vs` and `va` VMs
-
-2. Ensure server configuration and agent configuration match the IPs of the VM's. We have provided two example configs for separate server and agent using the local dir SoT in the vagrant repo. `VS_NUM=1 VA_NUM=1`
-
-3. Run each container in their respective mode. `server` or `agent` instead of `standalone`
-
-##### separate server dir SoT
-
-`docker run -v /vagrant/config/dir-sot-server.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>"   shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest server --config /vaquero/config.yaml`
-
-##### separate agent dir SoT
-
-`docker run -v /vagrant/config/dir-sot-agent.yaml:/vaquero/config.yaml --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" -e VAQUERO_AGENT_ID="test-agent"  shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest agent --config /vaquero/config.yaml`
-
-
-# 2. <a name="etcd-and-vaquero">etcd and vaquero</a>
-
-[CoreOS Etcd](https://coreos.com/etcd/) is a distributed, persistent key-value store. Vaquero users have the option to specify the use of an etcd cluster (vs. local filestorage) as Vaquero's internal storage. Vaquero will use that storage, in turn, to keep copies of SoTs, and to store internal information, such as tasks to be sent to Vaquero agents. Should the user elect to use their etcd cluster for Vaquero, it is up to them to maintain and secure the cluster; Vaquero simply reads and writes to the specified endpoints, and will not modify or add more nodes.
-
-The vaquero vagrant VM (described above) has a running etcd cluster baked in. You can explore the `vaquero-vagrant` `provision-scripts` folder (`etcd-config.sh`, `etcd.sh`, and `etcd-start.sh`) to see how we install and start up etcd every time we boot a machine. The example below demonstrates how to configure vaquero to use etcd.
-
-## how to run vaquero using etcd
-
-### 1. boot vaquero cluster
-Inside your host machine, in the `vaquero-vagrant` repo, run: `V_DEV=1 VS_NUM=3 vagrant up`. This will boot up a cluster of three vaquero servers, running on `10.10.10.5 - 10.10.10.7`.
-### 2. Test your cluster
-`ssh` into two of the VMs: `V_DEV=1 VS_NUM=3 vagrant ssh vs-1` in one tab, `V_DEV=1 VS_NUM=3 vagrant ssh vs-2` in another. (**Note:** this example uses three Vaquero servers, but you can start any number of VS machines (even one!), as long as each machine is configured for Etcd.)
-a. enter data
-To test to make sure the cluster is running, put a key-value pair into `vs-1`:
-
-        [vagrant@vs-1 ~]$ etcdctl put hello world
-        OK
-
-b. retrieve data
-In `vs-2`, try to fetch that key: `etcdctl get hello`.
-
-        [vagrant@vs-2 ~]$ etcdctl get hello
-        hello
-        world
-
-  *If you receive an empty output pair, or a grpc-related dialing issue on PUT, ensure that all three machines have booted before you continue. If you continue to have a problem, reboot each of the VMs, and then force-start Etcd: `sudo systemctl start etcd`. Check the cluster-health (`etcdCTL_API=2 etcdctl cluster-health`), then try to repeat steps 3-4.*
-
-### c. Check config
-Now that we've seen Etcd working on our vaquero server cluster, open up any server config (I used `/vagrant/config/dir-sot.yaml`). If you use `dir-sot.yaml`, you'll see that Etcd information is already specified (replicated below). Note that the endpoints are the **only required** information to run etcd inside vaquero, but you can also optionally specify `timeout` (for each request, in seconds, default=2) and `retry` (number of retries per request, default=3). The `10.10.10.5 - 10.10.10.7` Endpoints are what the vagrant VM reserves for servers (see "Virtualenv Layout" on this page), and the `2379` port is what we specified as our Etcd client endpoints on boot. If there is no Etcd information in your config, add it to the YAML.
-
-        Etcd:
-          Endpoints:
-          - "http://10.10.10.5:2379"
-          - "http://10.10.10.6:2379"
-          - "http://10.10.10.7:2379"
-          Timeout: 5
-          Retry: 3
-
-### d. Run vaquero from the container
-(this command uses `dir-sot.yaml`, replace with the config you used)
-`docker run -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml -v /var/vaquero/files:/var/vaquero/files -v /vagrant/local:/vagrant/local -v /vagrant/provision_files/secret:/vaquero/secret --net="host" -e VAQUERO_SHARED_SECRET="<secret>" -e VAQUERO_SERVER_SECRET="<secret>" -e VAQUERO_SITE_ID="test-site" shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest standalone --config /vaquero/config.yaml`
-
-### e. Finished!
-You should now see some etcd-related startup messages in the log output, including a successful Etcd PUT of the vagrant VM's local SOT. Success!
-
-        time="2016-12-15T21:46:28Z" level=debug msg="Etcd client initialized at endpoints: [http://10.10.10.5:2379 http://10.10.10.6:2379 http://10.10.10.7:2379]" package=storage
-        time="2016-12-15T21:46:28Z" level=info msg="Initialized etcd store for vaquero-local/test-site" package="server/controller"
-        time="2016-12-15T21:46:28Z" level=debug msg="Successful Etcd Get (withPrefix=false) for key model/current" package=storage
-        time="2016-12-15T21:46:28Z" level=debug msg="Successful Etcd Put for key model/current" package=storage
-
-
-# 3. <a name="ipmi-reboots">simulating IPMI reboots in the virtual environment</a>
-In a typical deployment, reprovisioning machines and multistage boots will kick off an IPMI container to force a restart.
-Since most VMs do not include an IPMI interface, we include the option of rebooting via SSH. *Note that vaquero injects public ssh keys into all booting hosts in the demos. Vaquero also bakes in the private ssh key into the vaquero agent. Vaquero leaves it to the operator to place ssh private keys onto agents, Vaquero does not provide ssh key management services and recommends to avoid placing ssh private keys in the data model.*
-
-1. Ensure the provisioned guest VM contains a public key for authorizing SSH login (see our example cloud-config scripts for an example).
-
-2. Place the private key in a location accessible from vaquero agent with proper permissions (700).
-
-3. Add a `bmc` entry to corresponding inventory entry. Set its type (ssh), the VM's username, and the location of the private key from `2.` See the [data model how-to](https://ciscocloud.github.io/vaquero-docs/docs/current/data-model-howto.html) or the sample data model for more information.
-
-By default vaquero will not forcefully reprovision newly added machines. To make vaquero automatically reboot added hosts with `bmc` defined, set `force_provision: true` under `policy` in `env.yaml`
-
-# 4. <a name="vaquero-demo-lab">vaquero demo lab</a>
-
-Vaquero provides this vagrant environment as a sandbox to work with vaquero before deployment. We provide 9 mac -> IP mappings that are free for your use / testing, the machines labeled SANDBOX would be free. We also provide two example data models, one as a [github](https://github.com/CiscoCloud/vaquero-examples/tree/vagrant) SoT and a local dir SoT, [vaquero-vagrant](https://github.com/CiscoCloud/vaquero-vagrant/tree/master/local). These define the demo machines and are a working data model to use as an example when you develop your own SoT.
-
-## A. <a name="virtual-env-layout">virtual env layout</a>
-
-### vagrant VM table
-There are `*`'s in the third space because VMs can be on the 10.10.10.0/24 or the 10.10.11.0/24 network. If no dhcp relay is in effect all machines will be on the 10.10.10.0/24 network, if dhcp relay is active, vaquero services will be moved to 10.10.11.0/24 while booting hosts will be on 10.10.10.10/24
-
-
-| Vagrant VM     | IP Address               |
-|:---------------|:-------------------------|
-| Relay gateway  | 10.10.10.3 & 10.10.11.3  |
-| Free           | 10.10.\*.4               |
-| Vaquero server | 10.10.\*.5 - 10.10.\*.7  |
-| Vaquero agent  | 10.10.\*.8 - 10.10.\*.10 |
-
-
-### booting host table
-
-
-| Mac address       | IP Address  | Demo          |
-|:------------------|:------------|:--------------|
-| 00:00:00:00:00:01 | 10.10.10.11 | SANDBOX       |
-| 00:00:00:00:00:02 | 10.10.10.12 | SANDBOX       |
-| 00:00:00:00:00:03 | 10.10.10.13 | SANDBOX       |
-| 00:00:00:00:00:04 | 10.10.10.14 | SANDBOX       |
-| 00:00:00:00:00:05 | 10.10.10.15 | SANDBOX       |
-| 00:00:00:00:00:06 | 10.10.10.16 | SANDBOX       |
-| 00:00:00:00:00:07 | 10.10.10.17 | SANDBOX       |
-| 00:00:00:00:00:08 | 10.10.10.18 | SANDBOX       |
-| 00:00:00:00:00:09 | 10.10.10.19 | SANDBOX       |
-| 00:00:00:00:00:21 | 10.10.10.21 | core-cloud    |
-| 00:00:00:00:00:22 | 10.10.10.22 | core-cloud    |
-| 00:00:00:00:00:23 | 10.10.10.23 | core-cloud    |
-| 00:00:00:00:00:24 | 10.10.10.24 | core-cloud    |
-| 00:00:00:00:00:31 | 10.10.10.31 | core-ignition |
-| 00:00:00:00:00:32 | 10.10.10.32 | core-ignition |
-| 00:00:00:00:00:33 | 10.10.10.33 | core-ignition |
-| 00:00:00:00:00:34 | 10.10.10.34 | core-ignition |
-| 00:00:00:00:00:41 | 10.10.10.41 | centos        |
-
-
-## B. <a name="canned-demos">canned demos</a>
-This assumes there is a running vaquero instance as described above with either the provided github repo or local data model.
-
-[Video](https://cisco.box.com/s/lsohd9v7ik1rx1af3fthng1w87o9ig36)
-
-- etcd cluster on Coreos via cloud-config: `./create_cluster/cluster.sh -d core-cloud`
-
-- etcd cluster on Coreos via ignition: `./create_cluster/cluster.sh -d core-ignition`
-
-- Centos7 base via kickstart: `./create_cluster/cluster.sh -d centos`
-
-
-## C. <a name="sandbox-mac-space">using the sandbox mac space</a>
-### 1. via github
-
-1. Go through steps 1-5.
-2. You must add your personal git token into the [config](https://github.com/CiscoCloud/vaquero-docs/tree/VagrantEnv/config) for this to work.
-3. Create your own github repo to contain your own data model
-4. If your machine is not routable set up [ngrok and the githook as described in the README](README.html)
-5. Create your own vaquero configuration based off `config/git-sot.yaml` examples. Update the Gitter fields (URL) and SoT (branch) section to reflect your repo.
-6. Start vaquero and ensure the zipball API info log refers to your repo and is a success
-7. Update your github repo, see webhook
-8. Run `./create-cluster/cluster -c <count>` to start <count> VM's starting at mac `:01` and counting up
-
-[Video](https://cisco.box.com/s/b4d4d5v3i3yph4lvcoplydqny7p6qun4)
-
-### 2.via local dir
-
-1. Go through steps 1-5
-2. Update the `local/` data model.
-3. Run `./create-cluster/cluster -c <count>` to start <count> VM's starting at mac `00:00:00:00:00:01` and counting up
-
-[Video](https://cisco.box.com/s/cbvci60f1v6b3bcajq2ejtfizr3z0ss6)
-
-## D. [running the validator OR preview](tools.html)
-After [sshing] into the vagrant VM, with the container on it. Preview will work in the same way.
-
-Validate on a local Data Model
-`docker run -v <SRC_DIR>:<DEST_DIR> shippedrepos-docker-vaquero.bintray.io/vaquero/vaquero:latest validate --sot <DEST_DIR>`
-
-## E. <a name="kubernetes-in-the-virtualenv">kubernetes in the Virtualenv</a>
-To start up the kubernetes cluster please log into each VS machine and run `sudo ./kube-start.sh`. This will start the kubernetes cluster across the VS nodes. Regardless of how many VS machines you deploy, `vs-1` will always be the Kube master and `vs-1`, `vs-2` and `vs-3` will be listed as kubernetes nodes. You must run `sudo ./kube-start.sh` on every vs machine to successfully standup the kubernetes cluster.
+[Setting up Vaquero on bare metal](https://ciscocloud.github.io/vaquero-docs/docs/current/bare-metal.html)
