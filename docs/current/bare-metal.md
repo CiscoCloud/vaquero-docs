@@ -63,7 +63,7 @@ For our purposes, we'll be using the local directory mode for the vaquero server
 
 ### Initial directory structure
 
-We'll use /var/vaquero-demo, but feel free to use a different location. Take care to keep things consistent:
+First, create the initial directory structure where all configuration will live:
 
 ```
 mkdir -p /var/vaquero-demo/{files,save}
