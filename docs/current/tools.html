@@ -1,10 +1,12 @@
 <head>
-            
-<meta charset="UTF-8"> <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+&lt;[endif]–&gt;
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
 Vaquero Tools
 </title>
-            
 <link rel="stylesheet" type="text/css" href="../doc.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400"> <link rel='shortcut icon' href='cow.png' type='image/x-icon'/ >
 <style>
                 .markdown-body {
@@ -15,8 +17,8 @@ Vaquero Tools
                     padding: 45px;
                 }
             </style>
-</head><article class="markdown-body">
-
+</head>
+<article class="markdown-body">
 <h1 id="vaquero-tools">Vaquero Tools</h1>
 <p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> | <a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a> | <a href="#vaquero-migrate">Migrate</a> | <a href="#vaquero-preview">Preview</a> | <a href="#vaquero-validator">Validator</a></p>
 <h2 id="vaquero-migrate">Vaquero Migrate</h2>
@@ -105,7 +107,7 @@ Vaquero Tools
 </ul>
 <h3 id="validation-process">Validation Process</h3>
 <p>The validator first loads the directory tree passed in through a local directory, or through git. It then:</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>Checks if all links between objects exist. For example, an error would be generated if a <code>host_group</code> is looking for <code>operating_system: coreos-1053.2.0-stable</code> and the data model only has <code>coreos-1053.2.0-alpha</code>.</li>
 <li>Checks if all metadata needed to render templates is available.</li>
 <li>Checks unattended files are in a valid format</li>
