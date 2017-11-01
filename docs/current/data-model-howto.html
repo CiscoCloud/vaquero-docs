@@ -1,10 +1,12 @@
 <head>
-            
-<meta charset="UTF-8"> <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+&lt;[endif]–&gt;
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
 Vaquero Data Model
 </title>
-            
 <link rel="stylesheet" type="text/css" href="../doc.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400"> <link rel='shortcut icon' href='cow.png' type='image/x-icon'/ >
 <style>
                 .markdown-body {
@@ -15,20 +17,18 @@ Vaquero Data Model
                     padding: 45px;
                 }
             </style>
-</head><article class="markdown-body">
-
+</head>
+<article class="markdown-body">
 <h1 id="the-vaquero-data-model-and-you">The Vaquero Data Model and YOU</h1>
 <p><a href="https://ciscocloud.github.io/vaquero-docs/">Home</a> | <a href="https://github.com/CiscoCloud/vaquero-docs/tree/master">Docs Repo</a></p>
 <ul>
 <li><a href="https://github.com/CiscoCloud/vaquero-examples">Example Data Models</a></li>
 </ul>
 <h2 id="data-model-diagram-to-show-relationships">Data Model Diagram to show relationships</h2>
-<p>Each site contains an <code>environment file</code> and an <code>inventory file</code> that lists all related hosts. Hosts are members of a single <code>workflow</code>. <code>workflow</code> is a collection of 'boot' steps that take a new machine and bring it to its final state. A <code>boot</code> contains <code>os</code> and <code>assets</code>. Note re-use of <code>boot</code>, <code>os</code> and <code>assets</code>.</p>
-<div class="figure">
-<img src="nov16DM.png" />
-</div>
+<p>Each site contains an <code>environment file</code> and an <code>inventory file</code> that lists all related hosts. Hosts are members of a single <code>workflow</code>. <code>workflow</code> is a collection of ‘boot’ steps that take a new machine and bring it to its final state. A <code>boot</code> contains <code>os</code> and <code>assets</code>. Note re-use of <code>boot</code>, <code>os</code> and <code>assets</code>.</p>
+<p><img src="nov16DM.png" /></p>
 <h2 id="table-of-contents">Table of Contents</h2>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li><p><a href="#key-concepts">Key Concepts</a></p></li>
 <li><p><a href="#vocabulary">Vocabulary</a></p></li>
 <li><p><a href="#where-things-go">Where things go</a></p></li>
@@ -41,23 +41,23 @@ Vaquero Data Model
 </ol>
 <h3 id="introduction">Introduction</h3>
 <p>The Vaquero data model is meant to be a declarative representation of the state of your data center. You specify the state you want your baremetal to be in, and Vaquero takes the steps to get there.</p>
-<p>We treat this data model as a &quot;single source of truth&quot; (SoT) that describes the operating state of your data center. The data model is <a href="tools.html">parsed and verified</a>, then deployed to an on-site Vaquero Agent for execution.</p>
+<p>We treat this data model as a “single source of truth” (SoT) that describes the operating state of your data center. The data model is <a href="tools.html">parsed and verified</a>, then deployed to an on-site Vaquero Agent for execution.</p>
 <h2 id="key-concepts"><a name="key-concepts">Key Concepts</a></h2>
 <p>Your data center is expressed as an inventory of <em>hosts</em>. Each host belongs to a <em>workflow</em>. Each workflow is comprised of one or many <em>boot</em> steps that use a combination of <em>unattended assets</em> and <em>operating system</em> definitions to define a target configured state for a host.</p>
 <h2 id="vocabulary"><a name="vocabulary">Vocabulary</a></h2>
 <p><em>Site</em>: A managed data center, or group of machines managed by a single Vaquero Agent.</p>
 <p><em>Host</em>: A single managed machine. Definition includes identifying attributes (selectors), host-specific metadata, information for LOM (IPMI), and an association to a single workflow.</p>
-<p><em>Operating System</em>: An &quot;installation&quot; template containing the details to perform a network boot into a particular OS, specifying kernel, initrd, boot command-line parameters, unattended config, etc.</p>
-<p><em>Unattended Assets</em>: An optionally templated unattended config/script (i.e. cloud-init, ignition, kickstart, etc) used for unattended boot and installation operations.</p>
+<p><em>Operating System</em>: An “installation” template containing the details to perform a network boot into a particular OS, specifying kernel, initrd, boot command-line parameters, unattended config, etc.</p>
+<p><em>Unattended Assets</em>: An optionally templated unattended config/script (i.e. cloud-init, ignition, kickstart, etc) used for unattended boot and installation operations.</p>
 <p><em>Boot</em>: A collection that ties together operating systems and unattended assets. Describes a single network boot.</p>
 <p><em>Workflow</em>: A series of network boots that end with a host machine in a desired state.</p>
 <h2 id="where-things-go"><a name="where-things-go">Where Things Go</a></h2>
 <p>Configuration files are placed in a directory hierarchy. Vaquero parses site configurations by reading files placed in specially named subdirectories. The root of your configuration path has four directories:</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li><strong>assets</strong>: grouped by type. These are generally unattended configs or scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).</li>
 <li><strong>os</strong>: Individual documents, each representing an Operating System</li>
 <li><strong>boot</strong>: Individual documents, each representing a Boot</li>
-<li><strong>sites</strong>: One or more sites (each in it's own subdirectory) that share the same boot, os, and asset definitions. Each site includes environment-specific information (Vaquero Agent URLs/certs, subnets, other metadata), and an inventory of hosts that apply boot definitions to machines.</li>
+<li><strong>sites</strong>: One or more sites (each in it’s own subdirectory) that share the same boot, os, and asset definitions. Each site includes environment-specific information (Vaquero Agent URLs/certs, subnets, other metadata), and an inventory of hosts that apply boot definitions to machines.</li>
 <li><strong>workflows</strong>: Individual documents, each representing a Workflow</li>
 </ol>
 <pre><code>.
@@ -69,14 +69,14 @@ Vaquero Data Model
 </code></pre>
 <h3 id="assets">Assets</h3>
 <p>Assets are grouped into named subdirectories based on type. There are currently four types:</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>Cloud-Config: <a href="https://coreos.com/os/docs/latest/cloud-config.html">CoreOS Cloudinit System</a></li>
 <li>Ignition: <a href="https://coreos.com/ignition/docs/latest/">CoreOS Ignition</a></li>
 <li>Kickstart: <a href="http://fedoraproject.org/wiki/Anaconda/Kickstart">Fedora Project Kickstart</a></li>
-<li>Untyped: Miscellaneous files. Can be used for &quot;unsupported&quot; configuration types.</li>
+<li>Untyped: Miscellaneous files. Can be used for “unsupported” configuration types.</li>
 </ol>
 <p>Each subdirectory may also have a <code>snippets</code> directory for holding partial templates (see below)</p>
-<p>Each asset is placed under a subdirectory according to it's type. Assets are referenced by file name from boots:</p>
+<p>Each asset is placed under a subdirectory according to it’s type. Assets are referenced by file name from boots:</p>
 <pre><code>.
 └── assets
     ├── cloud-config
@@ -94,7 +94,7 @@ Vaquero Data Model
         └── preseed.cfg</code></pre>
 <p>Validation is performed on typed assets to verify that rendered templates produce valid configuration scripts.</p>
 <p>Assets are retrieved dynamically from the Vaquero Agent asset server through the <code>/config/&lt;mac-addr&gt;</code> endpoint. An optional <code>boot</code> query parameter can be used to specify the ID of the Boot to use.</p>
-<p>For instance, a host with mac address <code>00:00:00:00:00:01</code> could retrieve it's default configuration by requesting</p>
+<p>For instance, a host with mac address <code>00:00:00:00:00:01</code> could retrieve it’s default configuration by requesting</p>
 <pre><code>{{.env.assetURL}}/config/00:00:00:00:00:01</code></pre>
 <p>Or the configuration from a particular boot by requesting</p>
 <pre><code>{{.env.assetURL}}/config/00:00:00:00:00:01?boot=specific-boot-id</code></pre>
@@ -125,7 +125,7 @@ Vaquero Data Model
     └── etcd-proxy.yml</code></pre>
 <h3 id="sites">Sites</h3>
 <p>Sites are represented by individual subdirectories. One directory == one site == one managed group of machines. Each SoT can contain multiple sites. Each of these sites shares the same assets/boot/os configuration files.</p>
-<p>Each site has <em>at least</em> two documents, the specially named <code>env.yml</code> and at least one document describing an inventory of hosts. You may use YAML's triple-dash <code>---</code> separator to combine multiple inventory documents into one file.</p>
+<p>Each site has <em>at least</em> two documents, the specially named <code>env.yml</code> and at least one document describing an inventory of hosts. You may use YAML’s triple-dash <code>---</code> separator to combine multiple inventory documents into one file.</p>
 <pre><code>.
 └── sites
     ├── site-a
@@ -144,7 +144,7 @@ Vaquero Data Model
     └── k8s-node.yml</code></pre>
 <h2 id="provisioning-steps"><a name="provisioning-steps">Provisioning Steps</a></h2>
 <p>Configurations are roughly executed in the following order:</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>Host makes DHCP request.</li>
 <li>DHCP causes host to chainload iPXE (<code>undionly.kpxe</code>) and indicates Vaquero Agent as next-server</li>
 <li>Vaquero Agent provides a default iPXE script to discover host interface information (mac)</li>
@@ -161,38 +161,38 @@ chain ipxe?uuid=${uuid}&amp;mac=${net0/mac:hexhyp}&amp;domain=${domain}&amp;host
 <p>A booting machine is identified as a particular host based on the selecting information used. Currently, a host will be identified by <code>mac</code>, as reported by iPXE. According to validation rules, every host has an exclusive collection of interfaces (all unique by mac address).</p>
 <p>Additionally, the first non-BMC type (excluding SSH) interface listed for the host is the <code>Primary Interface</code> for that host. The Primary Interface is the preferred interface to use when provisioning hosts.</p>
 <h2 id="metadata-and-templating"><a name="metadata-and-templating">Metadata and Templating</a></h2>
-<p>Templates are written using <a href="https://golang.org/pkg/text/template/">Go's standard templates</a>. Templated information occurs in the following areas:</p>
-<ol style="list-style-type: decimal">
+<p>Templates are written using <a href="https://golang.org/pkg/text/template/">Go’s standard templates</a>. Templated information occurs in the following areas:</p>
+<ol type="1">
 <li>In any files under <code>assets</code></li>
 <li>In os objects in <code>boot.kernel</code>, <code>boot.initrd</code>, and values in <code>cmdline</code></li>
 </ol>
-<p>Metadata is used primarily to render templated information. It is &quot;unstructured&quot; data, consisting of nested key-value maps, and lists. Metadata is included in three separate places in your configuration:</p>
-<ol style="list-style-type: decimal">
+<p>Metadata is used primarily to render templated information. It is “unstructured” data, consisting of nested key-value maps, and lists. Metadata is included in three separate places in your configuration:</p>
+<ol type="1">
 <li>In the environment <code>env.yml</code> file</li>
 <li>In a boot file</li>
 <li>In an inventory document, under each host</li>
 </ol>
-<p>Metadata is made available during template execution as separate fields under the template's &quot;dot&quot;. With a few exceptions, each entry directly relates to the scheme. The cases where proxies or other values are included are noted:</p>
-<ol style="list-style-type: decimal">
-<li><code>.env</code>: the site's Environment information.</li>
+<p>Metadata is made available during template execution as separate fields under the template’s “dot”. With a few exceptions, each entry directly relates to the scheme. The cases where proxies or other values are included are noted:</p>
+<ol type="1">
+<li><code>.env</code>: the site’s Environment information.</li>
 </ol>
 <ul>
 <li><code>.env.agentURL</code>: The scheme://host:port that the host can use to reach Vaquero Agent.</li>
 </ul>
-<ol start="2" style="list-style-type: decimal">
+<ol start="2" type="1">
 <li><code>.boot</code>: the current Boot</li>
 </ol>
 <ul>
-<li><code>.boot.configURL</code>: The scheme://host:port/path?query needed to retrieve the unattended configuration information for the boot. Used for manually inserting config retrieval, i.e. ClevOS answers.</li>
+<li><code>.boot.configURL</code>: The scheme://host:port/path?query needed to retrieve the unattended configuration information for the boot. Used for manually inserting config retrieval, i.e. ClevOS answers.</li>
 <li><code>.boot.{operating_system,os}</code>: the OS ID is replaced with the Operating System object that it refers to</li>
 </ul>
-<ol start="3" style="list-style-type: decimal">
+<ol start="3" type="1">
 <li><code>.host</code>: the current Host</li>
 </ol>
 <ul>
 <li><code>.host.interfaces.subnet</code>: subnet ID is replaced with Subnet object that it refers to</li>
 </ul>
-<ol start="4" style="list-style-type: decimal">
+<ol start="4" type="1">
 <li><code>.interface</code>: the Interface that the Host is using to connect with Vaquero Agent</li>
 </ol>
 <ul>
@@ -213,13 +213,13 @@ chain ipxe?uuid=${uuid}&amp;mac=${net0/mac:hexhyp}&amp;domain=${domain}&amp;host
         Address={{.interface.ipv4}}</code></pre>
 <h2 id="translation-to-ipxe"><a name="translation-to-ipxe">Translation to iPXE</a></h2>
 <p>Currently, all network boots and installations are performed using iPXE scripts. Operating system boot parameters and command line options are translated into iPXE scripts to perform boot/installation tasks.</p>
-<p>Any unattended configs or scripts included in a boot are inserted during this process. Inconsistencies (i.e. using ignition for a CentOS operating system) should be detected during validation.</p>
+<p>Any unattended configs or scripts included in a boot are inserted during this process. Inconsistencies (i.e. using ignition for a CentOS operating system) should be detected during validation.</p>
 <h3 id="command-line-parameters">Command Line Parameters</h3>
 <p>Rules for translating command line parameters:</p>
-<ol style="list-style-type: decimal">
-<li>Keys with empty values (i.e. &quot;&quot; or '') are formatted as <code>key</code> in the boot options</li>
+<ol type="1">
+<li>Keys with empty values (i.e. “” or ’’) are formatted as <code>key</code> in the boot options</li>
 <li>Keys with non-empty values are formatted as <code>key=value</code> in the boot options</li>
-<li>Keys that contain a list will be included once each time for every list element. If a list element cannot be parsed not a string (i.e. is a map, list, etc), it is ignored.</li>
+<li>Keys that contain a list will be included once each time for every list element. If a list element cannot be parsed not a string (i.e. is a map, list, etc), it is ignored.</li>
 </ol>
 <p>For example, given this OS:</p>
 <pre><code>---
@@ -255,69 +255,76 @@ cmdline:
 kernel http://127.0.0.1:24601/files/coreos_production_pxe.vmlinuz coreos.autologin initrd=coreos_production_pxe_image.cpio.gz coreos.first_boot coreos.config.url=http://127.0.0.1:24601/config/00:00:00:00:00:01?boot=etcd-master
 initrd http://127.0.0.1:24601/files/coreos_production_pxe_image.cpio.gz
 boot</code></pre>
-<p>Note how <code>lang</code> appears with a trailing <code>=</code>, because it's value was non-empty <code>' '</code></p>
+<p>Note how <code>lang</code> appears with a trailing <code>=</code>, because it’s value was non-empty <code>' '</code></p>
 <h2 id="schemas"><a name="schemas">Schemas</a></h2>
 <h3 id="boot-1">boot</h3>
 <p>Defines a configured state (combination of os with unattended configuration and metadata) that may be applied to a group of hosts.</p>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 50%" />
+<col style="width: 9%" />
+<col style="width: 15%" />
+<col style="width: 8%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">id</td>
-<td align="left">A self-assigned identifier (should be unique)</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">A self-assigned identifier (should be unique)</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">name</td>
-<td align="left">A human-readable name for this group</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left">id</td>
+<td style="text-align: left;">name</td>
+<td style="text-align: left;">A human-readable name for this group</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">id</td>
 </tr>
 <tr class="odd">
-<td align="left">operating_system</td>
-<td align="left">The ID of the os associated with this group</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">operating_system</td>
+<td style="text-align: left;">The ID of the os associated with this group</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">unattended</td>
-<td align="left">Unattended config/script details</td>
-<td align="left">no</td>
-<td align="left">boot.unattended</td>
-<td align="left"></td>
+<td style="text-align: left;">unattended</td>
+<td style="text-align: left;">Unattended config/script details</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">boot.unattended</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">metadata</td>
-<td align="left">unstructured, boot-specific information</td>
-<td align="left">no</td>
-<td align="left">object</td>
-<td align="left"></td>
+<td style="text-align: left;">metadata</td>
+<td style="text-align: left;">unstructured, boot-specific information</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">validate</td>
-<td align="left">A series of containers run to ensure proper configuration</td>
-<td align="left">no</td>
-<td align="left">container</td>
-<td align="left"></td>
+<td style="text-align: left;">validate</td>
+<td style="text-align: left;">A series of containers run to ensure proper configuration</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">container</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">before_shutdown</td>
-<td align="left">Containers to run before a manual reboot/reprovision</td>
-<td align="left">no</td>
-<td align="left">container</td>
-<td align="left"></td>
+<td style="text-align: left;">before_shutdown</td>
+<td style="text-align: left;">Containers to run before a manual reboot/reprovision</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">container</td>
+<td style="text-align: left;"></td>
 </tr>
 </tbody>
 </table>
@@ -326,27 +333,27 @@ boot</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">type</td>
-<td align="left">The type of unattended config/script to use</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">The type of unattended config/script to use</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">use</td>
-<td align="left">The file name used to find the unattended config/script</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">use</td>
+<td style="text-align: left;">The file name used to find the unattended config/script</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 </tbody>
 </table>
@@ -354,36 +361,36 @@ boot</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">image</td>
-<td align="left">Docker image name (e.g. alpine:latest)</td>
-<td align="left">yes</td>
-<td align="left">string</td>
+<td style="text-align: left;">image</td>
+<td style="text-align: left;">Docker image name (e.g. alpine:latest)</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
 </tr>
 <tr class="even">
-<td align="left">commands</td>
-<td align="left">List of commands to run (via /bin/sh -c)</td>
-<td align="left">yes</td>
-<td align="left">list</td>
+<td style="text-align: left;">commands</td>
+<td style="text-align: left;">List of commands to run (via /bin/sh -c)</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">list</td>
 </tr>
 <tr class="odd">
-<td align="left">env</td>
-<td align="left">Map of environment variables.</td>
-<td align="left">no</td>
-<td align="left">map</td>
+<td style="text-align: left;">env</td>
+<td style="text-align: left;">Map of environment variables.</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">map</td>
 </tr>
 <tr class="even">
-<td align="left">registry_auth</td>
-<td align="left">Registry Credentials</td>
-<td align="left">no</td>
-<td align="left">registry_auth</td>
+<td style="text-align: left;">registry_auth</td>
+<td style="text-align: left;">Registry Credentials</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">registry_auth</td>
 </tr>
 </tbody>
 </table>
@@ -391,201 +398,222 @@ boot</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">url</td>
-<td align="left">api versioned registry url</td>
-<td align="left">yes</td>
-<td align="left">string</td>
+<td style="text-align: left;">url</td>
+<td style="text-align: left;">api versioned registry url</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
 </tr>
 <tr class="even">
-<td align="left">username</td>
-<td align="left">registry username</td>
-<td align="left">yes</td>
-<td align="left">string</td>
+<td style="text-align: left;">username</td>
+<td style="text-align: left;">registry username</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
 </tr>
 <tr class="odd">
-<td align="left">password</td>
-<td align="left">registry password</td>
-<td align="left">yes</td>
-<td align="left">string</td>
+<td style="text-align: left;">password</td>
+<td style="text-align: left;">registry password</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
 </tr>
 </tbody>
 </table>
 <h3 id="env">env</h3>
 <p>Provides information for a single deployment/data center/etc.</p>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 45%" />
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 7%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">id</td>
-<td align="left">A self-assigned identifier (should be unique)</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">A self-assigned identifier (should be unique)</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">name</td>
-<td align="left">A human-readable name for this group</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left">id</td>
+<td style="text-align: left;">name</td>
+<td style="text-align: left;">A human-readable name for this group</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">id</td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="#envagent">agents</a></td>
-<td align="left">Details for establishing a connection to the site's agent</td>
-<td align="left">yes</td>
-<td align="left">env.agent array</td>
-<td align="left"></td>
+<td style="text-align: left;"><a href="#envagent">agents</a></td>
+<td style="text-align: left;">Details for establishing a connection to the site’s agent</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">env.agent array</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left"><a href="#envsubnet">subnets</a></td>
-<td align="left">List of subnets for this cluster</td>
-<td align="left">yes</td>
-<td align="left">env.subnet array</td>
-<td align="left"></td>
+<td style="text-align: left;"><a href="#envsubnet">subnets</a></td>
+<td style="text-align: left;">List of subnets for this cluster</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">env.subnet array</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">metadata</td>
-<td align="left">unstructured, site-specific information</td>
-<td align="left">no</td>
-<td align="left">object</td>
-<td align="left"></td>
+<td style="text-align: left;">metadata</td>
+<td style="text-align: left;">unstructured, site-specific information</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left"><a href="#envrelease_tag">release_tag</a></td>
-<td align="left">Github release tag</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;"><a href="#envrelease_tag">release_tag</a></td>
+<td style="text-align: left;">Github release tag</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 </tbody>
 </table>
 <h4 id="env.agent">env.agent</h4>
-<p>Details for establishing a connection to a site's agent</p>
-<table>
+<p>Details for establishing a connection to a site’s agent</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 30%" />
+<col style="width: 7%" />
+<col style="width: 17%" />
+<col style="width: 15%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><a href="#envagentassetserver">asset_server</a></td>
-<td align="left">Asset Server configuration</td>
-<td align="left">no</td>
-<td align="left">env.agent.asset_server</td>
-<td align="left"></td>
+<td style="text-align: left;"><a href="#envagentassetserver">asset_server</a></td>
+<td style="text-align: left;">Asset Server configuration</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">env.agent.asset_server</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">dhcp_mode</td>
-<td align="left">The mode to run DHCP in, server or proxy</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left">server</td>
+<td style="text-align: left;">dhcp_mode</td>
+<td style="text-align: left;">The mode to run DHCP in, server or proxy</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">server</td>
 </tr>
 <tr class="odd">
-<td align="left">save_path</td>
-<td align="left">The dir path to save local files</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left">/var/vaquero</td>
+<td style="text-align: left;">save_path</td>
+<td style="text-align: left;">The dir path to save local files</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">/var/vaquero</td>
 </tr>
 <tr class="even">
-<td align="left">ssh_container</td>
-<td align="left">Docker registry URL for ssh container.</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left">gemtest/openssh<sup>1</sup></td>
+<td style="text-align: left;">ssh_container</td>
+<td style="text-align: left;">Docker registry URL for ssh container.</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">gemtest/openssh<sup>1</sup></td>
 </tr>
 <tr class="odd">
-<td align="left">ipmi_container</td>
-<td align="left">Docker registry URL for IPMI container.</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left">gemtest/ipmitool<sup>2</sup></td>
+<td style="text-align: left;">ipmi_container</td>
+<td style="text-align: left;">Docker registry URL for IPMI container.</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">gemtest/ipmitool<sup>2</sup></td>
 </tr>
 </tbody>
 </table>
 <p><sup>1. docker.io/gemtest/openssh</sup><br /> <sup>2. docker.io/gemtest/ipmitool</sup> </sup> #### env.agent.asset_server</p>
 <p>Configuration for the asset server</p>
 <table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 53%" />
+<col style="width: 9%" />
+<col style="width: 8%" />
+<col style="width: 17%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">addr</td>
-<td align="left">Asset Server configuration</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left">127.0.0.1</td>
+<td style="text-align: left;">addr</td>
+<td style="text-align: left;">Asset Server configuration</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">127.0.0.1</td>
 </tr>
 <tr class="even">
-<td align="left">port</td>
-<td align="left">The mode to run DHCP in, server or proxy</td>
-<td align="left">no</td>
-<td align="left">integer</td>
-<td align="left">server</td>
+<td style="text-align: left;">port</td>
+<td style="text-align: left;">The mode to run DHCP in, server or proxy</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">server</td>
 </tr>
 <tr class="odd">
-<td align="left">base_dir</td>
-<td align="left">The directory that vaquero agent will use to serve files from</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left">/var/vaquero/files</td>
+<td style="text-align: left;">base_dir</td>
+<td style="text-align: left;">The directory that vaquero agent will use to serve files from</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">/var/vaquero/files</td>
 </tr>
 <tr class="even">
-<td align="left">scheme</td>
-<td align="left">The protocol scheme to use for the agent</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left">http</td>
+<td style="text-align: left;">scheme</td>
+<td style="text-align: left;">The protocol scheme to use for the agent</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">http</td>
 </tr>
 <tr class="odd">
-<td align="left">cdn_addr</td>
-<td align="left">The address of the CDN vaquero agent should reverse proxy to</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">cdn_addr</td>
+<td style="text-align: left;">The address of the CDN vaquero agent should reverse proxy to</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">cdn_port</td>
-<td align="left">The port of the CDN vaquero agent should reverse proxy to</td>
-<td align="left">no</td>
-<td align="left">integer</td>
-<td align="left"></td>
+<td style="text-align: left;">cdn_port</td>
+<td style="text-align: left;">The port of the CDN vaquero agent should reverse proxy to</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">cdn_scheme</td>
-<td align="left">The scheme of the CDN vaquero agent should reverse proxy to</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left">http</td>
+<td style="text-align: left;">cdn_scheme</td>
+<td style="text-align: left;">The scheme of the CDN vaquero agent should reverse proxy to</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">http</td>
 </tr>
 </tbody>
 </table>
@@ -593,7 +621,7 @@ boot</code></pre>
 <p>The transport (http/s) should be included with the agent URL.</p>
 <h4 id="env.release_tag">env.release_tag</h4>
 <p><code>release_tag</code> must be a valid <a href="https://git-scm.com/docs/git#git-ltcommit-ishgt">commit_ish</a> string corresponding to a specific <a href="https://help.github.com/articles/about-releases/">Github Release</a> (e.g., v0.1.0) or commit_id.</p>
-<p>If <code>release_tag</code> is specified, Vaquero will attempt to use the data model stored in the specified release instead of <em>this</em> model (i.e. where release_tag was specified). If the tag does not exist, Vaquero will fall back to using <em>this</em> model.</p>
+<p>If <code>release_tag</code> is specified, Vaquero will attempt to use the data model stored in the specified release instead of <em>this</em> model (i.e. where release_tag was specified). If the tag does not exist, Vaquero will fall back to using <em>this</em> model.</p>
 <p>This option is only supported when <a href="#staging">staging via Github</a>.</p>
 <h6 id="example">Example</h6>
 <p>Branch <code>master</code> defines three sites: <code>site-a</code> with <code>release_tag: v0.1.0</code>, <code>site-b</code> with <code>release_tag: v0.1.1</code>, and <code>site-c</code> with no tag.</p>
@@ -602,76 +630,76 @@ boot</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">id</td>
-<td align="left">A self-assigned identifier (should be unique in env)</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">A self-assigned identifier (should be unique in env)</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">cidr</td>
-<td align="left">CIDR for this subnet</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">cidr</td>
+<td style="text-align: left;">CIDR for this subnet</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">dns</td>
-<td align="left">List of DNS URLs</td>
-<td align="left">yes</td>
-<td align="left">string array</td>
-<td align="left"></td>
+<td style="text-align: left;">dns</td>
+<td style="text-align: left;">List of DNS URLs</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string array</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">ntp</td>
-<td align="left">List of NTP URLs</td>
-<td align="left">yes</td>
-<td align="left">string array</td>
-<td align="left"></td>
+<td style="text-align: left;">ntp</td>
+<td style="text-align: left;">List of NTP URLs</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string array</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">gateway</td>
-<td align="left">Gateway for this subnet</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">gateway</td>
+<td style="text-align: left;">Gateway for this subnet</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">domain_name</td>
-<td align="left">Domain name for this subnet</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">domain_name</td>
+<td style="text-align: left;">Domain name for this subnet</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">vlan</td>
-<td align="left">VLAN for the subnet</td>
-<td align="left">no</td>
-<td align="left">integer</td>
-<td align="left">1</td>
+<td style="text-align: left;">vlan</td>
+<td style="text-align: left;">VLAN for the subnet</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">1</td>
 </tr>
 <tr class="even">
-<td align="left">dhcp_options</td>
-<td align="left">Additional DHCP options</td>
-<td align="left">no</td>
-<td align="left">dhcp_options array</td>
-<td align="left"></td>
+<td style="text-align: left;">dhcp_options</td>
+<td style="text-align: left;">Additional DHCP options</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">dhcp_options array</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">metadata</td>
-<td align="left">unstructured, host-specific information</td>
-<td align="left">no</td>
-<td align="left">object</td>
-<td align="left"></td>
+<td style="text-align: left;">metadata</td>
+<td style="text-align: left;">unstructured, host-specific information</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;"></td>
 </tr>
 </tbody>
 </table>
@@ -680,45 +708,48 @@ boot</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">option</td>
-<td align="left">DHCP option tag.</td>
-<td align="left">yes</td>
-<td align="left">uint8</td>
-<td align="left"></td>
+<td style="text-align: left;">option</td>
+<td style="text-align: left;">DHCP option tag.</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">uint8</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">value</td>
-<td align="left">List of DNS URLs</td>
-<td align="left">yes</td>
-<td align="left">variable</td>
-<td align="left"></td>
+<td style="text-align: left;">value</td>
+<td style="text-align: left;">List of DNS URLs</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">variable</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">type</td>
-<td align="left">Denotes the type of <code>value</code>. Accepted values:</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">Denotes the type of <code>value</code>. Accepted values:</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left"></td>
-<td align="left">string, uint8, uint16, uint32, int8, int16, int32</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">string, uint8, uint16, uint32, int8, int16, int32</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left"></td>
-<td align="left">addresses*, base64** | | | | | | | | | |</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">addresses*, base64**</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 </tbody>
 </table>
@@ -728,346 +759,364 @@ boot</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">id</td>
-<td align="left">A self-assigned identifier (should be unique in env)</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">A self-assigned identifier (should be unique in env)</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">cidr</td>
-<td align="left">CIDR for this subnet</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">cidr</td>
+<td style="text-align: left;">CIDR for this subnet</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">dns</td>
-<td align="left">List of DNS URLs</td>
-<td align="left">yes</td>
-<td align="left">string array</td>
-<td align="left"></td>
+<td style="text-align: left;">dns</td>
+<td style="text-align: left;">List of DNS URLs</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string array</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">ntp</td>
-<td align="left">List of NTP URLs</td>
-<td align="left">yes</td>
-<td align="left">string array</td>
-<td align="left"></td>
+<td style="text-align: left;">ntp</td>
+<td style="text-align: left;">List of NTP URLs</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string array</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">domain</td>
-<td align="left">Client DNS domain</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">domain</td>
+<td style="text-align: left;">Client DNS domain</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">gateway</td>
-<td align="left">Gateway for this subnet</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">gateway</td>
+<td style="text-align: left;">Gateway for this subnet</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">vlan</td>
-<td align="left">VLAN for the subnet</td>
-<td align="left">no</td>
-<td align="left">integer</td>
-<td align="left">1</td>
+<td style="text-align: left;">vlan</td>
+<td style="text-align: left;">VLAN for the subnet</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">1</td>
 </tr>
 </tbody>
 </table>
 <h4 id="host">host</h4>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 53%" />
+<col style="width: 11%" />
+<col style="width: 12%" />
+<col style="width: 10%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">name</td>
-<td align="left">Name for the host machine.</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">name</td>
+<td style="text-align: left;">Name for the host machine.</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">interfaces</td>
-<td align="left">Network interfaces for this host</td>
-<td align="left">no</td>
-<td align="left">interface</td>
-<td align="left"></td>
+<td style="text-align: left;">interfaces</td>
+<td style="text-align: left;">Network interfaces for this host</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">interface</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">metadata</td>
-<td align="left">unstructured, host-specific information</td>
-<td align="left">no</td>
-<td align="left">object</td>
-<td align="left"></td>
+<td style="text-align: left;">metadata</td>
+<td style="text-align: left;">unstructured, host-specific information</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">workflow</td>
-<td align="left">The ID of the workflow used to provision this host</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">workflow</td>
+<td style="text-align: left;">The ID of the workflow used to provision this host</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">never_provision</td>
-<td align="left">Prevent Vaquero from rebooting/provisioning hosts.</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left">false</td>
+<td style="text-align: left;">never_provision</td>
+<td style="text-align: left;">Prevent Vaquero from rebooting/provisioning hosts.</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">false</td>
 </tr>
 </tbody>
 </table>
 <h4 id="interface">interface</h4>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 54%" />
+<col style="width: 9%" />
+<col style="width: 14%" />
+<col style="width: 8%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">type</td>
-<td align="left">Interface type. physical or bmc</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">Interface type. physical or bmc</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">mac</td>
-<td align="left">MAC address identifying this interface</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">mac</td>
+<td style="text-align: left;">MAC address identifying this interface</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">subnet</td>
-<td align="left">ID of subnet (specified in env)</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">subnet</td>
+<td style="text-align: left;">ID of subnet (specified in env)</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">bmc</td>
-<td align="left">Details for BMC interface*</td>
-<td align="left">no</td>
-<td align="left">interface.bmc</td>
-<td align="left"></td>
+<td style="text-align: left;">bmc</td>
+<td style="text-align: left;">Details for BMC interface*</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">interface.bmc</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">identifier</td>
-<td align="left">Identifier for interface</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">identifier</td>
+<td style="text-align: left;">Identifier for interface</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">ignore_dhcp</td>
-<td align="left">If true, stops Vaquero from provisioning on this interface</td>
-<td align="left">no</td>
-<td align="left">boolean</td>
-<td align="left"></td>
+<td style="text-align: left;">ignore_dhcp</td>
+<td style="text-align: left;">If true, stops Vaquero from provisioning on this interface</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">ipv4</td>
-<td align="left">IPv4 address</td>
-<td align="left">yes</td>
-<td align="left">dotted quad</td>
-<td align="left"></td>
+<td style="text-align: left;">ipv4</td>
+<td style="text-align: left;">IPv4 address</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">dotted quad</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">ipv6</td>
-<td align="left">IPv6 address</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">ipv6</td>
+<td style="text-align: left;">IPv6 address</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">hostname</td>
-<td align="left">Hostname for machine</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">hostname</td>
+<td style="text-align: left;">Hostname for machine</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 </tbody>
 </table>
-<p>* An interface of type <code>bmc</code> describes a power management interface. This interface will not be used for PXE booting the machine (but it may acquire an IP from vaquero's DHCP Server).</p>
-<p>An interface of type <code>physical</code> can define an <code>interface.bmc</code> for ssh power management <em>only</em> -- i.e. a physical interface may <em>not</em> include an <code>interface.bmc.type</code> set to <code>ipmi</code>.</p>
+<p>* An interface of type <code>bmc</code> describes a power management interface. This interface will not be used for PXE booting the machine (but it may acquire an IP from vaquero’s DHCP Server).</p>
+<p>An interface of type <code>physical</code> can define an <code>interface.bmc</code> for ssh power management <em>only</em> – i.e. a physical interface may <em>not</em> include an <code>interface.bmc.type</code> set to <code>ipmi</code>.</p>
 <h5 id="interface.bmc">interface.bmc</h5>
 <table>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">type</td>
-<td align="left">Specifies protocol type. IPMI/SSH</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">Specifies protocol type. IPMI/SSH</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">username</td>
-<td align="left">User for managing BMC</td>
-<td align="left">ipmi/ssh</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">username</td>
+<td style="text-align: left;">User for managing BMC</td>
+<td style="text-align: left;">ipmi/ssh</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">password</td>
-<td align="left">Password for specified user</td>
-<td align="left">ipmi</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">password</td>
+<td style="text-align: left;">Password for specified user</td>
+<td style="text-align: left;">ipmi</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">keypath</td>
-<td align="left">File path to ssh private key</td>
-<td align="left">ssh</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">keypath</td>
+<td style="text-align: left;">File path to ssh private key</td>
+<td style="text-align: left;">ssh</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">container</td>
-<td align="left">Custom bmc reboot container</td>
-<td align="left">custom</td>
-<td align="left">container</td>
-<td align="left"></td>
+<td style="text-align: left;">container</td>
+<td style="text-align: left;">Custom bmc reboot container</td>
+<td style="text-align: left;">custom</td>
+<td style="text-align: left;">container</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">soft_reboot</td>
-<td align="left">Attempt Graceful Shutdown.<sup>1</sup></td>
-<td align="left">no</td>
-<td align="left">bool</td>
-<td align="left">false</td>
+<td style="text-align: left;">soft_reboot</td>
+<td style="text-align: left;">Attempt Graceful Shutdown.<sup>1</sup></td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">bool</td>
+<td style="text-align: left;">false</td>
 </tr>
 <tr class="odd">
-<td align="left">soft_timeout</td>
-<td align="left">Soft Reboot Timeout (seconds)<sup>2</sup></td>
-<td align="left">no</td>
-<td align="left">integer</td>
-<td align="left">0</td>
+<td style="text-align: left;">soft_timeout</td>
+<td style="text-align: left;">Soft Reboot Timeout (seconds)<sup>2</sup></td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">0</td>
 </tr>
 </tbody>
 </table>
 <p>This bmc struct defines the method used to reboot the host. There are three possible configurations:</p>
 <ul>
-<li><p>Use IPMI with the provided credentials to reboot the machine:</p>
+<li>Use IPMI with the provided credentials to reboot the machine:</li>
+</ul>
 <pre><code>type: ipmi
 username: ipmiusername
 password: ipmipassword
 soft_reboot: true
 soft_timeout: 30</code></pre>
-<p><sup>1.</sup> By default, IPMI will do a power cycle. <code>soft_reboot</code> may be specified to do a soft (graceful) restart instead. <sup>2.</sup> <code>soft_timeout</code> specifies the amount of time to try a soft reboot. If the machine is not able to restart in this time, a power cycle is issued. <code>soft_timeout=0</code> means the host will never be forcefully restarted.</p></li>
-<li><p>SSH into the machine and do a sudo reboot. This requires key management, which is left as an exercise to the reader.</p>
+<p><sup>1.</sup> By default, IPMI will do a power cycle. <code>soft_reboot</code> may be specified to do a soft (graceful) restart instead. <sup>2.</sup> <code>soft_timeout</code> specifies the amount of time to try a soft reboot. If the machine is not able to restart in this time, a power cycle is issued. <code>soft_timeout=0</code> means the host will never be forcefully restarted.</p>
+<ul>
+<li>SSH into the machine and do a sudo reboot. This requires key management, which is left as an exercise to the reader.</li>
+</ul>
 <pre><code>type: ssh
 username: core
-keypath: /home/core/.ssh/id_rsa</code></pre></li>
-<li><p>Use a custom container to reboot the machine.</p>
+keypath: /home/core/.ssh/id_rsa</code></pre>
+<ul>
+<li>Use a custom container to reboot the machine.</li>
+</ul>
 <pre><code>type: custom
 container:
   image: vaquero.registry.com/ipmi:latest
   pull: yes
   commands:
-- ipmitool -H 10.10.10.103 -I imb -U root -P secret power cycle
-  timeout: 60</code></pre></li>
-</ul>
+    - ipmitool -H 10.10.10.103 -I imb -U root -P secret power cycle
+  timeout: 60</code></pre>
 <h3 id="os">os</h3>
 <p>Represents a single operating system with boot/installation parameters.</p>
 <table>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">id</td>
-<td align="left">self-assigned identifier</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">self-assigned identifier</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">name</td>
-<td align="left">human-readable name</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left">id</td>
+<td style="text-align: left;">name</td>
+<td style="text-align: left;">human-readable name</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">id</td>
 </tr>
 <tr class="odd">
-<td align="left">major_version</td>
-<td align="left">major version</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">major_version</td>
+<td style="text-align: left;">major version</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">minor_version</td>
-<td align="left">minor version</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">minor_version</td>
+<td style="text-align: left;">minor version</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">os_family</td>
-<td align="left">family (i.e. CoreOS, CentOS)</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">os_family</td>
+<td style="text-align: left;">family (i.e. CoreOS, CentOS)</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">release_name</td>
-<td align="left">release name (i.e. stable, beta)</td>
-<td align="left">no</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">release_name</td>
+<td style="text-align: left;">release name (i.e. stable, beta)</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">boot</td>
-<td align="left">kernal &amp; initrd img info</td>
-<td align="left">yes</td>
-<td align="left">os.boot</td>
-<td align="left"></td>
+<td style="text-align: left;">boot</td>
+<td style="text-align: left;">kernal &amp; initrd img info</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">os.boot</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">cmdline</td>
-<td align="left">boot/installation options</td>
-<td align="left">no</td>
-<td align="left">string array</td>
-<td align="left"></td>
+<td style="text-align: left;">cmdline</td>
+<td style="text-align: left;">boot/installation options</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string array</td>
+<td style="text-align: left;"></td>
 </tr>
 </tbody>
 </table>
@@ -1093,27 +1142,27 @@ cmdline:
 <table>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">kernel</td>
-<td align="left">URL for retrieving kernel on boot</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">kernel</td>
+<td style="text-align: left;">URL for retrieving kernel on boot</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">initrd</td>
-<td align="left">URL for retrieving initrds/imgs on boot</td>
-<td align="left">yes</td>
-<td align="left">string array</td>
-<td align="left"></td>
+<td style="text-align: left;">initrd</td>
+<td style="text-align: left;">URL for retrieving initrds/imgs on boot</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string array</td>
+<td style="text-align: left;"></td>
 </tr>
 </tbody>
 </table>
@@ -1123,87 +1172,94 @@ cmdline:
 <table>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">id</td>
-<td align="left">self-assigned identifier</td>
-<td align="left">yes</td>
-<td align="left">string</td>
-<td align="left"></td>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">self-assigned identifier</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">workflow</td>
-<td align="left">Series of boots to provision the host</td>
-<td align="left">yes</td>
-<td align="left">workflow.stage array</td>
-<td align="left"></td>
+<td style="text-align: left;">workflow</td>
+<td style="text-align: left;">Series of boots to provision the host</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">workflow.stage array</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">deps</td>
-<td align="left">Host provisioning rollout policy</td>
-<td align="left">no</td>
-<td align="left">workflow.deps</td>
-<td align="left"></td>
+<td style="text-align: left;">deps</td>
+<td style="text-align: left;">Host provisioning rollout policy</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">workflow.deps</td>
+<td style="text-align: left;"></td>
 </tr>
 </tbody>
 </table>
 <p><em>Be aware that <code>min_standing</code> could become a blocking condition, if <code>min_standing</code> is set to 3 and there are only 3 hosts in that workflow.</em></p>
 <h4 id="workflow.deps">workflow.deps</h4>
 <p>Workflow deps defines interworkflow dependencies and specifies policy for provisioning all hosts in this workflow.</p>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 51%" />
+<col style="width: 8%" />
+<col style="width: 18%" />
+<col style="width: 7%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">name</th>
-<th align="left">description</th>
-<th align="left">required</th>
-<th align="left">schema</th>
-<th align="left">default</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">description</th>
+<th style="text-align: left;">required</th>
+<th style="text-align: left;">schema</th>
+<th style="text-align: left;">default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">max_concurrent</td>
-<td align="left">Max simultaneous hosts actively provisioning</td>
-<td align="left">no</td>
-<td align="left">int</td>
-<td align="left">0</td>
+<td style="text-align: left;">max_concurrent</td>
+<td style="text-align: left;">Max simultaneous hosts actively provisioning</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">int</td>
+<td style="text-align: left;">0</td>
 </tr>
 <tr class="even">
-<td align="left">min_standing</td>
-<td align="left">Minimum number of hosts that must be active to unblock dependant workflows</td>
-<td align="left">no</td>
-<td align="left">int</td>
-<td align="left">0</td>
+<td style="text-align: left;">min_standing</td>
+<td style="text-align: left;">Minimum number of hosts that must be active to unblock dependant workflows</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">int</td>
+<td style="text-align: left;">0</td>
 </tr>
 <tr class="odd">
-<td align="left">block_deps</td>
-<td align="left">IDs of blocking dependency workflows</td>
-<td align="left">no</td>
-<td align="left">string array</td>
-<td align="left"></td>
+<td style="text-align: left;">block_deps</td>
+<td style="text-align: left;">IDs of blocking dependency workflows</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string array</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td align="left">validate_on</td>
-<td align="left">IDs of workflows that cause this workflow to rerun validation</td>
-<td align="left">no</td>
-<td align="left">string array</td>
-<td align="left"></td>
+<td style="text-align: left;">validate_on</td>
+<td style="text-align: left;">IDs of workflows that cause this workflow to rerun validation</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">string array</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td align="left">max_fail</td>
-<td align="left">How many hosts can fail before halted</td>
-<td align="left">no</td>
-<td align="left">int</td>
-<td align="left">0</td>
+<td style="text-align: left;">max_fail</td>
+<td style="text-align: left;">How many hosts can fail before halted</td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">int</td>
+<td style="text-align: left;">0</td>
 </tr>
 </tbody>
 </table>
 <h2 id="staging-updates"><a name="staging">Staging Updates</a></h2>
-<p>Github will be used to stage models for updating, vaquero will receive webhooks from specified branches. Submitting PR's and merging other branches into the vaquero branch would be how teams manage updating their source of truth. Once a model lands in the branch vaquero is watching, it will push it out and begin provisioning against that source of truth.</p>
+<p>Github will be used to stage models for updating, vaquero will receive webhooks from specified branches. Submitting PR’s and merging other branches into the vaquero branch would be how teams manage updating their source of truth. Once a model lands in the branch vaquero is watching, it will push it out and begin provisioning against that source of truth.</p>
