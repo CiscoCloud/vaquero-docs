@@ -5,7 +5,7 @@ highlighter: rouge
 include: ['docs/']
 
 # Setup
-url: https://ciscocloud.github.io/vaquero-docs
+url: /vaquero-docs
 baseurl: ''
 
 sass:
