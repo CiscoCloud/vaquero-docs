@@ -2,9 +2,10 @@
 layout: page
 page.title: Changelog
 ---
-<div align="center">
-<img src="img/cow.png" alt="Drawing" style="width: 200px;"/>
+<div align="center" markdown="1">
+<img src="{{ site.url }}/img/cow.png" alt="Drawing" style="width: 200px;"/>
   <p style="font-size:60px">vaquero</p>
+
 [Home]({{ site.url }}) | [Dev Repo](https://github.com/CiscoCloud/vaquero) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.html) | [Issue Tracking](https://waffle.io/CiscoCloud/vaquero)
 </div>
 
