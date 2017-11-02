@@ -84,7 +84,7 @@ Etcd:
 - `DHCPMode`:Using "server" runs Vaquero as a DHCP server.  Vaquero does not manage free address pools or leases; it simply assigns based of the static configuration defined in the data model. **Note that DHCPMode defaults to server.** Using "proxy" enables ProxyDHCP. ProxyDHCP works with an existing DHCP Server to provide PXEBoot functionality, while leaving the managing and assigning of IP addresses to the other DHCP Server. Only enable this if you already have a DHCP server with entries for all the hosts in your Data Model.
 
 
-### Configuration Fields In Detail
+### Configuration Fields in Detail
 
 (Fields indicated as "Agent" and "Server" are by default included in Standalone mode. Forward-slashes in field names indicate YAML hierarchy)
 
@@ -121,7 +121,7 @@ Etcd:
 | Server | SoT/Local/Root                      | yes, if local dir | local root dir                                                    | none         |
 | Server | LocalDir/PollInterval               | no                | number of seconds between checks to that directory for updates    | 10           |
 
-## key generation
+## Key Generation
 The Vaquero Server and Vaquero Agents communicate over HTTPS/TLS. The Vaquero Server requires a public/private keypair to start up. You may either use the provided sample keys ([public]( https://raw.githubusercontent.com/CiscoCloud/vaquero-vagrant/master/provision_files/server.pem), [private](https://raw.githubusercontent.com/CiscoCloud/vaquero-vagrant/master/provision_files/server.key)), or generate your own using the following commands:
 
 ```
@@ -148,10 +148,10 @@ ServerClient:
 ```
 Alternatively, the `-k` flag can be passed on the command line.
 
-## secrets
+## Secrets
 The Vaquero APIs authenticate via JWT tokens. These require a server-secret and a shared-secret to be exported on the server and shared-secret and site-id must be exported on the agents. This can be done via the environment or command line:
 
-### environment
+### Environment
 Server:
 ```
 export VAQUERO_SHARED_SECRET="HighlySecureSharedSecret"
@@ -175,7 +175,7 @@ If exported in the environment, make sure to run sudo with the `-E` flag when ru
 
 
 
-## Running Vaquero from the container
+## Running Vaquero from the Container
 [Docker Hub](https://hub.docker.com/r/thecsikos/vaquero/)
 
 1. Fetch the image: `docker pull thecsikos/vaquero:latest`

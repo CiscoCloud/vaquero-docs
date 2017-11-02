@@ -30,11 +30,11 @@ Vaquero is designed to simplify the provisioning and repurposing of your bare me
 # Use Cases
 Let's walk through a couple of typical scenarios that Vaquero can be used for...
 
-## Building out a new datacenter
+## Building Out a New Datacenter
 
 You are building out a new datacenter and you have purchased some new servers. Before the hardware even arrives you typically get all of the hardware specifications. With that you can easily pre-configure your site configuration in Vaquero based on the hardware specs. When your machines arrive simply rack and stack them as you normally would and Vaquero will do the rest, from powering them on (if you choose to use the power managment option) to laying down the OS you specified in the Vaquero workflow.
 
-## Repurpose existing hardware
+## Repurpose Existing Hardware
 
 Suppose you have a rack of gear that you want to repurpose for a different project. Maybe your new project is running on a new OS or has different hardware configuration needs. With vaquero, this migration is as simple as updating the config files with the new bits and Vaquero will take care of the rest.
 
