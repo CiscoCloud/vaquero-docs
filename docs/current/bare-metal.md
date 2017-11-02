@@ -1,21 +1,4 @@
-<head>
-            <meta charset="UTF-8">
-            <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Vaquero Getting Started</title>
-            <link rel="stylesheet" type="text/css" href="../doc.css">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
-                      <link rel='shortcut icon' href='cow.png' type='image/x-icon'/ >
-            <style>
-                .markdown-body {
-                    box-sizing: border-box;
-                    min-width: 200px;
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    padding: 25px;
-                }
-            </style>
-</head><article class="markdown-body">
+<article class="markdown-body">
 
 # Getting Started on Bare Metal
 
@@ -292,5 +275,4 @@ When you're done with the Vaquero and boot servers, you may power them off or co
 
 At this point, you've successfully run Vaquero and provisioned a bare metal machine with CentOS. In "standalone mode", the Vaquero server and agent run together in a docker container running a single machine. In a production setting, it is more suitable to run the vaquero server on a centralized machine with multiple vaquero agents running in different locations/networks to manage multiple groups of hosts as desired.
 
-For more information on running multiple sites/agents with a centralized vaquero server, please visit the [vaquero docs](https://ciscocloud.github.io/vaquero-docs/).
-
+Look at the page on [configuring Vaquero](https://ciscocloud.github.io/vaquero-docs/current/configuration.html) for additional parameters and information on running multiple sites/agents.
