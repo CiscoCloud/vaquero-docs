@@ -1,0 +1,15 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: gemtest/vaquero-docs:latest
+
+    steps:
+      - checkout
+      - run:
+          name: Build
+          command: make build
+
+      - run:
+          name: Merge
+          command: make merge

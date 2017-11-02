@@ -1,14 +1,21 @@
 #!/bin/bash
 set -ue
 
-TMP=$(mktemp -d -p "/drone")
-git clone -b gh-pages $(git config remote.origin.url) "${TMP}"
+if ! which pandoc > /dev/null; then
+  echo "You are missing pandoc command, please install it for your OS"
+  exit
+fi
 
-TARGET="${TMP}/docs/current"
+DIR=generate
+rm -rf ${DIR}
+mkdir -p ${DIR}
+git clone -b gh-pages $(git config remote.origin.url) "${DIR}"
+
+TARGET="${DIR}/docs/current"
 if [[ -n ${DRONE_TAG:-} ]]; then
-    TARGET="${TMP}/docs/${DRONE_TAG}"
-elif [[ $DRONE_BRANCH != master ]]; then
-    TARGET="${TMP}/docs/branches/${DRONE_BRANCH/\//--}"
+    TARGET="${DIR}/docs/${DRONE_TAG}"
+elif [[ "${DRONE_BRANCH:=master}" != master ]]; then
+    TARGET="${DIR}/docs/branches/${DRONE_BRANCH/\//--}"
 fi
 
 mkdir -vp "${TARGET}"
@@ -19,6 +26,6 @@ for src in docs/current/*.md; do
 done
 
 cp docs/current/*.png ${TARGET}
-if [[ $DRONE_BRANCH == master ]]; then
-    cp * ${TMP} | true
+if [[ "${DRONE_BRANCH:-master}" == master ]]; then
+    cp * ${DIR} | true
 fi
