@@ -1,0 +1,12 @@
+# Dependencies
+markdown: kramdown
+highlighter: rouge
+
+include: ['docs/']
+
+# Setup
+url: http://localhost:4000
+baseurl: ''
+
+sass:
+  style: compressed

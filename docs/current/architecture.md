@@ -1,24 +1,9 @@
-<head>
-      <meta charset="UTF-8">
-      <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Vaquero Architecture</title>
-      <link rel="stylesheet" type="text/css" href="../doc.css">
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
-                <link rel='shortcut icon' href='cow.png' type='image/x-icon'/ >
-      <style>
-        .markdown-body {
-          box-sizing: border-box;
-          min-width: 200px;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 45px;
-        }
-      </style>
-</head><article class="markdown-body">
-
+---
+layout: page
+page.title: Architecture
+---
 # Vaquero: Architecture
-[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
+[Home]({{ site.url }}) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 **Last Updated**: February 2017
 
@@ -81,9 +66,9 @@ Vaquero implements leader election using Etcd's [built in leader election](https
 
 *Note*: Once a vaquero server errors out or temporarily loses contact with etcd, it is no longer permitted to continue campaigning. We expect a vaquero server to be deployed by a container orchestration system (eg. Kubernetes, Docker Swarm, Systemd) that would restart a server if it shut down. See the [outage document](outage.html) to see how Vaquero handles failures.
 
-Ensure you have toggled the `HA` configuration flag to `true` and that your etcd cluster is properly configured and healthy before deploying HA vaquero servers. 
+Ensure you have toggled the `HA` configuration flag to `true` and that your etcd cluster is properly configured and healthy before deploying HA vaquero servers.
 
 #### HA and Kubernetes
-Vaquero's readiness probe is baked into its leader election procedure. We expose a `/ready` endpoint via the vaquero UserAPI (default= `500`, not ready), and when a server becomes the elected leader, we write a `200` (ready) to the UserAPI server. This tells kubernetes that this server is the leader, and to direct traffic towards that server only. *Note*: Currently our `/live` (liveliness probe) endpoint is hardcoded to `200` as long as the vaquero server is up-- whether it is the active leader or passively campaigning. This may change in the future when the liveliness probe is developed further.          
+Vaquero's readiness probe is baked into its leader election procedure. We expose a `/ready` endpoint via the vaquero UserAPI (default= `500`, not ready), and when a server becomes the elected leader, we write a `200` (ready) to the UserAPI server. This tells kubernetes that this server is the leader, and to direct traffic towards that server only. *Note*: Currently our `/live` (liveliness probe) endpoint is hardcoded to `200` as long as the vaquero server is up-- whether it is the active leader or passively campaigning. This may change in the future when the liveliness probe is developed further.
 
 Further, with Kubernetes we recommend deploying two vaquero agents per broadcast domain, for operational safety. See the [README](README.html) for details on production deployments, considerations, and requirements.
