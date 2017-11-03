@@ -1,26 +1,12 @@
-<head>
-            <meta charset="UTF-8">
-            <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Vaquero README</title>
-            <link rel="stylesheet" type="text/css" href="../doc.css">
-            <link rel='shortcut icon' href='cow.png' type='image/x-icon'/ >
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
-            <style>
-                .markdown-body {
-                    box-sizing: border-box;
-                    min-width: 200px;
-                    max-width: 1100px;
-                    margin: 0 auto;
-                    padding: 45px;
-                }
-            </style>
-</head><article class="markdown-body">
-
-<div align="center">
-<img src="cow.png" alt="Drawing" style="width: 200px;"/>
+---
+layout: page
+page.title: Changelog
+---
+<div align="center" markdown="1">
+<img src="{{ site.url }}/img/cow.png" alt="Drawing" style="width: 200px;"/>
   <p style="font-size:60px">vaquero</p>
-[Home](https://ciscocloud.github.io/vaquero-docs/) | [Dev Repo](https://github.com/CiscoCloud/vaquero) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.html) | [Issue Tracking](https://waffle.io/CiscoCloud/vaquero)
+
+[Home]({{ site.url }}) | [Dev Repo](https://github.com/CiscoCloud/vaquero) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.html) | [Issue Tracking](https://waffle.io/CiscoCloud/vaquero)
 </div>
 
 # Change log

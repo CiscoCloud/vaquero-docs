@@ -1,28 +1,14 @@
-<head>
-            <meta charset="UTF-8">
-            <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Vaquero README</title>
-            <link rel="stylesheet" type="text/css" href="../doc.css">
-            <link rel='shortcut icon' href='cow.png' type='image/x-icon'/ >
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
-            <style>
-                .markdown-body {
-                    box-sizing: border-box;
-                    min-width: 200px;
-                    max-width: 1100px;
-                    margin: 0 auto;
-                    padding: 45px;
-                }
-            </style>
-</head><article class="markdown-body">
+---
+layout: page
 
-<div align="center">
-<img src="cow.png" alt="Drawing" style="width: 200px;"/>
-  <p style="font-size:60px">vaquero</p>
-[Home](https://ciscocloud.github.io/vaquero-docs/) | [Dev Repo](https://github.com/CiscoCloud/vaquero) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.html) | [Issue Tracking](https://waffle.io/CiscoCloud/vaquero)
+---
+<div align="center" markdown="1">
+
+  <img src="{{ site.url }}/img/cow.png" alt="Drawing" style="width: 200px;"/>
+
+  [Home]({{ site.url }}) | [Dev Repo](https://github.com/CiscoCloud/vaquero) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.html) | [Issue Tracking](https://waffle.io/CiscoCloud/vaquero)
+
 </div>
-
 <h1></h1>
 Vaquero is designed to simplify the provisioning and repurposing of your bare metal infrastructure. Vaquero is driven by user defined templates to network boot machines. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped unattend boot scripts.
 
@@ -71,4 +57,4 @@ Suppose you have a rack of gear that you want to repurpose for a different proje
 # Try it
 The only requirement for running Vaquero is [Docker](https://www.docker.com/).
 
-See the [Getting Started](getting-started.html) page for details on deploying Vaquero in virtualbox.
+See the [Getting Started]({{ site.url }}/docs/current/getting-started.html) page for details on deploying Vaquero in virtualbox.

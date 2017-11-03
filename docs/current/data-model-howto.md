@@ -1,24 +1,9 @@
-<head>
-            <meta charset="UTF-8">
-            <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Vaquero Data Model</title>
-            <link rel="stylesheet" type="text/css" href="../doc.css">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
-                      <link rel='shortcut icon' href='cow.png' type='image/x-icon'/ >
-            <style>
-                .markdown-body {
-                    box-sizing: border-box;
-                    min-width: 200px;
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    padding: 45px;
-                }
-            </style>
-</head><article class="markdown-body">
-
+---
+layout: page
+page.title: Data Model
+---
 # The Vaquero Data Model and YOU
-[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
+[Home]({{ site.url }}) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 - [Example Data Models](https://github.com/CiscoCloud/vaquero-examples)
 
@@ -62,6 +47,8 @@ Your data center is expressed as an inventory of _hosts_. Each host belongs to a
 *Site*: A managed data center, or group of machines managed by a single Vaquero Agent.
 
 *Host*: A single managed machine. Definition includes identifying attributes (selectors), host-specific metadata, information for LOM (IPMI), and an association to a single workflow.
+
+*Cluster*: A grouping of hosts under a specific site.
 
 *Operating System*: An "installation" template containing the details to perform a network boot into a particular OS, specifying kernel, initrd, boot command-line parameters, unattended config, etc.
 
@@ -129,35 +116,34 @@ Assets are retrieved dynamically from the Vaquero Agent asset server through the
 
 For instance, a host with mac address `00:00:00:00:00:01` could retrieve it's default configuration by requesting
 
-```
-{{.env.assetURL}}/config/00:00:00:00:00:01
-```
+{% raw %}
+  {{ .env.assetURL }}/config/00:00:00:00:00:01
+{% endraw %}
 
 Or the configuration from a particular boot by requesting
 
-```
+{% raw %}
 {{.env.assetURL}}/config/00:00:00:00:00:01?boot=specific-boot-id
-```
+{% endraw %}
 
 #### Asset Snippets
 
 Any snippets for a particular config type are _always included_ when rendering configurations of that type. Most of the time, the preferred use will be to have the snippet file `define` a template, and use the `template` function to include it in the configuration:
 
-```
+{% raw %}
 /assets/kickstart/snippets/snip1
 
 {{ define "snippet-id-1" }}
   # Template here
 {{ end }}
-```
+{% endraw %}
 
-```
+{% raw %}
 /assets/kickstart/centos.ks
 
 # My kickstart template
 {{ template "snippet-id-1" . }}
-
-```
+{% endraw %}
 
 ### Operating Systems
 
@@ -182,23 +168,60 @@ Boots exist as individual documents under the `boot` subdirectory. They are refe
     └── etcd-proxy.yml
 ```
 
+
 ### Sites
 
 Sites are represented by individual subdirectories. One directory == one site == one managed group of machines. Each SoT can contain multiple sites. Each of these sites shares the same assets/boot/os configuration files.
 
 Each site has _at least_ two documents, the specially named `env.yml` and at least one document describing an inventory of hosts. You may use YAML's triple-dash `---` separator to combine multiple inventory documents into one file.
 
+#### Clusters
+
+Clusters are represented by individual yaml files under a site (conventional they are prefixed with `cluster-` in the file name (example: `cluster-a.yml`).
+
+One file is a grouping of hosts under that site directory. Each SoT can contain multiple sites. Each of these sites shares the same assets/boot/os configuration files.
+
 ```
 .
 └── sites
     ├── site-a
     │   ├── env.yml
-    │   └── inventory.yml
-    └── site-a
-        ├── env.yml
-        ├── inventory.yml
-        └── another-inv.yml
+    │   └── cluster-aa.yml
+    │   └── cluster-ab.yml
+    │   └── cluster-ac.yml
+    └── site-b
+    |   ├── env.yml
+    |   └── cluster-ba.yml
+    |   └── cluster-bb.yml
+    |   └── cluster-bc.yml
 ```
+
+#### Configuration
+
+At the top of every cluster file is a `config` section.
+
+This section describes how to obtain the SOT configuration for this cluster of hosts.
+
+type: git
+
+```
+---
+config:
+  type: git
+  url: "https://github.com/mattdietz/vaquero-sot"
+  ref: "master"
+  token: "github_api_token_here"
+```
+
+type: local
+
+```
+---
+config:
+  type: local
+  url: "/var/vaquero/local-config"
+```
+
 
 ### Workflows
 
@@ -271,7 +294,7 @@ Metadata is made available during template execution as separate fields under th
 
 By way of example, this template snippet defines a networkd configuration:
 
-```
+{% raw %}
 networkd:
   units:
     - name: 10-static.network
@@ -282,7 +305,7 @@ networkd:
         Gateway={{.interface.subnet.gateway}}
         DNS={{index .interface.subnet.dns 0}}
         Address={{.interface.ipv4}}
-```
+{% endraw %}
 
 ## <a name="translation-to-ipxe">Translation to iPXE</a>
 
@@ -376,7 +399,7 @@ Allow a network boot or installation to proceed automatically by providing canne
 
 | name          | description                              | required | schema        |
 |:--------------|:-----------------------------------------|:---------|:--------------|
-| image         | Docker image name (e.g. alpine:latest)   | yes      | string        |         
+| image         | Docker image name (e.g. alpine:latest)   | yes      | string        |
 | commands      | List of commands to run (via /bin/sh -c) | yes      | list          |
 | env           | Map of environment variables.            | no       | map           |
 | registry_auth | Registry Credentials                     | no       | registry_auth |
@@ -384,7 +407,7 @@ Allow a network boot or installation to proceed automatically by providing canne
 #### container.registry_auth
 | name       | description                | required | schema  |
 |:-----------|:---------------------------|:---------|:--------|
-| url        | api versioned registry url | yes      | string  |         
+| url        | api versioned registry url | yes      | string  |
 | username   | registry username          | yes      | string  |
 | password   | registry password          | yes       | string  |
 
@@ -495,6 +518,15 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 | gateway | Gateway for this subnet                              | no       | string       |         |
 | vlan    | VLAN for the subnet                                  | no       | integer      | 1       |
 
+#### config
+
+| name  | description                                        | required          | schema | default |
+|:------|:---------------------------------------------------|:------------------|:-------|:--------|
+| type  | The type of config (local, git)                    | yes               | object |         |
+| url   | The url for git repository or local path of sot    | yes               | string |         |
+| ref   | The Git reference (branch, SHA, tag, HEAD)         | yes (if type git) | string |         |
+| token | The token to use to call Github API                | yes               | string |         |
+
 #### host
 
 | name       | description                                        | required | schema    | default |
@@ -587,7 +619,8 @@ Represents a single operating system with boot/installation parameters.
 Cmdline values may be templated. They will be rendered on-demand for individual hosts.
 
 **Note initrd must be added in the cmdline to work with UEFI. Bug: https://github.com/coreos/bugs/issues/1239**
-```
+
+{% raw %}
 ---
 id: coreos-1053.2.0-stable
 name: CoreOS Stable 1053.2.0
@@ -603,7 +636,7 @@ cmdline:
   - coreos.autologin: ''
   #This line is needed for EFI PXE boots. https://github.com/coreos/bugs/issues/1239
   - initrd: "coreos_production_pxe_image.cpio.gz"
-```
+{% endraw %}
 
 #### os.boot
 

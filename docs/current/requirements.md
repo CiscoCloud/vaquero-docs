@@ -1,24 +1,9 @@
-<head>
-            <meta charset="UTF-8">
-            <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Vaquero Requirements</title>
-            <link rel="stylesheet" type="text/css" href="../doc.css">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
-                      <link rel='shortcut icon' href='cow.png' type='image/x-icon'/ >
-            <style>
-                .markdown-body {
-                    box-sizing: border-box;
-                    min-width: 200px;
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    padding: 45px;
-                }
-            </style>
-</head><article class="markdown-body">
-
+---
+layout: page
+page.title: Requirements
+---
 # Vaquero Requirements
-[Home](https://ciscocloud.github.io/vaquero-docs/) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
+[Home]({{ site.url }}) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
 The Vaquero project is designed to simplify the provisioning and ongoing operations of clustered software on bare metal infrastructure.
 

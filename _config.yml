@@ -1,0 +1,12 @@
+# Dependencies
+markdown: kramdown
+highlighter: rouge
+
+include: ['docs/']
+
+# Setup
+url: /vaquero-docs
+baseurl: ''
+
+sass:
+  style: compressed
