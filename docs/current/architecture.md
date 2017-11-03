@@ -11,7 +11,7 @@ page.title: Architecture
 
 For simplicity, Vaquero is delivered as a single docker image with all of the required services available (server and agent). The same docker image can be used to start containers in both the control plane and remote agent sites.
 
-![](https://ciscocloud.github.io/vaquero-docs/docs/current/jan17Arch.png)
+![Architecture diagram]({{ site.url }}/img/jan17Arch.png)
 
 ### Terminology
 
@@ -59,7 +59,7 @@ A Vaquero agent is responsible for the provisioning of a local datacenter. Many 
 
 ## HA Vaquero
 
-![](https://ciscocloud.github.io/vaquero-docs/docs/current/jan17HA.png)
+![HA diagram]({{ site.url }}/img/jan17HA.png)
 
 The diagram above depicts a production deployment of Vaquero. Vaquero implements its own leader election, and also contains a readiness probe to integrate with kubernetes deployments.
 
