@@ -50,6 +50,8 @@ Your data center is expressed as an inventory of _hosts_. Each host belongs to a
 
 *Cluster*: A grouping of hosts under a specific site.
 
+*Configuration*: The general name given for the collection of `Operating System`, `Assets`, `Boot` and `Workflows`. Please refer below for explanation.
+
 *Operating System*: An "installation" template containing the details to perform a network boot into a particular OS, specifying kernel, initrd, boot command-line parameters, unattended config, etc.
 
 *Unattended Assets*: An optionally templated unattended config/script (i.e. cloud-init, ignition, kickstart, etc) used for unattended boot and installation operations.
@@ -65,17 +67,14 @@ Configuration files are placed in a directory hierarchy. Vaquero parses site con
 1. **assets**: grouped by type. These are generally unattended configs or scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).
 2. **os**: Individual documents, each representing an Operating System
 3. **boot**: Individual documents, each representing a Boot
-4. **sites**: One or more sites (each in it's own subdirectory) that share the same boot, os, and asset definitions. Each site includes environment-specific information (Vaquero Agent URLs/certs, subnets, other metadata), and an inventory of hosts that apply boot definitions to machines.
-5. **workflows**: Individual documents, each representing a Workflow
+4. **workflows**: Individual documents, each representing a Workflow
 
 ```
 .
 ├── assets
 ├── os
 ├── boot
-├── sites
 └── workflows
-
 ```
 
 ### Assets
@@ -176,18 +175,84 @@ Boots exist as individual documents under the `boot` subdirectory. They are refe
     └── etcd-proxy.yml
 ```
 
+### Workflows
+
+Workflows exist as individual documents under the `workflows` subdirectory. They are referenced by a self-assigned ID described in the document:
+
+```
+.
+└── workflows
+    ├── clevos-accessor.yml
+    ├── k8s-master.yml
+    └── k8s-node.yml
+```
 
 ### Sites
 
-Sites are represented by individual subdirectories. One directory == one site == one managed group of machines. Each SoT can contain multiple sites. Each of these sites shares the same assets/boot/os configuration files.
+Sites are represented by individual subdirectories under the top level `sites` directory. Each `site` under the `sites` directory corresponds to a managed group
+of machines.
 
-Each site has _at least_ two documents, the specially named `env.yml` and at least one document describing an inventory of hosts. You may use YAML's triple-dash `---` separator to combine multiple inventory documents into one file.
+Each site has _at least_ two documents, the specially named `env.yml` and at least one document describing an inventory of hosts, a cluster. You may use YAML's triple-dash `---` separator to combine multiple inventory documents into one cluster file.
 
 #### Clusters
 
-Clusters are represented by individual yaml files under a site (conventional they are prefixed with `cluster-` in the file name (example: `cluster-a.yml`).
+The hosts can be grouped into multiple logical `clusters` in a `site`. Clusters are represented by individual yaml files under a site (conventional they are prefixed with `cluster-` in the file name (example: `cluster-a.yml`).
 
-One file is a grouping of hosts under that site directory. Each SoT can contain multiple sites. Each of these sites shares the same assets/boot/os configuration files.
+
+```
+.
+└── sites
+    ├── site-a
+    │   ├── env.yml
+    │   ├── cluster-aa.yml
+    │   ├── cluster-ab.yml
+    │   └── cluster-ac.yml
+    └── site-b
+    |   ├── env.yml
+    |   ├── cluster-ba.yml
+    |   ├── cluster-bb.yml
+    |   └── cluster-bc.yml
+
+```
+
+#### Linking Configurations with Sites
+
+Vaquero supports a couple of ways of linking configurations - `assets`, `os`, `boot` and `workflows` - with `sites`. In the most common setting, configuration
+directories are placed at the root level along side `sites`. This enables all `clusters` to share the same configuration which can be considered an all in one
+SOT.
+
+```
+.
+├── assets
+├── os
+├── boot
+├── workflows
+└── sites
+    ├── site-a
+    │   ├── env.yml
+    │   ├── cluster-aa.yml
+    │   ├── cluster-ab.yml
+    │   └── cluster-ac.yml
+    └── site-b
+    |   ├── env.yml
+    |   ├── cluster-ba.yml
+    |   ├── cluster-bb.yml
+    |   └── cluster-bc.yml
+```
+
+
+In addition to the all in one SOTs, each cluster can point to their own configuration located on a Github repository or another location on disk. This is
+particularly useful as it allows for centralized configurations. Consider the case where you have a large number of data centers. On day zero of operations,
+you would need to have the same number of SOTs with the same redundant configuration information. On day one of operations, consider the case where you would
+like to introduce a new configuration to a number of these data centers such as new `asset`. Following the above design, you would need to manually alter the
+SOTs. Going forward with day N, managing becomes extremely difficult as you end up with data centers that use diverging configurations.
+
+If each cluster in a data center points to a centralized configuration, managing these configurations becomes trivial. When introducing a configuration such as a
+new `asset`, instead of altering each SOT, you only need to edit a single configuration repository and all the clusters that point to this repository is updated.
+This can be referred to as split configuration SOTs.
+
+
+#### Split Configuration SOTs
 
 ```
 .
@@ -195,20 +260,14 @@ One file is a grouping of hosts under that site directory. Each SoT can contain 
     ├── site-a
     │   ├── env.yml
     │   └── cluster-aa.yml
-    │   └── cluster-ab.yml
-    │   └── cluster-ac.yml
     └── site-b
     |   ├── env.yml
     |   └── cluster-ba.yml
-    |   └── cluster-bb.yml
-    |   └── cluster-bc.yml
+
 ```
 
-#### Configuration
-
-At the top of every cluster file is a `config` section.
-
-This section describes how to obtain the SOT configuration for this cluster of hosts.
+In order to link a `cluster` with a `configuration`, place a `config` section at the top of every cluster file. This section describes how to obtain the
+SOT configuration for this cluster of hosts.
 
 type: git
 
@@ -216,7 +275,7 @@ type: git
 ---
 config:
   type: git
-  url: "https://github.com/mattdietz/vaquero-sot"
+  url: "https://github.com/someuser/vaquero-configurations"
   ref: "master"
   token: "github_api_token_here"
 ```
@@ -228,19 +287,6 @@ type: local
 config:
   type: local
   url: "/var/vaquero/local-config"
-```
-
-
-### Workflows
-
-Workflows exist as individual documents under the `workflows` subdirectory. They are referenced by a self-assigned ID described in the document:
-
-```
-.
-└── workflows
-    ├── clevos-accessor.yml
-    ├── k8s-master.yml
-    └── k8s-node.yml
 ```
 
 ## <a name="provisioning-steps">Provisioning Steps</a>
