@@ -11,10 +11,11 @@ page.title: Getting Started
 This getting started guide provides a simple Vagrant-based environment to run Vaquero in "standalone mode" and requires the following prerequisites before moving forward:
 
 1. [Latest Vagrant](https://www.vagrantup.com/)
-2. [VirtualBox 5.1.x (v5.2.x is not supported by Vagrant at this time)](https://www.virtualbox.org/wiki/Download_Old_Builds_5_1)
-3. [Install VirtualBox Extension Pack to match your version of VirtualBox](https://www.virtualbox.org/wiki/Download_Old_Builds_5_1) Adds functionality to PXE boot for Intel cards
-4. Access to [vaquero docker repository](
+1. [VirtualBox 5.1.x (v5.2.x is not supported by Vagrant at this time)](https://www.virtualbox.org/wiki/Download_Old_Builds_5_1)
+1. [Install VirtualBox Extension Pack to match your version of VirtualBox](https://www.virtualbox.org/wiki/Download_Old_Builds_5_1) Adds functionality to PXE boot for Intel cards
+1. Access to [vaquero docker repository](
 https://hub.docker.com/r/thecsikos/vaquero/); this is currently a private docker repository
+1. The [undionly.kpxe](http://boot.ipxe.org/undionly.kpxe) boot file from [http://ipxe.org/](http://ipxe.org/)
 
 ## Try it out locally
 
@@ -25,6 +26,15 @@ The vaquero-vagrant repository contains all the bits necessary to get a small Va
 ```
 git clone https://github.com/CiscoCloud/vaquero-vagrant.git
 cd vaquero-vagrant
+```
+
+### Boot file
+
+Before continuing, add the undionly.kpxe boot file from above into the pxeroms directory otherwise vagrant will complain.
+
+```
+# Adjust your source path accordingly
+mv ~/downloads/undionly.kpxe pxeroms/
 ```
 
 ### Start it up and jump into the VM
@@ -60,6 +70,7 @@ and finally, start Vaquero in standalone mode:
 docker run \
   -v /vagrant/config/dir-sot.yaml:/vaquero/config.yaml \
   -v /var/vaquero/files:/var/vaquero/files \
+  -v /vagrant/pxeroms:/vagrant/pxeroms \
   -v /vagrant/local:/vagrant/local \
   -v /vagrant/provision_files/secret:/vaquero/secret \
   --net="host" \
