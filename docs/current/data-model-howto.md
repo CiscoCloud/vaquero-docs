@@ -16,9 +16,9 @@ Each site contains an `environment file` and an `inventory file` that lists all 
 
 1. [Key Concepts](#key-concepts)
 
-2. [Vocabulary](#vocabulary)
+2. [Terminology](#terminology)
 
-3. [Where things go](#where-things-go)
+3. [SOT layout](#sot-layout)
 
 4. [Provisioning Steps](#provisioning-steps)
 
@@ -42,7 +42,7 @@ We treat this data model as a "single source of truth" (SoT) that describes the 
 
 Your data center is expressed as an inventory of _hosts_. Each host belongs to a _workflow_. Each workflow is comprised of one or many _boot_ steps that use a combination of _unattended assets_ and _operating system_ definitions to define a target configured state for a host.
 
-## <a name="vocabulary">Vocabulary</a>
+## <a name="terminology">Terminology</a>
 
 *Site*: A managed data center, or group of machines managed by a single Vaquero Agent.
 
@@ -60,28 +60,36 @@ Your data center is expressed as an inventory of _hosts_. Each host belongs to a
 
 *Workflow*: A series of network boots that end with a host machine in a desired state.
 
-*SOT (Source of Truth)*: The name given to the collection of both `configurations` and `sites` that is necessary to define a data center.
+*SOT (Source of Truth)*: The name given to the collection of both `configurations` and `sites` that is necessary to define a data center. Vaquero supports two types of SOT: a basic SOT or an advanced SOT. The former is simpler to manage, whereas the latter provides better access control and separation of responsibilities.
 
-## <a name="where-things-go">Where Things Go</a>
+## Basic SOT
 
-Configuration files are placed in a directory hierarchy. Vaquero parses site configurations by reading files placed in specially named subdirectories. The root of your configuration path has four directories:
+A basic SOT is where all sites and configuration files are defined together in the same local directory or github repo. It's simple to manage and is useful for smaller environments.
+
+![Vaquero Basic SOT]({{ site.url }}/img/vaquero-basic-sot.png)
+
+
+## Advanced SOT
+
+In this mode, sites are stored in a single github repo or local directory, while configuration files can be spread out across multiple github repos or local directories. This provides a way to see all defined infrastructure in a centralized way, while separating the configuration for each cluster.
+
+![Vaquero Advanced SOT]({{ site.url }}/img/vaquero-advanced-sot.png)
+
+## <a name="sot-layout">SOT Layout</a>
+
+Configuration files are placed in a directory hierarchy. Vaquero parses site `configurations` by reading files placed in specially named subdirectories. The root of your configuration path has four directories:
 
 1. **assets**: grouped by type. These are generally unattended configs or scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).
 2. **os**: Individual documents, each representing an Operating System
 3. **boot**: Individual documents, each representing a Boot
 4. **workflows**: Individual documents, each representing a Workflow
 
-```
-.
-├── assets
-├── os
-├── boot
-└── workflows
-```
+`Sites` are another component to a complete SOT. `Sites` are responsible for defining agent-specific settings (networks, asset and TFTP directories, etc.) and the set of hosts the agent is responsible for provisioning.
+
 
 ### Assets
 
-Assets are grouped into named subdirectories based on type. There are currently four types:
+`Assets` are grouped into named subdirectories based on type. There are currently four types:
 
 1. Cloud-Config: [CoreOS Cloudinit System](https://coreos.com/os/docs/latest/cloud-config.html)
 2. Ignition: [CoreOS Ignition](https://coreos.com/ignition/docs/latest/)
@@ -90,7 +98,7 @@ Assets are grouped into named subdirectories based on type. There are currently 
 
 Each subdirectory may also have a `snippets` directory for holding partial templates (see below)
 
-Each asset is placed under a subdirectory according to it's type. Assets are referenced by file name from boots:
+Each `asset` is placed under a subdirectory according to it's type. `Assets` are referenced by file name from boots:
 
 ```
 .
@@ -113,7 +121,7 @@ Each asset is placed under a subdirectory according to it's type. Assets are ref
 
 Validation is performed on typed assets to verify that rendered templates produce valid configuration scripts.
 
-Assets are retrieved dynamically from the Vaquero Agent asset server through the `/config/<mac-addr>` endpoint. An optional `boot` query parameter can be used to specify the ID of the Boot to use.
+`Assets` are retrieved dynamically from the Vaquero Agent asset server through the `/config/<mac-addr>` endpoint. An optional `boot` query parameter can be used to specify the ID of the Boot to use.
 
 For instance, a host with mac address `00:00:00:00:00:01` could retrieve it's default configuration by requesting
 
@@ -219,11 +227,11 @@ are prefixed with with `cluster-` in the file name (example: `cluster-prod.yml`)
 
 ```
 
-#### Linking Configurations with Sites
+## Basic SOT
 
-Vaquero supports a couple of ways of linking configurations - `assets`, `os`, `boot` and `workflows` - with `sites`. In the most common setting, configuration
-directories are placed at the root level along side `sites`. This enables all `clusters` to share the same configuration which can be considered an all in one
-SOT.
+In the basic SOT, your configuration -- `assets`, `os`, `boot` and `workflows` -- are defined alongside your `sites`. This enables all `clusters` to share the same configuration, which minimizes the overall complexity of managing your SOT.
+
+An example of a basic SOT structure with two sites with multiple clusters each:
 
 ```
 .
@@ -232,48 +240,44 @@ SOT.
 ├── boot
 ├── workflows
 └── sites
-    ├── site-a
+    ├── denver
     │   ├── env.yml
     │   ├── cluster-dev.yml
     │   ├── cluster-stage.yml
     │   └── cluster-prod.yml
-    └── site-b
-    |   ├── env.yml
-    |   ├── cluster-dev.yml
-    |   ├── cluster-stage.yml
-    |   └── cluster-prod.yml
+    └── reno
+        ├── env.yml
+        ├── cluster-dev.yml
+        ├── cluster-stage.yml
+        └── cluster-prod.yml
 ```
 
+In the above example, all clusters defined in the denver and reno sites will share the same configuration. For small teams, this may be appropriate if all administrators are allowed to have access to all configuration. In the event that multiple teams should not see configuration from each other, the advanced SOT below may be more suitable.
 
-In addition to the all in one SOTs, each cluster can point to their own configuration located on a Github repository or another location on disk. This is
-particularly useful as it allows for centralized configurations. Consider the case where you have a large number of data centers. On day zero of operations,
-you would need to have the same number of SOTs with the same redundant configuration information. On day one of operations, consider the case where you would
-like to introduce a new configuration to a number of these data centers such as new `asset`. Following the above design, you would need to manually alter the
-SOTs. Going forward with day N, managing becomes extremely difficult as you end up with data centers that use diverging configurations.
+## Advanced SOT
 
-If each cluster in a data center points to a centralized configuration, managing these configurations becomes trivial. When introducing a configuration such as a
-new `asset`, instead of altering each SOT, you only need to edit a single configuration repository and all the clusters that point to this repository is updated.
-This can be referred to as split configuration SOTs.
+For advanced SOTs, each `cluster` can point to their own configuration located on a Github repository or another location on disk. This allows administrators to separate the responsibility of managing the configuration of their `sites`.
 
-
-#### Split Configuration SOTs
+An example of two sites with dev and prod configuration:
 
 ```
 .
 └── sites
-    ├── site-a
+    ├── denver
     │   ├── env.yml
+    │   ├── cluster-dev.yml
     │   └── cluster-prod.yml
-    └── site-b
-    |   ├── env.yml
-    |   └── cluster-prod.yml
-
+    └── reno
+        ├── env.yml
+        ├── cluster-dev.yml        
+        └── cluster-prod.yml
 ```
 
-In order to link a `cluster` with a `configuration`, place a `config` section at the top of every cluster file. This section describes how to obtain the
-SOT configuration for this cluster of hosts.
+In the above example, your reno site is able to manage their production configuration separately from both their development config as well as the reno `site`. This allows for separation of responsibility across the teams administering your datacenters and minimizes the opportunity for sensitive information to be exposed.
 
-type: git
+In order to link a `cluster` with a `configuration`, place a `config` section at the top of every cluster file. This section describes how to obtain the SOT configuration for this cluster of hosts.
+
+#### Github SOT
 
 ```yaml
 ---
@@ -284,7 +288,7 @@ config:
   token: "github_api_token_here"
 ```
 
-type: local
+#### Local SOT
 
 ```yaml
 ---
