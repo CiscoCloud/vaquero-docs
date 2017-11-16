@@ -60,6 +60,8 @@ Your data center is expressed as an inventory of _hosts_. Each host belongs to a
 
 *Workflow*: A series of network boots that end with a host machine in a desired state.
 
+*SOT (Source of Truth)*: The name given to the collection of both `configurations` and `sites` that is necessary to define a data center.
+
 ## <a name="where-things-go">Where Things Go</a>
 
 Configuration files are placed in a directory hierarchy. Vaquero parses site configurations by reading files placed in specially named subdirectories. The root of your configuration path has four directories:
@@ -192,11 +194,13 @@ Workflows exist as individual documents under the `workflows` subdirectory. They
 Sites are represented by individual subdirectories under the top level `sites` directory. Each `site` under the `sites` directory corresponds to a managed group
 of machines.
 
-Each site has _at least_ two documents, the specially named `env.yml` and at least one document describing an inventory of hosts, a cluster. You may use YAML's triple-dash `---` separator to combine multiple inventory documents into one cluster file.
+Each site requires one file named `env.yml`, all other files will be treated as a cluster definition that describe their host inventory. You may use YAML's
+triple-dash `---` separator to combine multiple inventory documents into one cluster file.
 
 #### Clusters
 
-The hosts can be grouped into multiple logical `clusters` in a `site`. Clusters are represented by individual yaml files under a site (conventional they are prefixed with `cluster-` in the file name (example: `cluster-a.yml`).
+The hosts can be grouped into multiple logical `clusters` in a `site`. Clusters are represented by individual yaml files under a site (by convention these files
+are prefixed with with `cluster-` in the file name (example: `cluster-prod.yml`).
 
 
 ```
@@ -204,14 +208,14 @@ The hosts can be grouped into multiple logical `clusters` in a `site`. Clusters 
 └── sites
     ├── site-a
     │   ├── env.yml
-    │   ├── cluster-aa.yml
-    │   ├── cluster-ab.yml
-    │   └── cluster-ac.yml
+    │   ├── cluster-dev.yml
+    │   ├── cluster-stage.yml
+    │   └── cluster-prod.yml
     └── site-b
     |   ├── env.yml
-    |   ├── cluster-ba.yml
-    |   ├── cluster-bb.yml
-    |   └── cluster-bc.yml
+    |   ├── cluster-dev.yml
+    |   ├── cluster-stage.yml
+    |   └── cluster-prod.yml
 
 ```
 
@@ -230,14 +234,14 @@ SOT.
 └── sites
     ├── site-a
     │   ├── env.yml
-    │   ├── cluster-aa.yml
-    │   ├── cluster-ab.yml
-    │   └── cluster-ac.yml
+    │   ├── cluster-dev.yml
+    │   ├── cluster-stage.yml
+    │   └── cluster-prod.yml
     └── site-b
     |   ├── env.yml
-    |   ├── cluster-ba.yml
-    |   ├── cluster-bb.yml
-    |   └── cluster-bc.yml
+    |   ├── cluster-dev.yml
+    |   ├── cluster-stage.yml
+    |   └── cluster-prod.yml
 ```
 
 
@@ -259,10 +263,10 @@ This can be referred to as split configuration SOTs.
 └── sites
     ├── site-a
     │   ├── env.yml
-    │   └── cluster-aa.yml
+    │   └── cluster-prod.yml
     └── site-b
     |   ├── env.yml
-    |   └── cluster-ba.yml
+    |   └── cluster-prod.yml
 
 ```
 
@@ -310,7 +314,8 @@ chain ipxe?uuid=${uuid}&mac=${net0/mac:hexhyp}&domain=${domain}&hostname=${hostn
 
 ## <a name="serving-files">Serving Files</a>
 
-Vaquero Agent will expose an endpoint `/files` for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to the configuration file.
+Vaquero Agent will expose an endpoint `/files` for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to
+the configuration file.
 
 ## Identifying a Host
 
