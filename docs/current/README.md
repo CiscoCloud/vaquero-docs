@@ -9,9 +9,8 @@ layout: page
   [Home]({{ site.url }}) | [Dev Repo](https://github.com/CiscoCloud/vaquero) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master) | [Project Requirements](requirements.html) | [Issue Tracking](https://waffle.io/CiscoCloud/vaquero)
 
 </div>
-<h1></h1>
-Vaquero is designed to simplify the provisioning and repurposing of your bare metal infrastructure. Vaquero is driven by user defined templates to network boot machines. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped unattend boot scripts.
 
+Vaquero is designed to simplify the provisioning and repurposing of your bare metal infrastructure. Vaquero is driven by user defined templates to network boot machines. We leverage iPXE and support cloud-config, ignition, kickstart, and untyped unattend boot scripts.
 
 # Use Cases
 Let's walk through a couple of typical scenarios that Vaquero can be used for...

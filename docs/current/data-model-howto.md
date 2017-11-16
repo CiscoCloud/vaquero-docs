@@ -116,20 +116,25 @@ Assets are retrieved dynamically from the Vaquero Agent asset server through the
 
 For instance, a host with mac address `00:00:00:00:00:01` could retrieve it's default configuration by requesting
 
+```
 {% raw %}
   {{ .env.assetURL }}/config/00:00:00:00:00:01
 {% endraw %}
+```
 
 Or the configuration from a particular boot by requesting
 
+```
 {% raw %}
 {{.env.assetURL}}/config/00:00:00:00:00:01?boot=specific-boot-id
 {% endraw %}
+```
 
 #### Asset Snippets
 
 Any snippets for a particular config type are _always included_ when rendering configurations of that type. Most of the time, the preferred use will be to have the snippet file `define` a template, and use the `template` function to include it in the configuration:
 
+```
 {% raw %}
 /assets/kickstart/snippets/snip1
 
@@ -137,13 +142,16 @@ Any snippets for a particular config type are _always included_ when rendering c
   # Template here
 {{ end }}
 {% endraw %}
+```
 
+```
 {% raw %}
 /assets/kickstart/centos.ks
 
 # My kickstart template
 {{ template "snippet-id-1" . }}
 {% endraw %}
+```
 
 ### Operating Systems
 
@@ -204,7 +212,7 @@ This section describes how to obtain the SOT configuration for this cluster of h
 
 type: git
 
-```
+```yaml
 ---
 config:
   type: git
@@ -215,7 +223,7 @@ config:
 
 type: local
 
-```
+```yaml
 ---
 config:
   type: local
@@ -248,7 +256,7 @@ Configurations are roughly executed in the following order:
 
 The default ipxe script chains back to Vaquero Agent, injecting basic information:
 
-```
+```bash
 #!ipxe
 chain ipxe?uuid=${uuid}&mac=${net0/mac:hexhyp}&domain=${domain}&hostname=${hostname}&domain=${domain}
 ```
@@ -294,6 +302,7 @@ Metadata is made available during template execution as separate fields under th
 
 By way of example, this template snippet defines a networkd configuration:
 
+```yaml
 {% raw %}
 networkd:
   units:
@@ -306,6 +315,7 @@ networkd:
         DNS={{index .interface.subnet.dns 0}}
         Address={{.interface.ipv4}}
 {% endraw %}
+```
 
 ## <a name="translation-to-ipxe">Translation to iPXE</a>
 
@@ -323,7 +333,7 @@ Rules for translating command line parameters:
 
 For example, given this OS:
 
-```
+```yaml
 ---
 id: centos-example
 major_version: '7'
@@ -352,15 +362,16 @@ cmdline:
 
 The iPXE script will be roughly generated as (not taking unattended info from boot):
 
-```
-    #!ipxe
-    kernel centos_kernel console=ttyS0,115200 console=ttyS1 lang=  debug enforcing
-    initrd centos_initrd
-    boot
+```bash
+#!ipxe
+kernel centos_kernel console=ttyS0,115200 console=ttyS1 lang=  debug enforcing
+initrd centos_initrd
+boot
 ```
 
 **For UEFI you must add an initrd to the cmdline. Bug: https://github.com/coreos/bugs/issues/1239**
-```
+
+```bash
 #!ipxe
 kernel http://127.0.0.1:24601/files/coreos_production_pxe.vmlinuz coreos.autologin initrd=coreos_production_pxe_image.cpio.gz coreos.first_boot coreos.config.url=http://127.0.0.1:24601/config/00:00:00:00:00:01?boot=etcd-master
 initrd http://127.0.0.1:24601/files/coreos_production_pxe_image.cpio.gz
@@ -405,6 +416,7 @@ Allow a network boot or installation to proceed automatically by providing canne
 | registry_auth | Registry Credentials                     | no       | registry_auth |
 
 #### container.registry_auth
+
 | name       | description                | required | schema  |
 |:-----------|:---------------------------|:---------|:--------|
 | url        | api versioned registry url | yes      | string  |
@@ -441,7 +453,7 @@ Details for establishing a connection to a site's agent
 
 <sup>1. docker.io/gemtest/openssh</sup><br />
 <sup>2. docker.io/gemtest/ipmitool</sup>
-</sup>
+
 #### env.agent.asset_server
 
 Configuration for the asset server
@@ -500,11 +512,10 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 | value  | List of DNS URLs                                  | yes      | variable |                                                                                                              |
 | type   | Denotes the type of `value`. Accepted values:     | yes      | string   |                                                                                                              |
 |        | string, uint8, uint16, uint32, int8, int16, int32 |          |          |                                                                                                              |
-|        | addresses*, base64**                              |          |          | |         |         |                                                      |          |                    | |
+|        | addresses<sup>1</sup>, base64<sup>2</sup>         |          |          | |         |         |                                                      |          |                    | |
 
-\* Type `addresses` is a comma seperated string of ip addresses.
-
-\** Type `base64` is a base64 encoded value.
+<sup>1. Type `addresses` is a comma seperated string of ip addresses.</sup><br>
+<sup>2. Type `base64` is a base64 encoded value.</sup>
 
 [Examples](dhcp-options.html)
 
@@ -542,19 +553,18 @@ Represents a single DHCP Option as defined in [RFC2132](http://www.iana.org/go/r
 
 | name        | description                                                | required | schema        | default |
 |:------------|:-----------------------------------------------------------|:---------|:--------------|:--------|
-| type        | Interface type. physical or bmc                            | yes      | string        |         |
+| type        | Interface type. physical or bmc<sup>1</sup>                | yes      | string        |         |
 | mac         | MAC address identifying this interface                     | yes      | string        |         |
 | subnet      | ID of subnet (specified in env)                            | yes      | string        |         |
-| bmc         | Details for BMC interface*                                 | no       | interface.bmc |         |
+| bmc         | Details for BMC interface<sup>2</sup>                      | no       | interface.bmc |         |
 | identifier  | Identifier for interface                                   | no       | string        |         |
 | ignore_dhcp | If true, stops Vaquero from provisioning on this interface | no       | boolean       |         |
 | ipv4        | IPv4 address                                               | yes      | dotted quad   |         |
 | ipv6        | IPv6 address                                               | no       | string        |         |
 | hostname    | Hostname for machine                                       | no       | string        |         |
 
-\* An interface of type `bmc` describes a power management interface. This interface will not be used for PXE booting the machine (but it may acquire an IP from vaquero's DHCP Server).
-
-An interface of type `physical` can define an `interface.bmc` for ssh power management _only_ -- i.e. a physical interface may *not* include an `interface.bmc.type` set to `ipmi`.
+<sup>1. An interface of type `physical` can define an `interface.bmc` for ssh power management _only_ -- i.e. a physical interface may *not* include an `interface.bmc.type` set to `ipmi`.</sup><br>
+<sup>2. An interface of type `bmc` describes a power management interface. This interface will not be used for PXE booting the machine (but it may acquire an IP from vaquero's DHCP Server).</sup>
 
 ##### interface.bmc
 
@@ -568,9 +578,13 @@ An interface of type `physical` can define an `interface.bmc` for ssh power mana
 | soft_reboot  | Attempt Graceful Shutdown.<sup>1</sup>        | no       | bool      | false   |
 | soft_timeout | Soft Reboot Timeout (seconds)<sup>2</sup>    | no       | integer   | 0    |
 
+<sup>1. By default, IPMI will do a power cycle. `soft_reboot` may be specified to do a soft (graceful) restart instead.</sup><br>
+<sup>2. `soft_timeout` specifies the amount of time to try a soft reboot. If the machine is not able to restart in this time, a power cycle is issued. `soft_timeout=0` means the host will never be forcefully restarted.</sup>
+
 This bmc struct defines the method used to reboot the host. There are three possible configurations:
 
 -  Use IPMI with the provided credentials to reboot the machine:
+
 ```
 type: ipmi
 username: ipmiusername
@@ -578,10 +592,9 @@ password: ipmipassword
 soft_reboot: true
 soft_timeout: 30
 ```
-<sup>1.</sup> By default, IPMI will do a power cycle. `soft_reboot` may be specified to do a soft (graceful) restart instead.
-<sup>2.</sup> `soft_timeout` specifies the amount of time to try a soft reboot. If the machine is not able to restart in this time, a power cycle is issued. `soft_timeout=0` means the host will never be forcefully restarted.
 
 -  SSH into the machine and do a sudo reboot. This requires key management, which is left as an exercise to the reader.
+
 ```
 type: ssh
 username: core
@@ -589,6 +602,7 @@ keypath: /home/core/.ssh/id_rsa
 ```
 
 -  Use a custom container to reboot the machine.
+
 ```
 type: custom
 container:
@@ -620,6 +634,7 @@ Cmdline values may be templated. They will be rendered on-demand for individual 
 
 **Note initrd must be added in the cmdline to work with UEFI. Bug: https://github.com/coreos/bugs/issues/1239**
 
+```yaml
 {% raw %}
 ---
 id: coreos-1053.2.0-stable
@@ -637,6 +652,7 @@ cmdline:
   #This line is needed for EFI PXE boots. https://github.com/coreos/bugs/issues/1239
   - initrd: "coreos_production_pxe_image.cpio.gz"
 {% endraw %}
+```
 
 #### os.boot
 
@@ -662,7 +678,6 @@ A workflow chains multiple boots together to provision a host. The workflow is a
 | workflow         | Series of boots to provision the host                            | yes        | workflow.stage array   |           |
 | deps             | Host provisioning rollout policy                                              | no         | workflow.deps          |           |
 
-*Be aware that `min_standing` could become a blocking condition, if `min_standing` is set to 3 and there are only 3 hosts in that workflow.*
 
 #### workflow.deps
 
@@ -676,6 +691,7 @@ Workflow deps defines interworkflow dependencies and specifies policy for provis
 | validate_on      | IDs of workflows that cause this workflow to rerun validation              | no         | string array           |           |
 | max_fail         | How many hosts can fail before halted                                      | no         | int                    | 0         |
 
+*Be aware that `min_standing` could become a blocking condition, if `min_standing` is set to 3 and there are only 3 hosts in that workflow.*
 
 ## <a name="staging">Staging Updates</a>
 
