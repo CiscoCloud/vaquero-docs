@@ -7,10 +7,6 @@ page.title: Data Model
 
 - [Example Data Models](https://github.com/CiscoCloud/vaquero-examples)
 
-## Data Model Diagram to show relationships
-
-![](nov16DM.png)
-
 ## Table of Contents
 
 1. [Key Concepts](#key-concepts)
