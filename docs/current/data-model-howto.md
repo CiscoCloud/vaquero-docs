@@ -7,18 +7,13 @@ page.title: Data Model
 
 - [Example Data Models](https://github.com/CiscoCloud/vaquero-examples)
 
-## Data Model Diagram to show relationships
-Each site contains an `environment file` and an `inventory file` that lists all related hosts. Hosts are members of a single `workflow`. `workflow` is a collection of 'boot' steps that take a new machine and bring it to its final state. A `boot` contains `os` and `assets`. Note re-use of `boot`, `os` and `assets`.
-
-![](nov16DM.png)
-
 ## Table of Contents
 
 1. [Key Concepts](#key-concepts)
 
-2. [Vocabulary](#vocabulary)
+2. [Terminology](#terminology)
 
-3. [Where things go](#where-things-go)
+3. [SOT layout](#sot-layout)
 
 4. [Provisioning Steps](#provisioning-steps)
 
@@ -40,15 +35,17 @@ We treat this data model as a "single source of truth" (SoT) that describes the 
 
 ## <a name="key-concepts">Key Concepts</a>
 
-Your data center is expressed as an inventory of _hosts_. Each host belongs to a _workflow_. Each workflow is comprised of one or many _boot_ steps that use a combination of _unattended assets_ and _operating system_ definitions to define a target configured state for a host.
+Your data center is expressed as an inventory of `hosts`. Each host belongs to a `workflow`. Each workflow is comprised of one or many `boot` steps that use a combination of `unattended assets` and `operating system` definitions to define a target configured state for a host.
 
-## <a name="vocabulary">Vocabulary</a>
+## <a name="terminology">Terminology</a>
 
 *Site*: A managed data center, or group of machines managed by a single Vaquero Agent.
 
 *Host*: A single managed machine. Definition includes identifying attributes (selectors), host-specific metadata, information for LOM (IPMI), and an association to a single workflow.
 
 *Cluster*: A grouping of hosts under a specific site.
+
+*Configuration*: The general name given for the collection of `Operating System`, `Assets`, `Boot` and `Workflows`. Please refer below for explanation.
 
 *Operating System*: An "installation" template containing the details to perform a network boot into a particular OS, specifying kernel, initrd, boot command-line parameters, unattended config, etc.
 
@@ -58,29 +55,36 @@ Your data center is expressed as an inventory of _hosts_. Each host belongs to a
 
 *Workflow*: A series of network boots that end with a host machine in a desired state.
 
-## <a name="where-things-go">Where Things Go</a>
+*SOT (Source of Truth)*: The name given to the collection of both `configurations` and `sites` that is necessary to define a data center. Vaquero supports two types of SOT: a basic SOT or an advanced SOT. The former is simpler to manage, whereas the latter provides better access control and separation of responsibilities.
 
-Configuration files are placed in a directory hierarchy. Vaquero parses site configurations by reading files placed in specially named subdirectories. The root of your configuration path has four directories:
+## Basic SOT
+
+A basic SOT is where all sites and configuration files are defined together in the same local directory or github repo. It's simple to manage and is useful for smaller environments.
+
+![Vaquero Basic SOT]({{ site.url }}/img/vaquero-basic-sot.png)
+
+
+## Advanced SOT
+
+In this mode, sites are stored in a single github repo or local directory, while configuration files can be spread out across multiple github repos or local directories. This provides a way to see all defined infrastructure in a centralized way, while separating the configuration for each cluster.
+
+![Vaquero Advanced SOT]({{ site.url }}/img/vaquero-advanced-sot.png)
+
+## <a name="sot-layout">SOT Layout</a>
+
+Configuration files are placed in a directory hierarchy. Vaquero parses site `configurations` by reading files placed in specially named subdirectories. The root of your configuration path has four directories:
 
 1. **assets**: grouped by type. These are generally unattended configs or scripts that have been templated to include environment-specific information. Contains named subdirectories (more on that later).
 2. **os**: Individual documents, each representing an Operating System
 3. **boot**: Individual documents, each representing a Boot
-4. **sites**: One or more sites (each in it's own subdirectory) that share the same boot, os, and asset definitions. Each site includes environment-specific information (Vaquero Agent URLs/certs, subnets, other metadata), and an inventory of hosts that apply boot definitions to machines.
-5. **workflows**: Individual documents, each representing a Workflow
+4. **workflows**: Individual documents, each representing a Workflow
 
-```
-.
-├── assets
-├── os
-├── boot
-├── sites
-└── workflows
+`Sites` are another component to a complete SOT. `Sites` are responsible for defining agent-specific settings (networks, asset and TFTP directories, etc.) and the set of hosts the agent is responsible for provisioning.
 
-```
 
 ### Assets
 
-Assets are grouped into named subdirectories based on type. There are currently four types:
+`Assets` are grouped into named subdirectories based on type. There are currently four types:
 
 1. Cloud-Config: [CoreOS Cloudinit System](https://coreos.com/os/docs/latest/cloud-config.html)
 2. Ignition: [CoreOS Ignition](https://coreos.com/ignition/docs/latest/)
@@ -89,7 +93,7 @@ Assets are grouped into named subdirectories based on type. There are currently 
 
 Each subdirectory may also have a `snippets` directory for holding partial templates (see below)
 
-Each asset is placed under a subdirectory according to it's type. Assets are referenced by file name from boots:
+Each `asset` is placed under a subdirectory according to it's type. `Assets` are referenced by file name from boots:
 
 ```
 .
@@ -112,7 +116,7 @@ Each asset is placed under a subdirectory according to it's type. Assets are ref
 
 Validation is performed on typed assets to verify that rendered templates produce valid configuration scripts.
 
-Assets are retrieved dynamically from the Vaquero Agent asset server through the `/config/<mac-addr>` endpoint. An optional `boot` query parameter can be used to specify the ID of the Boot to use.
+`Assets` are retrieved dynamically from the Vaquero Agent asset server through the `/config/<mac-addr>` endpoint. An optional `boot` query parameter can be used to specify the ID of the Boot to use.
 
 For instance, a host with mac address `00:00:00:00:00:01` could retrieve it's default configuration by requesting
 
@@ -132,7 +136,7 @@ Or the configuration from a particular boot by requesting
 
 #### Asset Snippets
 
-Any snippets for a particular config type are _always included_ when rendering configurations of that type. Most of the time, the preferred use will be to have the snippet file `define` a template, and use the `template` function to include it in the configuration:
+Any snippets for a particular config type are `always included` when rendering configurations of that type. Most of the time, the preferred use will be to have the snippet file `define` a template, and use the `template` function to include it in the configuration:
 
 ```
 {% raw %}
@@ -176,61 +180,6 @@ Boots exist as individual documents under the `boot` subdirectory. They are refe
     └── etcd-proxy.yml
 ```
 
-
-### Sites
-
-Sites are represented by individual subdirectories. One directory == one site == one managed group of machines. Each SoT can contain multiple sites. Each of these sites shares the same assets/boot/os configuration files.
-
-Each site has _at least_ two documents, the specially named `env.yml` and at least one document describing an inventory of hosts. You may use YAML's triple-dash `---` separator to combine multiple inventory documents into one file.
-
-#### Clusters
-
-Clusters are represented by individual yaml files under a site (conventional they are prefixed with `cluster-` in the file name (example: `cluster-a.yml`).
-
-One file is a grouping of hosts under that site directory. Each SoT can contain multiple sites. Each of these sites shares the same assets/boot/os configuration files.
-
-```
-.
-└── sites
-    ├── site-a
-    │   ├── env.yml
-    │   └── cluster-aa.yml
-    │   └── cluster-ab.yml
-    │   └── cluster-ac.yml
-    └── site-b
-    |   ├── env.yml
-    |   └── cluster-ba.yml
-    |   └── cluster-bb.yml
-    |   └── cluster-bc.yml
-```
-
-#### Configuration
-
-At the top of every cluster file is a `config` section.
-
-This section describes how to obtain the SOT configuration for this cluster of hosts.
-
-type: git
-
-```yaml
----
-config:
-  type: git
-  url: "https://github.com/mattdietz/vaquero-sot"
-  ref: "master"
-  token: "github_api_token_here"
-```
-
-type: local
-
-```yaml
----
-config:
-  type: local
-  url: "/var/vaquero/local-config"
-```
-
-
 ### Workflows
 
 Workflows exist as individual documents under the `workflows` subdirectory. They are referenced by a self-assigned ID described in the document:
@@ -241,6 +190,106 @@ Workflows exist as individual documents under the `workflows` subdirectory. They
     ├── clevos-accessor.yml
     ├── k8s-master.yml
     └── k8s-node.yml
+```
+
+### Sites
+
+Sites are represented by individual subdirectories under the top level `sites` directory. Each `site` under the `sites` directory corresponds to a managed group
+of machines.
+
+Each site requires one file named `env.yml`, all other files will be treated as a cluster definition that describe their host inventory. You may use YAML's
+triple-dash `---` separator to combine multiple inventory documents into one cluster file.
+
+#### Clusters
+
+The hosts can be grouped into multiple logical `clusters` in a `site`. Clusters are represented by individual yaml files under a site (by convention these files
+are prefixed with with `cluster-` in the file name (example: `cluster-prod.yml`).
+
+
+```
+.
+└── sites
+    ├── site-a
+    │   ├── env.yml
+    │   ├── cluster-dev.yml
+    │   ├── cluster-stage.yml
+    │   └── cluster-prod.yml
+    └── site-b
+    |   ├── env.yml
+    |   ├── cluster-dev.yml
+    |   ├── cluster-stage.yml
+    |   └── cluster-prod.yml
+
+```
+
+## Basic SOT
+
+In the basic SOT, your configuration -- `assets`, `os`, `boot` and `workflows` -- are defined alongside your `sites`. This enables all `clusters` to share the same configuration, which minimizes the overall complexity of managing your SOT.
+
+An example of a basic SOT structure with two sites with multiple clusters each:
+
+```
+.
+├── assets
+├── os
+├── boot
+├── workflows
+└── sites
+    ├── denver
+    │   ├── env.yml
+    │   ├── cluster-dev.yml
+    │   ├── cluster-stage.yml
+    │   └── cluster-prod.yml
+    └── reno
+        ├── env.yml
+        ├── cluster-dev.yml
+        ├── cluster-stage.yml
+        └── cluster-prod.yml
+```
+
+In the above example, all clusters defined in the denver and reno sites will share the same configuration. For small teams, this may be appropriate if all administrators are allowed to have access to all configuration. In the event that multiple teams should not see configuration from each other, the advanced SOT below may be more suitable.
+
+## Advanced SOT
+
+For advanced SOTs, each `cluster` can point to their own configuration located on a Github repository or another location on disk. This allows administrators to separate the responsibility of managing the configuration of their `sites`.
+
+An example of two sites with dev and prod configuration:
+
+```
+.
+└── sites
+    ├── denver
+    │   ├── env.yml
+    │   ├── cluster-dev.yml
+    │   └── cluster-prod.yml
+    └── reno
+        ├── env.yml
+        ├── cluster-dev.yml        
+        └── cluster-prod.yml
+```
+
+In the above example, your reno site is able to manage their production configuration separately from both their development config as well as the reno `site`. This allows for separation of responsibility across the teams administering your datacenters and minimizes the opportunity for sensitive information to be exposed.
+
+In order to link a `cluster` with a `configuration`, place a `config` section at the top of every cluster file. This section describes how to obtain the SOT configuration for this cluster of hosts.
+
+#### Github SOT
+
+```yaml
+---
+config:
+  type: git
+  url: "https://github.com/someuser/vaquero-configurations"
+  ref: "master"
+  token: "github_api_token_here"
+```
+
+#### Local SOT
+
+```yaml
+---
+config:
+  type: local
+  url: "/var/vaquero/local-config"
 ```
 
 ## <a name="provisioning-steps">Provisioning Steps</a>
@@ -264,7 +313,8 @@ chain ipxe?uuid=${uuid}&mac=${net0/mac:hexhyp}&domain=${domain}&hostname=${hostn
 
 ## <a name="serving-files">Serving Files</a>
 
-Vaquero Agent will expose an endpoint `/files` for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to the configuration file.
+Vaquero Agent will expose an endpoint `/files` for hosting static content. This endpoint acts transparently as a file server, or a reverse proxy, according to
+the configuration file.
 
 ## Identifying a Host
 
