@@ -35,7 +35,7 @@ We treat this data model as a "single source of truth" (SoT) that describes the 
 
 ## <a name="key-concepts">Key Concepts</a>
 
-Your data center is expressed as an inventory of _hosts_. Each host belongs to a _workflow_. Each workflow is comprised of one or many _boot_ steps that use a combination of _unattended assets_ and _operating system_ definitions to define a target configured state for a host.
+Your data center is expressed as an inventory of `hosts`. Each host belongs to a `workflow`. Each workflow is comprised of one or many `boot` steps that use a combination of `unattended assets` and `operating system` definitions to define a target configured state for a host.
 
 ## <a name="terminology">Terminology</a>
 
@@ -136,7 +136,7 @@ Or the configuration from a particular boot by requesting
 
 #### Asset Snippets
 
-Any snippets for a particular config type are _always included_ when rendering configurations of that type. Most of the time, the preferred use will be to have the snippet file `define` a template, and use the `template` function to include it in the configuration:
+Any snippets for a particular config type are `always included` when rendering configurations of that type. Most of the time, the preferred use will be to have the snippet file `define` a template, and use the `template` function to include it in the configuration:
 
 ```
 {% raw %}
