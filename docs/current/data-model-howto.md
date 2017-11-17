@@ -8,7 +8,6 @@ page.title: Data Model
 - [Example Data Models](https://github.com/CiscoCloud/vaquero-examples)
 
 ## Data Model Diagram to show relationships
-Each site contains an `environment file` and an `inventory file` that lists all related hosts. Hosts are members of a single `workflow`. `workflow` is a collection of 'boot' steps that take a new machine and bring it to its final state. A `boot` contains `os` and `assets`. Note re-use of `boot`, `os` and `assets`.
 
 ![](nov16DM.png)
 
