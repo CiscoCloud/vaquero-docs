@@ -524,6 +524,15 @@ By declaring cdn_addr and a cdn_port we will use that as a source. The agent wil
 
 The transport (http/s) should be included with the agent URL.
 
+#### env.agent.tftp_server
+
+Configuration for the tftp_server
+
+| name       | description                                                   | required | schema  | default            |
+|:-----------|:--------------------------------------------------------------|:---------|:--------|:-------------------|
+| base_dir | The directory that vaquero agent will use to serve tftp files from  | no       | string  | /var/vaquero/pxeroms  |
+
+
 #### env.release_tag
 `release_tag` must be a valid [commit_ish](https://git-scm.com/docs/git#git-ltcommit-ishgt) string corresponding to a specific [Github Release](https://help.github.com/articles/about-releases/) (e.g., v0.1.0) or commit_id.
 
