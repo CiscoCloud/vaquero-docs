@@ -5,7 +5,8 @@ page.title: Data Model
 # The Vaquero Data Model and YOU
 [Home]({{ site.url }}) | [Docs Repo](https://github.com/CiscoCloud/vaquero-docs/tree/master)
 
-- [Example Data Models](https://github.com/CiscoCloud/vaquero-examples)
+- [Example Data Models (legacy) ](https://github.com/CiscoCloud/vaquero-examples)
+- [Example Data Models (Advance SOT) ](https://github.com/CiscoCloud/vaquero-multi-site)
 
 ## Table of Contents
 
@@ -277,11 +278,17 @@ In order to link a `cluster` with a `configuration`, place a `config` section at
 ```yaml
 ---
 config:
+  id: "webhook_id"
   type: git
   url: "https://github.com/someuser/vaquero-configurations"
   ref: "master"
-  token: "github_api_token_here"
 ```
+Previously token was required to link `cluster` with a `configuration` but it is removed due to security reasons. This will require a keyword `id` in `config` section to point to webhook defined in the vaquero server startup configuration. This is one of the mandatory fields in the `config` section when Advance SOT is used. Vaquero validate can be also be used to validate the new SOT model configuration. 
+
+If a `cluster` file contains a `config` section, it takes precedence over `env`. (i.e) config applied in `env` can be overridden by a `cluster`.
+
+<b>NOTE:</b> sot_id  must be added in the `env` to link a cluster configuration with a Git SoT `ID` defined in the vaquero server config. If this is missing, any change in the configuration that is linked to a `cluster` may not be detected as a SoT event by the vaquero server.
+
 
 #### Local SOT
 
